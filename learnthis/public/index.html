@@ -2,14 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -24,20 +19,135 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>LearnThis!</title>
+
+    <style>
+      body {
+        background-color: #000;
+      }
+      .center-screen {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh;
+        transition: all 0.5s ease-in-out;
+      }
+      .loading-title {
+        font-size: 2rem;
+        font-family:Arial, Helvetica, sans-serif;
+        transition: all 0.5s ease-in-out;
+        color: rgb(179, 116, 1);
+      }
+      .loadingbox-wrapper {
+        /* */
+      }
+      .loadingbox-wrapper:hover .b3{
+        border-radius: 50%;
+        background-color: orange;
+        box-shadow: 0px 0px 14px 5px rgba(0, 128, 128, 0.679);
+        scale: 1.0;
+        transition: all 1s;
+      }
+      
+      .loadingbox {
+        width: 30px;
+        height: 30px;
+        background-color: teal;
+        position: relative;
+        box-shadow: 0px 0px 8px 10px rgba(39, 39, 39, 0.752);
+        border-radius: 5px;
+        opacity: 100%;
+        transition: 0.5s;
+      }
+      
+      .b1 {
+        background-color: orange;
+        translate: -30px;
+        animation: move2 2.6s linear infinite;
+        z-index: 1;
+        bottom: -30px;
+      }
+      .b2 {
+        translate: 30px;
+        animation: move3 2.6s linear infinite;
+        z-index: 1;
+      }
+      
+      @keyframes move2 {
+        0% {
+          translate: -30px;
+          scale: 1.0;
+          z-index: 2;
+        }
+        40% {
+          translate: 30px;
+          scale: 1.0;
+          z-index: 2;
+        }
+        50% {
+          translate: 30px;
+          scale: 0.85;
+          z-index: 1;
+        }
+        90% {
+          translate: -30px;
+          scale: 0.85;
+          z-index: 1;
+        }
+        100% {
+          translate: -30px;
+          scale: 1.0;
+          z-index: 2;
+        }
+      }
+      @keyframes move3 {
+        0% {
+          translate: 30px;
+          scale: 0.85;
+          z-index: 1;
+        }
+        40% {
+          translate: -30px;
+          scale: 0.85;
+          z-index: 1;
+        }
+        50% {
+          translate: -30px;
+          scale: 1.0;
+          z-index: 2;
+        }
+        90% {
+          translate: 30px;
+          scale: 1.0;
+          z-index: 2;
+        }
+        100% {
+          translate: 30px;
+          scale: 0.85;
+        }
+      }
+    </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>You need to enable JavaScript to run this application.</noscript>
+
+    
+    <div class="center-screen" id="pageloader">
+      <div class="loadingbox-wrapper">
+        <div class="loadingbox b1 b3"></div>
+        <div class="loadingbox b2 b3"></div>
+      </div>
+      <div class="loading-title">
+        Application loading...<br>
+        Please stand by!
+      </div>
+    </div>
+
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>
