@@ -1,18 +1,27 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
 
   "name": "Save URL",
   "description": "This extension saves the URL of the current tab in a variable",
   "version": "1.0",
 
-  "browser_action": {
-    
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "action": {
     "default_popup": "popup.html",
     "default_title": "Click here!"
   },
 
   "permissions": [
     "activeTab",
-    "tabs"
+    "tabs",
+    "storage",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "*://*/*"
   ]
 }
