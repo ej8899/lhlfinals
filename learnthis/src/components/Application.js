@@ -16,7 +16,7 @@ import {
   modalAboutMessage, modalCookiesMessage, modalPrivacyPolicy, modalReleaseNotes
 } from "./Modal/ModalData.js";
 
-
+import NavBar from "./NavBar.jsx";
 
 //
 // application - main function
@@ -93,7 +93,9 @@ export default function Application(props) {
     !pageLoading && (
     <ThemeContext.Provider value={{ theme, setTheme }}>
 
-      <div>
+      <div><NavBar/>
+        <main className={className} id={theme}>
+       <br></br><br></br><br></br><br></br>
         my app
 
         {global.config.cookiesModal && (
@@ -110,7 +112,7 @@ export default function Application(props) {
               </ZModal>
             )}
 
-
+        </main>
       </div>
 
     </ThemeContext.Provider>
