@@ -1,8 +1,8 @@
 
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { ThemeContext } from './ThemeContext.jsx';
-import './Application.scss';
-import './ThemeSwitch.scss';
+import './Application.css';
+import './ThemeSwitch.css';
 
 function ThemeSwitch() {
   const { theme, setTheme } = useContext(ThemeContext);
