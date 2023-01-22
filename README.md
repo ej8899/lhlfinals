@@ -2,7 +2,7 @@
 
 about message here
 
-![Screen Shot of Staff working with Scheduler app](./screenshots/title.jpg)
+![Screen Shot of app](./screenshots/title.jpg)
 
 ---
 ## Contents...
@@ -24,7 +24,7 @@ You'll also need the server and SQL data that is available within this same gith
 ---
 ## Features...
 - replace this as necessary
-![Screen Shot of Adding an Interview](./screenshots/edit.png)
+![Screen Shot of main feature component](./screenshots/edit.png)
 
 
 ## Bonus features...
