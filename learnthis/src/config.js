@@ -8,7 +8,7 @@
 
 module.exports = global.config = {
   // application details:
-  appVersion: "1.1",
+  appVersion: "0.1",
   appDeveloper: "Ernie Johnson",
 
   // debug mode true or false

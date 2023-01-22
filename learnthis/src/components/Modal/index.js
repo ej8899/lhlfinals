@@ -60,5 +60,3 @@ export default function ZModal(props) {
     if (global.config.debug) console.log("zmodalUpdate data:",newData);
     stateFunction(currState => { return {...currState, ...newData }});
   };
-
-  
