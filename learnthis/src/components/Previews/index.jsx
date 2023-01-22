@@ -3,13 +3,15 @@ import YouTube from 'react-youtube'; // npx install react-youtube
 import axios from "axios"; // npx install axios
 
 import './Previews.css';
+import zlog from "../../zlog";
+import config from "../../config";
 
 // todo - any benefit to removing react-youtube and rolling our own variant?
 
 function PreviewItem(props) {
   const API_KEY = "AIzaSyBjbEQ1qaIn7iZi-JBMBlhJRuqw_yMFNxI";
   const testVideoID = "hY7m5jjJ9mM";
-
+  
   const videoId = testVideoID;
   
   // reference: https://www.npmjs.com/package/react-youtube
@@ -28,6 +30,10 @@ function PreviewItem(props) {
     axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`)
       .then(response => {
         setTitle(response.data.items[0].snippet.title);
+        if(global.config.debug === true) {
+          zlog('info',"data snippet follows:");
+          console.log(response.data.items[0].snippet)
+        }
       })
       .catch(error => {
         console.error(error);
@@ -36,7 +42,6 @@ function PreviewItem(props) {
 
   return (
     <div className="previewItemWrapper">
-
     this is a preview item block
     <YouTube videoId={testVideoID} opts={videoPlayerOpts} />
     <h2>{title}</h2>

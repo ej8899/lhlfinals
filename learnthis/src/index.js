@@ -5,7 +5,7 @@ import "./index.scss";
 
 import Application from "./components/Application";
 
-import './config.js'; // for global configuration variables (EJ added)
+import './config.js'; // for global configuration variables
 import './zlog.js';   // console log replacement
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
