@@ -9,7 +9,9 @@ import zlog from "../../zlog";
 // todo - any benefit to removing react-youtube and rolling our own variant?
 
 function PreviewItem(props) {
-  const API_KEY = "AIzaSyBjbEQ1qaIn7iZi-JBMBlhJRuqw_yMFNxI";
+  const API_KEY = global.config.youtubekey;
+  
+  zlog('info',API_KEY)
   const testVideoID = "hY7m5jjJ9mM";
   
   const videoId = testVideoID;

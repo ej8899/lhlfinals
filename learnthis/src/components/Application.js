@@ -20,10 +20,12 @@ import {
 import NavBar from "./NavBar.jsx";
 import PreviewItem from "./Previews";
 
+
 //
 // application - main function
 //
 export default function Application(props) {
+  global.config.youtubekey = process.env.REACT_APP_YOUTUBE_API_KEY;
   //
   // set up for light and dark modes
   //

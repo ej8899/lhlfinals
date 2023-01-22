@@ -18,6 +18,9 @@ module.exports = global.config = {
   cookiesModal: true, // use modal windows in this app.
   useToday: true, // use today to set current day view in scheduler - fails tests if true (tests were modified to support this - to remove)
 
+  // api keys
+  youtubekey: 123,
+
   // additional global vars and functions:
   editsOpen: {},
   deleteOpen: false,
