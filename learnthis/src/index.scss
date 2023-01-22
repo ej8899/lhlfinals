@@ -1,0 +1,45 @@
+@import "./styles/variables.scss";
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-y: scroll; 
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  background-color: $white;
+}
+
+
+.socicons-container {
+  padding-top: 20px;
+}
+
+.socicons {
+  color:darken($white, 10%);
+  padding-top: 20px;
+  text-shadow: 0 0 10px darken($dark-background,15%), 0 0 20px darken($dark-background,15%), 0 0 30px darken($dark-background,15%);
+  cursor: pointer;
+}
+.socicons:hover {
+  color: $orange;
+}

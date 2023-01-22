@@ -1,6 +1,6 @@
 
 import React, { useContext, useEffect, useRef, useState } from "react";
-import "./Application.css";
+import "./Application.scss";
 
 // light and dark mode switch / theme switch
 import {
@@ -93,7 +93,7 @@ export default function Application(props) {
     !pageLoading && (
     <ThemeContext.Provider value={{ theme, setTheme }}>
 
-      <div><NavBar/>
+      <div className="maincontainer"><NavBar/>
         <main className={className} id={theme}>
        <br></br><br></br><br></br><br></br>
         my app

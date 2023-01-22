@@ -1,4 +1,4 @@
-
+@import "../styles/variables.scss";
 
 .fadein {
   opacity: 1;
@@ -8,11 +8,11 @@
 
 
 #light {
-  background-color: white;
+  background-color: $white;
   color-scheme: light;
 }
 #dark {
-  background-color: rgb(25, 25, 25);
+  background-color: $black;
   color-scheme: dark;
 }
 
@@ -27,4 +27,8 @@ example for specific items for light/dark mode changes:  use #mode .classname
 }
 #light :root {
   color-scheme: light;
+}
+
+.maincontainer {
+  height: 100vh;
 }

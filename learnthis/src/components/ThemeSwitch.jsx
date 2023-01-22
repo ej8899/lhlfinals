@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { ThemeContext } from './ThemeContext.jsx';
-import './Application.css';
+import './Application.scss';
 import './ThemeSwitch.css';
 
 function ThemeSwitch() {
