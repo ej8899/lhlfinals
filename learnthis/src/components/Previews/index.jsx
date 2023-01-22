@@ -31,9 +31,22 @@ function PreviewItem(props) {
       .then(response => {
         setTitle(response.data.items[0].snippet.title);
         if(global.config.debug === true) {
-          zlog('info',"data snippet follows:");
-          console.log(response.data.items[0].snippet)
+          //zlog('info',"data snippet follows:");
+          //console.log(response.data.items[0].snippet)
         }
+        /*
+        useful items in response data:
+        .snippet.
+          categoryId
+          channelId,
+          channelTitle,
+          description,
+          title,
+          thumbnails.default.url, 120x90
+          thumbnails.high.url, 480x360
+          thumbnails.medium.url, 320x180
+          thumbnails.standard.url, 640x480
+        */
       })
       .catch(error => {
         console.error(error);
