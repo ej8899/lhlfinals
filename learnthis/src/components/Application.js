@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Application.scss";
 
+
 // light and dark mode switch / theme switch
 import {
   getDefaultTheme, ThemeContext
@@ -17,6 +18,7 @@ import {
 } from "./Modal/ModalData.js";
 
 import NavBar from "./NavBar.jsx";
+import PreviewItem from "./Previews";
 
 //
 // application - main function
@@ -111,6 +113,9 @@ export default function Application(props) {
                 {zmodalData.message}
               </ZModal>
             )}
+
+
+                <PreviewItem></PreviewItem>
 
         </main>
       </div>

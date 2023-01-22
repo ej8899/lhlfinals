@@ -1,0 +1,10 @@
+/*
+
+  CSS: Preview List Item
+  this is the boundary box item, individual item content, quick tag, favorites, etc.
+  
+*/
+
+.previewItemWrapper {
+  border: 2px solid red;
+}
