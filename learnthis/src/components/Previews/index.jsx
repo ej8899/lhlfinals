@@ -26,10 +26,12 @@ function PreviewItem(props) {
 
   // state for video data
   const [title, setTitle] = useState('');
+  const [thumbnail, setThumbnail] = useState('');
   useEffect(() => {
     axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`)
       .then(response => {
         setTitle(response.data.items[0].snippet.title);
+        setThumbnail(response.data.items[0].snippet.thumbnails.high.url);
         if(global.config.debug === true) {
           //zlog('info',"data snippet follows:");
           //console.log(response.data.items[0].snippet);
@@ -55,11 +57,12 @@ function PreviewItem(props) {
 
 
   // todo just display thumbnail here, a click should open to a modal w the youtube player embed
+
   return (
     <div className="previewItemWrapper">
-    this is a preview item block
+    <h3>{title}</h3>
+    <img src={thumbnail} alt=""></img>
     <YouTube videoId={testVideoID} opts={videoPlayerOpts} />
-    <h2>{title}</h2>
     </div>
   );
 };
