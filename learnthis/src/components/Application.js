@@ -118,6 +118,14 @@ export default function Application(props) {
                 <PreviewItem></PreviewItem>
 
         </main>
+        <br></br>
+        footer location: <a className="socicons">
+                  <i
+                    onClick={() => showAbout()}
+                    className="fa-solid fa-circle-question fa-xl"
+                  ></i>
+                </a> | cookies | 
+        <br></br>
       </div>
 
     </ThemeContext.Provider>
