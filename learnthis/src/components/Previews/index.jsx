@@ -4,7 +4,7 @@ import axios from "axios"; // npx install axios
 
 import './Previews.css';
 import zlog from "../../zlog";
-import config from "../../config";
+//import config from "../../config";
 
 // todo - any benefit to removing react-youtube and rolling our own variant?
 
@@ -32,7 +32,7 @@ function PreviewItem(props) {
         setTitle(response.data.items[0].snippet.title);
         if(global.config.debug === true) {
           //zlog('info',"data snippet follows:");
-          //console.log(response.data.items[0].snippet)
+          console.log(response.data.items[0].snippet)
         }
         /*
         useful items in response data:
