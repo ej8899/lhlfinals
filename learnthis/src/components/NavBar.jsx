@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import ThemeSwitch from "./ThemeSwitch";
 
-import './NavBar.css';
+import './NavBar.scss';
 function NavBar(props) {
   
   return (

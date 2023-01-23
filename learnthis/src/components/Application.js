@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Application.scss";
 
+//todo This element needs to lazy load with 'shimmer' effect
 
 // light and dark mode switch / theme switch
 import {
@@ -98,11 +99,25 @@ export default function Application(props) {
     <ThemeContext.Provider value={{ theme, setTheme }}>
 
       <div className="maincontainer"><NavBar/>
-        <main className={className} id={theme}>
-       <br></br><br></br><br></br><br></br>
+        <header>
+        <br></br><br></br><br></br><br></br>
         my app
+        </header>
 
-        {global.config.cookiesModal && (
+        <main className={className} id={theme}>
+          <PreviewItem></PreviewItem>
+        </main>
+        <br></br>
+        footer location: <a className="socicons">
+                  <i
+                    onClick={() => showAbout()}
+                    className="fa-solid fa-circle-question fa-xl"
+                  ></i>
+                </a> | cookies | 
+        <br></br>
+      </div>
+
+      {global.config.cookiesModal && (
               <ZModal
                 settings={zmodalData.settings}
                 buttontext={zmodalData.button}
@@ -115,21 +130,6 @@ export default function Application(props) {
                 {zmodalData.message}
               </ZModal>
             )}
-
-
-                <PreviewItem></PreviewItem>
-
-        </main>
-        <br></br>
-        footer location: <a className="socicons">
-                  <i
-                    onClick={() => showAbout()}
-                    className="fa-solid fa-circle-question fa-xl"
-                  ></i>
-                </a> | cookies | 
-        <br></br>
-      </div>
-
     </ThemeContext.Provider>
     )
   );
