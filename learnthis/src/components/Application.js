@@ -22,10 +22,17 @@ import NavBar from "./NavBar.jsx";
 import PreviewItem from "./Previews";
 
 
+
+
 //
 // application - main function
 //
 export default function Application(props) {
+  const sampledata = [
+    "0KEpWHtG10M","r8Dg0KVnfMA","3VHCxuxtuL8","ha3a63YjLro","s-yvlPTDak0","r-yxNNO1EI8","9sWEecNUW-o","NQULKpW6hK4","r8Dg0KVnfMA","rxnX1jdoI6c",
+  ];
+
+  
   global.config.youtubekey = process.env.REACT_APP_YOUTUBE_API_KEY;
   //
   // set up for light and dark modes
@@ -105,7 +112,13 @@ export default function Application(props) {
         </header>
 
         <main className={className} id={theme}>
-          <PreviewItem></PreviewItem>
+
+        {sampledata.map((item, index) => (
+          <PreviewItem key={index} videoId={{ item }}>
+          {index + 1}
+          </PreviewItem>
+        ))}
+          
         </main>
         <br></br>
         footer location: <a className="socicons">

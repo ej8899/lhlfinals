@@ -9,6 +9,7 @@ import zlog from "../../zlog";
 // todo - any benefit to removing react-youtube and rolling our own variant?
 
 function PreviewItem(props) {
+  console.log("preview item props:",props)
   const API_KEY = global.config.youtubekey;
   
   zlog('info',API_KEY)
@@ -30,9 +31,11 @@ function PreviewItem(props) {
   const [title, setTitle] = useState('');
   const [thumbnail, setThumbnail] = useState('');
   useEffect(() => {
-    axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`)
+    axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId.item}&key=${API_KEY}`)
       .then(response => {
-        setTitle(response.data.items[0].snippet.title);
+        let title = response.data.items[0].snippet.title;
+        if (title) setTitle(title);
+
         setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
         if(global.config.debug === true) {
           //zlog('info',"data snippet follows:");
