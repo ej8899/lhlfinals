@@ -5,6 +5,12 @@ import axios from "axios"; // npx install axios
 import './Previews.css';
 import zlog from "../../zlog";
 
+// materialUI
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { Button, CardActionArea, CardActions } from '@mui/material';
 
 // todo - any benefit to removing react-youtube and rolling our own variant?
 
@@ -75,45 +81,34 @@ function PreviewItem(props) {
 
 
 
-    <div class="container">
-
-        <div class="card">
-          <img src={thumbnail} alt="" className="card_img"></img>
-
-            <div class="card_body">
-                <h2 class="card_name">{title}</h2>
-                <span class="card_occupation">description</span>
-                <ul class="social_list">
-                    <li class="social_item"> <a href="#" class="social_link" ><i class='bx bxl-github' ></i></a> </li>
-                    <li class="social_item"> <a href="#" class="social_link" ><i class='bx bxl-twitter' ></i></a> </li>
-                    <li class="social_item"> <a href="#" class="social_link" ><i class='bx bxl-linkedin-square' ></i></a> </li>
-                </ul>
-                <a href="#" class="card_button"><i class='bx bx-envelope' ></i>add to lesson plan</a>
-            </div>
-
-            <div class="card_footer">
-                <div class="card_data">
-                    <h3 class="card_data_title">Projects</h3>
-                <span class="card_data_number">50+</span>
-                </div>
-
-                <div class="card_data">
-                    <h3 class="card_data_title">Followers</h3>
-                <span class="card_data_number">5.5k</span>
-                </div>
-
-                <div class="card_data">
-                    <h3 class="card_data_title">Following</h3>
-                <span class="card_data_number">54</span>
-                </div>
-            </div>
-
-      </div>
-
-    </div>
-
-
-
+    
+    <Card sx={{ maxWidth: 345 }}>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="140"
+          image={thumbnail}
+          alt={title}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            description here
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Button size="small" color="primary">
+          Share
+        </Button>
+        <Button size="small" color="primary">
+          Add to Lesson Plan
+        </Button>
+      </CardActions>
+    </Card>
+    
   );
 };
 export default PreviewItem;

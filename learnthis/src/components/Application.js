@@ -1,6 +1,7 @@
 
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Application.scss";
+import Masonry from '@mui/lab/Masonry';
 
 //todo This element needs to lazy load with 'shimmer' effect
 
@@ -113,11 +114,13 @@ export default function Application(props) {
 
         <main className={className} id={theme}>
 
+        <Masonry columns={4} spacing={2}>
         {sampledata.map((item, index) => (
           <PreviewItem key={index} videoId={{ item }}>
           {index + 1}
           </PreviewItem>
         ))}
+        </Masonry>
           
         </main>
         <br></br>
