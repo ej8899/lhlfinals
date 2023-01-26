@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Application.scss";
 import Masonry from '@mui/lab/Masonry';
 
-//todo This element needs to lazy load with 'shimmer' effect
+// TODO This element needs to lazy load with 'shimmer' effect
 
 // light and dark mode switch / theme switch
 import {
@@ -21,7 +21,7 @@ import {
 
 import NavBar from "./NavBar.jsx";
 import PreviewItem from "./Previews";
-
+import SiteFooter from "./Footer";
 
 
 
@@ -68,6 +68,7 @@ export default function Application(props) {
     },
     show: false,
   });
+
   function showAbout() {
     zmodalUpdater(updateZModal, zmodalData, modalAboutMessage({clickFunction: showReleaseNotes}));
   }
@@ -76,7 +77,7 @@ export default function Application(props) {
   }
   function showPrivacy() {
     zmodalUpdater(updateZModal, zmodalData, modalPrivacyPolicy());
-  }
+  } 
 
 
   //
@@ -97,8 +98,8 @@ export default function Application(props) {
       zmodalData,
       modalCookiesMessage({ clickFunction: showPrivacy })
     );
-    // todo -load from localStorage - don't show modal if we've done it before
-    // todo - update localStorage once user says ok
+    // TODO -load from localStorage - don't show modal if we've done it before
+    // TODO - update localStorage once user says ok
   }
 
 
@@ -124,12 +125,7 @@ export default function Application(props) {
           
         </main>
         <br></br>
-        footer location: <a className="socicons">
-                  <i
-                    onClick={() => showAbout()}
-                    className="fa-solid fa-circle-question fa-xl"
-                  ></i>
-                </a> | cookies | 
+        <SiteFooter></SiteFooter>
         <br></br>
       </div>
 

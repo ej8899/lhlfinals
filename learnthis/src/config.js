@@ -25,8 +25,8 @@ module.exports = global.config = {
   editsOpen: {},
   deleteOpen: false,
   editRef: null,
-  newData: false,      // todo - evaluate for viability
-  useWebSockets: true, // todo - implement as a toggle option
+  newData: false,      // TODO - evaluate for viability
+  useWebSockets: true, // TODO - implement as a toggle option
   timeClock: 12,       // 12 or 24 for clock setting - // todo - save to localstorage
 
   link: {

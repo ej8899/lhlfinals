@@ -31,3 +31,12 @@ function getYoutubeVideoId(url) {
 // const videoId = getYoutubeVideoId(youtubeUrl);
 
 
+function showAbout() {
+  zmodalUpdater(updateZModal, zmodalData, modalAboutMessage({clickFunction: showReleaseNotes}));
+}
+function showReleaseNotes() {
+  zmodalUpdater(updateZModal, zmodalData, modalReleaseNotes());
+}
+function showPrivacy() {
+  zmodalUpdater(updateZModal, zmodalData, modalPrivacyPolicy());
+}

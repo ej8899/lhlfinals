@@ -33,6 +33,17 @@ function PreviewItem(props) {
     },
   };
 
+  //
+  // truncate long text 
+  //
+  function truncateText(text, limit) {
+    if (text.length > limit) {
+        return text.substring(0, limit) + '...';
+    } else {
+        return text;
+    }
+}
+
   // TODO - implement materialui skeleton
 
   // state for video data
@@ -40,14 +51,16 @@ function PreviewItem(props) {
   const [thumbnail, setThumbnail] = useState('');
   const [description, setDesc] = useState('');
 
+
   useEffect(() => {
     axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId.item}&key=${API_KEY}`)
       .then(response => {
         let title = response.data.items[0].snippet.title;
-        if (title) setTitle(title);
+        if (title) setTitle(truncateText(title,30));
 
+        // TODO - truncate description
         let description = response.data.items[0].snippet.description;
-        if (description) setDesc(description);
+        if (description) setDesc(truncateText(description,100));
 
         setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
         if(global.config.debug === true) {
