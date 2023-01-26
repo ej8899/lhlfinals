@@ -1,4 +1,4 @@
-import "./Application.scss";
+import "../Application.scss";
 
 export default function Hero(props) {
   function showAbout() {

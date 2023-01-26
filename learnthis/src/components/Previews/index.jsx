@@ -3,7 +3,7 @@ import YouTube from 'react-youtube'; // npx install react-youtube
 import axios from "axios"; // npx install axios
 
 import './Previews.css';
-import zlog from "../../zlog";
+import zlog from "../../helpers/zlog";
 
 // materialUI
 import Card from '@mui/material/Card';
@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
 // helpers
-import { truncateText } from '../helpers';
+import { truncateText } from '../../helpers/helpers';
 
 // TODO - any benefit to removing react-youtube and rolling our own variant?
 

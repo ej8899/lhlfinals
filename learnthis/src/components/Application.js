@@ -11,7 +11,7 @@ import {
 } from "./ThemeContext.jsx";
 
 // console log helper
-import zlog from "../zlog.js";
+import zlog from "../helpers/zlog.js";
 
 // modal windows
 import ZModal, { zmodalUpdater } from "./Modal/index.js";
@@ -19,10 +19,10 @@ import {
   modalAboutMessage, modalCookiesMessage, modalPrivacyPolicy, modalReleaseNotes
 } from "./Modal/ModalData.js";
 
-import NavBar from "./NavBar.jsx";
+import NavBar from "./Nav/NavBar.jsx";
 import PreviewItem from "./Previews";
 import SiteFooter from "./Footer";
-import Hero from "./Hero.jsx";
+import Hero from "./Hero/Hero.jsx";
 
 
 //

@@ -6,7 +6,7 @@ import "./index.scss";
 import Application from "./components/Application";
 
 import './config.js'; // for global configuration variables
-import './zlog.js';   // console log replacement
+import './helpers/zlog.js';   // console log replacement
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
