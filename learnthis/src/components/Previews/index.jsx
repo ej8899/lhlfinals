@@ -12,7 +12,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
-
 // helpers
 import { truncateText } from '../helpers';
 
@@ -63,6 +62,7 @@ function PreviewItem(props) {
           //console.log(response.data.items[0].snippet);
         }
         /*
+        REFERENCE:
         useful items in response data:
         .snippet.
           categoryId
