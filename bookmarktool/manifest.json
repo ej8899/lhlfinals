@@ -18,7 +18,9 @@
     "activeTab",
     "tabs",
     "storage",
-    "scripting"
+    "scripting",
+    "identity",
+    "http://localhost:5000/*"
   ],
 
   "host_permissions": [
