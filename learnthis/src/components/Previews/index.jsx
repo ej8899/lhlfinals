@@ -12,7 +12,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
-// todo - any benefit to removing react-youtube and rolling our own variant?
+// TODO - any benefit to removing react-youtube and rolling our own variant?
 
 function PreviewItem(props) {
   console.log("preview item props:",props)
@@ -33,14 +33,21 @@ function PreviewItem(props) {
     },
   };
 
+  // TODO - implement materialui skeleton
+
   // state for video data
   const [title, setTitle] = useState('');
   const [thumbnail, setThumbnail] = useState('');
+  const [description, setDesc] = useState('');
+
   useEffect(() => {
     axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId.item}&key=${API_KEY}`)
       .then(response => {
         let title = response.data.items[0].snippet.title;
         if (title) setTitle(title);
+
+        let description = response.data.items[0].snippet.description;
+        if (description) setDesc(description);
 
         setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
         if(global.config.debug === true) {
@@ -67,8 +74,8 @@ function PreviewItem(props) {
   }, [videoId]);
 
 
-  // todo just display thumbnail here, a click should open to a modal w the youtube player embed
-
+  // TODO  just display thumbnail here, a click should open to a modal w the youtube player embed
+  // TODO - truncate descriptoin to 'x' chars
 /*
     <div className="previewItemWrapper">
     <h3>{title}</h3>
@@ -79,9 +86,6 @@ function PreviewItem(props) {
 
   return (
 
-
-
-    
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
         <CardMedia
@@ -95,7 +99,7 @@ function PreviewItem(props) {
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            description here
+            {description}
           </Typography>
         </CardContent>
       </CardActionArea>
