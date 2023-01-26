@@ -22,7 +22,7 @@ import {
 import NavBar from "./NavBar.jsx";
 import PreviewItem from "./Previews";
 import SiteFooter from "./Footer";
-
+import Hero from "./Hero.jsx";
 
 
 //
@@ -109,8 +109,7 @@ export default function Application(props) {
 
       <div className="maincontainer"><NavBar/>
         <header>
-        <br></br><br></br><br></br><br></br>
-        my app
+        <Hero></Hero>
         </header>
 
         <main className={className} id={theme}>
