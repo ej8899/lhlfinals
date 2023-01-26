@@ -12,6 +12,10 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
+
+// helpers
+import { truncateText } from '../helpers';
+
 // TODO - any benefit to removing react-youtube and rolling our own variant?
 
 function PreviewItem(props) {
@@ -33,16 +37,7 @@ function PreviewItem(props) {
     },
   };
 
-  //
-  // truncate long text 
-  //
-  function truncateText(text, limit) {
-    if (text.length > limit) {
-        return text.substring(0, limit) + '...';
-    } else {
-        return text;
-    }
-}
+
 
   // TODO - implement materialui skeleton
 

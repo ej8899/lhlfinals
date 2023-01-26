@@ -2,7 +2,7 @@
 //
 // returns true or false
 //
-function isYoutubeUrl(url) {
+export const isYoutubeUrl = (url) => {
   return (url.indexOf("youtube.com") !== -1 || url.indexOf("youtu.be") !== -1);
 }
 /* sample usage:
@@ -16,7 +16,7 @@ console.log(isYoutubeUrl(nonYoutubeUrl)); // Outputs false
 //
 // 
 //
-function getYoutubeVideoId(url) {
+export const getYoutubeVideoId = (url) => {
   let videoId;
   try {
       const match = url.match(/(v=|youtu\.be\/)([^&]+)/);
@@ -31,12 +31,13 @@ function getYoutubeVideoId(url) {
 // const videoId = getYoutubeVideoId(youtubeUrl);
 
 
-function showAbout() {
-  zmodalUpdater(updateZModal, zmodalData, modalAboutMessage({clickFunction: showReleaseNotes}));
-}
-function showReleaseNotes() {
-  zmodalUpdater(updateZModal, zmodalData, modalReleaseNotes());
-}
-function showPrivacy() {
-  zmodalUpdater(updateZModal, zmodalData, modalPrivacyPolicy());
+  //
+  // truncate long text 
+  //
+export const truncateText = (text, limit) => {
+  if (text.length > limit) {
+      return text.substring(0, limit) + '...';
+  } else {
+      return text;
+  }
 }
