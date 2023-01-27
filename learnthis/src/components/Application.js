@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Application.scss";
 import Masonry from '@mui/lab/Masonry';
@@ -36,10 +35,70 @@ const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 //
 export default function Application(props) {
   const sampledata = [
-    "0KEpWHtG10M","r8Dg0KVnfMA","3VHCxuxtuL8","ha3a63YjLro","s-yvlPTDak0","r-yxNNO1EI8","9sWEecNUW-o","NQULKpW6hK4","r8Dg0KVnfMA","rxnX1jdoI6c",
-  ];
+    {
+      id: 1,
+      videoID: "rxnX1jdoI6c",
+      category:"CSS",
+      stage: "Beginner" 
+    },
+    {
+      id: 2,
+      videoID:"0KEpWHtG10M",
+      category: "JS",
+      stage:"Intermediate"
+    },
+    {
+      id: 3,
+      videoID:"r8Dg0KVnfMA",
+      category: "React",
+      stage: "Beginner"
+    },
+    {
+      id: 4,
+      videoID:"3VHCxuxtuL8",
+      category: "NodeJS",
+      stage: "Intermediate"
+    },
+    {
+      id: 5,
+      videoID:"ha3a63YjLro",
+      category: "JS",
+      stage: "Advanced"
+    },
+    {
+      id: 6,
+      videoID:"s-yvlPTDak0",
+      category: "JS",
+      stage: "Intermediate"
+    },
+    {
+      id: 7,
+      videoID:"r-yxNNO1EI8",
+      category: "JS",
+      stage: "Intermediate"
+    },
+    {
+      id: 8,
+      videoID:"9sWEecNUW-o",
+      category: "CSS",
+      stage: "Intermediate"
+    },
+    {
+      id: 9,
+      videoID:"NQULKpW6hK4",
+      category: "React",
+      stage: "Intermediate"
+    },
+    {
+      id: 10,
+      videoID:"r8Dg0KVnfMA",
+      category: "React",
+      stage: "Beginner"
+    }
+  ]
 
-  
+
+ 
   global.config.youtubekey = process.env.REACT_APP_YOUTUBE_API_KEY;
   //
   // set up for light and dark modes
@@ -51,19 +110,20 @@ export default function Application(props) {
 
   //  setup controlled page loader -- NOTE check our useEffect for smooth load of app itself
   const [pageLoading,setPageLoading] = useState(true);
+  const [nowloading, setLoading] = useState(true);
   const pageloader = document.getElementById('pageloader');
   if(pageLoading === true) {
     global.config.goSleep(2000).then(()=> {   // update here if we want to delay even more
       pageloader.style.display = "none";
-      setPageLoading(false); 
-    });
+      setPageLoading(false);
+    })
   }
   // classes for main display
   const [className, setclassName] = useState("layout");
-  
+ 
 
   //
-  // MODAL WINDOWS: 
+  // MODAL WINDOWS:
   // set up states & defaults for our zmodal windows
   //
   const [zmodalData, updateZModal] = useState({
@@ -83,7 +143,7 @@ export default function Application(props) {
   }
   function showPrivacy() {
     zmodalUpdater(updateZModal, zmodalData, modalPrivacyPolicy());
-  } 
+  }
 
 
   //
@@ -91,11 +151,15 @@ export default function Application(props) {
   // https://dmitripavlutin.com/react-useeffect-explanation/
   //
   useEffect(() => {
-    //zlog('userwarning');
+  //   //zlog('userwarning');
     if (global.config.cookiesModal) {
       cookiesModal(true);
+      setLoading(true)
+      setclassName("layout fadein")
     }
-    global.config.goSleep(2000).then(()=> { setclassName("layout fadein"); });
+  //   global.config.goSleep(2000).then(()=> { setclassName("layout fadein"); });
+    global.config.goSleep(4000).then(()=> {setLoading(false);});
+
   }, []);
 
   function cookiesModal(modalState = false) {
@@ -112,7 +176,7 @@ export default function Application(props) {
 
 
 
-  
+ 
   //<ThemeContext.Provider value={{ theme, setTheme }}>
 
   // from MUI
@@ -136,10 +200,9 @@ export default function Application(props) {
     [mode],
   );
 
-  
+ 
   return (
-    !pageLoading && (
-    
+  (
     <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
       <div className="maincontainer"><NavBar/>
@@ -156,13 +219,13 @@ export default function Application(props) {
         <Box sx={{ width: 1400, minHeight: 377 }}>
         <Masonry columns={4} spacing={2}>
         {sampledata.map((item, index) => (
-          <PreviewItem key={index} videoId={{ item }}>
-          {index + 1}
+          <PreviewItem key={item.id} videoId={ item.videoID } stage={item.stage} category={item.category} nowloading={nowloading}>
+          {item.id}
           </PreviewItem>
         ))}
         </Masonry>
         </Box>
-          
+         
         </main>
         <br></br>
         <SiteFooter></SiteFooter>

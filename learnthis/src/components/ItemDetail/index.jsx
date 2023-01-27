@@ -3,7 +3,6 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const style = {
@@ -22,28 +21,26 @@ const style = {
   p: 4,
 };
 
-// TODOp ass props to this component w data
-export default function TransitionsModal(props) {
-  const [open, setOpen] = React.useState(false || props.status);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+// TODO pass props to this component w data
+export default function DetailModal(props) {
+  // const [open, setOpen] = React.useState(false || props.status);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
 
   // <Button onClick={handleOpen}>Open modal - this is the 'full screen' view of the resource item</Button>
   return (
-    <div>
-      
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
+        open={props.status}
+        onClose={props.handleClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Fade in={open}>
+        <Fade in={props.status}>
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Text in a modal
@@ -54,6 +51,5 @@ export default function TransitionsModal(props) {
           </Box>
         </Fade>
       </Modal>
-    </div>
   );
 }

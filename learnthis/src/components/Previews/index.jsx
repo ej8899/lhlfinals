@@ -37,6 +37,9 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import Tooltip from '@mui/material/Tooltip';
+import Skeleton from '@mui/material/Skeleton';
+import Fade from '@mui/material/Fade';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -57,9 +60,9 @@ function PreviewItem(props) {
   console.log("preview item props:",props)
   const API_KEY = global.config.youtubekey;
   const testVideoID = "hY7m5jjJ9mM";
- 
+
   const videoId = testVideoID;
- 
+
   // reference: https://www.npmjs.com/package/react-youtube
   const videoPlayerOpts = {
     height: '390',
@@ -84,20 +87,25 @@ function PreviewItem(props) {
     setExpanded(!expanded);
   };
   const [descriptionExpanded, setDescriptionExpanded] = useState('');
+  const [stage, setStage] = useState('');
+  const [category, setCategory] = useState('');
 // -------------------------------------------------------------
 
 
   useEffect(() => {
-    axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId.item}&key=${API_KEY}`)
+    axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}&key=${API_KEY}`)
       .then(response => {
-        let title = response.data.items[0].snippet.title;
-        if (title) setTitle(truncateText(title,30));
+        // let title = response.data.items[0].snippet.title;
+        // if (title) setTitle(truncateText(title,30));
+        setTitle(response.data.items[0].snippet.title)
 
         // TODO - truncate description
         let description = response.data.items[0].snippet.description;
         if (description) setDesc(truncateText(description,100));
 
         setDescriptionExpanded(response.data.items[0].snippet.description)
+        setStage(`Learning Stage: ${props.stage}`)
+        setCategory(`Category: ${props.category}`)
        
         setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
         if(global.config.debug === true) {
@@ -141,6 +149,7 @@ function PreviewItem(props) {
 //
 const [open, setOpen] = useState(false);
 const [selectedResource, setSelectedResource] = useState();
+
 const handleOpen = (resourceId) => {
   setSelectedResource(resourceId);
   console.log("open modal for card DETAIL:",resourceId)
@@ -150,95 +159,228 @@ const handleOpen = (resourceId) => {
 const handleClose = () => {
   setOpen(false);
 };
- 
+
+// Random Colour for icon thumbnail
+function randomColor() {
+  let hex = Math.floor(Math.random() * 0xFFFFFF);
+  let color = "#" + hex.toString(16);
+
+  return color;
+}
 // TODO - next step here is assign a MODAL window and pass it to open with this resoruce ID
 
 
 // --------------------------------------------------------
   return (
-
     <Card sx={{ maxWidth: 345 }}>
-  <CardActionArea onClick={() => handleOpen(props.videoId.item)}>
-      <CardMedia
-        component="img"
-        height="140"
-        image={thumbnail}
-        alt={title}
-      />
-<DetailModal status={open}></DetailModal>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: blue[700] }} aria-label="recipe">
-            <YouTubeIcon />
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="Category: React"
-        subheader="Learning Stage: Beginner"
-      />
+      <CardActionArea onClick={() => handleOpen(props.videoId)}>
+        {props.nowloading ? (
+          <Skeleton sx={{ height: 140 }} animation="wave" variant="rectangular" />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <CardMedia
+              component="img"
+              height="140"
+              image={thumbnail}
+              alt={title}
+            />
+          </Fade>
+        )}
+       
+        <DetailModal status={open} handleClose={handleClose}/>
+     
+        <CardHeader
+          avatar={
+            props.nowloading ? (
+              <Skeleton animation="wave" variant="circular" width={40} height={40} />
+            ) : (
+              <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+                <Avatar style={{
+                  backgroundColor: randomColor()}} aria-label="recipe">
+                  <YouTubeIcon />
+                </Avatar>
+              </Fade>
+            )
+          }
+          action={
+            props.nowloading ? null : (
+              <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+                <IconButton aria-label="settings">
+                  <MoreVertIcon />
+                </IconButton>
+              </Fade>
+            )
+          }
+          title={
+            props.nowloading ? (
+              <Skeleton 
+                animation="wave"
+                height={10}
+                width="80%"
+                style={{ marginBottom: 6 }}
+              />) : (
+              <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+                <Typography>
+                  {category}
+                </Typography>
+              </Fade>
+            )
+          }
+          subheader={
+            props.nowloading ? (
+              <Skeleton animation="wave" height={10} width="40%" />
+            ) : (
+              <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+                <Typography variant="body2">
+                  {stage}
+                </Typography>
+              </Fade>
+            )
+          }  
+        />
 
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {description}
-        </Typography>
-      </CardContent>
-    </CardActionArea>
+        {props.nowloading ? (
+          <React.Fragment>
+            <Skeleton animation="wave" height={40} style={{ marginBottom: 6, marginLeft: 20}} width="85%" />
+            <Skeleton animation="wave" height={20} style={{marginLeft: 20}} width="85%" />
+            <Skeleton animation="wave" height={20} style={{marginLeft: 20}} width="85%" />
+            <Skeleton animation="wave" height={20} style={{marginLeft: 20}} width="85%" />
+          </React.Fragment>
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {description}
+              </Typography>
+            </CardContent>
+          </Fade>
+        )}
+      </CardActionArea>
 
       <Divider>
-        <Chip color="warning" label="More Actions" />
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="rounded" width={100} height={30} />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <Chip color="warning" label="More Actions" />
+          </Fade>
+        )}
       </Divider>
 
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="add to lesson plan">
-          <NoteAddIcon/>
-        </IconButton>
-        <IconButton aria-label="save for later">
-          <BookmarkAddIcon />
-        </IconButton>
-        <IconButton aria-label="add to playlist">
-          <PlaylistAddIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <IconButton aria-label="rate & add review">
-          <RateReviewIcon />
-        </IconButton>
-        <IconButton aria-label="report video">
-          <ReportGmailerrorredIcon />
-        </IconButton>
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <Tooltip title="Add to Favourites">
+              <IconButton aria-label="add to favourites">
+                <FavoriteIcon />
+              </IconButton>
+            </Tooltip>
+          </Fade>
+        )}
+
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <Tooltip title="Add to Lesson Plan">
+              <IconButton aria-label="add to lesson plan">
+                <NoteAddIcon/>
+              </IconButton>
+            </Tooltip>
+          </Fade>
+        )}
+
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <Tooltip title="Save for Later">
+              <IconButton aria-label="save for later">
+                <BookmarkAddIcon />
+              </IconButton>
+            </Tooltip>
+          </Fade>
+        )}
+     
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <Tooltip title="Add to Playlist">
+              <IconButton aria-label="add to playlist">
+                <PlaylistAddIcon />
+              </IconButton>
+            </Tooltip>
+          </Fade>
+        )}
+
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <Tooltip title="Share">
+              <IconButton aria-label="share">
+                <ShareIcon />
+              </IconButton>
+            </Tooltip>
+          </Fade>
+        )}
+
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <Tooltip title="Rate & Review Lesson">
+              <IconButton aria-label="rate & add review">
+                <RateReviewIcon />
+              </IconButton>
+            </Tooltip>
+          </Fade>
+        )}
+       
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <Tooltip title="Report Video">
+              <IconButton aria-label="report video">
+                <ReportGmailerrorredIcon />
+              </IconButton>
+            </Tooltip>
+          </Fade>
+        )}
+
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+            <ExpandMoreIcon />
+          </Fade>
+        )}
         </ExpandMore>
       </CardActions>
-   
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>Read Full Video Description:</Typography>
           <Typography paragraph variant="body2" color="text.secondary" sx={{ wordBreak: "break-word" }}>
-          {descriptionExpanded}
+            {descriptionExpanded}
           </Typography>
         </CardContent>
       </Collapse>
-     
+
     </Card>
-   
   );
 };
 // --------------------------------------------------------
