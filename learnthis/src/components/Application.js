@@ -9,6 +9,11 @@ import Masonry from '@mui/lab/Masonry';
 import {
   getDefaultTheme, ThemeContext
 } from "./ThemeContext.jsx";
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 // console log helper
 import zlog from "../helpers/zlog.js";
@@ -24,7 +29,8 @@ import PreviewItem from "./Previews";
 import SiteFooter from "./Footer";
 import Hero from "./Hero/Hero.jsx";
 
-
+import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 //
 // application - main function
 //
@@ -38,10 +44,10 @@ export default function Application(props) {
   //
   // set up for light and dark modes
   //
-  const [theme, setTheme] = useState(getDefaultTheme);
-  function toggleTheme() {
-    setTheme((curr) => (curr === "light" ? "dark" : "light"));
-  };
+  // const [theme, setTheme] = useState(getDefaultTheme);
+  // function toggleTheme() {
+  //   setTheme((curr) => (curr === "light" ? "dark" : "light"));
+  // };
 
   //  setup controlled page loader -- NOTE check our useEffect for smooth load of app itself
   const [pageLoading,setPageLoading] = useState(true);
@@ -98,18 +104,50 @@ export default function Application(props) {
       zmodalData,
       modalCookiesMessage({ clickFunction: showPrivacy })
     );
-    // TODO -load from localStorage - don't show modal if we've done it before
+    // TODO -load from localStorage - don't show modal if we've done it before (cookies only)
     // TODO - update localStorage once user says ok
   }
 
 
+
+
+
+  
+  //<ThemeContext.Provider value={{ theme, setTheme }}>
+
+  // from MUI
+  const [mode, setMode] = React.useState('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
   return (
     !pageLoading && (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-
+    
+    <ColorModeContext.Provider value={colorMode}>
+    <ThemeProvider theme={theme}>
       <div className="maincontainer"><NavBar/>
         <header>
         <Hero></Hero>
+        {theme.palette.mode} mode
+      <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
         </header>
 
         <main className={className} id={theme}>
@@ -141,7 +179,8 @@ export default function Application(props) {
                 {zmodalData.message}
               </ZModal>
             )}
-    </ThemeContext.Provider>
+    </ThemeProvider>
+    </ColorModeContext.Provider>
     )
   );
 }

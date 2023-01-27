@@ -4,6 +4,9 @@ import { ThemeContext } from './ThemeContext.jsx';
 import './Application.scss';
 import './ThemeSwitch.css';
 
+// TODO change dark/light modal to MUI style/system
+
+
 function ThemeSwitch() {
   const { theme, setTheme } = useContext(ThemeContext);
 
@@ -34,3 +37,5 @@ function ThemeSwitch() {
   );
 };
 export default ThemeSwitch;
+
+

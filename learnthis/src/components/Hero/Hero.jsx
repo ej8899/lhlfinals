@@ -1,3 +1,4 @@
+import { grey } from "@mui/material/colors";
 import "../Application.scss";
 import SpringModal from "../ItemDetail/index.jsx";
 
@@ -5,9 +6,10 @@ export default function Hero(props) {
   function showAbout() {
     // TODO - this is in Application.js currently - needs moved to helper function file for import elsewhere
   }
-  const tempstyles = "marginTop: 40px";
+  
   return (
-    <div style={{tempstyles}}>
+    <div style={{marginTop: '40px',
+                backgroundColor: '#616161'}}>
       <br/><br/>
     hero location: <br/><br/> <a className="socicons">
                   <i
@@ -21,3 +23,4 @@ export default function Hero(props) {
     </div>
   );
 };
+

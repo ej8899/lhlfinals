@@ -22,14 +22,15 @@ const style = {
   p: 4,
 };
 
-export default function TransitionsModal() {
+// TODO pass props to this component w data
+export default function TransitionsModal(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Button onClick={handleOpen}>Open modal - this is the 'full screen' view of the resource item</Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
