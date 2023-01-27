@@ -22,15 +22,16 @@ const style = {
   p: 4,
 };
 
-// TODO pass props to this component w data
+// TODOp ass props to this component w data
 export default function TransitionsModal(props) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false || props.status);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // <Button onClick={handleOpen}>Open modal - this is the 'full screen' view of the resource item</Button>
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal - this is the 'full screen' view of the resource item</Button>
+      
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

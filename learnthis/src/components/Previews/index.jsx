@@ -12,6 +12,9 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, CardHeader } from '@mui/material';
 
+// detailpage modal
+import DetailModal from "../ItemDetail/index.jsx";
+
 // helpers
 import { truncateText } from '../../helpers/helpers';
 
@@ -53,8 +56,6 @@ const ExpandMore = styled((props) => {
 function PreviewItem(props) {
   console.log("preview item props:",props)
   const API_KEY = global.config.youtubekey;
- 
-  zlog('info',API_KEY)
   const testVideoID = "hY7m5jjJ9mM";
  
   const videoId = testVideoID;
@@ -134,18 +135,36 @@ function PreviewItem(props) {
     </div>
 */
 
+
+//
+// handle open and close of item detail modal
+//
+const [open, setOpen] = useState(false);
+const [selectedResource, setSelectedResource] = useState();
+const handleOpen = (resourceId) => {
+  setSelectedResource(resourceId);
+  console.log("DETAIL:",resourceId)
+  setOpen(true);
+};
+
+const handleClose = () => {
+  setOpen(false);
+};
+
+
+
 // --------------------------------------------------------
   return (
 
     <Card sx={{ maxWidth: 345 }}>
-
+  <CardActionArea onClick={() => handleOpen(props.videoId.item)}>
       <CardMedia
         component="img"
         height="140"
         image={thumbnail}
         alt={title}
       />
-
+<DetailModal status={open}></DetailModal>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: blue[700] }} aria-label="recipe">
@@ -159,7 +178,6 @@ function PreviewItem(props) {
         }
         title="Category: React"
         subheader="Learning Stage: Beginner"
-       
       />
 
       <CardContent>
@@ -170,11 +188,12 @@ function PreviewItem(props) {
           {description}
         </Typography>
       </CardContent>
+    </CardActionArea>
 
       <Divider>
         <Chip color="warning" label="More Actions" />
       </Divider>
-     
+
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
@@ -211,7 +230,7 @@ function PreviewItem(props) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>Read Full Video Description:</Typography>
-          <Typography paragraph variant="body2" color="text.secondary">
+          <Typography paragraph variant="body2" color="text.secondary" sx={{ wordBreak: "break-word" }}>
           {descriptionExpanded}
           </Typography>
         </CardContent>
