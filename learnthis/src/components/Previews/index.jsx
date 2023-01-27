@@ -150,7 +150,8 @@ const handleOpen = (resourceId) => {
 const handleClose = () => {
   setOpen(false);
 };
-
+ 
+// TODO - next step here is assign a MODAL window and pass it to open with this resoruce ID
 
 
 // --------------------------------------------------------
