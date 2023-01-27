@@ -16,7 +16,8 @@ import { Button, CardActionArea, CardActions, CardHeader } from '@mui/material';
 import DetailModal from "../ItemDetail/index.jsx";
 
 // helpers
-import { truncateText } from '../../helpers/helpers';
+import {  truncateText,
+          randomNumber } from '../../helpers/helpers';
 
 // --------------------------------------------------------
 // Complex Interaction Card - Expand More Prop
@@ -169,6 +170,7 @@ function randomColor() {
 }
 // TODO - next step here is assign a MODAL window and pass it to open with this resoruce ID
 
+const skeletonTimer = randomNumber(100,3000);
 
 // --------------------------------------------------------
   return (
@@ -177,7 +179,7 @@ function randomColor() {
         {props.nowloading ? (
           <Skeleton sx={{ height: 140 }} animation="wave" variant="rectangular" />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <CardMedia
               component="img"
               height="140"
