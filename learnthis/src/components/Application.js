@@ -153,6 +153,7 @@ export default function Application(props) {
 
         <main className={className} id={theme}>
 
+        <Box sx={{ width: 1000, minHeight: 377 }}>
         <Masonry columns={4} spacing={2}>
         {sampledata.map((item, index) => (
           <PreviewItem key={index} videoId={{ item }}>
@@ -160,6 +161,7 @@ export default function Application(props) {
           </PreviewItem>
         ))}
         </Masonry>
+        </Box>
           
         </main>
         <br></br>
