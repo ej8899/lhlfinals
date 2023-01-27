@@ -1,4 +1,5 @@
 import "../Application.scss";
+import SpringModal from "../ItemDetail/index.jsx";
 
 export default function Hero(props) {
   function showAbout() {
@@ -15,6 +16,8 @@ export default function Hero(props) {
                   ></i>
                 </a> | cookies | 
                 <br/><br/>
+
+    <SpringModal></SpringModal>
     </div>
   );
 };
