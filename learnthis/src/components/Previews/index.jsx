@@ -143,7 +143,7 @@ const [open, setOpen] = useState(false);
 const [selectedResource, setSelectedResource] = useState();
 const handleOpen = (resourceId) => {
   setSelectedResource(resourceId);
-  console.log("DETAIL:",resourceId)
+  console.log("open modal for card DETAIL:",resourceId)
   setOpen(true);
 };
 
