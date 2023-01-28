@@ -28,9 +28,9 @@ export default function Hero(props) {
     <Grid container>
       <Grid item xs={12}>
         <div style={heroContent}>
-          <Typography variant="h1">Welcome to our site!</Typography>
+          <Typography variant="h2">Welcome to our site!</Typography>
           <Typography variant="subtitle1">
-          hero location: <br/><br/> put other 'chips' or buttons here for quick sort of primary categories
+          hero component<br/><br/> put other 'chips' or buttons here for quick sort of primary categories
           </Typography>
           <ChipsArray></ChipsArray>
         </div>

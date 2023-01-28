@@ -6,6 +6,7 @@ import TagFacesIcon from '@mui/icons-material/TagFaces';
 import JavascriptIcon from '@mui/icons-material/Javascript';
 import CssIcon from '@mui/icons-material/Css';
 import PhpIcon from '@mui/icons-material/Php';
+import VpnLockIcon from '@mui/icons-material/VpnLock';
 
 const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
@@ -31,6 +32,9 @@ export default function ChipsArray() {
 
   const handleDelete = (chipToDelete) => () => {
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+  };
+  const handleClick = (chipID) => {
+    console.info('You clicked the Chip.',chipID);
   };
 
   // TODO - could we add an overflow to scroll the chip list left and right?
@@ -61,12 +65,16 @@ export default function ChipsArray() {
         if (data.label === 'PHP') {
           icon = <PhpIcon />;
         }
+        if (data.label === 'CyberSecurity') {
+          icon = <VpnLockIcon/>;
+        }
 
         return (
           <ListItem key={data.key}>
             <Chip
               icon={icon}
               label={data.label}
+              onClick={()=> {handleClick(data.key)}}
             />
           </ListItem>
         );
