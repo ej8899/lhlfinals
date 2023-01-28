@@ -2,7 +2,7 @@ INSERT INTO likes (
   resource_id,
   profile_id,
   comment_id,
-  like
+  is_liked
 )
 VALUES
   (1,1,NULL,true),
