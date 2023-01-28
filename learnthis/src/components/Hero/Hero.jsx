@@ -2,6 +2,7 @@ import { Container, Grid, Typography,Button } from "@mui/material";
 
 import "../Application.scss";
 import SpringModal from "../ItemDetail/index.jsx";
+import ChipsArray from "./ChipsList";
 
 
 const heroContainer = {
@@ -29,14 +30,9 @@ export default function Hero(props) {
         <div style={heroContent}>
           <Typography variant="h1">Welcome to our site!</Typography>
           <Typography variant="subtitle1">
-          hero location: <br/><br/> <a className="socicons">
-                      <i
-                        onClick={() => showAbout()}
-                        className="fa-solid fa-circle-question fa-xl"
-                      ></i>
-                    </a> | cookies | put other 'chips' or buttons here for quick sort of primary categories
+          hero location: <br/><br/> put other 'chips' or buttons here for quick sort of primary categories
           </Typography>
-          <Button variant="contained" color="secondary">Learn More</Button>
+          <ChipsArray></ChipsArray>
         </div>
       </Grid>
     </Grid>

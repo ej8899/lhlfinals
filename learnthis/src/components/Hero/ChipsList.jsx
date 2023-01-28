@@ -3,12 +3,16 @@ import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
+import JavascriptIcon from '@mui/icons-material/Javascript';
+import CssIcon from '@mui/icons-material/Css';
+import PhpIcon from '@mui/icons-material/Php';
 
 const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
 export default function ChipsArray() {
+  // TODO this should ultimately come from database - not hard coded
   const [chipData, setChipData] = React.useState([
     { key: 0, label: 'All' },
     { key: 9, label: 'Recent' },
@@ -20,6 +24,9 @@ export default function ChipsArray() {
     { key: 6, label: 'HTML' },
     { key: 7, label: 'CSS' },
     { key: 8, label: 'CyberSecurity' },
+    { key: 10, label: 'JavaScript' },
+    { key: 11, label: 'PHP' },
+    { key: 12, label: 'SQL' },
   ]);
 
   const handleDelete = (chipToDelete) => () => {
@@ -45,13 +52,21 @@ export default function ChipsArray() {
         if (data.label === 'React') {
           icon = <TagFacesIcon />;
         }
+        if (data.label === 'JavaScript') {
+          icon = <JavascriptIcon />;
+        }
+        if (data.label === 'CSS') {
+          icon = <CssIcon />;
+        }
+        if (data.label === 'PHP') {
+          icon = <PhpIcon />;
+        }
 
         return (
           <ListItem key={data.key}>
             <Chip
               icon={icon}
               label={data.label}
-              onDelete={data.label === 'React' ? undefined : handleDelete(data)}
             />
           </ListItem>
         );

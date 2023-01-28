@@ -10,18 +10,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions, CardHeader } from '@mui/material';
+import { Button, CardActionArea, CardActions, CardHeader, Icon } from '@mui/material';
 
 // detailpage modal
 import DetailModal from "../ItemDetail/index.jsx";
 
-// helpers
-import {  truncateText,
-          randomNumber } from '../../helpers/helpers';
-
 // --------------------------------------------------------
 // Complex Interaction Card - Expand More Prop
-import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import { blue } from '@mui/material/colors';
@@ -41,24 +36,20 @@ import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import Tooltip from '@mui/material/Tooltip';
 import Skeleton from '@mui/material/Skeleton';
 import Fade from '@mui/material/Fade';
+import Box from '@mui/material/Box'
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+// Import Helper Functions
+import { randomNumber, randomColor, ExpandMore, truncateText, Stars } from "../../helpers/helpers";
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
 // --------------------------------------------------------
 
 
 // TODO - any benefit to removing react-youtube and rolling our own variant?
 
 function PreviewItem(props) {
-  console.log("preview item props:",props)
+  // console.log("preview item props:",props)
   const API_KEY = global.config.youtubekey;
   const testVideoID = "hY7m5jjJ9mM";
 
@@ -90,6 +81,7 @@ function PreviewItem(props) {
   const [descriptionExpanded, setDescriptionExpanded] = useState('');
   const [stage, setStage] = useState('');
   const [category, setCategory] = useState('');
+  const [video, setVideo] = useState('');
 // -------------------------------------------------------------
 
 
@@ -105,9 +97,10 @@ function PreviewItem(props) {
         if (description) setDesc(truncateText(description,100));
 
         setDescriptionExpanded(response.data.items[0].snippet.description)
-        setStage(`Learning Stage: ${props.stage}`)
+        setStage(`Complexity: ${props.stage}`)
         setCategory(`Category: ${props.category}`)
-       
+        setVideo(response.data.items[0].snippet.video)
+        setOpen(false)
         setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
         if(global.config.debug === true) {
           //zlog('info',"data snippet follows:");
@@ -151,23 +144,29 @@ function PreviewItem(props) {
 const [open, setOpen] = useState(false);
 const [selectedResource, setSelectedResource] = useState();
 
-const handleOpen = (resourceId) => {
-  setSelectedResource(resourceId);
-  console.log("open modal for card DETAIL:",resourceId)
+const handleOpen = () => 
   setOpen(true);
-};
+;
 
 const handleClose = () => {
   setOpen(false);
 };
 
-// Random Colour for icon thumbnail
-function randomColor() {
-  let hex = Math.floor(Math.random() * 0xFFFFFF);
-  let color = "#" + hex.toString(16);
+const ratingScore = `Rating: ${props.rating}`
 
-  return color;
-}
+// TODO pass favourite status to database
+const [favourite, setFavourite] = useState('default')
+const addFavourites = () => {
+    favourite === "pink"? setFavourite('default') : setFavourite('pink')
+  }
+
+// TODO pass lesson plan status to database
+const [lesson, setLesson] = useState('default')
+const addLesson = () => {
+    lesson === 'blue'? setLesson('default') : setLesson('blue')
+  }
+
+
 // TODO - next step here is assign a MODAL window and pass it to open with this resoruce ID
 
 const skeletonTimer = randomNumber(100,3000);
@@ -175,7 +174,7 @@ const skeletonTimer = randomNumber(100,3000);
 // --------------------------------------------------------
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea onClick={() => handleOpen(props.videoId)}>
+      <CardActionArea onClick={handleOpen}>
         {props.nowloading ? (
           <Skeleton sx={{ height: 140 }} animation="wave" variant="rectangular" />
         ) : (
@@ -188,15 +187,15 @@ const skeletonTimer = randomNumber(100,3000);
             />
           </Fade>
         )}
-       
-        <DetailModal status={open} handleClose={handleClose}/>
      
+
+   
         <CardHeader
           avatar={
             props.nowloading ? (
               <Skeleton animation="wave" variant="circular" width={40} height={40} />
             ) : (
-              <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+              <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
                 <Avatar style={{
                   backgroundColor: randomColor()}} aria-label="recipe">
                   <YouTubeIcon />
@@ -206,7 +205,7 @@ const skeletonTimer = randomNumber(100,3000);
           }
           action={
             props.nowloading ? null : (
-              <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+              <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
                 <IconButton aria-label="settings">
                   <MoreVertIcon />
                 </IconButton>
@@ -221,7 +220,7 @@ const skeletonTimer = randomNumber(100,3000);
                 width="80%"
                 style={{ marginBottom: 6 }}
               />) : (
-              <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+              <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
                 <Typography>
                   {category}
                 </Typography>
@@ -232,7 +231,7 @@ const skeletonTimer = randomNumber(100,3000);
             props.nowloading ? (
               <Skeleton animation="wave" height={10} width="40%" />
             ) : (
-              <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+              <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
                 <Typography variant="body2">
                   {stage}
                 </Typography>
@@ -249,24 +248,48 @@ const skeletonTimer = randomNumber(100,3000);
             <Skeleton animation="wave" height={20} style={{marginLeft: 20}} width="85%" />
           </React.Fragment>
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
+            <Box 
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center" 
+              >
+              <Typography gutterBottom variant='h6' textAlign="center" marginBottom={'0px'} lineHeight="105%" marginTop={"-15px"}>
                 {title}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {description}
+              <Typography variant="body2" color="text.secondary" marginBottom={'-12px'}>
+                <Tooltip title={ratingScore} >
+                  <IconButton sx={{ "&:hover": {color: 'orange'} }}>
+                    <Stars rating={props.rating} />
+                  </IconButton>
+                </Tooltip>
               </Typography>
+              </Box>
             </CardContent>
           </Fade>
         )}
       </CardActionArea>
-
+          <div>
+      <DetailModal 
+        open={open} 
+        handleClose={handleClose} 
+        videoId={props.videoId} 
+        title={title} 
+        complexity={props.complexity} 
+        typeCategory={props.typeCategory} 
+        favourite={favourite} 
+        addFavourites={addFavourites}
+        lesson={lesson}
+        addLesson={addLesson}
+        />
+          </div>
       <Divider>
         {props.nowloading ? (
           <Skeleton animation="wave" variant="rounded" width={100} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <Chip color="warning" label="More Actions" />
           </Fade>
         )}
@@ -276,9 +299,9 @@ const skeletonTimer = randomNumber(100,3000);
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <Tooltip title="Add to Favourites">
-              <IconButton aria-label="add to favourites">
+              <IconButton aria-label="add to favourites" sx={{color: favourite, "&:hover": {color: 'pink'} }} onClick={addFavourites}>
                 <FavoriteIcon />
               </IconButton>
             </Tooltip>
@@ -288,9 +311,9 @@ const skeletonTimer = randomNumber(100,3000);
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <Tooltip title="Add to Lesson Plan">
-              <IconButton aria-label="add to lesson plan">
+              <IconButton aria-label="add to lesson plan" sx={{color: lesson, "&:hover": {color: 'blue'} }} onClick={addLesson}>
                 <NoteAddIcon/>
               </IconButton>
             </Tooltip>
@@ -300,21 +323,21 @@ const skeletonTimer = randomNumber(100,3000);
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <Tooltip title="Save for Later">
-              <IconButton aria-label="save for later">
+              <IconButton aria-label="save for later" sx={{ "&:hover": {color: 'green'} }}>
                 <BookmarkAddIcon />
               </IconButton>
             </Tooltip>
           </Fade>
         )}
-     
+   
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <Tooltip title="Add to Playlist">
-              <IconButton aria-label="add to playlist">
+              <IconButton aria-label="add to playlist" sx={{ "&:hover": {color: 'brown'} }}>
                 <PlaylistAddIcon />
               </IconButton>
             </Tooltip>
@@ -324,9 +347,9 @@ const skeletonTimer = randomNumber(100,3000);
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <Tooltip title="Share">
-              <IconButton aria-label="share">
+              <IconButton aria-label="share" sx={{ "&:hover": {color: 'purple'} }}>
                 <ShareIcon />
               </IconButton>
             </Tooltip>
@@ -336,21 +359,21 @@ const skeletonTimer = randomNumber(100,3000);
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <Tooltip title="Rate & Review Lesson">
-              <IconButton aria-label="rate & add review">
+              <IconButton aria-label="rate & add review" sx={{ "&:hover": {color: 'teal'} }}>
                 <RateReviewIcon />
               </IconButton>
             </Tooltip>
           </Fade>
         )}
-       
+     
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <Tooltip title="Report Video">
-              <IconButton aria-label="report video">
+              <IconButton aria-label="report video" sx={{ "&:hover": {color: 'red'} }}>
                 <ReportGmailerrorredIcon />
               </IconButton>
             </Tooltip>
@@ -366,7 +389,7 @@ const skeletonTimer = randomNumber(100,3000);
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: 4000 }}>
+          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
             <ExpandMoreIcon />
           </Fade>
         )}

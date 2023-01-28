@@ -50,6 +50,7 @@ function CookiesConsentModal() {
   };
 
   // TODO - align cookie center vertical
+  // TODO - if dark mode start, cookies modal "paper" is lighter color than modal background or perhaps "box" - need to fix!
 
   return (
     <Modal
