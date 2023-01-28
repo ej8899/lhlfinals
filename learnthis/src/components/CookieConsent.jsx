@@ -63,7 +63,7 @@ function CookiesConsentModal() {
         <Grid sx={{ border: "0px solid red" }} container spacing={2} justifyContent="center" >
         <Grid item 
                   align="left"
-                  direction="row"
+                  
                   alignItems="flex-end"
                   justify="center" 
                   >
@@ -78,7 +78,7 @@ function CookiesConsentModal() {
         <Grid item xs={8} 
                   container
                   align="left"
-                  direction="row"
+                  
                   alignItems="flex-end"
                   justify="center"
                   >
@@ -103,7 +103,7 @@ function CookiesConsentModal() {
         
         <div >
           <Toolbar sx={{ justifyContent: "flex-end" }}>
-          <Button variant="contained" color="primary" className={useStyles.acceptButton} onClick={handleClose}>
+          <Button variant="contained" color="primary"  onClick={handleClose}>
             Accept
           </Button>&nbsp;
           <Button variant="outlined" color="primary" onClick={handleClose}>
