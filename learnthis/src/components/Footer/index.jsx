@@ -17,38 +17,37 @@ export default function SiteFooter(props) {
 
   return (
     <div>
-<footer class="footer">
-    <div class="waves">
-      <div class="wave" id="wave1"></div>
-      <div class="wave" id="wave2"></div>
-      <div class="wave" id="wave3"></div>
-      <div class="wave" id="wave4"></div>
+<footer className="footer">
+    <div className="waves">
+      <div className="wave" id="wave1"></div>
+      <div className="wave" id="wave2"></div>
+      <div className="wave" id="wave3"></div>
+      <div className="wave" id="wave4"></div>
     </div>
-    <ul class="social-icon">
-      <li class="social-icon__item"><a class="social-icon__link" href="#">
+    <ul className="social-icon">
+      <li className="social-icon__item"><a className="social-icon__link" href="#">
           <GitHubIcon/>
         </a></li>
-      <li class="social-icon__item"><a class="social-icon__link" href="#">
+      <li className="social-icon__item"><a className="social-icon__link" href="#">
           <LinkedInIcon/>
         </a></li>
-      <li class="social-icon__item"><a class="social-icon__link" href="#">
+      <li className="social-icon__item"><a className="social-icon__link" href="#">
           <ion-icon name="logo-linkedin"></ion-icon>
         </a></li>
-      <li class="social-icon__item"><a class="social-icon__link" href="#">
+      <li className="social-icon__item"><a className="social-icon__link" href="#">
           <ion-icon name="logo-instagram"></ion-icon>
         </a></li>
     </ul>
-    <ul class="menu">
-      <li class="menu__item"><a class="menu__link" href="#">About</a></li>
-      <li class="menu__item"><a class="menu__link" href="#">Team</a></li>
-      <li class="menu__item"><a class="menu__link" href="#">Contact</a></li>
-      <li class="menu__item"><a class="menu__link" href="#">Cookie Policy</a></li>
-      <li class="menu__item"><a class="menu__link" href="#">Privacy Policy</a></li>
+    <ul className="menu">
+      <li className="menu__item"><a className="menu__link" href="#">About</a></li>
+      <li className="menu__item"><a className="menu__link" href="#">Team</a></li>
+      <li className="menu__item"><a className="menu__link" href="#">Contact</a></li>
+      <li className="menu__item"><a className="menu__link" href="#">Cookie Policy</a></li>
+      <li className="menu__item"><a className="menu__link" href="#">Privacy Policy</a></li>
     </ul>
     &copy;2023, All Rights Reserved
   </footer>
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  
     </div>
   );
 };
