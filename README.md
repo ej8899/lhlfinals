@@ -18,9 +18,19 @@ about message here
 Clone the repository to your computer.
 You'll also need the server and SQL data that is available within this same github repository.
 
+## SERVER Getting Started
+1. Create the `.env` by using `.env.example` as a reference: `cp .env.example .env`
+2. Update the .env file with your correct local information 
+  - username: `development` 
+  - password: `development` 
+  - database: `finals`
+3. Install dependencies: `npm i`
+5. Reset database: `npm run db:reset`
+  - Check the db folder to see what gets created and seeded in the SDB
+7. Run the server: `npm run local`
+  - Note: nodemon is used, so you should not have to restart your server
+8. Visit `http://localhost:8080/`
 
-4. Visit `http://localhost:8000/` in your web browser to start the app.  
-[( back to top 🔺)](#learnthis)
 ---
 ## Features...
 - replace this as necessary
