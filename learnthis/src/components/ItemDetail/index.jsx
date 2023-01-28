@@ -8,17 +8,23 @@ import YouTube from 'react-youtube'; // npx install react-youtube
 import CloseIcon from '@mui/icons-material/Close';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 //-------------------------------------------------------------------
 import MultilineTextFields from './commentbox';
 import ComboBox from './buttonlist';
 //-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
+// Import Icons Functions
+import { FavouriteStaleStats} from '../Icons/favourite.jsx'
+import { LessonStaleStats} from '../Icons/lesson.jsx'
+import { RateStaleStats } from '../Icons/review';
+import { BookmarkStaleStats } from '../Icons/bookmark';
+import { PlaylistStaleStats } from '../Icons/playlist';
+import { ShareStaleStats } from '../Icons/share';
+import { ReportStaleStats } from '../Icons/report';
+import { LikeStaleStats } from '../Icons/like';
+//-------------------------------------------------------------------
+
 
 const style = {
   position: 'absolute',
@@ -51,21 +57,7 @@ export default function DetailModal(props) {
     },
   };
 
-  // TODO pass the notes, category and level to database
-  const [show, setShow] = useState('none');
-  const rateReview = () => {
-    if(show === "none") {
-    setShow('flex')
-    } else {
-      setShow('none')
-    }
-    return    
-  }
 
-
- 
-
- 
   return (
       <Modal
         aria-labelledby="detail-modal-title"
@@ -85,63 +77,37 @@ export default function DetailModal(props) {
               {props.title}
             </Typography>
             <Tooltip title="Close">
-              <IconButton aria-label="close" sx={{bgcolor: "lightgrey", "&:hover": {color: 'red'} }} onClick={props.handleClose}>
+              <IconButton aria-label="close" sx={{bgcolor: "#f5f5f5", "&:hover": {color: 'red'} }} onClick={props.handleClose}>
                 <CloseIcon />
               </IconButton>
             </Tooltip>
             </Box>
           <Box display="flex" width="100%" justifyContent="space-around">
-              <YouTube videoId={props.videoId} opts={videoPlayerOpts} />
-              <MultilineTextFields display={show}/>
+            <YouTube videoId={props.videoId} opts={videoPlayerOpts} />
+            <MultilineTextFields display={props.show}/>
             <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around">
-              <Tooltip title="Rate & Review Lesson">
-                <IconButton aria-label="rate & add review" sx={{ "&:hover": {color: 'teal'} }} onClick={rateReview}>
-                  <RateReviewIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Add to Favourites">
-                <IconButton aria-label="add to favourites" sx={{ color: `${props.favourite}`, "&:hover": {color: "pink"} }}  onClick={props.addFavourites}>
-                  <FavoriteIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Add to Lesson Plan">
-                <IconButton aria-label="add to lesson plan" sx={{ color:`${props.lesson}`, "&:hover": {color: 'blue'} }} onClick={props.addLesson}>
-                  <NoteAddIcon/>
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Save for Later">
-                <IconButton aria-label="save for later" sx={{ "&:hover": {color: 'green'} }}>
-                  <BookmarkAddIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Add to Playlist">
-                <IconButton aria-label="add to playlist" sx={{ "&:hover": {color: 'brown'} }}>
-                  <PlaylistAddIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Share">
-                <IconButton aria-label="share" sx={{ "&:hover": {color: 'purple'} }}>
-                  <ShareIcon />
-                </IconButton>
-              </Tooltip>
 
-              <Tooltip title="Report Video">
-                <IconButton aria-label="report video" sx={{ "&:hover": {color: 'red'} }}>
-                  <ReportGmailerrorredIcon />
-                </IconButton>
-              </Tooltip>
+              <RateStaleStats rateReview={props.rateReview} rate={props.rate} addRate={props.addRate}/>
+              <FavouriteStaleStats favourite={props.favourite} addFavourites={props.addFavourites}/>
+              <LikeStaleStats like={props.like} addLike={props.addLike} />
+              <LessonStaleStats lesson={props.lesson} addLesson={props.addLesson}/>
+              <BookmarkStaleStats bookmark={props.bookmark} addBookmark={props.addBookmark} />
+              <PlaylistStaleStats playlist={props.playlist} addPlaylist={props.addPlaylist} />
+              <ShareStaleStats share={props.share} addShare={props.addShare} />
+              <ReportStaleStats report={props.report} addReport={props.addReport} />
+
             </Typography>
-            </Box>
-            <Box display={show}>
-            <Box style={{paddingTop:20, paddingLeft:15}}>
-              <ComboBox listData={props.complexity} message={'Select the lesson complexity...'}/>
-              </Box>
-            <Box style={{paddingTop:20, paddingLeft: 20}} >
-              <ComboBox listData={props.typeCategory} message={'Select the lesson category...'}/>
-              </Box>
-              </Box>
-          </Box>
 
+            </Box>
+            <Box display={props.show}>
+              <Box style={{paddingTop:20, paddingLeft:15}}>
+                <ComboBox listData={props.complexity} message={'Select the lesson complexity...'}/>
+              </Box>
+              <Box style={{paddingTop:20, paddingLeft: 20}} >
+                <ComboBox listData={props.typeCategory} message={'Select the lesson category...'}/>
+              </Box>
+            </Box>
+          </Box>
         </Fade>
       </Modal>
   );

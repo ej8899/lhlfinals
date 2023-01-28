@@ -43,72 +43,83 @@ export default function Application(props) {
       videoID: "rxnX1jdoI6c",
       category:"CSS",
       stage: "Beginner",
-      rating: 3.7 
+      rating: 3.7,
+      likes: 32
     },
     {
       id: 2,
       videoID:"0KEpWHtG10M",
       category: "JS",
       stage:"Intermediate",
-      rating: 1.2
+      rating: 1.2,
+      likes: 0
     },
     {
       id: 3,
       videoID:"r8Dg0KVnfMA",
       category: "React",
       stage: "Beginner",
-      rating: 4
+      rating: 4,
+      likes:56
     },
     {
       id: 4,
       videoID:"3VHCxuxtuL8",
       category: "NodeJS",
       stage: "Intermediate",
-      rating: 2.7
+      rating: 2.7,
+      likes: 18
     },
     {
       id: 5,
       videoID:"ha3a63YjLro",
       category: "JS",
       stage: "Advanced",
-      rating: 4.9
+      rating: 4.9,
+      likes: 101
     },
     {
       id: 6,
       videoID:"s-yvlPTDak0",
       category: "JS",
       stage: "Intermediate",
-      rating: 3.6
+      rating: 3.6,
+      likes: 54
     },
     {
       id: 7,
       videoID:"r-yxNNO1EI8",
       category: "JS",
       stage: "Intermediate",
-      rating: 4.2
+      rating: 4.2,
+      likes: 62
     },
     {
       id: 8,
       videoID:"9sWEecNUW-o",
       category: "CSS",
       stage: "Intermediate",
-      rating: 2.0
+      rating: 2.0,
+      likes: 8
     },
     {
       id: 9,
       videoID:"NQULKpW6hK4",
       category: "React",
       stage: "Intermediate",
-      rating: 2.8
+      rating: 2.8,
+      likes: 34
     },
     {
       id: 10,
       videoID:"r8Dg0KVnfMA",
       category: "React",
       stage: "Beginner",
-      rating: 4.1
+      rating: 4.1,
+      likes: 87
     }
   ]
+  // TODO DELETE THESE:
   const typeCategory = [
     'CSS', 'React', 'Javascript', 'NodeJS', 'SQL', 'SASS', 'Ruby'
   ]
@@ -120,13 +131,6 @@ export default function Application(props) {
 
 
   global.config.youtubekey = process.env.REACT_APP_YOUTUBE_API_KEY;
-  //
-  // set up for light and dark modes
-  //
-  // const [theme, setTheme] = useState(getDefaultTheme);
-  // function toggleTheme() {
-  //   setTheme((curr) => (curr === "light" ? "dark" : "light"));
-  // };
 
   //  setup controlled page loader -- NOTE check our useEffect for smooth load of app itself
   const [pageLoading,setPageLoading] = useState(true);
@@ -141,29 +145,33 @@ export default function Application(props) {
   // classes for main display
   const [className, setclassName] = useState("layout");
 
-  //
-  // MODAL WINDOWS:
-  // set up states & defaults for our zmodal windows
-  //
-  const [zmodalData, updateZModal] = useState({
-    message: "",
-    button: "",
-    settings: {
-      noAbort: true,
-    },
-    show: false,
-  });
 
-  // TODO remove these modal details after conversion to MUI modals
-  function showAbout() {
-    zmodalUpdater(updateZModal, zmodalData, modalAboutMessage({clickFunction: showReleaseNotes}));
-  }
-  function showReleaseNotes() {
-    zmodalUpdater(updateZModal, zmodalData, modalReleaseNotes());
-  }
-  function showPrivacy() {
-    zmodalUpdater(updateZModal, zmodalData, modalPrivacyPolicy());
-  }
+  // from MUI
+  const [mode, setMode] = React.useState('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        if(mode === 'light') {
+          localStorage.setItem("isDarkMode", 'dark');  
+        } else {
+          localStorage.setItem("isDarkMode",'light');
+        }
+      },
+    }),
+    [mode],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
 
 
   //
@@ -171,6 +179,12 @@ export default function Application(props) {
   // https://dmitripavlutin.com/react-useeffect-explanation/
   //
   useEffect(() => {
+    // grab theme settings
+    const isDarkMode = localStorage.getItem("isDarkMode");
+    setMode(isDarkMode);
+    zlog('info',"THEME FROM localstorage:",isDarkMode)
+
+
     // TODO why is userwarning showing twice.. need only 1
     //zlog('userwarning');
 
@@ -186,51 +200,23 @@ export default function Application(props) {
 
   }, []);
 
-  // TODO remove this code if mui cookies modal is fine - but be sure showPrivacy is linked to child modal
-  function cookiesModal(modalState = false) {
-    zmodalUpdater(
-      updateZModal,
-      zmodalData,
-      modalCookiesMessage({ clickFunction: showPrivacy })
-    );
+    // TODO - cookiesmodal -  be sure showPrivacy is linked to child modal
     // TODO -load from localStorage - don't show modal if we've done it before (cookies only)
     // TODO - update localStorage once user says ok
-  }
+  
 
 
 
-  //<ThemeContext.Provider value={{ theme, setTheme }}>
-
-  // from MUI
-  const [mode, setMode] = React.useState('light');
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-      },
-    }),
-    [],
-  );
-
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode],
-  );
-
-
+  
 
   return (
   (
     <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
     <CssBaseline />
-      <div className="maincontainer"><NavBar/>
-        <header>
+      <div className="maincontainer">
+        <NavBar/>
+      <header>
         <Hero></Hero>
         {theme.palette.mode} mode
       <IconButton sx={ {m1: 1} } onClick={colorMode.toggleColorMode} color="inherit">
@@ -238,11 +224,10 @@ export default function Application(props) {
       </IconButton>
         </header>
 
-
         <Box sx={{ width: 1400, minHeight: 377 }}>
         <Masonry columns={4} spacing={2}>
         {sampledata.map((item, index) => (
-          <PreviewItem key={item.id} videoId={ item.videoID } stage={item.stage} category={item.category} nowloading={nowloading} rating={item.rating} complexity={sampleComplexity} typeCategory={typeCategory}>
+          <PreviewItem key={item.id} videoId={ item.videoID } stage={item.stage} category={item.category} nowloading={nowloading} rating={item.rating} complexity={sampleComplexity} typeCategory={typeCategory} likes={item.likes}>
           {item.id}
           </PreviewItem>
         ))}
@@ -253,10 +238,9 @@ export default function Application(props) {
       </div>
 
       <MUICookieConsent 
-  cookieName="mySiteCookieConsent"
-  componentType="Dialog" // default value is Snackbar
-  message="This site uses cookies.... bla bla..."
-/>
+        cookieName="mySiteCookieConsent"
+        message="This site uses cookies.... bla bla..."
+      />
 
     </ThemeProvider>
     </ColorModeContext.Provider>

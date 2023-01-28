@@ -1,48 +1,56 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import YouTube from 'react-youtube'; // npx install react-youtube
 import axios from "axios"; // npx install axios
-
 import './Previews.css';
 import zlog from "../../helpers/zlog";
 
-// materialUI
+// --------------------------------------------------------
+// Material UI Icons
+import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
+import { blue } from '@mui/material/colors';
+import Collapse from '@mui/material/Collapse';
+import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
+import Chip from '@mui/material/Chip';
+import Tooltip from '@mui/material/Tooltip';
+import Skeleton from '@mui/material/Skeleton';
+import Fade from '@mui/material/Fade';
+import Box from '@mui/material/Box'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, CardHeader, Icon } from '@mui/material';
-
-// detailpage modal
-import DetailModal from "../ItemDetail/index.jsx";
+// --------------------------------------------------------
 
 // --------------------------------------------------------
-// Complex Interaction Card - Expand More Prop
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import { blue } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Collapse from '@mui/material/Collapse';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import Divider from '@mui/material/Divider';
-import Chip from '@mui/material/Chip';
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import Tooltip from '@mui/material/Tooltip';
-import Skeleton from '@mui/material/Skeleton';
-import Fade from '@mui/material/Fade';
-import Box from '@mui/material/Box'
-
 // Import Helper Functions
 import { randomNumber, randomColor, ExpandMore, truncateText, Stars } from "../../helpers/helpers";
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarHalfIcon from '@mui/icons-material/StarHalf';
+
+// Import State Hooks
+import StateStatus from '../../hooks/state';
+
+// Import Icon Hooks/Status
+import IconStatus from '../../hooks/iconStatus'
+
+// Import Icons
+import { FavouriteStats } from '../Icons/favourite.jsx'
+import { LessonStats } from '../Icons/lesson.jsx'
+import { RateStats } from '../Icons/review.jsx'
+import { BookmarkStats } from "../Icons/bookmark";
+import { PlaylistStats } from "../Icons/playlist";
+import { ShareStats } from "../Icons/share";
+import { ReportStats } from "../Icons/report";
+import { LikeStats } from "../Icons/like";
+import { MoreStats } from "../Icons/hamburger";
+
+// Import Detail Modal
+import DetailModal from "../ItemDetail/index.jsx";
 // --------------------------------------------------------
 
 
@@ -65,23 +73,70 @@ function PreviewItem(props) {
     },
   };
 
-
-
-  // TODO - implement materialui skeleton
-
-  // state for video data
-  const [title, setTitle] = useState('');
-  const [thumbnail, setThumbnail] = useState('');
-  const [description, setDesc] = useState('');
 // -------------------------------------------------------------
-  const [expanded, setExpanded] = React.useState(false);
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-  const [descriptionExpanded, setDescriptionExpanded] = useState('');
-  const [stage, setStage] = useState('');
-  const [category, setCategory] = useState('');
-  const [video, setVideo] = useState('');
+  // Import Hooks
+  const {
+    title,
+    setTitle,
+    thumbnail,
+    setThumbnail,
+    description,
+    setDesc,
+    expanded,
+    setExpanded,
+    handleExpandClick,
+    descriptionExpanded,
+    setDescriptionExpanded,
+    stage,
+    setStage,
+    category,
+    setCategory,
+    video,
+    setVideo,
+    open,
+    setOpen,
+    selectedResource,
+    setSelectedResource,
+    handleClose,
+    handleOpen
+  } = StateStatus();
+// -------------------------------------------------------------
+
+// -------------------------------------------------------------
+// Import Icon Status
+  const {
+    favourite,
+    setFavourite,
+    addFavourites,
+    lesson,
+    setLesson,
+    addLesson,
+    rate,
+    setRate,
+    addRate,
+    rateReview,
+    show,
+    setShow,
+    bookmark,
+    setBookmark,
+    addBookmark,
+    playlist,
+    setPlaylist,
+    addPlaylist,
+    share,
+    setShare,
+    addShare,
+    report,
+    setReport,
+    addReport,
+    like,
+    setLike,
+    addLike,
+    more,
+    setMore,
+    addMore
+  } = IconStatus();
+
 // -------------------------------------------------------------
 
 
@@ -127,8 +182,6 @@ function PreviewItem(props) {
   }, [videoId]);
 
 
-  // TODO  just display thumbnail here, a click should open to a modal w the youtube player embed
-  // TODO - truncate descriptoin to 'x' chars
 /*
     <div className="previewItemWrapper">
     <h3>{title}</h3>
@@ -137,38 +190,7 @@ function PreviewItem(props) {
     </div>
 */
 
-
-//
-// handle open and close of item detail modal
-//
-const [open, setOpen] = useState(false);
-const [selectedResource, setSelectedResource] = useState();
-
-const handleOpen = () => 
-  setOpen(true);
-;
-
-const handleClose = () => {
-  setOpen(false);
-};
-
 const ratingScore = `Rating: ${props.rating}`
-
-// TODO pass favourite status to database
-const [favourite, setFavourite] = useState('default')
-const addFavourites = () => {
-    favourite === "pink"? setFavourite('default') : setFavourite('pink')
-  }
-
-// TODO pass lesson plan status to database
-const [lesson, setLesson] = useState('default')
-const addLesson = () => {
-    lesson === 'blue'? setLesson('default') : setLesson('blue')
-  }
-
-
-// TODO - next step here is assign a MODAL window and pass it to open with this resoruce ID
-
 const skeletonTimer = randomNumber(100,3000);
 
 // --------------------------------------------------------
@@ -187,9 +209,7 @@ const skeletonTimer = randomNumber(100,3000);
             />
           </Fade>
         )}
-     
 
-   
         <CardHeader
           avatar={
             props.nowloading ? (
@@ -200,15 +220,6 @@ const skeletonTimer = randomNumber(100,3000);
                   backgroundColor: randomColor()}} aria-label="recipe">
                   <YouTubeIcon />
                 </Avatar>
-              </Fade>
-            )
-          }
-          action={
-            props.nowloading ? null : (
-              <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
               </Fade>
             )
           }
@@ -265,6 +276,7 @@ const skeletonTimer = randomNumber(100,3000);
                     <Stars rating={props.rating} />
                   </IconButton>
                 </Tooltip>
+                <LikeStats likes={props.likes}/>
               </Typography>
               </Box>
             </CardContent>
@@ -283,6 +295,23 @@ const skeletonTimer = randomNumber(100,3000);
         addFavourites={addFavourites}
         lesson={lesson}
         addLesson={addLesson}
+        rate={rate}
+        show={show}
+        rateReview={rateReview}
+        bookmark={bookmark}
+        addBookmark={addBookmark}
+        playlist={playlist}
+        addPlaylist={addPlaylist}
+        share={share}
+        addShare={addShare}
+        report={report}
+        addReport={addReport}
+        like={like}
+        addLike={addLike}
+        setLike={setLike}
+        more={more}
+        addMore={addMore}
+        setMore={setMore}
         />
           </div>
       <Divider>
@@ -295,110 +324,87 @@ const skeletonTimer = randomNumber(100,3000);
         )}
       </Divider>
 
+
       <CardActions disableSpacing>
-        {props.nowloading ? (
+      {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-            <Tooltip title="Add to Favourites">
-              <IconButton aria-label="add to favourites" sx={{color: favourite, "&:hover": {color: 'pink'} }} onClick={addFavourites}>
-                <FavoriteIcon />
-              </IconButton>
-            </Tooltip>
-          </Fade>
+          <MoreStats nowLoading={props.nowLoading} skeletonTimer={skeletonTimer} more={more} addMore={addMore} />
         )}
 
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-            <Tooltip title="Add to Lesson Plan">
-              <IconButton aria-label="add to lesson plan" sx={{color: lesson, "&:hover": {color: 'blue'} }} onClick={addLesson}>
-                <NoteAddIcon/>
-              </IconButton>
-            </Tooltip>
-          </Fade>
+          <FavouriteStats nowloading={props.nowLoading} skeletonTimer={skeletonTimer} favourite={favourite} addFavourites={addFavourites}/>
         )}
 
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-            <Tooltip title="Save for Later">
-              <IconButton aria-label="save for later" sx={{ "&:hover": {color: 'green'} }}>
-                <BookmarkAddIcon />
-              </IconButton>
-            </Tooltip>
-          </Fade>
-        )}
-   
-        {props.nowloading ? (
-          <Skeleton animation="wave" variant="circular" width={30} height={30} />
-        ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-            <Tooltip title="Add to Playlist">
-              <IconButton aria-label="add to playlist" sx={{ "&:hover": {color: 'brown'} }}>
-                <PlaylistAddIcon />
-              </IconButton>
-            </Tooltip>
-          </Fade>
+          <LessonStats nowloading={props.nowLoading} skeletonTimer={skeletonTimer} lesson={lesson} addLesson={addLesson}/>
         )}
 
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-            <Tooltip title="Share">
-              <IconButton aria-label="share" sx={{ "&:hover": {color: 'purple'} }}>
-                <ShareIcon />
-              </IconButton>
-            </Tooltip>
-          </Fade>
+          <BookmarkStats nowloading={props.nowLoading} skeletonTimer={skeletonTimer} bookmark={bookmark} addBookmark={addBookmark}/>
         )}
 
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-            <Tooltip title="Rate & Review Lesson">
-              <IconButton aria-label="rate & add review" sx={{ "&:hover": {color: 'teal'} }}>
-                <RateReviewIcon />
-              </IconButton>
-            </Tooltip>
-          </Fade>
-        )}
-     
-        {props.nowloading ? (
-          <Skeleton animation="wave" variant="circular" width={30} height={30} />
-        ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-            <Tooltip title="Report Video">
-              <IconButton aria-label="report video" sx={{ "&:hover": {color: 'red'} }}>
-                <ReportGmailerrorredIcon />
-              </IconButton>
-            </Tooltip>
-          </Fade>
+          <PlaylistStats nowloading={props.nowLoading} skeletonTimer={skeletonTimer} playlist={playlist} addPlaylist={addPlaylist}/>
         )}
 
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
         {props.nowloading ? (
           <Skeleton animation="wave" variant="circular" width={30} height={30} />
         ) : (
-          <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-            <ExpandMoreIcon />
-          </Fade>
+          <ShareStats nowLoading={props.nowLoading} skeletonTimer={skeletonTimer} share={share} addShare={addShare} />
         )}
-        </ExpandMore>
+
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <RateStats nowloading={props.nowLoading} skeletonTimer={skeletonTimer} rate={rate} rateReview={rateReview}/>
+        )}
+
+        {props.nowloading ? (
+          <Skeleton animation="wave" variant="circular" width={30} height={30} />
+        ) : (
+          <ReportStats nowloading={props.nowLoading} skeletonTimer={skeletonTimer} report={report} addReport={addReport} />
+        )}
       </CardActions>
+      <Divider/>
+        <CardContent style={{paddingBottom:"0", paddingTop:"0"}}>
+          <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" textAlign="center">
+
+          {props.nowloading ? (
+            <Skeleton animation="wave" height={40} style={{ marginBottom: 6, marginLeft: 6}} width="65%" />
+          ):(
+            <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
+              <Typography variant="body2" >Read Video Description: </Typography>
+            </Fade>
+          )}    
+         
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+          {props.nowloading ? (
+            <Skeleton animation="wave" variant="circular" width={30} height={30} />
+          ) : (
+            <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
+              <ExpandMoreIcon fontSize="small"/>
+            </Fade>
+          )}
+          </ExpandMore>
+          </Box>
+        </CardContent>
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Read Full Video Description:</Typography>
           <Typography paragraph variant="body2" color="text.secondary" sx={{ wordBreak: "break-word" }}>
             {descriptionExpanded}
           </Typography>

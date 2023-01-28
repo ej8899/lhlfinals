@@ -4,7 +4,6 @@ import React from "react";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
-import Tooltip from '@mui/material/Tooltip';
 
 //
 // returns true or false
@@ -94,3 +93,4 @@ export const Stars = (props) => {
       </React.Fragment>
     )
   }
+
