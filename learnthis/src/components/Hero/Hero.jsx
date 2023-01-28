@@ -7,12 +7,12 @@ import ChipsArray from "./ChipsList";
 
 const heroContainer = {
     paddingTop: "64px",
-    border: "1px solid red"
+    border: "0px solid red"
   };
 const heroContent =  {
     textAlign: "center",
     padding: "32px",
-    border: "1px solid red"
+    border: "0px solid red"
   };
 
 
