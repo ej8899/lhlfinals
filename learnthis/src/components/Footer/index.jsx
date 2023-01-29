@@ -32,6 +32,15 @@ export default function SiteFooter(props) {
         case 'team':
           setTitle("The Dev Team...");
           break;
+        case 'contact':
+          setTitle("Contact Us...");
+          break;
+        case 'cpolicy':
+          setTitle("Cookies Policy...");
+          break;
+        case 'ppolicy':
+          setTitle("Privacy Policy...");
+          break;
         default:
           break;
       }
