@@ -154,9 +154,11 @@ export default function Application(props) {
       toggleColorMode: () => {
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
         if(mode === 'light') {
-          localStorage.setItem("isDarkMode", 'dark');  
+          localStorage.setItem("isDarkMode", 'dark');
+          global.config.currentTheme = 'dark';
         } else {
           localStorage.setItem("isDarkMode",'light');
+          global.config.currentTheme = 'light';
         }
       },
     }),
@@ -191,6 +193,7 @@ export default function Application(props) {
     } else {
       const isDarkMode = localStorage.getItem("isDarkMode");
       setMode(isDarkMode);
+      global.config.currentTheme = isDarkMode;
       zlog('info',"THEME FROM localstorage:",isDarkMode)
     }
     
