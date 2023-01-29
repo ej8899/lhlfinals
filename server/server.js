@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const userDatabase = require('./db/userDatabase');
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/user');
 
 // /user/endpoints
 const userRouter = express.Router();
