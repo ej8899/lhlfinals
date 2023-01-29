@@ -2,6 +2,8 @@
 // GLOBAL object
 //
 
+const { light } = require("@mui/material/styles/createPalette");
+
 // TASK:
 // add this to index.js
 // import './config.js'; // for global configuration variables (EJ added)
@@ -29,6 +31,7 @@ module.exports = global.config = {
   newData: false,      // TODO - evaluate for viability
   useWebSockets: true, // TODO - implement as a toggle option
   timeClock: 12,       // 12 or 24 for clock setting - // todo - save to localstorage
+  currentTheme: 'light', // light or dark
 
   link: {
     github: "https://github.com/ej8899/scheduler",
