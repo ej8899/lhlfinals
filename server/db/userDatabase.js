@@ -11,8 +11,6 @@ const query = (text, params, callback) => {
   .catch(err => console.log(err.message));
 };
 
-/// Users
-
 /**
 * Get a single user from the database given their email.
 * @param {String} email The email of the user.
@@ -20,7 +18,7 @@ const query = (text, params, callback) => {
 */
 const getUserWithEmail = function(email) {
   return query(`SELECT * FROM users WHERE email=$1`, [email], result => result.rows[0]);
-}
+};
 exports.getUserWithEmail = getUserWithEmail;
 
 /**
@@ -31,7 +29,7 @@ exports.getUserWithEmail = getUserWithEmail;
 const addUser = function(user) {
 const queryValue = [user.email, user.password];
   return query(`INSERT INTO users (email, password) values ($1, $2) RETURNING *;`, queryValue, result => result.rows[0]);
-}
+};
 exports.addUser = addUser;
 
 /**
@@ -42,7 +40,7 @@ exports.addUser = addUser;
 const updateUserWithEmail = function(user) {
   const queryValue = [user.previousEmail, user.updatedEmail, user.password];
   return query(`UPDATE users SET email=$2, password=$3 WHERE email=$1 RETURNING *;`, queryValue, result => result.rows[0]);
-}
+};
 exports.updateUserWithEmail = updateUserWithEmail;
 
 /**
@@ -52,5 +50,5 @@ exports.updateUserWithEmail = updateUserWithEmail;
 */
 const deleteUserWithEmail = function(email) {
   return query(`DELETE FROM users WHERE email=$1 RETURNING *;`, [email], result => result.rows[0]);
-}
+};
 exports.deleteUserWithEmail = deleteUserWithEmail;
