@@ -1,10 +1,15 @@
+import * as React from 'react';
+
 import "../Application.scss";
 import "./footer.scss";
-
+import AboutDialog from "../Modal/about.jsx"
 
 // mui
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import zlog from '../../helpers/zlog';
 
 export default function SiteFooter(props) {
   function showAbout() {
@@ -14,6 +19,27 @@ export default function SiteFooter(props) {
 
     // TODO - p0 - fix spacing between icons and menu items - same as menu to copyright
     // TODO - menu items below need to open modals w info
+
+
+    const [open, setOpen] = React.useState(false);
+    const [dialogTitle, setTitle] = React.useState('');
+    const handleOpen = (modal) => {
+      zlog('info',"MODAL:",modal);
+      switch (modal) {
+        case 'about':
+          setTitle("About...");
+          break;
+        case 'team':
+          setTitle("The Dev Team...");
+          break;
+        default:
+          break;
+      }
+      if(open === true) setOpen(false);
+      if(open === false) setOpen(true);
+    }
+    const handleClose = () => setOpen(false);
+
 
   return (
     <div>
@@ -39,11 +65,12 @@ export default function SiteFooter(props) {
         </a></li>
     </ul>
     <ul className="menu">
-      <li className="menu__item"><a className="menu__link" href="#">About</a></li>
-      <li className="menu__item"><a className="menu__link" href="#">Team</a></li>
-      <li className="menu__item"><a className="menu__link" href="#">Contact</a></li>
-      <li className="menu__item"><a className="menu__link" href="#">Cookie Policy</a></li>
-      <li className="menu__item"><a className="menu__link" href="#">Privacy Policy</a></li>
+      <Button onClick={() => handleOpen('about')} variant="contained" >About</Button>&nbsp;
+      <AboutDialog title={dialogTitle} open={open} handleClose={handleClose}></AboutDialog>
+      <Button onClick={() => handleOpen('team')} variant="contained" >Team</Button>&nbsp;
+      <Button onClick={() => handleOpen('contact')} variant="contained" >Contact Us</Button>&nbsp;
+      <Button onClick={() => handleOpen('cpolicy')} variant="contained" >Cookie Policy</Button>&nbsp;
+      <Button onClick={() => handleOpen('ppolicy')} variant="contained" >Privacy Policy</Button>
     </ul>
     &copy;2023, All Rights Reserved
   </footer>
