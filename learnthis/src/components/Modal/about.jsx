@@ -10,6 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 
+import { modalCookiesMessage } from './contentCookies';
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
@@ -49,14 +51,17 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function AboutDialog(props) {
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const handleClose = () => {
+  let handleClose = () => {
     setOpen(false);
   };
+
+
 
   console.log("ABOUT PROPS:",props)
   return (
@@ -70,6 +75,7 @@ export default function AboutDialog(props) {
           {props.title}
         </BootstrapDialogTitle>
         <DialogContent dividers>
+          {props.content}
           <Typography gutterBottom>
             Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
             dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac

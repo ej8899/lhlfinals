@@ -6,7 +6,7 @@ export default function ComboBox(props) {
 
   const listing = [];
   props.listData.forEach((element, index) => {
-    listing.push({label: element})
+    listing.push(element)
   });
 
   return (

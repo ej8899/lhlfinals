@@ -17,6 +17,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import zlog from '../../helpers/zlog';
+import Login from '../Login';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -89,6 +90,14 @@ export default function PrimarySearchAppBar() {
       zlog('info',"SEARCH BAR:",event.target.value)
   };
 
+  const [loginopen, setLOpen] = React.useState(false);
+  const handleClose = () => setLOpen(false);
+  const handleLogin = (event) => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+    setLOpen(true);
+  }
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -109,6 +118,7 @@ export default function PrimarySearchAppBar() {
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={handleLogin}>Login</MenuItem>
     </Menu>
   );
 
@@ -158,6 +168,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <Login open={loginopen}></Login>
       <AppBar position="static">
         <Toolbar>
           <IconButton

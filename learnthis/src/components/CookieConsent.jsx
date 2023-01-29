@@ -4,7 +4,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Paper, Toolbar, Box, Grid } from "@mui/material";
-
+import Dialog from '@mui/material/Dialog';
+import { styled } from '@mui/material/styles';
+console.log("COOKIE MODAL")
 const useStyles = {
   modal: {
     display: "flex",
@@ -39,13 +41,21 @@ const mstyle = {
   borderTopRightRadius: 5,
 };
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
 
-function CookiesConsentModal() {
+function CookiesConsentModal(props) {
   const [open, setOpen] = useState(true);
 
   const handleClose = () => {
     setOpen(false);
-    // set a cookie to remember the user accepted the cookies
+    // set a cookie or localstorage to remember the user accepted the cookies
     // or update your local storage
   };
 
@@ -53,67 +63,14 @@ function CookiesConsentModal() {
   // TODO - if dark mode start, cookies modal "paper" is lighter color than modal background or perhaps "box" - need to fix!
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      className={useStyles.modal}
-    >
-      <div className={useStyles.paper}>
-        <Box sx={mstyle}>
-        <Grid sx={{ border: "0px solid red" }} container spacing={2} justifyContent="center" >
-        <Grid item 
-                  align="left"
-                  
-                  alignItems="flex-end"
-                  justify="center" 
-                  >
-          <Paper sx={{ border: "0px solid red", boxShadow: "none", alignItems: "center", textAlign: "center" }}><img
-            className="fashadow "
-            src="./images/cookie.svg"
-            alt="myCookie"
-            width="150"
-            height="150"
-          /></Paper>
-        </Grid>
-        <Grid item xs={8} 
-                  container
-                  align="left"
-                  
-                  alignItems="flex-end"
-                  justify="center"
-                  >
-          <Paper sx={{ border: "0px solid red", boxShadow: "none" }}>
-            <Typography variant="h6">
-          This website uses cookies to enhance the user experience.
-        </Typography>
-        <Typography variant="body1">
-          By continuing to browse the site, you are agreeing to our use of cookies.<br/>&nbsp;
-        </Typography>
-        </Paper>
-        </Grid>
-      </Grid>
-        <div>
-          <span>
-          
-        </span>
-        <span>
-        
-        </span>
-      </div>
-        
-        <div >
-          <Toolbar sx={{ justifyContent: "flex-end" }}>
-          <Button variant="contained" color="primary"  onClick={handleClose}>
-            Accept
-          </Button>&nbsp;
-          <Button variant="outlined" color="primary" onClick={handleClose}>
-            Decline
-          </Button>
-          </Toolbar>
-        </div>
-        </Box>
-      </div>
-    </Modal>
+    
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+     
+      </BootstrapDialog>
   );
 }
 

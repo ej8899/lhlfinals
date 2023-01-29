@@ -20,6 +20,7 @@ import zlog from "../helpers/zlog.js";
 
 // modal windows  --
 // TODO this can be removed after all are converted to MUI modal
+import AboutDialog from "./Modal/about";
 import ZModal, { zmodalUpdater } from "./Modal/index.js";
 import {
   modalAboutMessage, modalCookiesMessage, modalPrivacyPolicy, modalReleaseNotes
@@ -58,7 +59,7 @@ export default function Application(props) {
       id: 3,
       videoID:"r8Dg0KVnfMA",
       category: "React",
-      stage: "Beginner",
+      stage: "Unrated",
       rating: 4,
       likes:56
     },
@@ -173,6 +174,10 @@ export default function Application(props) {
   );
 
 
+  // COOKIES Modal
+  const [copen, setCOpen] = React.useState(true);
+  const handleCClose = () => setCOpen(false);
+
 
   //
   // useEffect - actions on first load
@@ -180,10 +185,15 @@ export default function Application(props) {
   //
   useEffect(() => {
     // grab theme settings
-    const isDarkMode = localStorage.getItem("isDarkMode");
-    setMode(isDarkMode);
-    zlog('info',"THEME FROM localstorage:",isDarkMode)
-
+    // localStorage.clear()
+    if (!localStorage.getItem("isDarkMode")) {
+      localStorage.setItem("isDarkMode",'light');
+    } else {
+      const isDarkMode = localStorage.getItem("isDarkMode");
+      setMode(isDarkMode);
+      zlog('info',"THEME FROM localstorage:",isDarkMode)
+    }
+    
 
     // TODO why is userwarning showing twice.. need only 1
     //zlog('userwarning');
@@ -204,10 +214,10 @@ export default function Application(props) {
     // TODO -load from localStorage - don't show modal if we've done it before (cookies only)
     // TODO - update localStorage once user says ok
   
-
-
-
   
+
+
+  // TODO move theme button to nav bar
 
   return (
   (
@@ -237,10 +247,8 @@ export default function Application(props) {
         <SiteFooter></SiteFooter>
       </div>
 
-      <MUICookieConsent 
-        cookieName="mySiteCookieConsent"
-        message="This site uses cookies.... bla bla..."
-      />
+   
+      <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose}></AboutDialog>
 
     </ThemeProvider>
     </ColorModeContext.Provider>

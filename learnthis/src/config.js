@@ -10,6 +10,7 @@ module.exports = global.config = {
   // application details:
   appVersion: "0.1",
   appDeveloper: "Ernie Johnson",
+  appName: "LearnThis!",
 
   // debug mode true or false
   // usage is:  if (global.config.debug) console.log("debugging info here"); // or of course, other options for debug purposes

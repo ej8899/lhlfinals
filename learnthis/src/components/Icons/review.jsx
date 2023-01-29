@@ -5,11 +5,11 @@ import React from 'react';
 import Fade from '@mui/material/Fade';
 
 export const RateStats = (props) => {
- 
+
   return (
     <Fade in={!props.nowloading} timeout={{ enter: props.skeletonTimer }}>
     <Tooltip title="Rate & Review Lesson">
-      <IconButton aria-label="rate & add review" sx={{color: `${props.rate}`, "&:hover": {color: 'teal'} }} onClick={props.rateReview}>
+      <IconButton aria-label="rate & add review" sx={{color: `${props.rate}`, "&:hover": {color: 'teal'} }} onClick={() => props.rateReview}>
         <RateReviewIcon />
       </IconButton>
     </Tooltip>

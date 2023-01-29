@@ -12,9 +12,13 @@ export default function StateStatus() {
 // -------------------------------------------------------------
 // Expanded Section of Prevew Card
   const [expanded, setExpanded] = React.useState(false);
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleExpandClick = (filter) => {
+    if (filter === 'blur(0px)') {
+      setExpanded(!expanded);
+    }
+    return
   };
+
   const [descriptionExpanded, setDescriptionExpanded] = useState('');
   const [stage, setStage] = useState('');
   const [category, setCategory] = useState('');
@@ -26,13 +30,16 @@ export default function StateStatus() {
   const [open, setOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState();
 
-  const handleOpen = () => 
-    setOpen(true);
-  ;
+  const handleOpen = (filter) => {
+    if (filter === 'blur(0px)') {
+      setOpen(true);
+    }
+    return
+  }
 
   const handleClose = () => {
     setOpen(false);
-};
+  };
 // -------------------------------------------------------------
 
   return {

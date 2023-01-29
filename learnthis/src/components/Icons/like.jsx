@@ -4,6 +4,7 @@ import React from 'react';
 import Fade from '@mui/material/Fade';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import Badge from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
 
 export const LikeStats = (props) => {
 
@@ -35,13 +36,24 @@ export const LikeStats = (props) => {
     }
     return `${count} notifications`;
   }
+
+
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      right: -4,
+      top: -3,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: '0 4px',
+    },
+  }));
+
   return (
 
     <Tooltip title="Video Likes">
-      <IconButton aria-label={notificationsLabel(props.likes)}>
-        <Badge badgeContent={props.likes} color={badgeColour(props.likes)} showZero>
+      <IconButton aria-label={notificationsLabel(props.likes)} sx={{color: `${props.like}`, "&:hover": {color: 'purple'} }} onClick={props.addLike}>
+        <StyledBadge badgeContent={props.likes} color={badgeColour(props.likes)} showZero>
           <ThumbUpIcon />
-        </Badge>
+        </StyledBadge>
       </IconButton>
     </Tooltip>
   )
@@ -51,7 +63,7 @@ export const LikeStaleStats = (props) => {
 
   return (
     <Tooltip title="Like Video">
-      <IconButton aria-label="like video" sx={{color: `${props.like}`, "&:hover": {color: 'indigo'} }} onClick={props.addLike}>
+      <IconButton aria-label="like video" sx={{color: `${props.like}`, "&:hover": {color: 'purple'} }} onClick={props.addLike}>
         <ThumbUpIcon />
       </IconButton>
     </Tooltip>

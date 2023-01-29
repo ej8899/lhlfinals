@@ -7,18 +7,22 @@ import JavascriptIcon from '@mui/icons-material/Javascript';
 import CssIcon from '@mui/icons-material/Css';
 import PhpIcon from '@mui/icons-material/Php';
 import VpnLockIcon from '@mui/icons-material/VpnLock';
-import zlog from '../../helpers/zlog';
+import zlog from "../../helpers/zlog.js";
+
+
+
 const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
 export default function ChipsArray() {
   // TODO this should ultimately come from database - not hard coded
+  // TODO - these can be "top" categories - 'most active' or randomized?
   const [chipData, setChipData] = React.useState([
     { key: 0, label: 'All' },
     { key: 9, label: 'Recent' },
     { key: 1, label: 'jQuery' },
-    { key: 2, label: 'Polymer' },
+    { key: 2, label: 'Svelte' },
     { key: 3, label: 'React' },
     { key: 4, label: 'Vue.js' },
     { key: 5, label: 'C++' },

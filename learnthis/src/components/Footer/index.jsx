@@ -52,7 +52,7 @@ export default function SiteFooter(props) {
 
   return (
     <div>
-<footer className="footer">
+    <footer className="footer">
     <div className="waves">
       <div className="wave" id="wave1"></div>
       <div className="wave" id="wave2"></div>

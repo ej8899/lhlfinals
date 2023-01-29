@@ -1,14 +1,17 @@
 import React, {useState} from 'react';
 
-export default function IconStatus() {
+export default function IconStatus(props) {
 
   // -------------------------------------------------------------
   // Toggle Favourite Status
   // TODO pass favourite status to database
   const [favourite, setFavourite] = useState('default')
-  const addFavourites = () => {
+  const addFavourites = (filter) => {
+    if (filter === 'blur(0px)') {
       favourite === "pink"? setFavourite('default') : setFavourite('pink')
     }
+    return
+  }
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
@@ -63,8 +66,11 @@ export default function IconStatus() {
   // Toggle share status
   // TODO pass share status to database
   const [share, setShare] = useState('default')
-  const addShare = () => {
+  const addShare = (filter) => {
+    if (filter === 'blur(0px)') {
       share === 'purple'? setShare('default') : setShare('purple')
+    }
+    return
   }
 // -------------------------------------------------------------
 
@@ -72,8 +78,10 @@ export default function IconStatus() {
   // Toggle report status
   // TODO pass report status to database
   const [report, setReport] = useState('default')
+  const [filter, setFilter] = useState('blur(0px)')
   const addReport = () => {
       report === 'red'? setReport('default') : setReport('red')
+      filter === 'blur(3px)'? setFilter('blur(0px)') : setFilter('blur(3px)')
   }
 // -------------------------------------------------------------
 
@@ -81,8 +89,11 @@ export default function IconStatus() {
   // Toggle like status
   // TODO pass like status to database
   const [like, setLike] = useState('default')
-  const addLike = () => {
-      like === 'indigo'? setLike('default') : setLike('indigo')
+  const addLike = (filter) => {
+    if (filter === 'blur(0px)') {
+      like === 'purple'? setLike('default') : setLike('purple')
+    }
+    return
   }
 // -------------------------------------------------------------
 
@@ -93,6 +104,32 @@ export default function IconStatus() {
       more === 'warning'? setMore('default') : setMore('warning')
   }
 // -------------------------------------------------------------
+
+// -------------------------------------------------------------
+  // Toggle star rating status
+  // TODO pass star rating status to database
+
+  const [star, setStar] = useState(0)
+  const addStar = (event, num) => {
+    event.stopPropagation()
+    setStar(num+1)
+  }
+// -------------------------------------------------------------
+
+// -------------------------------------------------------------
+  // Toggle hamburger menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseOut = () => {
+    setAnchorEl(null);
+  };
+// -------------------------------------------------------------
+
+
+
 
   return {
     favourite,
@@ -132,7 +169,19 @@ export default function IconStatus() {
 
     more,
     setMore,
-    addMore
+    addMore,
+
+    star,
+    setStar,
+    addStar,
+
+    anchorEl,
+    setAnchorEl,
+    handleClick,
+    handleCloseOut,
+
+    filter,
+    setFilter
   }
 
 }

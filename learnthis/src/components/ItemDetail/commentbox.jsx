@@ -7,7 +7,7 @@ export default function MultilineTextFields(props) {
     <Box display={props.display} alignItems="flex-start"
       component="form"
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '30ch' },
+        '& .MuiTextField-root': { m: 1, width: '40ch' },
       }}
       noValidate
       autoComplete="off"
@@ -17,7 +17,7 @@ export default function MultilineTextFields(props) {
           id="outlined-multiline-static"
           label="My Comments"
           multiline
-          rows={15}
+          rows={17}
           placeholder="Make your notes here."
         />
       </div>

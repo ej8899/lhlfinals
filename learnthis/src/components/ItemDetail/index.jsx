@@ -5,7 +5,6 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import YouTube from 'react-youtube'; // npx install react-youtube
-import CloseIcon from '@mui/icons-material/Close';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 //-------------------------------------------------------------------
@@ -23,8 +22,9 @@ import { PlaylistStaleStats } from '../Icons/playlist';
 import { ShareStaleStats } from '../Icons/share';
 import { ReportStaleStats } from '../Icons/report';
 import { LikeStaleStats } from '../Icons/like';
+import { CloseModal } from '../Icons/close';
+import { StarStaleRating } from '../Icons/stars';
 //-------------------------------------------------------------------
-
 
 const style = {
   position: 'absolute',
@@ -40,7 +40,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
 
 //-------------------------------------------------------------------
 // TODO pass props to this component w data
@@ -59,34 +58,47 @@ export default function DetailModal(props) {
 
 
   return (
-      <Modal
-        aria-labelledby="detail-modal-title"
-        aria-describedby="detail-modal-description"
-        open={props.open}
-        onClose={props.handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={props.open}>
-          <Box sx={style}>
+    <Modal
+      aria-labelledby="detail-modal-title"
+      aria-describedby="detail-modal-description"
+      open={props.open}
+      onClose={props.handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={props.open}>
+        <Box sx={style}>
           <Box display="flex" width="100%" justifyContent="space-between">
             <Typography id="detail-modal-title" variant="h5" component="h2">
               {props.title}
             </Typography>
-            <Tooltip title="Close">
-              <IconButton aria-label="close" sx={{bgcolor: "#f5f5f5", "&:hover": {color: 'red'} }} onClick={props.handleClose}>
-                <CloseIcon />
-              </IconButton>
-            </Tooltip>
-            </Box>
+            <CloseModal handleClose={props.handleClose}/>
+          </Box>
+         
           <Box display="flex" width="100%" justifyContent="space-around">
-            <YouTube videoId={props.videoId} opts={videoPlayerOpts} />
-            <MultilineTextFields display={props.show}/>
-            <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around">
+            <Box>
+              <YouTube videoId={props.videoId} opts={videoPlayerOpts} />
+              <Box display={props.show}>
+                <Box style={{paddingTop:20, paddingLeft:15}}>
+                  <ComboBox listData={props.complexity} message={'Select the lesson complexity...'}/>
+                </Box>
+                <Box style={{paddingTop:20, paddingLeft: 20}} >
+                  <ComboBox listData={props.typeCategory} message={'Select the lesson category...'}/>
+                </Box>
+              </Box>
+            </Box>
+           
+            <Box display={props.show} flexDirection="column">
+              <Box flexDirection="row" textAlign="center">
+                Rate This Video: <StarStaleRating star={props.star} addStar={props.addStar}/>
+              </Box>
+              <MultilineTextFields display={props.show}/>
+            </Box>
 
+            <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around">
               <RateStaleStats rateReview={props.rateReview} rate={props.rate} addRate={props.addRate}/>
               <FavouriteStaleStats favourite={props.favourite} addFavourites={props.addFavourites}/>
               <LikeStaleStats like={props.like} addLike={props.addLike} />
@@ -95,20 +107,13 @@ export default function DetailModal(props) {
               <PlaylistStaleStats playlist={props.playlist} addPlaylist={props.addPlaylist} />
               <ShareStaleStats share={props.share} addShare={props.addShare} />
               <ReportStaleStats report={props.report} addReport={props.addReport} />
-
             </Typography>
-
-            </Box>
-            <Box display={props.show}>
-              <Box style={{paddingTop:20, paddingLeft:15}}>
-                <ComboBox listData={props.complexity} message={'Select the lesson complexity...'}/>
-              </Box>
-              <Box style={{paddingTop:20, paddingLeft: 20}} >
-                <ComboBox listData={props.typeCategory} message={'Select the lesson category...'}/>
-              </Box>
-            </Box>
+         
           </Box>
-        </Fade>
-      </Modal>
+         
+
+        </Box>
+      </Fade>
+    </Modal>
   );
 }
