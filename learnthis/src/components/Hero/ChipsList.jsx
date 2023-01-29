@@ -7,7 +7,7 @@ import JavascriptIcon from '@mui/icons-material/Javascript';
 import CssIcon from '@mui/icons-material/Css';
 import PhpIcon from '@mui/icons-material/Php';
 import VpnLockIcon from '@mui/icons-material/VpnLock';
-
+import zlog from '../../helpers/zlog';
 const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
@@ -34,7 +34,7 @@ export default function ChipsArray() {
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
   };
   const handleClick = (chipID) => {
-    console.info('You clicked the Chip.',chipID);
+    zlog('info',"chip clicked:",chipID)
   };
 
   // TODO - could we add an overflow to scroll the chip list left and right?
