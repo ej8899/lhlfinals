@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
  * Check if a user exists with a given username and password
  * @param {String} email
  * @param {String} password
+ * @param {Database} database
  */
 const authenticateUser = async function(email, password, database) {
   const user = await database.getUserWithEmail(email);
