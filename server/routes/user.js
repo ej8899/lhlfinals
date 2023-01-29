@@ -21,7 +21,7 @@ module.exports = function(router, database) {
   // Get a user
   router.get('/', async (req, res) => {
     const user = req.body;
-    const foundUser = await database.getUserWithEmail(user.email).catch(e => res.send(e));
+    const foundUser = await database.getUserWithEmail(user.email);
 
     if (!foundUser) {
       res.send({ error: "The user has not been existing" });
@@ -39,14 +39,14 @@ module.exports = function(router, database) {
   router.post('/', async (req, res) => {
     const user = req.body;
     user.password = bcrypt.hashSync(user.password, 12);
-    const foundUser = await database.getUserWithEmail(user.email).catch(e => res.send(e));
+    const foundUser = await database.getUserWithEmail(user.email);
 
     if (foundUser) {
       res.send({ error: "The user has been existing" });
       return;
     }
 
-    const createdUser = await database.addUser(user).catch(e => res.send(e));
+    const createdUser = await database.addUser(user);
 
     if (!createdUser) {
       res.send({ error: "Create user error" });
@@ -64,14 +64,14 @@ module.exports = function(router, database) {
   router.put('/', async (req, res) => {
     const user = req.body;
     user.password = bcrypt.hashSync(user.password, 12);
-    const foundUser = await database.getUserWithEmail(user.previousEmail).catch(e => res.send(e));
+    const foundUser = await database.getUserWithEmail(user.previousEmail);
 
     if (!foundUser) {
       res.send({ error: "The user has not been existing" });
       return;
     }
 
-    const updatedUser = await database.updateUserWithEmail(user).catch(e => res.send(e));
+    const updatedUser = await database.updateUserWithEmail(user);
 
     if (!updatedUser) {
       res.send({ error: "Update error" });
@@ -95,14 +95,14 @@ module.exports = function(router, database) {
     }
 
     const user = req.body;
-    const foundUser = await database.getUserWithEmail(user.email).catch(e => res.send(e));
+    const foundUser = await database.getUserWithEmail(user.email);
 
     if (!foundUser) {
       res.send({ error: "The user has not been existing" });
       return;
     }
 
-    const deletedUser = await database.deleteUserWithEmail(user.email).catch(e => res.send(e));
+    const deletedUser = await database.deleteUserWithEmail(user.email);
 
     if (!deletedUser) {
       res.send({ error: "Delete error" });
