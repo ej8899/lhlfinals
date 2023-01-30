@@ -7,7 +7,9 @@ const bcrypt = require('bcrypt');
  * @param {Database} database
  */
 const authenticateUser = async function(email, password, database) {
-  const user = await database.getUserWithEmail(email);
+  const user = await database.getUserWithEmail(email)
+                .catch(err => res.status(500).json({ error: err.message }));
+
   if (!user) {
     return null;
   }
@@ -22,16 +24,21 @@ module.exports = function(router, database) {
   // Get a user
   router.get('/', async (req, res) => {
     const user = req.body;
-    const foundUser = await database.getUserWithEmail(user.email);
+    const foundUser = await database.getUserWithEmail(user.email)
+                        .catch(err => res.status(500).json({ error: err.message }));
 
     if (!foundUser) {
-      res.send({ error: "The user has not been existing" });
+      res
+        .status(500)
+        .json({ error: "The user has not been existing" });
       return;
     }
 
-    res.send({
-      success: "User found",
-      user: { id: foundUser.id , email: foundUser.email}
+    res
+      .status(200)
+      .json({
+        success: "User found",
+        user: { id: foundUser.id , email: foundUser.email}
     });
 
   });
@@ -40,24 +47,32 @@ module.exports = function(router, database) {
   router.post('/', async (req, res) => {
     const user = req.body;
     user.password = bcrypt.hashSync(user.password, 12);
-    const foundUser = await database.getUserWithEmail(user.email);
+    const foundUser = await database.getUserWithEmail(user.email)
+                        .catch(err => res.status(500).json({ error: err.message }));
 
     if (foundUser) {
-      res.send({ error: "The user has been existing" });
+      res
+        .status(500)
+        .json({ error: "The user has not been existing" });
       return;
     }
 
-    const createdUser = await database.addUser(user);
+    const createdUser = await database.addUser(user)
+                          .catch(err => res.status(500).json({ error: err.message }));
 
     if (!createdUser) {
-      res.send({ error: "Create user error" });
+      res
+        .status(500)
+        .json({ error: "Create user error" });
       return;
     }
 
     req.session.userId = user.id;
-    res.send({
-      success: "User created",
-      user: { id: createdUser.id , email: createdUser.email}
+    res
+      .status(200)
+      .json({
+        success: "User created",
+        user: { id: createdUser.id , email: createdUser.email}
     });
   });
 
@@ -68,21 +83,28 @@ module.exports = function(router, database) {
 
     const authenticatedUser = await authenticateUser(user.previousEmail, user.previousPassword, database);
     if (!authenticatedUser) {
-      res.send({ error: "Authentication error" });
+      res
+        .status(500)
+        .json({ error: "Authentication error" });
       return;
     }
 
     const { previousEmail, updatedEmail, updatedPassword } = user;
-    const updatedUser = await database.updateUserWithEmail({ previousEmail, updatedEmail, updatedPassword });
+    const updatedUser = await database.updateUserWithEmail({ previousEmail, updatedEmail, updatedPassword })
+                          .catch(err => res.status(500).json({ error: err.message }));
 
     if (!updatedUser) {
-      res.send({ error: "Update error" });
+      res
+        .status(500)
+        .json({ error: "Update user error" });
       return;
     }
 
-    res.send({
-      success: "User updated",
-      user: { id: updatedUser.id, email: updatedUser.email }
+    res
+      .status(500)
+      .json({
+        success: "User updated",
+        user: { id: updatedUser.id, email: updatedUser.email }
     });
 
   });
@@ -92,28 +114,38 @@ module.exports = function(router, database) {
     const userId = req.session.userId;
 
     if (!userId) {
-      res.send({ error: "Not logged in" });
+      res
+        .status(500)
+        .json({ error: "Not logged in" });
       return;
     }
 
     const user = req.body;
-    const foundUser = await database.getUserWithEmail(user.email);
+    const foundUser = await database.getUserWithEmail(user.email)
+                        .catch(err => res.status(500).json({ error: err.message }));
 
     if (!foundUser) {
-      res.send({ error: "The user has not been existing" });
+      res
+        .status(500)
+        .json({ error: "The user has not been existing" });
       return;
     }
 
-    const deletedUser = await database.deleteUserWithEmail(user.email);
+    const deletedUser = await database.deleteUserWithEmail(user.email)
+                          .catch(err => res.status(500).json({ error: err.message }));
 
     if (!deletedUser) {
-      res.send({ error: "Delete error" });
+      res
+        .status(500)
+        .json({ error: "Delete error" });
       return;
     }
 
-    res.send({
-      success: "User deleted",
-      user: { id: deletedUser.id, email: deletedUser.email }
+    res
+      .status(200)
+      .json({
+        success: "User deleted",
+        user: { id: deletedUser.id, email: deletedUser.email }
     });
   });
 
@@ -122,21 +154,27 @@ module.exports = function(router, database) {
     const user = req.body;
     const authenticatedUser = await authenticateUser(user.email, user.password, database);
     if (!authenticatedUser) {
-      res.send({ error: "Login error" });
+      res
+        .status(500)
+        .json({ error: "Login error" });
       return;
     }
 
-    req.session.userId = user.id;
-    res.send({
-      success: "Logged in",
-      user: { id: user.id , email: user.email}
+    req.session.userId = authenticatedUser.id;
+    res
+      .status(200)
+      .json({
+        success: "Logged in",
+        user: { id: authenticatedUser.id , email: user.email}
     });
   });
 
   // Logout
   router.post('/logout', (req, res) => {
     req.session.userId = null;
-    res.send({ success: "Logged out" });
+    res
+      .status(200)
+      .json({ success: "Logged out" });
   });
 
 
