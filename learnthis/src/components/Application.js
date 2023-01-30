@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Application.scss";
 import Masonry from '@mui/lab/Masonry';
 import CssBaseline from '@mui/material/CssBaseline';
-import MUICookieConsent from './CookieConsent.jsx';
 // TODO This element needs to lazy load with 'shimmer' effect
 
 // light and dark mode switch / theme switch
@@ -175,7 +174,7 @@ export default function Application(props) {
 
 
   // COOKIES Modal
-  const [copen, setCOpen] = React.useState(true);
+  const [copen, setCOpen] = React.useState(false);
   const handleCClose = () => setCOpen(false);
 
   const [cookiesMessage,setCMessage] = useState('cookies default');
@@ -201,6 +200,8 @@ export default function Application(props) {
     //zlog('userwarning');
 
     // TODO convert this cookies code to use the MUI modal, but need to save state of acceptance to localstorage
+    // TODO - cookies modal should be 'disabled' if user has already been to site and accepted cookies modal - 
+    // this should set for 30 days and then come back on until they accept again.
     if (global.config.cookiesModal) {
       //cookiesModal(true);
       setLoading(true)
@@ -211,24 +212,21 @@ export default function Application(props) {
     global.config.goSleep(4000).then(()=> {setLoading(false);});
 
     setCMessage(modalCookiesMessage);
+    setCOpen(true);
 
   }, []);
 
-    // TODO - cookiesmodal -  be sure showPrivacy is linked to child modal
     // TODO -load from localStorage - don't show modal if we've done it before (cookies only)
     // TODO - update localStorage once user says ok
   
-
-  
-  
-
-  // TODO move theme button to nav bar
+    // TODO move theme button  - light-dark to nav bar
+    // TODO - remove the 'light mode' 'dark mode' text from theme button
 
   return (
   (
     <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
-    <CssBaseline />
+    <CssBaseline enableColorScheme/>
       <div className="maincontainer">
         <NavBar/>
       <header>

@@ -39,13 +39,13 @@ export function modalCookiesMessage(data) {
             alignItems="flex-end"
             justify="center" 
             >
-    <Paper sx={{ border: "0px solid red", boxShadow: "none", alignItems: "center", textAlign: "center" }}><img
+    <img
       className="fashadow "
       src="./images/cookie.svg"
       alt="myCookie"
       width="150"
       height="150"
-    /></Paper>
+    />
   </Grid>
   <Grid item xs={8} 
             container
@@ -54,14 +54,14 @@ export function modalCookiesMessage(data) {
             alignItems="flex-end"
             justify="center"
             >
-    <Paper sx={{ border: "0px solid red", boxShadow: "none" }}>
+    
       <Typography variant="h6">
     This website uses cookies to enhance the user experience.
   </Typography>
   <Typography variant="body1">
     By continuing to browse the site, you are agreeing to our use of cookies.<br/>&nbsp;
   </Typography>
-  </Paper>
+
   </Grid>
   </Grid>
 
@@ -81,6 +81,7 @@ export function modalAboutMessage() {
 <Typography gutterBottom>
   ABOUT DIALOG CONTENT
             descript PERN stack
+            <img src="./images/pernstack.png" alt="PERN stack"/>
           </Typography>
           <Typography gutterBottom>
             Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
@@ -102,19 +103,46 @@ export function modalAboutMessage() {
 export function modalPrivacyPolicy() {
   return (
     <div>
-  <Typography gutterBottom>
-    privacy policy DIALOG CONTENT
-              
-            </Typography>
             <Typography gutterBottom>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-              Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+            Privacy Policy
+
+We are committed to protecting your privacy and personal information. This policy explains how we collect, use, and disclose your personal information when you use our website.
+<br/>
+Information we collect:
+
+Information you provide to us directly, such as when you create an account, fill out a form, or make a purchase.
+Information we collect automatically, such as your IP address, browser type, and device information.
+Information from third-party sources, such as data from social media platforms.
+How we use your information:
+
+To provide and improve our services
+To personalize your experience and show you relevant content
+To communicate with you about your account and activities on our website
+To comply with legal obligations
+To detect and prevent fraud or other illegal activities
+Sharing your information:
+We may share your information with third parties for the following purposes:
+
+To provide and improve our services
+To comply with legal obligations
+To detect and prevent fraud or other illegal activities
+We do not sell or rent your personal information to third parties for their marketing purposes without your explicit consent.
+
+Security:
+We take reasonable measures to protect your personal information from unauthorized access, use, or disclosure. However, no method of transmission over the internet, or method of electronic storage, is 100% secure.
+
+Your Rights:
+You have the right to access, correct, update, and delete your personal information. You also have the right to request that we limit the use of your personal information, and to object to our processing of your personal information. To exercise these rights, please contact us.
+
+Changes to this Policy:
+We may update this policy from time to time. We will notify you of any changes by posting the new policy on our website.
+
+Contact Us:
+If you have any questions about this policy or our handling of your personal information, please contact us.
+
+Last updated: [insert date]
             </Typography>
-            <Typography gutterBottom>
-              Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-              magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-              ullamcorper nulla non metus auctor fringilla.
-            </Typography>
+         
     </div>
     );
 }

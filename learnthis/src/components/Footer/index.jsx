@@ -86,12 +86,18 @@ export default function SiteFooter(props) {
         </a></li>
     </ul>
     <ul className="menu">
-      <Button onClick={() => handleOpen('about')} variant="contained" >About</Button>&nbsp;
+      <Button 
+        onClick={() => handleOpen('about')} 
+        variant="contained"
+        style={{backgroundColor: "transparent", boxShadow: "none"}}
+        >
+          About
+        </Button>&nbsp;
       <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
-      <Button onClick={() => handleOpen('team')} variant="contained" >Team</Button>&nbsp;
-      <Button onClick={() => handleOpen('contact')} variant="contained" >Contact Us</Button>&nbsp;
-      <Button onClick={() => handleOpen('cpolicy')} variant="contained" >Cookie Policy</Button>&nbsp;
-      <Button onClick={() => handleOpen('ppolicy')} variant="contained" >Privacy Policy</Button>
+      <Button onClick={() => handleOpen('team')} variant="contained" style={{backgroundColor: "transparent", boxShadow: "none"}}>our Team</Button>&nbsp;
+      <Button onClick={() => handleOpen('contact')} variant="contained" style={{backgroundColor: "transparent", boxShadow: "none"}}>Contact Us</Button>&nbsp;
+      <Button onClick={() => handleOpen('cpolicy')} variant="contained" style={{backgroundColor: "transparent", boxShadow: "none"}}>Cookie Policy</Button>&nbsp;
+      <Button onClick={() => handleOpen('ppolicy')} variant="contained" style={{backgroundColor: "transparent", boxShadow: "none"}}>Privacy Policy</Button>
     </ul>
     &copy;2023, All Rights Reserved
   </footer>

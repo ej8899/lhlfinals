@@ -31,13 +31,13 @@ export function modalCookiesMessage(props) {
             alignItems="flex-end"
             justify="center" 
             >
-    <Paper sx={{ border: "1px solid red", boxShadow: "none", alignItems: "center", textAlign: "center" }}><img
+    <img
       className="fashadow "
       src="./images/cookie.svg"
       alt="myCookie"
       width="150"
       height="150"
-    /></Paper>
+    />
   </Grid>
   <Grid item xs={8} 
             container
@@ -46,14 +46,14 @@ export function modalCookiesMessage(props) {
             alignItems="flex-end"
             justify="center"
             >
-    <Paper sx={{ border: "0px solid red", boxShadow: "none" }}>
+    
       <Typography variant="h6">
     This website uses cookies to enhance the user experience.
   </Typography>
   <Typography variant="body1">
     By continuing to browse the site, you are agreeing to our use of cookies.<br/>&nbsp;
   </Typography>
-  </Paper>
+  
   </Grid>
   </Grid>
 
