@@ -34,7 +34,11 @@ export default function IconStatus(props) {
   // TODO pass the notes, category and level to database
   const [show, setShow] = useState('none');
 
-  const rateReview = () => {
+  const rateReview = (tmp = false) => {
+    if (tmp === true) {
+      setRate('teal')
+      setShow('flex')
+    } else {
       addRate()
       if(show === "none") {
         return setShow('flex')
@@ -42,6 +46,7 @@ export default function IconStatus(props) {
         return setShow('none')
       }
     }
+  }
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------

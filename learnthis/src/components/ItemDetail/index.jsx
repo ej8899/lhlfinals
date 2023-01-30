@@ -77,25 +77,25 @@ export default function DetailModal(props) {
             </Typography>
             <CloseModal handleClose={props.handleClose}/>
           </Box>
-         
+       
           <Box display="flex" width="100%" justifyContent="space-around">
             <Box>
               <YouTube videoId={props.videoId} opts={videoPlayerOpts} />
               <Box display={props.show}>
                 <Box style={{paddingTop:20, paddingLeft:15}}>
-                  <ComboBox listData={props.complexity} message={'Select the lesson complexity...'}/>
+                  <ComboBox listData={props.complexity} message={'Select the lesson complexity...'} mySelection={props.myComplexity} addMySelection={props.addMyComplexity}/>
                 </Box>
                 <Box style={{paddingTop:20, paddingLeft: 20}} >
-                  <ComboBox listData={props.typeCategory} message={'Select the lesson category...'}/>
+                  <ComboBox listData={props.typeCategory} message={'Select the lesson category...'} mySelection={props.myCategory} addMySelection={props.addMyCategory}/>
                 </Box>
               </Box>
             </Box>
-           
+         
             <Box display={props.show} flexDirection="column">
               <Box flexDirection="row" textAlign="center">
                 Rate This Video: <StarStaleRating star={props.star} addStar={props.addStar}/>
               </Box>
-              <MultilineTextFields display={props.show}/>
+              <MultilineTextFields display={props.show} myComments={props.myComments} addMyComments={props.addMyComments}/>
             </Box>
 
             <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around">
@@ -106,11 +106,11 @@ export default function DetailModal(props) {
               <BookmarkStaleStats bookmark={props.bookmark} addBookmark={props.addBookmark} />
               <PlaylistStaleStats playlist={props.playlist} addPlaylist={props.addPlaylist} />
               <ShareStaleStats share={props.share} addShare={props.addShare} />
-              <ReportStaleStats report={props.report} addReport={props.addReport} />
+              <ReportStaleStats report={props.report} addReport={() => {props.addReport(props.setOpen(false), props.setExpanded(false))}} />
             </Typography>
-         
+       
           </Box>
-         
+       
 
         </Box>
       </Fade>

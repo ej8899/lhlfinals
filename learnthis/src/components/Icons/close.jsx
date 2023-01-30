@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 export const CloseModal = (props) => {
 
   let bgColor =  "#f5f5f5";
-  if (localStorage.getItem('isDarkMode') === "dark") {
+  if (global.config.currentTheme === "dark") {
     bgColor = "#424242"
   }
 

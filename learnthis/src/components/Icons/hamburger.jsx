@@ -20,7 +20,7 @@ export const MoreStats = (props) => {
   const open = Boolean(props.anchorEl);
 
   let bgColor =  "#f5f5f5";
-  if (localStorage.getItem('isDarkMode') === "dark") {
+  if (global.config.currentTheme === "dark") {
     bgColor = "#424242"
   }
 
@@ -51,11 +51,11 @@ export const MoreStats = (props) => {
         flex-direction="column"
       >
         <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" textAlign="center">
-          <MenuItem onClick={props.handleCloseOut}><RateStaleStats rate={props.rate} rateReview={() => props.rateReview(true, props.handleOpen())}/></MenuItem>
+          <MenuItem onClick={props.handleCloseOut}><RateStaleStats rate={props.rate} rateReview={() => {props.rateReview(true, props.handleOpen())}}/></MenuItem>
           <MenuItem onClick={props.handleCloseOut}><LessonStaleStats lesson={props.lesson} addLesson={props.addLesson}/></MenuItem>
           <MenuItem onClick={props.handleCloseOut}><BookmarkStaleStats bookmark={props.bookmark} addBookmark={props.addBookmark}/></MenuItem>
           <MenuItem onClick={props.handleCloseOut}><PlaylistStaleStats playlist={props.playlist} addPlaylist={props.addPlaylist}/></MenuItem>
-          <MenuItem onClick={props.handleCloseOut}><ReportStaleStats report={props.report} addReport={props.addReport}/></MenuItem>
+          <MenuItem onClick={props.handleCloseOut}><ReportStaleStats report={props.report} addReport={() => props.addReport(props.setExpanded(false))}/></MenuItem>
         </Box>
       </Menu>
       </div>

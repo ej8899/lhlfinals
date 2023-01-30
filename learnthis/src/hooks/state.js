@@ -42,6 +42,36 @@ export default function StateStatus() {
   };
 // -------------------------------------------------------------
 
+// -------------------------------------------------------------
+// State for my comments date
+// TODO - add comments to database
+  const [myComments, setMyComments] = useState('');
+  const addMyComments = (comments) => {
+    setMyComments(comments)
+    // console.log(comments)
+  }
+// -------------------------------------------------------------
+
+// -------------------------------------------------------------
+// State for my complexity rating
+// TODO - add my complexity rating to database
+const [myComplexity, setMyComplexity] = useState(null);
+const addMyComplexity = (complexity) => {
+  setMyComplexity(complexity)
+  // console.log(complexity)
+}
+// -------------------------------------------------------------
+
+// -------------------------------------------------------------
+// State for my category rating
+// TODO - add my complexity rating to database
+const [myCategory, setMyCategory] = useState(null);
+const addMyCategory = (category) => {
+  setMyCategory(category)
+  // console.log(category)
+}
+// -------------------------------------------------------------
+
   return {
     title,
     setTitle,
@@ -65,6 +95,15 @@ export default function StateStatus() {
     selectedResource,
     setSelectedResource,
     handleClose,
-    handleOpen
+    handleOpen,
+    myComments,
+    setMyComments,
+    addMyComments,
+    myComplexity,
+    addMyComplexity,
+    setMyComplexity,
+    myCategory,
+    setMyCategory,
+    addMyCategory
   };
 };

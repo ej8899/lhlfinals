@@ -11,7 +11,10 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import zlog from '../../helpers/zlog';
 
-import { modalAboutMessage } from '../Modal/contentMisc.jsx';
+import {  modalAboutMessage, 
+          modalPrivacyPolicy,
+          modalAboutTeam,
+         } from '../Modal/contentMisc.jsx';
 
 export default function SiteFooter(props) {
   function showAbout() {
@@ -36,7 +39,7 @@ export default function SiteFooter(props) {
           break;
         case 'team':
           setTitle("The Dev Team...");
-          setContent("team");
+          setContent(modalAboutTeam());
           break;
         case 'contact':
           setTitle("Contact Us...");
@@ -48,7 +51,7 @@ export default function SiteFooter(props) {
           break;
         case 'ppolicy':
           setTitle("Privacy Policy...");
-          setContent("content for priv ppolicy");
+          setContent(modalPrivacyPolicy());
           break;
         default:
           break;

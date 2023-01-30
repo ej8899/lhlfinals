@@ -97,7 +97,16 @@ function PreviewItem(props) {
     selectedResource,
     setSelectedResource,
     handleClose,
-    handleOpen
+    handleOpen,
+    myComments,
+    setMyComments,
+    addMyComments,
+    myComplexity,
+    addMyComplexity,
+    setMyComplexity,
+    myCategory,
+    setMyCategory,
+    addMyCategory
   } = StateStatus();
 // -------------------------------------------------------------
 
@@ -198,7 +207,7 @@ function PreviewItem(props) {
     </div>
 */
 
-const ratingScore = `Rating: ${props.rating}`
+const ratingScore = `Overall User Rating: ${props.rating}`
 const skeletonTimer = randomNumber(100,3000);
 
 
@@ -305,23 +314,26 @@ const skeletonTimer = randomNumber(100,3000);
 
       <div>
         <DetailModal 
-          open={open} 
+          open={open} setOpen={setOpen} setExpanded={setExpanded}
           handleClose={handleClose} 
           videoId={props.videoId} 
           title={title} 
           complexity={props.complexity} 
           typeCategory={props.typeCategory} 
-          favourite={favourite} addFavourites={addFavourites}
+          favourite={favourite} addFavourites={() => addFavourites(filter)}
           lesson={lesson} addLesson={addLesson}
           rate={rate} rateReview={rateReview}
           show={show}
           bookmark={bookmark} addBookmark={addBookmark}
           playlist={playlist} addPlaylist={addPlaylist}
-          share={share} addShare={addShare}
+          share={share} addShare={() => addShare(filter)}
           report={report} addReport={addReport}
-          like={like} addLike={addLike} setLike={setLike}
+          like={like} addLike={() => addLike(filter)} setLike={setLike}
           more={more} addMore={addMore} setMore={setMore}
           star={star} addStar={addStar}
+          myComments={myComments} addMyComments={addMyComments}
+          myComplexity={myComplexity} addMyComplexity={addMyComplexity}
+          myCategory={myCategory} addMyCategory={addMyCategory}
         />
       </div>
       <Divider sx={{ filter: filter }}>
@@ -329,7 +341,7 @@ const skeletonTimer = randomNumber(100,3000);
           <Skeleton animation="wave" variant="rounded" width={100} height={30} />
         ) : (
           <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-            <Chip color="warning" label="More Actions" />
+            <Chip style={{ backgroundColor: colorGenerator(props.stage)}} label="More Actions" />
           </Fade>
         )}
       </Divider>
@@ -350,6 +362,7 @@ const skeletonTimer = randomNumber(100,3000);
                 handleOpen={() => handleOpen(filter)}
                 anchorEl={anchorEl} setAnchorEl={setAnchorEl} 
                 handleCloseOut={handleCloseOut} handleClick={handleClick}
+                setExpanded={setExpanded}
               />
             ) : (
               <ReportStats nowloading={props.nowLoading} skeletonTimer={skeletonTimer} report={report} addReport={addReport} />
@@ -413,7 +426,7 @@ const skeletonTimer = randomNumber(100,3000);
               <Typography variant="body2" >Read Video Description: </Typography>
             </Fade>
           )}    
-       
+     
           <ExpandMore
             expand={expanded}
             onClick={() => handleExpandClick(filter)}

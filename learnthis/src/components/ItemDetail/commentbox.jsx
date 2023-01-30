@@ -19,6 +19,8 @@ export default function MultilineTextFields(props) {
           multiline
           rows={17}
           placeholder="Make your notes here."
+          value={props.myComments}
+          onChange={(event) => props.addMyComments(event.target.value)}
         />
       </div>
     </Box>

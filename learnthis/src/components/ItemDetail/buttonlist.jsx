@@ -16,6 +16,8 @@ export default function ComboBox(props) {
       options={listing}
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label={props.message} />}
+      value={props.mySelection}
+      onChange={(event, value) => props.addMySelection(value)}
     />
   );
 }

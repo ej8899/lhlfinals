@@ -9,8 +9,8 @@ export const LessonStats = (props) => {
 
   return (
     <Fade in={!props.nowloading} timeout={{ enter: props.skeletonTimer }}>
-      <Tooltip title="Add to Lesson Plan">
-        <IconButton aria-label="add to lesson plan" sx={{color: `${props.lesson}`, "&:hover": {color: 'blue'} }} onClick={props.addLesson}>
+      <Tooltip title="Recommend Add to Lesson Plan">
+        <IconButton aria-label="recommend add to lesson plan" sx={{color: `${props.lesson}`, "&:hover": {color: 'blue'} }} onClick={props.addLesson}>
           <NoteAddIcon/>
         </IconButton>
       </Tooltip>
@@ -21,8 +21,8 @@ export const LessonStats = (props) => {
 export const LessonStaleStats = (props) => {
 
   return (
-    <Tooltip title="Add to Lesson Plan">
-      <IconButton aria-label="add to lesson plan" sx={{ color:`${props.lesson}`, "&:hover": {color: 'blue'} }} onClick={props.addLesson}>
+    <Tooltip title="Recommend Add to Lesson Plan">
+      <IconButton aria-label="recommend add to lesson plan" sx={{ color:`${props.lesson}`, "&:hover": {color: 'blue'} }} onClick={props.addLesson}>
         <NoteAddIcon/>
       </IconButton>
     </Tooltip>
