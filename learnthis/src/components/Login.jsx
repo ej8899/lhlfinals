@@ -15,7 +15,9 @@ import Dialog from '@mui/material/Dialog';
 
 import { styled } from '@mui/material/styles';
 
-import config from '../config';
+// TODO - add a "close" button to this modal box
+// TODO - add the content for 'singup'
+// TODO - add the content for 'forgot'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {

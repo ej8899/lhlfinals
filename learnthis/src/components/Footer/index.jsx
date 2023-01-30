@@ -11,6 +11,8 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import zlog from '../../helpers/zlog';
 
+import { modalAboutMessage } from '../Modal/contentMisc.jsx';
+
 export default function SiteFooter(props) {
   function showAbout() {
     // TODO - this is in Application.js currently - needs moved to helper function file for import elsewhere
@@ -23,23 +25,30 @@ export default function SiteFooter(props) {
 
     const [open, setOpen] = React.useState(false);
     const [dialogTitle, setTitle] = React.useState('');
+    const [dialogContent, setContent] = React.useState('');
+
     const handleOpen = (modal) => {
       zlog('info',"MODAL:",modal);
       switch (modal) {
         case 'about':
           setTitle("About...");
+          setContent(modalAboutMessage());
           break;
         case 'team':
           setTitle("The Dev Team...");
+          setContent("team");
           break;
         case 'contact':
           setTitle("Contact Us...");
+          setContent("content for contact");
           break;
         case 'cpolicy':
           setTitle("Cookies Policy...");
+          setContent("content for cookies plicy");
           break;
         case 'ppolicy':
           setTitle("Privacy Policy...");
+          setContent("content for priv ppolicy");
           break;
         default:
           break;
@@ -75,7 +84,7 @@ export default function SiteFooter(props) {
     </ul>
     <ul className="menu">
       <Button onClick={() => handleOpen('about')} variant="contained" >About</Button>&nbsp;
-      <AboutDialog title={dialogTitle} open={open} handleClose={handleClose}></AboutDialog>
+      <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
       <Button onClick={() => handleOpen('team')} variant="contained" >Team</Button>&nbsp;
       <Button onClick={() => handleOpen('contact')} variant="contained" >Contact Us</Button>&nbsp;
       <Button onClick={() => handleOpen('cpolicy')} variant="contained" >Cookie Policy</Button>&nbsp;

@@ -10,7 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 
-import { modalCookiesMessage } from './contentCookies';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -61,8 +60,6 @@ export default function AboutDialog(props) {
     setOpen(false);
   };
 
-
-
   console.log("ABOUT PROPS:",props)
   return (
     <div>
@@ -75,24 +72,11 @@ export default function AboutDialog(props) {
           {props.title}
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          {props.content}
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-            consectetur ac, vestibulum at eros.
-          </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-            magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-            ullamcorper nulla non metus auctor fringilla.
-          </Typography>
+        {props.description}
+        
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" autoFocus onClick={props.handleClose}>
+          <Button variant="contained" onClick={props.handleClose}>
             ok
           </Button>
         </DialogActions>

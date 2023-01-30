@@ -17,14 +17,11 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 // console log helper
 import zlog from "../helpers/zlog.js";
+import { modalCookiesMessage } from "./Modal/contentMisc.jsx";
 
 // modal windows  --
 // TODO this can be removed after all are converted to MUI modal
 import AboutDialog from "./Modal/about";
-import ZModal, { zmodalUpdater } from "./Modal/index.js";
-import {
-  modalAboutMessage, modalCookiesMessage, modalPrivacyPolicy, modalReleaseNotes
-} from "./Modal/ModalData.js";
 
 import NavBar from "./Nav/NavBar.jsx";
 import PreviewItem from "./Previews";
@@ -38,6 +35,7 @@ const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 // application - main function
 //
 export default function Application(props) {
+
   const sampledata = [
     {
       id: 1,
@@ -180,6 +178,7 @@ export default function Application(props) {
   const [copen, setCOpen] = React.useState(true);
   const handleCClose = () => setCOpen(false);
 
+  const [cookiesMessage,setCMessage] = useState('cookies default');
 
   //
   // useEffect - actions on first load
@@ -211,14 +210,17 @@ export default function Application(props) {
     //   global.config.goSleep(2000).then(()=> { setclassName("layout fadein"); });
     global.config.goSleep(4000).then(()=> {setLoading(false);});
 
+    setCMessage(modalCookiesMessage);
+
   }, []);
 
     // TODO - cookiesmodal -  be sure showPrivacy is linked to child modal
     // TODO -load from localStorage - don't show modal if we've done it before (cookies only)
     // TODO - update localStorage once user says ok
   
-  
 
+  
+  
 
   // TODO move theme button to nav bar
 
@@ -250,8 +252,7 @@ export default function Application(props) {
         <SiteFooter></SiteFooter>
       </div>
 
-   
-      <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose}></AboutDialog>
+      <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
 
     </ThemeProvider>
     </ColorModeContext.Provider>
