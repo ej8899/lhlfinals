@@ -64,15 +64,16 @@ module.exports = function(router, database) {
   // Update a user
   router.put('/', async (req, res) => {
     const user = req.body;
-    user.password = bcrypt.hashSync(user.password, 12);
-    const foundUser = await database.getUserWithEmail(user.previousEmail);
+    user.updatedPassword = bcrypt.hashSync(user.updatedPassword, 12);
 
-    if (!foundUser) {
-      res.send({ error: "The user has not been existing" });
+    const authenticatedUser = await authenticateUser(user.previousEmail, user.previousPassword, database);
+    if (!authenticatedUser) {
+      res.send({ error: "Authentication error" });
       return;
     }
 
-    const updatedUser = await database.updateUserWithEmail(user);
+    const { previousEmail, updatedEmail, updatedPassword } = user;
+    const updatedUser = await database.updateUserWithEmail({ previousEmail, updatedEmail, updatedPassword });
 
     if (!updatedUser) {
       res.send({ error: "Update error" });

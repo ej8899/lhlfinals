@@ -34,11 +34,12 @@ exports.addUser = addUser;
 
 /**
 * Update a user.
-* @param {{previousEmail: string, updatedEmail: string,password: string}} user
+* @param {{previousEmail: string, updatedEmail: string, updatedPassword: string}} user
 * @return {Promise<{}>} A promise of the user.
 */
 const updateUserWithEmail = function(user) {
-  const queryValue = [user.previousEmail, user.updatedEmail, user.password];
+  console.log(user);
+  const queryValue = [user.previousEmail, user.updatedEmail, user.updatedPassword];
   return query(`UPDATE users SET email=$2, password=$3 WHERE email=$1 RETURNING *;`, queryValue, result => result.rows[0]);
 };
 exports.updateUserWithEmail = updateUserWithEmail;
