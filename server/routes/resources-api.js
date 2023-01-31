@@ -68,7 +68,9 @@ router.put("/:id", (req, res) => {
  */
 router.delete("/:id", (req, res) => {
   //const userId = req.session.userID;
-  const resourceData = req.body;
+  //const resourceData = req.body;
+  const resourceId = req.params.id;
+  const resourceData = {id : resourceId};
 
   q_resources
     .deleteResource(resourceData)

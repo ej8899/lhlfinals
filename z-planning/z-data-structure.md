@@ -85,10 +85,7 @@ returned:
 description: delete a resource
 
 ```json
-body:
-{
-    "id": 5
-}
+body: N/A
 
 returned:
 {
