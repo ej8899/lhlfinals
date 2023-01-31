@@ -1,3 +1,55 @@
+## POST api/user
+description: create/save a new user
+
+```json
+body: 
+{
+	"email":"123456@test.com",
+	"password":"1234"
+}
+
+returned:
+{
+    "success": "User created",
+    "user": {
+        "id": 5,
+        "email": "123456@test.com"
+    }
+}
+```
+
+## POST api/user/login
+description: login a user
+
+```json
+body: 
+{
+	"email":"123456@test.com",
+	"password":"1234"
+}
+
+returned:
+{
+    "success": "Logged in",
+    "user": {
+        "id": 5,
+        "email": "123456@test.com"
+    }
+}
+```
+
+## POST api/user/logout
+description: logout a user
+
+```json
+body: N/A
+
+returned:
+{
+    "success": "Logged out"
+}
+```
+
 ## GET api/resources
 description: retrieve all resources from all users
 
