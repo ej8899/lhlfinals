@@ -81,7 +81,7 @@ export const DetailModal = (props) => {
      
           <Box display="flex" width="100%" justifyContent="space-around">
             <Box>
-              {/* <YouTube videoId={props.videoId} opts={videoPlayerOpts} /> */}
+              <YouTube videoId={props.videoId} opts={videoPlayerOpts} />
               <Box display={props.show}>
                 <Box style={{paddingTop:20, paddingLeft:15}}>
                   <ComboBox listData={props.complexity} message={'Select the lesson complexity...'} mySelection={props.myComplexity} addMySelection={props.addMyComplexity}/>

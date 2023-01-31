@@ -169,10 +169,10 @@ export const PreviewItem = (props) => {
 // -------------------------------------------------------------
 
 // not using to save quieries
-// axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}`)
-
+// axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}&key=${API_KEY}`)
+// axios.get(`https://www.googleapis.com/`)
   useEffect(() => {
-    axios.get(`https://www.googleapis.com/`)
+    axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}&key=${API_KEY}`)
       .then(response => {
         // let title = response.data.items[0].snippet.title;
         // if (title) setTitle(truncateText(title,30));

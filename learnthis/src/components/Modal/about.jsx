@@ -60,7 +60,7 @@ export default function AboutDialog(props) {
     setOpen(false);
   };
 
-  console.log("ABOUT PROPS:",props)
+
   return (
     <div>
       <BootstrapDialog
