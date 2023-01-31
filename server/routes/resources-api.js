@@ -41,8 +41,8 @@ router.post("/", (req, res) => {
 });
 
 /**
- * Save new resource
- * @return {json} resource that is saved
+ * Update existing resource
+ * @return {json} resource that is updated
  * 
  */
 router.put("/:id", (req, res) => {
@@ -60,5 +60,27 @@ router.put("/:id", (req, res) => {
       return res.status(500).json({ error: err.message });
     });
 });
+
+/**
+ * Delete existing resource
+ * @return {json} resource that is deleted
+ * 
+ */
+router.delete("/:id", (req, res) => {
+  //const userId = req.session.userID;
+  const resourceData = req.body;
+
+  q_resources
+    .deleteResource(resourceData)
+    .then((data) => {
+      console.log("Resouce deleted returned obj: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error deleting new resource", err);
+      return res.status(500).json({ error: err.message });
+    });
+});
+
 
 module.exports = router;
