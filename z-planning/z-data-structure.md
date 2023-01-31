@@ -81,7 +81,7 @@ returned:
 ]
 ```
 
-## DELETE api/resouces/[resource_id]
+## DELETE api/resources/[resource_id]
 description: delete a resource
 
 ```json
@@ -101,7 +101,7 @@ returned:
 }
 ```
 
-## UPDATE api/resouces/[resource_id]
+## UPDATE api/resources/[resource_id]
 description: update a resource
 
 ```json
@@ -129,7 +129,7 @@ body:
 }
 ```
 
-## POST api/resouces/[resource_id]
+## POST api/resources
 description: create/save a resource
 
 ```json
@@ -183,4 +183,28 @@ returned:
         "deleted_at": null
     }
 ]
+```
+
+## POST api/categories
+description: create/save a category
+
+```json
+body: 
+  {
+    "resource_id": 2,
+    "name":"Java",
+    "index":4
+  }
+
+returned:
+{
+    "id": 5,
+    "resource_id": 2,
+    "name": "Java",
+    "index": 4,
+    "description": null,
+    "created_at": "2023-01-31T21:48:04.700Z",
+    "updated_at": null,
+    "deleted_at": null
+}
 ```

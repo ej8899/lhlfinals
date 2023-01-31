@@ -20,4 +20,25 @@ router.get("/resources/:id", (req, res) => {
     });
 });
 
+/**
+ * Save new category
+ * @return {json} category that is saved
+ * 
+ */
+router.post("/", (req, res) => {
+  //const userId = req.session.userID;
+  const categoryData = req.body;
+
+  q_categories
+    .postCategory(categoryData)
+    .then((data) => {
+      console.log("Category save returned obj: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error saving new category", err);
+      return res.status(500).json({ error: err.message });
+    });
+});
+
 module.exports = router;
