@@ -18,6 +18,13 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import zlog from '../../helpers/zlog';
 import Login from '../Signin.jsx';
+import SignUp from '../SignUp.jsx';
+
+import {  modalSignUp,
+          modalSignIn
+} from './signinup.jsx';
+
+import AboutDialog from "../Modal/about.jsx"
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -91,12 +98,59 @@ export default function PrimarySearchAppBar() {
   };
 
   // LOGIN
+  const [open, setOpen] = React.useState(false);
+  const [dialogTitle, setTitle] = React.useState('empty');
+  const [dialogContent, setContent] = React.useState('empty');
+  const handleUserModals = (modal) => {
+    setAnchorEl(null);
+    handleMenuClose();
+    zlog('info',"user MODAL:",modal);
+    switch (modal) {
+      case 'about':
+        setTitle("About...");
+        //setContent(modalAboutMessage());
+        break;
+      case 'team':
+        setTitle("The Dev Team...");
+        //setContent(modalAboutTeam());
+        break;
+      case 'contact':
+        setTitle("Contact Us...");
+        //setContent("content for contact");
+        break;
+      case 'cpolicy':
+        setTitle("Cookies Policy...");
+        //setContent("content for cookies plicy");
+        break;
+      case 'ppolicy':
+        setTitle("Privacy Policy...");
+        //setContent(modalPrivacyPolicy());
+        break;
+      default:
+        setTitle("oops.. not found");
+        break;
+    }
+    if(open === true) setOpen(false);
+    if(open === false) setOpen(true);
+  }
+  const handleClose = () => setOpen(false);
+
+
+  // SIGN IN
   const [loginopen, setLOpen] = React.useState(false);
-  const handleClose = () => setLOpen(false);
+  const handleLoginClose = () => setLOpen(false);
   const handleLogin = (event) => {
     setAnchorEl(null);
     handleMobileMenuClose();
     setLOpen(true);
+  }
+  // SIGN UP
+  const [signupopen, setSOpen] = React.useState(false);
+  const handleSignUpClose = () => setSOpen(false);
+  const handleSignUp = (event) => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+    setSOpen(true);
   }
 
   const menuId = 'primary-search-account-menu';
@@ -116,61 +170,21 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClose={handleClose} onClick={handleMenuClose}>Logout</MenuItem>
-      <MenuItem close={handleClose} onClick={handleLogin}>Sign In</MenuItem>
-      <MenuItem close={handleClose} onClick={handleLogin}>Sign Up</MenuItem>
+      <MenuItem onClick={() => handleUserModals('profile')}>Profile</MenuItem>
+      <MenuItem onClick={() => handleUserModals('account')}>My account</MenuItem>
+      <MenuItem onClick={handleLogin}>Sign In</MenuItem>
+      <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>
+      <MenuItem onClick={() => handleUserModals('logout')}>Logout</MenuItem>
     </Menu>
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Login open={loginopen}></Login>
+      <Login open={loginopen} close={handleLoginClose}></Login>
+      <SignUp open={signupopen} close={handleSignUpClose}></SignUp>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -238,8 +252,8 @@ export default function PrimarySearchAppBar() {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
       {renderMenu}
+      <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
     </Box>
   );
 }

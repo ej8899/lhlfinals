@@ -41,7 +41,7 @@ function Copyright(props) {
   );
 }
 
-// TODO - login - create sign up form and link from sign in
+// TODO - sign UP link needs to work
 
 const Login=(props)=>{
 
@@ -131,7 +131,6 @@ const Login=(props)=>{
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-
       </BootstrapDialog>
     )
 };
