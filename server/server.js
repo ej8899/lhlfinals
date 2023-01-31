@@ -16,14 +16,19 @@ app.use(bodyParser.json());
 
 const userDatabase = require('./db/queries/user');
 const userRoutes = require('./routes/user');
+const resourcesRoutes = require('./routes/resources-api');
 
 // /user/endpoints
 const userRouter = express.Router();
 userRoutes(userRouter, userDatabase);
 app.use('/api/user', userRouter);
+app.use('/api/resources',resourcesRoutes);
 
 app.use(express.static(publicPath));
 app.get("/*", function (req, res) {
 res.sendFile(path.join(publicPath, "index.html"));
 });
-app.listen(process.env.PORT || 7070);
+
+app.listen(process.env.PORT || 8080,()=>{
+  console.log ("Server running");
+});

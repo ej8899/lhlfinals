@@ -6,13 +6,12 @@ const express = require('express');
 const router = express.Router();
 const q_resources = require('../db/queries/q_resources');
 
-/*
-API to get all quizzes owned by the user
+/**
+* Get all resources comming from all users that are still active from db
+* @return {json} All resources in db that are not deleted limit by 20.
 */
 router.get('/', (req, res) => {
-  //const userId = req.session.userID;
-
-  q_resources.getResources
+  q_resources.getAllResources()
     .then(data => res.json(data))
     .catch((err) => {
       res
@@ -20,3 +19,6 @@ router.get('/', (req, res) => {
         .json({ error: err.message });
     });
 });
+
+
+module.exports = router;
