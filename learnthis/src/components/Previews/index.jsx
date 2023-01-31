@@ -26,6 +26,13 @@ import { Button, CardActionArea, CardActions, CardHeader, Icon } from '@mui/mate
 // --------------------------------------------------------
 
 // --------------------------------------------------------
+// React Router Imports
+import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+// --------------------------------------------------------
+
+
+// --------------------------------------------------------
 // Import Helper Functions
 import { randomNumber, randomColor, truncateText, colorGenerator } from "../../helpers/helpers";
 
@@ -48,14 +55,15 @@ import { MoreStats } from "../Icons/hamburger";
 import { StarRating } from "../Icons/stars";
 import { ExpandIcon, ExpandMore } from "../Icons/expand";
 
-// Import Detail Modal
-import DetailModal from "../ItemDetail/index.jsx";
+// Import Modal
+import { DetailModal }  from "../ItemDetail/index.jsx";
+import { ShareModal } from "../Modal/share";
 // --------------------------------------------------------
 
 
 // TODO - any benefit to removing react-youtube and rolling our own variant?
 
-function PreviewItem(props) {
+export const PreviewItem = (props) => {
   // console.log("preview item props:",props)
   const API_KEY = global.config.youtubekey;
   const testVideoID = "hY7m5jjJ9mM";
@@ -134,6 +142,10 @@ function PreviewItem(props) {
     share,
     setShare,
     addShare,
+    shareOpen,
+    setShareOpen,
+    handleShareClose,
+    handleShareOpen,
     report,
     setReport,
     addReport,
@@ -156,9 +168,11 @@ function PreviewItem(props) {
 
 // -------------------------------------------------------------
 
+// not using to save quieries
+// axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}`)
 
   useEffect(() => {
-    axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}&key=${API_KEY}`)
+    axios.get(`https://www.googleapis.com/`)
       .then(response => {
         // let title = response.data.items[0].snippet.title;
         // if (title) setTitle(truncateText(title,30));
@@ -178,6 +192,7 @@ function PreviewItem(props) {
           //zlog('info',"data snippet follows:");
           //console.log(response.data.items[0].snippet);
         }
+       
         /*
         REFERENCE:
         useful items in response data:
@@ -194,7 +209,7 @@ function PreviewItem(props) {
         */
       })
       .catch(error => {
-        console.error(error);
+        // console.error(error);
       });
   }, [videoId]);
 
@@ -211,10 +226,13 @@ const ratingScore = `Overall User Rating: ${props.rating}`
 const skeletonTimer = randomNumber(100,3000);
 
 
+
 // --------------------------------------------------------
   return (
     <Card sx={{ maxWidth: 345 }} >
-      <CardActionArea onClick={() => handleOpen(filter)} sx={{ filter: filter }}>
+      <CardActionArea onClick={() => (handleOpen(filter), setExpanded(false))} sx={{ filter: filter }}>
+
+
         {props.nowloading ? (
           <Skeleton sx={{ height: 140 }} animation="wave" variant="rectangular" />
         ) : (
@@ -227,7 +245,6 @@ const skeletonTimer = randomNumber(100,3000);
             />
           </Fade>
         )}
-
         <CardHeader
           avatar={
             props.nowloading ? (
@@ -290,6 +307,7 @@ const skeletonTimer = randomNumber(100,3000);
             </CardContent>              
           </Fade>
         )}
+
       </CardActionArea>
 
       {props.nowloading ? (
@@ -315,7 +333,32 @@ const skeletonTimer = randomNumber(100,3000);
       <div>
         <DetailModal 
           open={open} setOpen={setOpen} setExpanded={setExpanded}
-          handleClose={handleClose} 
+          handleClose={() => handleClose()} 
+          videoId={props.videoId} 
+          title={title} 
+          complexity={props.complexity} 
+          typeCategory={props.typeCategory} 
+          favourite={favourite} addFavourites={() => addFavourites(filter)}
+          lesson={lesson} addLesson={addLesson}
+          rate={rate} rateReview={rateReview}
+          show={show}
+          bookmark={bookmark} addBookmark={addBookmark}
+          playlist={playlist} addPlaylist={addPlaylist}
+          share={share} addShare={() => addShare(filter)} shareOpen={shareOpen} handleShareClose={handleShareClose} handleShareOpen={handleShareOpen}
+          report={report} addReport={addReport}
+          like={like} addLike={() => addLike(filter)} setLike={setLike}
+          more={more} addMore={addMore} setMore={setMore}
+          star={star} addStar={addStar}
+          myComments={myComments} addMyComments={addMyComments}
+          myComplexity={myComplexity} addMyComplexity={addMyComplexity}
+          myCategory={myCategory} addMyCategory={addMyCategory}
+        />
+
+      </div>
+      <div>
+        <ShareModal 
+          open={shareOpen} setShareOpen={setShareOpen} setExpanded={setExpanded}
+          handleShareClose={() => handleShareClose()} 
           videoId={props.videoId} 
           title={title} 
           complexity={props.complexity} 
@@ -334,8 +377,14 @@ const skeletonTimer = randomNumber(100,3000);
           myComments={myComments} addMyComments={addMyComments}
           myComplexity={myComplexity} addMyComplexity={addMyComplexity}
           myCategory={myCategory} addMyCategory={addMyCategory}
+          thumbnail={thumbnail} videoID={videoId}
         />
+          {/* {background && ( <Routes>
+            <Route path="modal" element={shareModal} />
+          </Routes>)} */}
+          {/* {shareModal} */}
       </div>
+
       <Divider sx={{ filter: filter }}>
         {props.nowloading ? (
           <Skeleton animation="wave" variant="rounded" width={100} height={30} />
@@ -396,7 +445,7 @@ const skeletonTimer = randomNumber(100,3000);
             {props.nowloading ? (
               <Skeleton animation="wave" variant="circular" width={30} height={30} />
             ) : (
-              <ShareStats nowLoading={props.nowLoading} skeletonTimer={skeletonTimer} share={share} addShare={() => addShare(filter)} />
+              <ShareStats nowLoading={props.nowLoading} skeletonTimer={skeletonTimer} share={share} addShare={() => handleShareOpen(setExpanded(false))} />
             )}
 
             {/* {props.nowloading ? (
@@ -426,7 +475,7 @@ const skeletonTimer = randomNumber(100,3000);
               <Typography variant="body2" >Read Video Description: </Typography>
             </Fade>
           )}    
-     
+   
           <ExpandMore
             expand={expanded}
             onClick={() => handleExpandClick(filter)}
@@ -455,4 +504,4 @@ const skeletonTimer = randomNumber(100,3000);
 };
 // --------------------------------------------------------
 
-export default PreviewItem;
+export default PreviewItem

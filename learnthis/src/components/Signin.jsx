@@ -52,6 +52,7 @@ const Login=(props)=>{
         email: data.get('email'),
         password: data.get('password'),
       });
+      props.close();
     };
 
     return(

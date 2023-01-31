@@ -70,13 +70,32 @@ export default function IconStatus(props) {
 // -------------------------------------------------------------
   // Toggle share status
   // TODO pass share status to database
+  const [shareOpen, setShareOpen] = useState(false)
   const [share, setShare] = useState('default')
   const addShare = (filter) => {
     if (filter === 'blur(0px)') {
       share === 'purple'? setShare('default') : setShare('purple')
+      setShareOpen(!shareOpen)
     }
     return
   }
+
+  const handleShareOpen = () => {
+    if (filter === 'blur(0px)') {
+      setShare('purple')
+      setShareOpen(true)
+    }
+    return
+  }
+
+  const handleShareClose = () => {
+    if (filter === 'blur(0px)') {
+      setShare('default')
+      setShareOpen(false)
+    }
+    return
+  }
+
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
@@ -163,6 +182,10 @@ export default function IconStatus(props) {
     share,
     setShare,
     addShare,
+    shareOpen,
+    setShareOpen,
+    handleShareClose,
+    handleShareOpen,
 
     report,
     setReport,

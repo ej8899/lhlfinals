@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import YouTube from 'react-youtube'; // npx install react-youtube
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+import { Route, Routes, useLocation, Outlet, Link } from "react-router-dom";
 //-------------------------------------------------------------------
 import MultilineTextFields from './commentbox';
 import ComboBox from './buttonlist';
@@ -43,7 +44,7 @@ const style = {
 
 //-------------------------------------------------------------------
 // TODO pass props to this component w data
-export default function DetailModal(props) {
+export const DetailModal = (props) => {
 
   // reference: https://www.npmjs.com/package/react-youtube
   const videoPlayerOpts = {
@@ -77,10 +78,10 @@ export default function DetailModal(props) {
             </Typography>
             <CloseModal handleClose={props.handleClose}/>
           </Box>
-       
+     
           <Box display="flex" width="100%" justifyContent="space-around">
             <Box>
-              <YouTube videoId={props.videoId} opts={videoPlayerOpts} />
+              {/* <YouTube videoId={props.videoId} opts={videoPlayerOpts} /> */}
               <Box display={props.show}>
                 <Box style={{paddingTop:20, paddingLeft:15}}>
                   <ComboBox listData={props.complexity} message={'Select the lesson complexity...'} mySelection={props.myComplexity} addMySelection={props.addMyComplexity}/>
@@ -90,7 +91,7 @@ export default function DetailModal(props) {
                 </Box>
               </Box>
             </Box>
-         
+     
             <Box display={props.show} flexDirection="column">
               <Box flexDirection="row" textAlign="center">
                 Rate This Video: <StarStaleRating star={props.star} addStar={props.addStar}/>
@@ -105,7 +106,7 @@ export default function DetailModal(props) {
               <LessonStaleStats lesson={props.lesson} addLesson={props.addLesson}/>
               <BookmarkStaleStats bookmark={props.bookmark} addBookmark={props.addBookmark} />
               <PlaylistStaleStats playlist={props.playlist} addPlaylist={props.addPlaylist} />
-              <ShareStaleStats share={props.share} addShare={props.addShare} />
+              <ShareStaleStats share={props.share} addShare={props.handleShareOpen}/>
               <ReportStaleStats report={props.report} addReport={() => {props.addReport(props.setOpen(false), props.setExpanded(false))}} />
             </Typography>
        
@@ -114,6 +115,8 @@ export default function DetailModal(props) {
 
         </Box>
       </Fade>
+
     </Modal>
+
   );
 }
