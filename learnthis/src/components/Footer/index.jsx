@@ -99,7 +99,7 @@ export default function SiteFooter(props) {
       <Button onClick={() => handleOpen('cpolicy')} variant="contained" style={{backgroundColor: "transparent", boxShadow: "none"}}>Cookie Policy</Button>&nbsp;
       <Button onClick={() => handleOpen('ppolicy')} variant="contained" style={{backgroundColor: "transparent", boxShadow: "none"}}>Privacy Policy</Button>
     </ul>
-    &copy;2023, All Rights Reserved
+    &copy;{new Date().getFullYear()} All Rights Reserved
   </footer>
   
     </div>
