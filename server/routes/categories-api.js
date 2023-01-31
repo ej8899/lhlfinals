@@ -62,4 +62,26 @@ router.put("/:id", (req, res) => {
     });
 });
 
+/**
+ * Delete existing category
+ * @return {json} category that is deleted
+ * 
+ */
+router.delete("/:id", (req, res) => {
+  //const userId = req.session.userID;
+  const categoryId = req.params.id;
+  const categoryData = {id : categoryId};
+
+  q_categories
+    .deleteCategory(categoryData)
+    .then((data) => {
+      console.log("Category deleted returned obj: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error deleting category", err);
+      return res.status(500).json({ error: err.message });
+    });
+});
+
 module.exports = router;

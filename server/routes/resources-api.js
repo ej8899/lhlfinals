@@ -31,7 +31,7 @@ router.post("/", (req, res) => {
   q_resources
     .postResource(resourceData)
     .then((data) => {
-      console.log("Resouce save returned obj: ", data);
+      console.log("Resource save returned obj: ", data);
       return res.status(200).json(data);
     })
     .catch((err) => {
@@ -52,7 +52,7 @@ router.put("/:id", (req, res) => {
   q_resources
     .updateResource(resourceData)
     .then((data) => {
-      console.log("Resouce updated returned obj: ", data);
+      console.log("Resource updated returned obj: ", data);
       return res.status(200).json(data);
     })
     .catch((err) => {
@@ -75,7 +75,7 @@ router.delete("/:id", (req, res) => {
   q_resources
     .deleteResource(resourceData)
     .then((data) => {
-      console.log("Resouce deleted returned obj: ", data);
+      console.log("Resource deleted returned obj: ", data);
       return res.status(200).json(data);
     })
     .catch((err) => {
