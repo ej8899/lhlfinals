@@ -2,6 +2,7 @@ const db = require("../connection");
 
 /**
  * Get all resources comming from all users that are still active from db
+ * @param {number} id resource id
  * @return {Promise<{}>} A promise of all resources in db that are not deleted limit by 20.
  */
 const getCategoriesByResourceId = (id) => {
@@ -11,7 +12,7 @@ const getCategoriesByResourceId = (id) => {
   from
     categories
   where
-    resource_id = $1
+    resource_id = $1 AND deleted_at IS NULL
   ORDER BY
     index;`;
   const params = [id];
@@ -20,70 +21,59 @@ const getCategoriesByResourceId = (id) => {
 };
 
 /**
- * Insert new resource
- * @param {json} resource data
- * @return {Promise<{}>} A promise of the resource inserted.
+ * Insert new category
+ * @param {json} category data
+ * @return {Promise<{}>} A promise of the category inserted.
  */
-const postResource = (data) => {
+const postCategory = (data) => {
   let query = `
   INSERT INTO
-    resources (
-      profile_id,
-      url,
-      title,
-      description,
-      thumbnail
-    )
+    categories 
+      (resource_id, name, index)
     VALUES
-      ($1, $2, $3, $4, $5) RETURNING *;`;
+      ($1, $2, $3) RETURNING *;`;
   const params = [
-    data.profile_id,
-    data.url,
-    data.title,
-    data.description,
-    data.thumbnail,
+    data.resource_id,
+    data.name,
+    data.index
   ];
 
   return db.query(query, params).then((data) => data.rows[0]);
 };
 
 /**
- * Update exisiting resource
- * @param {json} resource data
- * @return {Promise<{}>} A promise of the resource updated.
+ * Update exisiting category
+ * @param {json} category data
+ * @return {Promise<{}>} A promise of the category updated.
  */
-const updateResource = (data) => {
+const updateCategory = (data) => {
   let query = `
   UPDATE
-    resources
+    categories
   SET
-    url = $1,
-    title = $2,
-    description = $3,
-    thumbnail = $4,
+    name = $1,
+    index = $2,
     updated_at = NOW()
   WHERE
-    id = $5 RETURNING *;`;
+    id = $3 RETURNING *;`;
   const params = [
-    data.url,
-    data.title,
+    data.name,
     data.description,
-    data.thumbnail,
-    data.id,
+    data.id
   ];
 
   return db.query(query, params).then((data) => data.rows[0]);
 };
 
 /**
- * Delete exisiting resource
- * @param {json} resource data
- * @return {Promise<{}>} A promise of the resource deleted
+ * Delete exisiting category
+ * @param {json} category data
+ * @return {Promise<{}>} A promise of the category deleted
  */
-const deleteResource = (data) => {
+const deleteCategory = (data) => {
   let query = `
   UPDATE
-    resources
+    categories
   SET
     deleted_at = NOW()
   WHERE
@@ -95,7 +85,7 @@ const deleteResource = (data) => {
 
 module.exports = {
   getCategoriesByResourceId,
-  postResource,
-  updateResource,
-  deleteResource,
+  postCategory,
+  updateCategory,
+  deleteCategory,
 };

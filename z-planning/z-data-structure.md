@@ -155,3 +155,32 @@ returned:
     "deleted_at": null
 }
 ```
+
+## GET api/categories/resources/id
+description: retrieve all categories for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "name": "Ruby",
+        "index": 1,
+        "description": null,
+        "created_at": "2023-01-31T13:54:46.368Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "name": "VS Code",
+        "index": 2,
+        "description": null,
+        "created_at": "2023-01-31T13:54:46.368Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
