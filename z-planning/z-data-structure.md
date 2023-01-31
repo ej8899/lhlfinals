@@ -1,4 +1,6 @@
 ## GET api/resources
+description: retrieve all resources from all users
+
 ```json
 returned:
 [
@@ -28,6 +30,8 @@ returned:
 ```
 
 ## DELETE api/resouces/[resource_id]
+description: delete a resource
+
 ```json
 body:
 {
@@ -49,6 +53,8 @@ returned:
 ```
 
 ## UPDATE api/resouces/[resource_id]
+description: update a resource
+
 ```json
 body:
 {
@@ -75,6 +81,8 @@ body:
 ```
 
 ## POST api/resouces/[resource_id]
+description: create/save a resource
+
 ```json
 body: 
 {
