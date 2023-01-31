@@ -18,6 +18,32 @@ const getAllResources = () => {
     });
 };
 
+const postResource = (data) => {
+  let query = `
+  INSERT INTO
+    resources (
+      profile_id,
+      url,
+      title,
+      description,
+      thumbnail
+    )
+    VALUES
+      (
+      ($1, $2, $3, $4, $5) RETURNING *;
+      `;
+  const params = [
+    data.profileId,
+    data.url,
+    data.title,
+    data.description,
+    data.thumbnail
+  ];
+
+  return db.query(query, params).then((data) => data.rows[0]);
+};
+
 module.exports = {
   getAllResources,
+  postResource
 };
