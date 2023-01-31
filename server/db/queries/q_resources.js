@@ -18,6 +18,11 @@ const getAllResources = () => {
     });
 };
 
+/**
+ * Insert new resource
+ * @param {json} resource data
+ * @return {Promise<{}>} A promise of the resource inserted.
+ */
 const postResource = (data) => {
   let query = `
   INSERT INTO
@@ -35,7 +40,37 @@ const postResource = (data) => {
     data.url,
     data.title,
     data.description,
-    data.thumbnail
+    data.thumbnail,
+  ];
+
+  return db.query(query, params).then((data) => data.rows[0]);
+};
+
+/**
+ * Update exisiting resource
+ * @param {json} resource data
+ * @return {Promise<{}>} A promise of the resource updated.
+ */
+const updateResource = (data) => {
+  let query = `
+  UPDATE
+    resources
+  SET
+    (
+      url = $1,
+      title = $2,
+      description = $3,
+      thumbnail = $4,
+      updated_at = NOW()
+    )
+  WHERE
+    id = $5 RETURNING *;`;
+  const params = [
+    data.url,
+    data.title,
+    data.description,
+    data.thumbnail,
+    data.id,
   ];
 
   return db.query(query, params).then((data) => data.rows[0]);
@@ -43,5 +78,6 @@ const postResource = (data) => {
 
 module.exports = {
   getAllResources,
-  postResource
+  postResource,
+  updateResource
 };

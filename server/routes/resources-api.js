@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 });
 
 /**
- * Check if a user exists with a given username and password
+ * Save new resource
  * @return {json} resource that is saved
  * 
  */
