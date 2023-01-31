@@ -17,12 +17,14 @@ app.use(bodyParser.json());
 const userDatabase = require('./db/queries/user');
 const userRoutes = require('./routes/user');
 const resourcesRoutes = require('./routes/resources-api');
+const categoriesRoutes = require('./routes/categories-api');
 
 // /user/endpoints
 const userRouter = express.Router();
 userRoutes(userRouter, userDatabase);
 app.use('/api/user', userRouter);
 app.use('/api/resources',resourcesRoutes);
+app.use('/api/categories',categoriesRoutes);
 
 app.use(express.static(publicPath));
 app.get("/*", function (req, res) {
