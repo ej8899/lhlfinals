@@ -56,13 +56,11 @@ const updateResource = (data) => {
   UPDATE
     resources
   SET
-    (
-      url = $1,
-      title = $2,
-      description = $3,
-      thumbnail = $4,
-      updated_at = NOW()
-    )
+    url = $1,
+    title = $2,
+    description = $3,
+    thumbnail = $4,
+    updated_at = NOW()
   WHERE
     id = $5 RETURNING *;`;
   const params = [

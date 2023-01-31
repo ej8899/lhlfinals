@@ -32,10 +32,31 @@ router.post("/", (req, res) => {
     .postResource(resourceData)
     .then((data) => {
       console.log("Resouce save returned obj: ", data);
-      return res.json(data);
+      return res.status(200).json(data);
     })
     .catch((err) => {
       console.log("Error saving new resource", err);
+      return res.status(500).json({ error: err.message });
+    });
+});
+
+/**
+ * Save new resource
+ * @return {json} resource that is saved
+ * 
+ */
+router.put("/:id", (req, res) => {
+  //const userId = req.session.userID;
+  const resourceData = req.body;
+
+  q_resources
+    .updateResource(resourceData)
+    .then((data) => {
+      console.log("Resouce updated returned obj: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error updating new resource", err);
       return res.status(500).json({ error: err.message });
     });
 });
