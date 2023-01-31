@@ -58,7 +58,7 @@ const updateCategory = (data) => {
     id = $3 RETURNING *;`;
   const params = [
     data.name,
-    data.description,
+    data.index,
     data.id
   ];
 

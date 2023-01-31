@@ -208,3 +208,27 @@ returned:
     "deleted_at": null
 }
 ```
+
+## UPDATE api/categories/[category_id]
+description: update a category
+
+```json
+body: 
+    {
+        "id": 6,
+        "name":"Rails",
+        "index":3
+    }
+
+returned:
+{
+    "id": 6,
+    "resource_id": 2,
+    "name": "Rails",
+    "index": 3,
+    "description": null,
+    "created_at": "2023-01-31T21:56:53.664Z",
+    "updated_at": "2023-01-31T21:57:12.271Z",
+    "deleted_at": null
+}
+```

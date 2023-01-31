@@ -41,4 +41,25 @@ router.post("/", (req, res) => {
     });
 });
 
+/**
+ * Update existing category
+ * @return {json} category that is updated
+ * 
+ */
+router.put("/:id", (req, res) => {
+  //const userId = req.session.userID;
+  const categoryData = req.body;
+
+  q_categories
+    .updateCategory(categoryData)
+    .then((data) => {
+      console.log("Category updated returned obj: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error updating category", err);
+      return res.status(500).json({ error: err.message });
+    });
+});
+
 module.exports = router;
