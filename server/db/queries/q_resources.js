@@ -29,11 +29,9 @@ const postResource = (data) => {
       thumbnail
     )
     VALUES
-      (
-      ($1, $2, $3, $4, $5) RETURNING *;
-      `;
+      ($1, $2, $3, $4, $5) RETURNING *;`;
   const params = [
-    data.profileId,
+    data.profile_id,
     data.url,
     data.title,
     data.description,

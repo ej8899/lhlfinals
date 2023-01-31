@@ -29,10 +29,10 @@ router.post("/", (req, res) => {
   const resourceData = req.body;
 
   q_resources
-    .postResource(resouceData)
+    .postResource(resourceData)
     .then((data) => {
       console.log("Resouce save returned obj: ", data);
-      return data;
+      return res.json(data);
     })
     .catch((err) => {
       console.log("Error saving new resource", err);
