@@ -74,8 +74,29 @@ const updateResource = (data) => {
   return db.query(query, params).then((data) => data.rows[0]);
 };
 
+/**
+ * Delete exisiting resource
+ * @param {json} resource data
+ * @return {Promise<{}>} A promise of the resource deleted
+ */
+const deleteResource = (data) => {
+  let query = `
+  UPDATE
+    resources
+  SET
+    deleted_at = NOW()
+  WHERE
+    id = $1 RETURNING *;`;
+  const params = [
+    data.id
+  ];
+
+  return db.query(query, params).then((data) => data.rows[0]);
+};
+
 module.exports = {
   getAllResources,
   postResource,
-  updateResource
+  updateResource,
+  deleteResource
 };
