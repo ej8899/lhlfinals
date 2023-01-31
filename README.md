@@ -25,11 +25,13 @@ You'll also need the server and SQL data that is available within this same gith
   - password: `development` 
   - database: `finals`
 3. Install dependencies: `npm i`
-5. Reset database: `npm run db:reset`
+4. Reset database: `npm run db:reset`
   - Check the db folder to see what gets created and seeded in the SDB
-7. Run the server: `npm run local`
+5. Run the server without nodemon: `npm start`
+6. Run the server with nodemon: `npm run local`
   - Note: nodemon is used, so you should not have to restart your server
-8. Visit `http://localhost:8080/`
+7. Visit `http://localhost:8080/`
+8. login: `bugg@example.com` password: `1234`
 
 ---
 ## Features...
@@ -69,6 +71,6 @@ You'll also need the server and SQL data that is available within this same gith
 ## The Team...
 - Atsu 
 - Ernie Johnson
-- Gene  
+- Gene Tenorlas
 [( back to top 🔺)](#learnthis)
 ---
