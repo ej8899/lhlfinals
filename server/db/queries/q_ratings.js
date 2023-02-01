@@ -60,8 +60,31 @@ const postRating = (data) => {
   return db.query(query, params).then((data) => data.rows[0]);
 };
 
+/**
+ * Update existing rating
+ * @param {json} rating data
+ * @return {Promise<{}>} A promise of the rating updated.
+ */
+const updateRatings = (data) => {
+  let query = `
+  UPDATE
+    ratings
+  SET
+    rate = $1,
+    updated_at = NOW()
+  WHERE
+    id = $2 RETURNING *;`;
+  const params = [
+    data.rate,
+    data.id
+  ];
+
+  return db.query(query, params).then((data) => data.rows[0]);
+};
+
 module.exports = {
   getRatingsByResourceId,
   getAverageRatingsByResourceId,
-  postRating
+  postRating,
+  updateRatings
 }
