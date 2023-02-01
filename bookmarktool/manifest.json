@@ -19,8 +19,7 @@
     "tabs",
     "storage",
     "scripting",
-    "identity",
-    "http://localhost:5000/*"
+    "identity"
   ],
 
   "host_permissions": [
