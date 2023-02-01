@@ -1,9 +1,9 @@
 const db = require("../connection");
 
 /**
- * Get all resources comming from all users that are still active from db
+ * Get all categories comming by resource id that are still active from db
  * @param {number} id resource id
- * @return {Promise<{}>} A promise of all resources in db that are not deleted limit by 20.
+ * @return {Promise<{}>} A promise of all categories in db that are not deleted limit by 20.
  */
 const getCategoriesByResourceId = (id) => {
   let query = `
