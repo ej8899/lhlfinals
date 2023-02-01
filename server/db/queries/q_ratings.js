@@ -82,9 +82,28 @@ const updateRating = (data) => {
   return db.query(query, params).then((data) => data.rows[0]);
 };
 
+/**
+ * Delete exisiting rating
+ * @param {json} rating data
+ * @return {Promise<{}>} A promise of the rating deleted
+ */
+const deleteRating = (data) => {
+  let query = `
+  UPDATE
+    ratings
+  SET
+    deleted_at = NOW()
+  WHERE
+    id = $1 RETURNING *;`;
+  const params = [data.id];
+
+  return db.query(query, params).then((data) => data.rows[0]);
+};
+
 module.exports = {
   getRatingsByResourceId,
   getAverageRatingsByResourceId,
   postRating,
-  updateRating
+  updateRating,
+  deleteRating
 }

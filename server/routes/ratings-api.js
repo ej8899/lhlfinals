@@ -78,4 +78,26 @@ router.put("/:id", (req, res) => {
     });
 });
 
+/**
+ * Delete existing rating
+ * @return {json} rating that is deleted
+ * 
+ */
+router.delete("/:id", (req, res) => {
+  //const userId = req.session.userID;
+  const ratingId = req.params.id;
+  const ratingData = {id : ratingId};
+
+  q_ratings
+    .deleteRating(ratingData)
+    .then((data) => {
+      console.log("Rating deleted returned obj: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error deleting rating", err);
+      return res.status(500).json({ error: err.message });
+    });
+});
+
 module.exports = router;
