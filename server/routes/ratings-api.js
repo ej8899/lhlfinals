@@ -36,6 +36,25 @@ router.get("/average/resources/:id", (req, res) => {
     });
 });
 
+/**
+ * Save new rating
+ * @return {json} rating that is saved
+ * 
+ */
+router.post("/", (req, res) => {
+  //const userId = req.session.userID;
+  const ratingData = req.body;
 
+  q_ratings
+    .postRating(ratingData)
+    .then((data) => {
+      console.log("Rating save returned obj: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error saving new rating", err);
+      return res.status(500).json({ error: err.message });
+    });
+});
 
 module.exports = router;

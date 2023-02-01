@@ -39,7 +39,29 @@ const getAverageRatingsByResourceId = (id) => {
   return db.query(query, params).then((data) => data.rows[0]);
 };
 
+/**
+ * Insert new rating
+ * @param {json} rating data
+ * @return {Promise<{}>} A promise of the rating inserted.
+ */
+const postRating = (data) => {
+  let query = `
+  INSERT INTO
+    ratings 
+      (resource_id, profile_id, rate)
+    VALUES
+      ($1, $2, $3) RETURNING *;`;
+  const params = [
+    data.resource_id,
+    data.profile_id,
+    data.rate
+  ];
+
+  return db.query(query, params).then((data) => data.rows[0]);
+};
+
 module.exports = {
   getRatingsByResourceId,
-  getAverageRatingsByResourceId
+  getAverageRatingsByResourceId,
+  postRating
 }
