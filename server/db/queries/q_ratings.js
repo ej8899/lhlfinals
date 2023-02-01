@@ -19,3 +19,7 @@ const getRatingsByResourceId = (id) => {
   const params = [id];
   return db.query(query, params).then((data) => data.rows);
 };
+
+module.exports = {
+  getRatingsByResourceId
+}
