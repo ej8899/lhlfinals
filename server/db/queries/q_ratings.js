@@ -65,7 +65,7 @@ const postRating = (data) => {
  * @param {json} rating data
  * @return {Promise<{}>} A promise of the rating updated.
  */
-const updateRatings = (data) => {
+const updateRating = (data) => {
   let query = `
   UPDATE
     ratings
@@ -86,5 +86,5 @@ module.exports = {
   getRatingsByResourceId,
   getAverageRatingsByResourceId,
   postRating,
-  updateRatings
+  updateRating
 }

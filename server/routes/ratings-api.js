@@ -57,4 +57,25 @@ router.post("/", (req, res) => {
     });
 });
 
+/**
+ * Update existing rating
+ * @return {json} rating that is updated
+ * 
+ */
+router.put("/:id", (req, res) => {
+  //const userId = req.session.userID;
+  const ratingData = req.body;
+
+  q_ratings
+    .updateRating(ratingData)
+    .then((data) => {
+      console.log("Rating updated returned obj: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error updating rating", err);
+      return res.status(500).json({ error: err.message });
+    });
+});
+
 module.exports = router;
