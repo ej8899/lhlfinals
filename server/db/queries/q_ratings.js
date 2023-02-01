@@ -28,16 +28,18 @@ const getRatingsByResourceId = (id) => {
 const getAverageRatingsByResourceId = (id) => {
   let query = `
   select
-  AVG(*) AS average
+    resource_id, AVG(rate) AS average
   from
     ratings
   where
-    resource_id = $1 AND deleted_at IS NULL;`;
+    resource_id = $1 AND deleted_at IS NULL
+  GROUP BY resource_id;`;
 
   const params = [id];
-  return db.query(query, params).then((data) => data.rows);
+  return db.query(query, params).then((data) => data.rows[0]);
 };
 
 module.exports = {
-  getRatingsByResourceId
+  getRatingsByResourceId,
+  getAverageRatingsByResourceId
 }
