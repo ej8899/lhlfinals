@@ -4,7 +4,7 @@
 
 const express = require("express");
 const router = express.Router();
-const q_ratings = import("../db/queries/q_ratings");
+const q_ratings = require("../db/queries/q_ratings");
 
 /**
  * Get all ratings for a specific resource
