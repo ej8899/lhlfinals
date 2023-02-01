@@ -156,7 +156,7 @@ returned:
 }
 ```
 
-## GET api/categories/resources/id
+## GET api/categories/resources/[resource_id]
 description: retrieve all categories for a specific resource
 
 ```json
@@ -249,5 +249,108 @@ returned:
     "created_at": "2023-01-31T21:56:53.664Z",
     "updated_at": "2023-01-31T21:57:12.271Z",
     "deleted_at": "2023-01-31T22:02:54.760Z"
+}
+```
+
+## GET api/ratings/resources/[resource_id]
+description: retrieve all ratings for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 2,
+        "resource_id": 2,
+        "profile_id": 1,
+        "rate": 2,
+        "created_at": "2023-02-01T14:28:21.410Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 3,
+        "resource_id": 2,
+        "profile_id": 1,
+        "rate": 1,
+        "created_at": "2023-02-01T14:28:21.410Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## GET api/ratings/average/resources/[resource_id]
+description: retrieve the average ratings for a specific resource
+
+```json
+returned:
+{
+    "resource_id": 2,
+    "average": "1.5000000000000000"
+}
+```
+
+## POST api/ratings
+description: create/save a ratings
+
+```json
+body: 
+    {
+        "resource_id": 1,
+        "profile_id": 2,
+        "rate":5
+    }
+
+returned:
+{
+    "id": 4,
+    "resource_id": 1,
+    "profile_id": 2,
+    "rate": 5,
+    "created_at": "2023-02-01T16:02:33.648Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## UPDATE api/ratings/[ratings_id]
+description: update a rating
+
+```json
+body: 
+    {
+    	"id": 4,
+        "resource_id": 1,
+        "profile_id": 2,
+        "rate":4
+    }
+
+returned:
+{
+    "id": 4,
+    "resource_id": 1,
+    "profile_id": 2,
+    "rate": 4,
+    "created_at": "2023-02-01T16:02:33.648Z",
+    "updated_at": "2023-02-01T16:46:20.541Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/ratings/[rating_id]
+description: delete a rating
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 4,
+    "resource_id": 1,
+    "profile_id": 2,
+    "rate": 4,
+    "created_at": "2023-02-01T16:02:33.648Z",
+    "updated_at": "2023-02-01T16:46:20.541Z",
+    "deleted_at": "2023-02-01T16:52:29.494Z"
 }
 ```
