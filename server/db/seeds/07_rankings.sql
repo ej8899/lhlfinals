@@ -1,5 +1,5 @@
 INSERT INTO
-  rankings (resource_id, profile_id, name, note)
+  rankings (resource_id, profile_id, name, scale, note)
 VALUES
-  (1, 1, 'Intermediate', NULL),
-  (2, 2, 'Beginner', 'Good to start');
+  (1, 1, 'Intermediate', 7, NULL),
+  (2, 2, 'Beginner', 3, 'Good to start');
