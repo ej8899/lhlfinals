@@ -2,9 +2,7 @@
 // LearnThis! Resource Web Clipper
 //
 
-
-
-
+const serverUrl = "http://localhost:7070";
 
 
 //
@@ -14,6 +12,10 @@
 
 // loading/saving spinner default OFF
 const spinElement = document.getElementById("spinner");
+
+// TODO - check if user logged in
+// TODO - fetch categories
+
 document.getElementById("spinner").style.display = "none";
 
 // listen for form submission
@@ -102,3 +104,32 @@ function getCurrentTabUrl() {
   //alert(pageUrlData + " - category - " + selectedOption + " - notes - " + noteText + " - page title - " + pageTitleText);  
 }
 
+// check login state to server
+const checkLoginStatus = async () => {
+  try {
+    const response = await fetch("http://localhost:7070/is-logged-in");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    if (data.isLoggedIn) {
+      console.log("User is logged in");
+    } else {
+      console.log("User is not logged in");
+    }
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+  }
+};
+
+
+// fetch categories from server listen
+function fetchCats() {
+  fetch(serverUrl)
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    // Do something with the fetched data
+  })
+  .catch(error => console.error(error));
+}
