@@ -2,6 +2,49 @@
 // LearnThis! Resource Web Clipper
 //
 
+
+
+
+
+
+//
+// MAIN script flow:
+//
+
+
+// loading/saving spinner default OFF
+const spinElement = document.getElementById("spinner");
+document.getElementById("spinner").style.display = "none";
+
+// listen for form submission
+document.querySelector('#get-url').addEventListener('click', getCurrentTabUrl);
+
+//
+// set the elements on our form:
+//
+
+// call chrome tabs API
+// set the default resource title to current page title
+chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  let currentTab = tabs[0];
+  document.getElementById("page-title").value = currentTab.title;
+  document.getElementById("page-url").value = currentTab.url;
+});
+
+// listen for close button
+let closeBtn = document.querySelector(".close");
+closeBtn.addEventListener("click", function() {
+  window.close();
+});
+
+
+
+
+
+//
+// functions
+//
+
 // process submit
 function getCurrentTabUrl() {
   let queryInfo = {
@@ -21,29 +64,36 @@ function getCurrentTabUrl() {
   let pageTitle = document.getElementById("page-title");
   let pageTitleText = pageTitle.value;
 
-  // grab resource url from current tab
-  chrome.tabs.query(queryInfo, function(tabs) {
-    let tab = tabs[0];
-    alert(tab.url + " - category - " + selectedOption + " - notes - " + noteText + " - page title - " + pageTitleText);
+  // grab any supplied page url information
+  let pageUrl = document.getElementById("page-url");
+  let pageUrlData = pageUrl.value;
+
+  // show spinner
+  document.getElementById("spinner").style.display = "flex";
+
+  // save to the server:
+
+  // TODO -format the data for the JSON body
+  fetch("http://localhost:3000/data", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ message: "Hello from the extension!" })
+})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
   })
-}
-
-
-// call chrome tabs API
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  let currentTab = tabs[0];
-  //alert("The title of the current tab is: " + currentTab.title);
-  
-  // set the default resource title to current page title
-  document.getElementById("page-title").value = currentTab.title;
-});
-
-// listen form form submission
-document.querySelector('#get-url').addEventListener('click', getCurrentTabUrl);
-
-// listen for close button
-let closeBtn = document.querySelector(".close");
-closeBtn.addEventListener("click", function() {
+  .then(data => {
+    alert("Data was sent successfully:", data);
+  })
+  .catch(error => {
+    alert("There was a problem with the fetch operation:", error);
+  });
+  alert(pageUrlData + " - category - " + selectedOption + " - notes - " + noteText + " - page title - " + pageTitleText);  
   window.close();
-});
+}
 
