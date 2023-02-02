@@ -15,6 +15,7 @@ const getCategoriesByResourceId = (id) => {
     resource_id = $1 AND deleted_at IS NULL
   ORDER BY
     index;`;
+    
   const params = [id];
 
   return db.query(query, params).then((data) => data.rows);
