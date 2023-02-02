@@ -38,7 +38,6 @@ exports.addUser = addUser;
 * @return {Promise<{}>} A promise of the user.
 */
 const updateUserWithEmail = function(user) {
-  console.log(user);
   const queryValue = [user.previousEmail, user.updatedEmail, user.updatedPassword];
   return query(`UPDATE users SET email=$2, password=$3 WHERE email=$1 RETURNING *;`, queryValue, result => result.rows[0]);
 };

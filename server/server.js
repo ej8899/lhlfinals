@@ -14,8 +14,8 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const userDatabase = require('./db/queries/user');
-const userRoutes = require('./routes/user');
+const userDatabase = require('./db/queries/q_user');
+const userRoutes = require('./routes/users_api');
 const resourcesRoutes = require('./routes/resources-api');
 const categoriesRoutes = require('./routes/categories-api');
 
