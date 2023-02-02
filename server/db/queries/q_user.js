@@ -17,7 +17,7 @@ const query = (text, params, callback) => {
 * @return {Promise<{}>} A promise of the user.
 */
 const getUserWithEmail = function(email) {
-  return query(`SELECT * FROM users WHERE email=$1`, [email], result => result.rows[0]);
+  return query(`SELECT * FROM users WHERE email=$1 AND deleted_at IS NULL`, [email], result => result.rows[0]);
 };
 exports.getUserWithEmail = getUserWithEmail;
 
@@ -39,7 +39,7 @@ exports.addUser = addUser;
 */
 const updateUserWithEmail = function(user) {
   const queryValue = [user.previousEmail, user.updatedEmail, user.updatedPassword];
-  return query(`UPDATE users SET email=$2, password=$3 WHERE email=$1 RETURNING *;`, queryValue, result => result.rows[0]);
+  return query(`UPDATE users SET email=$2, password=$3 updated_at=NOW() WHERE email=$1 RETURNING *;`, queryValue, result => result.rows[0]);
 };
 exports.updateUserWithEmail = updateUserWithEmail;
 
@@ -49,6 +49,6 @@ exports.updateUserWithEmail = updateUserWithEmail;
 * @return {Promise<{}>} A promise of the user.
 */
 const deleteUserWithEmail = function(email) {
-  return query(`DELETE FROM users WHERE email=$1 RETURNING *;`, [email], result => result.rows[0]);
+  return query(`UPDATE users SET deleted_at=NOW() WHERE email=$1 RETURNING *;`, [email], result => result.rows[0]);
 };
 exports.deleteUserWithEmail = deleteUserWithEmail;
