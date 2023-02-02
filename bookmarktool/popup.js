@@ -71,15 +71,20 @@ function getCurrentTabUrl() {
   // show spinner
   document.getElementById("spinner").style.display = "flex";
 
-  // save to the server:
-
+  
   // TODO -format the data for the JSON body
-  fetch("http://localhost:3000/data", {
+  // save to the server:
+  fetch("http://localhost:7070/data", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
   },
-  body: JSON.stringify({ message: "Hello from the extension!" })
+  body: JSON.stringify({ 
+    title: pageTitleText,
+    siteURL: pageUrlData,
+    note: noteText,
+    category: selectedOption,
+})
 })
   .then(response => {
     if (!response.ok) {
@@ -89,11 +94,11 @@ function getCurrentTabUrl() {
   })
   .then(data => {
     alert("Data was sent successfully:", data);
+    window.close();
   })
   .catch(error => {
     alert("There was a problem with the fetch operation:", error);
   });
-  alert(pageUrlData + " - category - " + selectedOption + " - notes - " + noteText + " - page title - " + pageTitleText);  
-  window.close();
+  //alert(pageUrlData + " - category - " + selectedOption + " - notes - " + noteText + " - page title - " + pageTitleText);  
 }
 
