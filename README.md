@@ -38,6 +38,9 @@ You'll also need the server and SQL data that is available within this same gith
 
 ---
 ## Features...
+  - ## API and Data Structure
+  - ![All api and data structure](./z-planning/z-data-structure.md)
+
 - replace this as necessary
 ![Screen Shot of main feature component](./screenshots/edit.png)
 
