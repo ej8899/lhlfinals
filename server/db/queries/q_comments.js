@@ -34,15 +34,17 @@ const postComment = (data) => {
       resource_id,
       profile_id,
       comment_id,
-      comment
+      comment,
+      is_private
     )
     VALUES
-      ($1, $2, $3, $4) RETURNING *;`;
+      ($1, $2, $3, $4, $5) RETURNING *;`;
   const params = [
     data.resource_id,
     data.profile_id,
     data.comment_id,
-    data.rate
+    data.comment,
+    data.is_private
   ];
 
   return db.query(query, params).then((data) => data.rows[0]);

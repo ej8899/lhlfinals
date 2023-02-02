@@ -291,7 +291,7 @@ returned:
 ```
 
 ## POST api/ratings
-description: create/save a ratings
+description: create/save a rating
 
 ```json
 body: 
@@ -313,7 +313,7 @@ returned:
 }
 ```
 
-## UPDATE api/ratings/[ratings_id]
+## UPDATE api/ratings/[rating_id]
 description: update a rating
 
 ```json
@@ -352,5 +352,122 @@ returned:
     "created_at": "2023-02-01T16:02:33.648Z",
     "updated_at": "2023-02-01T16:46:20.541Z",
     "deleted_at": "2023-02-01T16:52:29.494Z"
+}
+```
+
+## GET api/comments/resources/[resource_id]
+description: retrieve all comments for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "comment_id": null,
+        "comment": "Great Video",
+        "is_private": false,
+        "created_at": "2023-02-02T14:11:16.557Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "comment_id": 1,
+        "comment": "Yes, it is",
+        "is_private": false,
+        "created_at": "2023-02-02T14:11:16.557Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 3,
+        "resource_id": 1,
+        "profile_id": 2,
+        "comment_id": null,
+        "comment": "I want more",
+        "is_private": true,
+        "created_at": "2023-02-02T14:11:16.557Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/comments
+description: create/save a comment
+
+```json
+body: 
+{
+    "resource_id": 2,
+    "profile_id": 1,
+    "comment_id": null,
+    "comment": "Please add more videos",
+    "is_private": false
+}
+
+returned:
+{
+    "id": 4,
+    "resource_id": 2,
+    "profile_id": 1,
+    "comment_id": null,
+    "comment": "Please add more videos",
+    "is_private": false,
+    "created_at": "2023-02-02T14:15:55.207Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## UPDATE api/comments/[comment_id]
+description: update a comment
+
+```json
+body: 
+{
+	"id": 4,
+    "resource_id": 2,
+    "profile_id": 1,
+    "comment_id": null,
+    "comment": "It is pretty amazing.",
+    "is_private": false
+}
+
+returned:
+{
+    "id": 4,
+    "resource_id": 2,
+    "profile_id": 1,
+    "comment_id": null,
+    "comment": "It is pretty amazing.",
+    "is_private": false,
+    "created_at": "2023-02-02T14:15:55.207Z",
+    "updated_at": "2023-02-02T14:19:55.068Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/comments/[comment_id]
+description: delete a comment
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 4,
+    "resource_id": 2,
+    "profile_id": 1,
+    "comment_id": null,
+    "comment": "It is pretty amazing.",
+    "is_private": false,
+    "created_at": "2023-02-02T14:15:55.207Z",
+    "updated_at": "2023-02-02T14:19:55.068Z",
+    "deleted_at": "2023-02-02T14:21:56.902Z"
 }
 ```

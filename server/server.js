@@ -19,6 +19,7 @@ const userRoutes = require('./routes/user');
 const resourcesRoutes = require('./routes/resources-api');
 const categoriesRoutes = require('./routes/categories-api');
 const ratingsRoutes = require('./routes/ratings-api');
+const commentsRoutes = require('./routes/comments-api');
 
 // /user/endpoints
 const userRouter = express.Router();
@@ -27,6 +28,7 @@ app.use('/api/user', userRouter);
 app.use('/api/resources',resourcesRoutes);
 app.use('/api/categories',categoriesRoutes);
 app.use('/api/ratings',ratingsRoutes);
+app.use('/api/comments',commentsRoutes);
 
 app.use(express.static(publicPath));
 app.get("/*", function (req, res) {

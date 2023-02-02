@@ -6,6 +6,7 @@ CREATE TABLE comments (
   profile_id INTEGER REFERENCES profiles(id) ON DELETE CASCADE,
   comment_id INTEGER REFERENCES comments(id) ON DELETE CASCADE,
   comment VARCHAR(2000) NOT NULL,
+  is_private BOOLEAN,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP,
   deleted_at TIMESTAMP

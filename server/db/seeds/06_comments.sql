@@ -3,9 +3,10 @@ INSERT INTO
     resource_id,
     profile_id,
     comment_id,
-    comment
+    comment,
+    is_private
   )
 VALUES
-  (1, 1, NULL, 'Great Video'),
-  (1, 2, 1, 'Yes, it is'),
-  (1, 2, NULL, 'I want more');
+  (1, 1, NULL, 'Great Video',false),
+  (1, 2, 1, 'Yes, it is',false),
+  (1, 2, NULL, 'I want more',true);
