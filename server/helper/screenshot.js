@@ -1,3 +1,4 @@
+require('dotenv').config();
 const request = require("request-promise-native");
 
 // @param {String} token - String containing your API Key
@@ -6,14 +7,13 @@ const request = require("request-promise-native");
 // @param {Integer} height - Integer indicating the height of your target render
 // @param {String} output - String specifying the output format, "image" or "json"
 const screenshot = (url) => {
-  require('dotenv').config();
 
   // Construct the query params and URL
   const {TOKEN} = process.env;
   const width = 1920;
   const height = 1080;
   const output = "json";
-  const query = "https://shot.screenshotapi.net/screenshot";
+  let query = "https://shot.screenshotapi.net/screenshot";
   query += `?token=${TOKEN}&url=${url}&width=${width}&height=${height}&output=${output}`;
 
   return request.get(

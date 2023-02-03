@@ -5,6 +5,7 @@
 const express = require("express");
 const router = express.Router();
 const q_resources = require("../db/queries/q_resources");
+const { screenshot } = require("../helper/screenshot");
 
 /**
  * Get all resources comming from all users that are still active from db
@@ -22,28 +23,52 @@ router.get("/", (req, res) => {
 /**
  * Save new resource
  * @return {json} resource that is saved
- * 
+ *
  */
 router.post("/", (req, res) => {
   //const userId = req.session.userID;
-  const resourceData = req.body;
+  const resourceData ={...req.body};
 
-  q_resources
-    .postResource(resourceData)
+  if (!resourceData.thumbnail) {
+    console.log("creating a screenshot request")
+    screenshot(resourceData.url)
     .then((data) => {
-      console.log("Resource save returned obj: ", data);
-      return res.status(200).json(data);
+      console.log("screeshot data",data);
+      resourceData.thumbnail = JSON.parse(data)["screenshot"];
+      console.log("resource data before saving",resourceData);
+      q_resources.postResource(resourceData)
+      .then((savedData) => {
+        console.log("Resource save returned obj: ", savedData);
+        return res.status(200).json(savedData);
+      })
+      .catch((err) => {
+        console.log("Error saving new resource", err);
+        return res.status(500).json({ error: err.message });
+      });
     })
-    .catch((err) => {
-      console.log("Error saving new resource", err);
-      return res.status(500).json({ error: err.message });
+    .catch((error) => {
+      console.log("Error getting thumbnail")
+      res.status(400).send(error)
     });
+
+  } else {
+    q_resources
+      .postResource(resourceData)
+      .then((data) => {
+        console.log("Resource save returned obj: ", data);
+        return res.status(200).json(data);
+      })
+      .catch((err) => {
+        console.log("Error saving new resource", err);
+        return res.status(500).json({ error: err.message });
+      });
+  }
 });
 
 /**
  * Update existing resource
  * @return {json} resource that is updated
- * 
+ *
  */
 router.put("/:id", (req, res) => {
   //const userId = req.session.userID;
@@ -64,13 +89,13 @@ router.put("/:id", (req, res) => {
 /**
  * Delete existing resource
  * @return {json} resource that is deleted
- * 
+ *
  */
 router.delete("/:id", (req, res) => {
   //const userId = req.session.userID;
   //const resourceData = req.body;
   const resourceId = req.params.id;
-  const resourceData = {id : resourceId};
+  const resourceData = { id: resourceId };
 
   q_resources
     .deleteResource(resourceData)
@@ -83,6 +108,5 @@ router.delete("/:id", (req, res) => {
       return res.status(500).json({ error: err.message });
     });
 });
-
 
 module.exports = router;
