@@ -17,7 +17,7 @@ const query = (text, params, callback) => {
 * @return {Promise<{}>} A promise of the user.
 */
 const getUserWithEmail = function(email) {
-  return query(`SELECT * FROM users WHERE email=$1 AND deleted_at IS NULL`, [email], result => result.rows[0]);
+  return query(`SELECT * FROM users WHERE email=$1 AND deleted_at IS NULL;`, [email], result => result.rows[0]);
 };
 exports.getUserWithEmail = getUserWithEmail;
 
