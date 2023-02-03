@@ -14,17 +14,25 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const userDatabase = require('./db/queries/user');
-const userRoutes = require('./routes/user');
+const usersDatabase = require('./db/queries/q_user');
+const usersRoutes = require('./routes/users_api');
+const profilesDatabase = require('./db/queries/q_profiles');
+const profilesRoutes = require('./routes/profiles-api');
 const resourcesRoutes = require('./routes/resources-api');
 const categoriesRoutes = require('./routes/categories-api');
 const ratingsRoutes = require('./routes/ratings-api');
 const commentsRoutes = require('./routes/comments-api');
 
 // /user/endpoints
-const userRouter = express.Router();
-userRoutes(userRouter, userDatabase);
-app.use('/api/user', userRouter);
+const usersRouter = express.Router();
+usersRoutes(usersRouter, usersDatabase);
+app.use('/api/user', usersRouter);
+
+// /profiles/endpoints
+const profilesRouter = express.Router();
+profilesRoutes(profilesRouter, profilesDatabase);
+app.use('/api/profiles', profilesRouter);
+
 app.use('/api/resources',resourcesRoutes);
 app.use('/api/categories',categoriesRoutes);
 app.use('/api/ratings',ratingsRoutes);
