@@ -38,7 +38,7 @@ module.exports = function(router, database) {
       .status(200)
       .json({
         success: "User found",
-        user: { id: foundUser.id , email: foundUser.email}
+        foundUser,
     });
 
   });
@@ -72,7 +72,7 @@ module.exports = function(router, database) {
       .status(200)
       .json({
         success: "User created",
-        user: { id: createdUser.id , email: createdUser.email}
+        createdUser,
     });
   });
 
@@ -104,14 +104,14 @@ module.exports = function(router, database) {
       .status(500)
       .json({
         success: "User updated",
-        user: { id: updatedUser.id, email: updatedUser.email }
+        updatedUser,
     });
 
   });
 
   // Delete a user
   router.delete('/', async (req, res) => {
-    const userId = req.session.userId;
+    const { userId } = req.session;
 
     if (!userId) {
       res
@@ -137,7 +137,7 @@ module.exports = function(router, database) {
     if (!deletedUser) {
       res
         .status(500)
-        .json({ error: "Delete error" });
+        .json({ error: "Delete user error" });
       return;
     }
 
@@ -145,7 +145,7 @@ module.exports = function(router, database) {
       .status(200)
       .json({
         success: "User deleted",
-        user: { id: deletedUser.id, email: deletedUser.email }
+        deletedUser,
     });
   });
 
@@ -165,7 +165,7 @@ module.exports = function(router, database) {
       .status(200)
       .json({
         success: "Logged in",
-        user: { id: authenticatedUser.id , email: user.email}
+        authenticatedUser,
     });
   });
 
@@ -176,7 +176,6 @@ module.exports = function(router, database) {
       .status(200)
       .json({ success: "Logged out" });
   });
-
 
   return router;
 };
