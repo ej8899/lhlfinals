@@ -26,10 +26,10 @@ const usersRouter = express.Router();
 usersRoutes(usersRouter, usersDatabase);
 app.use('/api/user', usersRouter);
 
-// /user/endpoints
+// /profiles/endpoints
 const profilesRouter = express.Router();
-userRoutes(profilesRouter, profilesDatabase);
-app.user('/api/profiles', profilesRoutes);
+profilesRoutes(profilesRouter, profilesDatabase);
+app.use('/api/profiles', profilesRouter);
 
 app.use('/api/resources',resourcesRoutes);
 app.use('/api/categories',categoriesRoutes);
