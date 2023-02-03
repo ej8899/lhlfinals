@@ -1,0 +1,61 @@
+import { Button, Snackbar } from '@mui/material'
+import { useState } from 'react'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import Tooltip from '@mui/material/Tooltip';
+import * as React from 'react';
+import Stack from '@mui/material/Stack';
+import MuiAlert from '@mui/material/Alert';
+
+const CopyToClipboardButton = (props) => {
+    const [open, setOpen] = useState(false)
+    const handleClick = () => {
+      setOpen(true)
+      navigator.clipboard.writeText(`${window.location.toString()}ref/:${props.videoId}`)
+    }
+
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpen(false);
+    };
+
+    const Alert = React.forwardRef(function Alert(props, ref) {
+      return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+
+    return (
+        <>
+      {/* <Stack spacing={2} sx={{ width: '100%' }}> */}
+        <Tooltip title="Copy Link to Clipboard">
+          <ContentCopyRoundedIcon onClick={handleClick} sx={{fontSize:"xl", "&:hover": {color: 'green', cursor: "pointer"}}} style={{verticalAlign:"bottom"}} />
+        </Tooltip>
+
+          {/* <Snackbar
+            open={open}
+            onClose={() => setOpen(false)}
+            autoHideDuration={2000}
+            message="Copied to clipboard"
+          /> */}
+
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Copied to Clipboard
+        </Alert>
+      </Snackbar>
+
+      
+      {/* <Alert severity="error">This is an error message!</Alert>
+      <Alert severity="warning">This is a warning message!</Alert>
+      <Alert severity="info">This is an information message!</Alert>
+      <Alert severity="success">This is a success message!</Alert> */}
+      {/* </Stack> */}
+        </>
+        
+    )
+}
+
+export default CopyToClipboardButton

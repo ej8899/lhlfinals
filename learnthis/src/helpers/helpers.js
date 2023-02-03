@@ -59,13 +59,13 @@ export const colorGenerator = (stage) => {
   const intermediate = "#03a9f4"
   const advanced = "#e53935"
 
-  if (stage === "Beginner")
+  if (stage <= 33 && stage >= 0)
     return beginner;
 
-  if (stage === "Intermediate")
+  if (stage > 33 && stage < 68)
     return intermediate
 
-  if (stage === "Advanced")
+  if (stage >= 68 && stage <= 100)
     return advanced
 
   return 'default'

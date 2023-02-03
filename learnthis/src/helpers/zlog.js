@@ -14,6 +14,7 @@ export default function zlog(...args) {
     warn:   'color: white; background: #db9216; border-radius: 4px',
     info:   'color: white; background: #07910b; border-radius: 4px',
     debug:  'color: white; background: #c816db; border-radius: 4px',
+    API:  'color: white; background: #a224c9; border-radius: 4px',
   };
 
   let zmessage = `%c ${args[0]} `;
@@ -42,6 +43,9 @@ export default function zlog(...args) {
       break;
     case 'debug':
       console.log(zmessage,zlogStyle.debug,finmessage);
+      break;
+    case 'API':
+      console.log(zmessage,zlogStyle.API,finmessage);
       break;
     default:
       console.log(zmessage,zlogStyle.info,finmessage);

@@ -11,6 +11,7 @@ import { Route, Routes, useLocation, Outlet, Link } from "react-router-dom";
 //-------------------------------------------------------------------
 import MultilineTextFields from './commentbox';
 import ComboBox from './buttonlist';
+import Tags from './multichoice';
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
@@ -25,6 +26,7 @@ import { ReportStaleStats } from '../Icons/report';
 import { LikeStaleStats } from '../Icons/like';
 import { CloseModal } from '../Icons/close';
 import { StarStaleRating } from '../Icons/stars';
+import DiscreteSliderMarks from './slider';
 //-------------------------------------------------------------------
 
 const style = {
@@ -78,17 +80,19 @@ export const DetailModal = (props) => {
             </Typography>
             <CloseModal handleClose={props.handleClose}/>
           </Box>
-     
           <Box display="flex" width="100%" justifyContent="space-around">
             <Box>
               <YouTube videoId={props.videoId} opts={videoPlayerOpts} />
-              <Box display={props.show}>
-                <Box style={{paddingTop:20, paddingLeft:15}}>
+              <Box display={props.show} alignItems="center" marginTop="1rem">
+              <DiscreteSliderMarks myStage={props.myStage} addMyStage={props.addMyStage}         sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
+
+                {/* <Box style={{paddingTop:20, paddingLeft:15}}>
                   <ComboBox listData={props.complexity} message={'Select the lesson complexity...'} mySelection={props.myComplexity} addMySelection={props.addMyComplexity}/>
-                </Box>
-                <Box style={{paddingTop:20, paddingLeft: 20}} >
-                  <ComboBox listData={props.typeCategory} message={'Select the lesson category...'} mySelection={props.myCategory} addMySelection={props.addMyCategory}/>
-                </Box>
+                </Box> */}
+                {/* <Box style={{paddingTop:20, paddingLeft: 20}} > */}
+                  {/* <ComboBox listData={props.typeCategory} message={'Select the lesson category...'} mySelection={props.myCategory} addMySelection={props.addMyCategory}/> */}
+                  <Tags listData={props.typeCategory} message={'Select the lesson category...'} mySelection={props.myCategory} addMySelection={props.addMyCategory}/>
+                {/* </Box> */}
               </Box>
             </Box>
      
@@ -96,7 +100,7 @@ export const DetailModal = (props) => {
               <Box flexDirection="row" textAlign="center">
                 Rate This Video: <StarStaleRating star={props.star} addStar={props.addStar}/>
               </Box>
-              <MultilineTextFields display={props.show} myComments={props.myComments} addMyComments={props.addMyComments}/>
+              <MultilineTextFields display={props.show} myComments={props.myComments} addMyComments={props.addMyComments} rows={17} width={"40ch"} label={'My Comments'} placeholder={"Make your notes here."} margin={1}/>
             </Box>
 
             <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around">

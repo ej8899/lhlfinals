@@ -4,31 +4,27 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
-import YouTube from 'react-youtube'; // npx install react-youtube
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
 import CardMedia from '@mui/material/CardMedia';
 import { useNavigate } from "react-router-dom";
 import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom";
-
+import Divider from '@mui/material/Divider';
+import SendIcon from '@mui/icons-material/Send';
 
 //-------------------------------------------------------------------
 import MultilineTextFields from '../ItemDetail/commentbox';
-import ComboBox from '../ItemDetail/buttonlist';
+import InputWithIcon from '../ItemDetail/emailbox';
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Import Icons Functions
-import { FavouriteStaleStats} from '../Icons/favourite.jsx'
-import { LessonStaleStats} from '../Icons/lesson.jsx'
-import { RateStaleStats } from '../Icons/review';
-import { BookmarkStaleStats } from '../Icons/bookmark';
-import { PlaylistStaleStats } from '../Icons/playlist';
-import { ShareStaleStats } from '../Icons/share';
-import { ReportStaleStats } from '../Icons/report';
-import { LikeStaleStats } from '../Icons/like';
 import { CloseModal } from '../Icons/close';
-import { StarStaleRating } from '../Icons/stars';
+import { Tooltip } from '@mui/material';
+//-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
+// Copy to Clipboard & Share
+import CopyToClipboardButton from '../Icons/copyclipboard';
+import Button from '@mui/material/Button';
 //-------------------------------------------------------------------
 
 const style = {
@@ -50,17 +46,6 @@ const style = {
 // TODO pass props to this component w data
 export const ShareModal= (props) => {
 
-    // reference: https://www.npmjs.com/package/react-youtube
-    const videoPlayerOpts = {
-      height: '390',
-      width: '640',
-      playerVars: {
-        // https://developers.google.com/youtube/player_parameters
-        autoplay: 0,
-      border: '2px solid #000'
-      },
-    };
-
   return (
     <Modal
       aria-labelledby="detail-modal-title"
@@ -73,37 +58,58 @@ export const ShareModal= (props) => {
         timeout: 500,
       }}
     >
-      <Fade in={props.open}>
         <Box sx={style}>
           <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
             <Typography variant='h6' textAlign="center">
-              {props.title}
+              Share Resource
             </Typography>
             <CloseModal handleClose={props.handleShareClose}/>
           </Box>
+          <Typography style={{ marginLeft : 8, marginBottom : 10}}>
+          {props.title}
 
-          <Box display="flex" width="100%" justifyContent="space-around" flexDirection="column">
-            <Box display="flex" width="100%" justifyContent="center">
-            <Box display="flex" width="35%" justifyContent="center">
+          </Typography>
+          <Box display="flex" width="100%" justifyContent="space-around" flexDirection="column" >
+            <Box display="flex" width="100%" justifyContent="center" >
+            <Box display="flex" width="55%" justifyContent="center">
               <CardMedia
                 component="img"
                 height="140"
+                width="345"
                 image={props.thumbnail}
                 alt={props.title}
-                width="35%"
+                sx={{marginBottom : 2}}
               />
               </Box>
               </Box>
-            <Box display="flex" justifyContent="center">
-              <Typography>
-                Share this link: &nbsp;  
-                <a href={"//localhost:3000/ref/:${props.videoId"}>localhost:3000/ref/:${props.videoId}</a>
-              </Typography>
+            <Divider/>
+
+            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+              <InputWithIcon label={"To: Name, Group, or Email"} width={"38ch"} margin={0} botMargin={2} emailTo={props.emailTo} emailMyTo={props.emailMyTo} />
+              <MultilineTextFields myComments={props.emailMessage} rows={3} width={"41ch"} label={'Message...'} placeholder={"Type Your Message Here"} margin={0} addMyComments={props.emailMyMessage} botMargin={0}/>
             </Box>
+            <Box display="flex" justifyContent="flex-end" sx={{ m: 2 }}>
+                <Button variant="contained" href="" onClick={() => props.handleShareClose(props.sendEmail(props.emailTo, props.emailMessage, props.emailMyTo, props.emailMyMessage))} endIcon={<SendIcon />} >
+                  Share
+                </Button>
+              </Box>
             </Box>
 
+            <Divider/>
+
+            <Box sx={{ m: 2 }}>
+            <Typography variant='h6' textAlign="center">
+              Share Link: 
+
+                </Typography>
+            <Box textAlign="center" justifyContent="center" alignContent="middle" display="flex">
+                <Typography variant="caption" sx={{ "&:hover": {color: "green"}}}>
+                {`${window.location.toString()}ref/:${props.videoId}`} &nbsp;
+                <CopyToClipboardButton videoId={props.videoId} style={{verticalAlign:"middle"}}/>
+            </Typography>
+            </Box>
+            </Box>
           </Box>
-      </Fade>
     </Modal>
   );
 }

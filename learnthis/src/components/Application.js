@@ -29,6 +29,13 @@ import Hero from "./Hero/Hero.jsx";
 
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import { green, red } from "@mui/material/colors";
+
+// --------------------------------------------------------
+// Import 
+import StateStatus from '../hooks/state';
+import { NewResource } from "./Icons/newResource";
+import { AddNewResource } from "./NewResource/newResource";
+
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 //
 // application - main function
@@ -39,87 +46,424 @@ export default function Application(props) {
     {
       id: 1,
       videoID: "rxnX1jdoI6c",
+      created_at: "2023-01-31T13:54:46.365Z",
+      title: "5 common beginner CSS mistakes",
+      thumbnail: "https://i.ytimg.com/vi/rxnX1jdoI6c/sddefault.jpg",
+      description: `I often see beginners making the same mistakes over and over again, so in this video I take a look at some common issues and give some advice on how I think things could be improved.
+
+      🔗 Links 
+      ✅ Live Server VS Code extension: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
+      ✅ Flexbox or Grid - How to decide? https://youtu.be/3elGSZSWTbM
+      
+      ⌚ Timestamps
+      00:00 - Introduction
+      00:35 - Useless declarations (that can cause problems)
+      04:04 - Over-reliance of Flexbox
+      06:37 - Using very specific values
+      10:44 - Terrible class names and numbering elements for no reason
+      14:00 - Over-reliance on position absolute
+      
+      #css
+      
+      --
+      
+      Come hang out with other dev's in my Discord Community
+      💬 https://discord.gg/nTYCvrK
+      
+      Keep up to date with everything I'm up to
+      ✉ https://www.kevinpowell.co/newsletter
+      
+      Come hang out with me live every Monday on Twitch!
+      📺 https://www.twitch.tv/kevinpowellcss
+      
+      ---
+      
+      Help support my channel
+      👨‍🎓 Get a course: https://www.kevinpowell.co/courses
+      👕 Buy a shirt: https://teespring.com/stores/making-the-internet-awesome
+      💖 Support me on Patreon: https://www.patreon.com/kevinpowell
+      
+      ---
+      
+      My editor: VS Code - https://code.visualstudio.com/
+      
+      ---
+      
+      I'm on some other places on the internet too!
+      
+      If you'd like a behind the scenes and previews of what's coming up on my YouTube channel, make sure to follow me on Instagram and Twitter.
+      
+      Twitter: https://twitter.com/KevinJPowell
+      Codepen: https://codepen.io/kevinpowell/
+      Github: https://github.com/kevin-powell
+      
+      ---
+      
+      And whatever you do, don't forget to keep on making your corner of the internet just a little bit more awesome!`,
       category:"CSS",
-      stage: "Beginner",
+      stage: 15,
       rating: 3.7,
       likes: 32
     },
     {
       id: 2,
       videoID:"0KEpWHtG10M",
+      created_at: "2023-02-01T13:54:46.365Z",
+      title: "Material UI Tutorial #1 - Intro & Setup",
+      thumbnail: "https://i.ytimg.com/vi/0KEpWHtG10M/sddefault.jpg",
+      description: `Hey gang & welcome to this Material UI tutorial for React. In this series we'll be looking at what Material UI is & how to use it to create greate-looking React applications. To begin with we'll set up our starter project.
+
+      🐱‍💻 🐱‍💻 Course Files:
+      + https://github.com/iamshaunjp/material-ui-tut
+      
+      🐱‍👤🐱‍👤 JOIN THE GANG - 
+      https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg/join
+      
+      🐱‍💻 🐱‍💻 My Udemy Courses:
+      + Modern JavaScript - https://www.thenetninja.co.uk/udemy/modern-javascript
+      + Vue JS 3  & Firebase - https://www.thenetninja.co.uk/udemy/vue-and-firebase
+      + D3.js & Firebase - https://www.thenetninja.co.uk/udemy/d3-and-firebase
+      
+      🐱‍💻 🐱‍💻 Useful playlists:
+      + Full React tutorial - https://www.youtube.com/watch?v=j942wKiXFu8&list=PL4cUxeGkcC9gZD-Tvwfod2gaISzfRiP9d
+      + JSON Server Tutorial - https://www.youtube.com/watch?v=mAqYJF-yxO8&list=PL4cUxeGkcC9i2v2ZqJgydXIcRq_ZizIdD
+      
+      🐱‍💻 🐱‍💻 Other links:
+      + Material UI docs - https://material-ui.com/getting-started/installation/
+      + Get VS Code - https://code.visualstudio.com/
+      
+      🐱‍💻 🐱‍💻 Social Links:
+      Facebook - https://www.facebook.com/thenetninjauk
+      Twitter - https://twitter.com/thenetninjauk
+      Instagram - https://www.instagram.com/thenetninja/`,
       category: "JS",
-      stage:"Intermediate",
+      stage:50,
       rating: 1.2,
       likes: 0
     },
     {
       id: 3,
       videoID:"r8Dg0KVnfMA",
+      created_at: "2023-01-28T08:54:46.365Z",
+      title: "Learn React Query In 50 Minutes",
+      thumbnail: "https://i.ytimg.com/vi/r8Dg0KVnfMA/sddefault.jpg",
+      description: `Learn React Today Course: https://courses.webdevsimplified.com/learn-react-today
+
+      TanStack Query (also known as React Query) is my favorite way to interact with an external API. TanStack query is so easy to use and it gives you so many features by default which I love. In this video I go over everything you need to know about TanStack query in order to start implementing it in your React projects.
+      
+      
+      📚 Materials/References:
+      
+      Learn React Today Course: https://courses.webdevsimplified.com/learn-react-today
+      GitHub Code: https://github.com/WebDevSimplified/react-query-crash-course-example
+      What Is React Query Video: https://youtu.be/lVLz_ASqAio
+      
+      
+      🌎 Find Me Here:
+      
+      My Blog: https://blog.webdevsimplified.com
+      My Courses: https://courses.webdevsimplified.com
+      Patreon: https://www.patreon.com/WebDevSimplified
+      Twitter: https://twitter.com/DevSimplified
+      Discord: https://discord.gg/7StTjnR
+      GitHub: https://github.com/WebDevSimplified
+      CodePen: https://codepen.io/WebDevSimplified
+      
+      
+      ⏱️ Timestamps:
+      
+      00:00 - Introduction
+      00:44 - What Is TanStack Query
+      01:20 - Setup
+      03:18 - Basic Example
+      14:15 - useQuery Basics
+      26:10 - useMutation Basics
+      39:12 - Pagination
+      41:28 - Infinite Scrolling
+      44:40 - useQueries Hook
+      47:22 - Prefetching
+      49:13 - Initial/Placeholder Data
+      
+      
+      #TanStackQuery #WDS #ReactQuery`,
       category: "React",
-      stage: "Unrated",
+      stage: -1,
       rating: 4,
       likes:56
     },
     {
       id: 4,
       videoID:"3VHCxuxtuL8",
+      created_at: "2023-01-29T23:01:46.365Z",
+      title: "How to Use YouTube API in Node - Full Tutorial",
+      thumbnail: "https://i.ytimg.com/vi/3VHCxuxtuL8/sddefault.jpg",
+      description: `In this video you will learn how to use Youtube API in Node in two ways: as a plain Youtube API and with usage of library. We will start by creating a project and obtaining a key in Google Cloud. Then we will build a real example of how to use Youtube API in Node by making API requests with axios library. After that we will implement and example with google apis library which is a sugar around Youtube API.
+
+      ► CHECK MY COURSES - https://monsterlessons-academy.com/courses
+      
+      FOLLOW ME
+      ► TWITTER - https://twitter.com/monster_lessons
+      
+      REFERENCES
+      ► Source code - https://github.com/monsterlessonsacademy/monsterlessonsacademy/tree/108-how-to-use-youtube-api-in-node
+      
+      RECOMMENDED VIDEOS
+      ► Angular Tutorial for Beginners - https://youtu.be/Pd98NIR63cU
+      ► Vue JS Crash Course - https://youtu.be/89z5opT_3so
+      ► React Hooks Full Course  - https://youtu.be/h7RC-aVmPqE
+      ► Typescript Course for Beginners - https://youtu.be/RXZoCljqYOE
+      ► Build a Todo App with Angular - https://youtu.be/uyTC0Skvvls
+      
+      STUFF I USE
+      ► My mac mini for home on Amazon - https://geni.us/mADK6ob
+      ► Mac macbook to go on Amazon - https://geni.us/t0fC
+      ► My monitors on Amazon - https://geni.us/aRoFoR
+      ► My mouse on Amazon - https://geni.us/FTzq
+      ► My keyboard on Amazon - https://geni.us/wAjpl
+      
+      ► My Synology NAS on Amazon - https://geni.us/H9BeFo
+      ► My Seagate IronWolf 4TB HDD on Amazon - https://geni.us/09Hvpm
+      ► My external SSD drive on Amazon - https://geni.us/jg3MGNt
+      ► My external HDD drive on Amazon - https://geni.us/5HCIAX
+      
+      ► My monitor arm on Amazon - https://geni.us/OuX1
+      ► My chair on Amazon - https://geni.us/wGWq
+      ► My speakers on Amazon - https://geni.us/wM4fIn
+      ► My coffee machine on Amazon - https://geni.us/zP1uEbW
+      ► My standing desk - https://www.fully.com/en-eu/standing-desks/jarvis/jarvis-adjustable-height-desk-laminate.html
+      
+      Disclosures: All opinions are my own. Sponsors are acknowledged. Some links in the description are affiliate links that if you click on one of the product links, I’ll receive a commission at no additional cost to you.  As an Amazon Associate I earn a small commission from qualifying purchases.`,
       category: "NodeJS",
-      stage: "Intermediate",
+      stage: 0,
       rating: 2.7,
       likes: 18
     },
     {
       id: 5,
       videoID:"ha3a63YjLro",
+      created_at: "2023-02-02T19:21:34.735Z",
+      title: "Material UI Tutorial #2 - Typography",
+      thumbnail: "https://i.ytimg.com/vi/ha3a63YjLro/sddefault.jpg",
+      description: `Hey gang, in this Material UI tutorial we'll take a look at the Typography component to make/style headings & normal text.
+
+      🐱‍💻 🐱‍💻 Course Files:
+      + https://github.com/iamshaunjp/material-ui-tut
+      
+      🐱‍👤🐱‍👤 JOIN THE GANG - 
+      https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg/join
+      
+      🐱‍💻 🐱‍💻 My Udemy Courses:
+      + Modern JavaScript - https://www.thenetninja.co.uk/udemy/modern-javascript
+      + Vue JS 3  & Firebase - https://www.thenetninja.co.uk/udemy/vue-and-firebase
+      + D3.js & Firebase - https://www.thenetninja.co.uk/udemy/d3-and-firebase
+      
+      🐱‍💻 🐱‍💻 Useful playlists:
+      + Full React tutorial - https://www.youtube.com/watch?v=j942wKiXFu8&list=PL4cUxeGkcC9gZD-Tvwfod2gaISzfRiP9d
+      + JSON Server Tutorial - https://www.youtube.com/watch?v=mAqYJF-yxO8&list=PL4cUxeGkcC9i2v2ZqJgydXIcRq_ZizIdD
+      
+      🐱‍💻 🐱‍💻 Other links:
+      + Material UI docs - https://material-ui.com/getting-started/installation/
+      + Get VS Code - https://code.visualstudio.com/
+      
+      🐱‍💻 🐱‍💻 Social Links:
+      Facebook - https://www.facebook.com/thenetninjauk
+      Twitter - https://twitter.com/thenetninjauk
+      Instagram - https://www.instagram.com/thenetninja/`,
       category: "JS",
-      stage: "Advanced",
+      stage: 89,
       rating: 4.9,
       likes: 101
     },
     {
       id: 6,
       videoID:"s-yvlPTDak0",
+      created_at: "2023-01-31T19:21:34.735Z",
+      title: "ChatGPT Teaches Flexbox!",
+      thumbnail: "https://i.ytimg.com/vi/s-yvlPTDak0/sddefault.jpg",
+      description: `ChatGPT is an AI chatbot that can provide human-like responses to questions we ask. I asked it to create a video tutorial script about Flexbox, along with the code to go with it. This is what it came up with.
+
+      Let me know your thoughts in the comments down below :).
+      
+      ⭐⭐ Get access to all courses (including premium courses not found anywhere else) on Net Ninja Pro - https://netninja.dev/`,
       category: "JS",
-      stage: "Intermediate",
+      stage: 67,
       rating: 3.6,
       likes: 54
     },
     {
       id: 7,
       videoID:"r-yxNNO1EI8",
+      created_at: "2023-01-26T19:21:34.735Z",
+      title: "YouTube API Project With Authentication",
+      thumbnail: "https://i.ytimg.com/vi/r-yxNNO1EI8/sddefault.jpg",
+      description: `In this JavaScript project we will use the YouTube API v3 to fetch channel data and videos. We will create a search form to change channels and use OAuth2 to login and logout.
+
+      Sponsor: Coding Phase [GET 50% OFF!!] 
+      https://codingphase.teachable.com/p/all-courses-subscription/?coupon_code=TRAVERSY50&affcode=117955_0bufn2zv
+      
+      Code:
+      https://github.com/bradtraversy/youtube_api_auth_app
+      
+      Docs:
+      https://developers.google.com/youtube/v3/quickstart/js
+      https://developers.google.com/youtube/v3/docs/playlistItems/list
+      
+      💖 Become a Patron: Show support & get perks!
+      http://www.patreon.com/traversymedia
+      
+      Website & Udemy Courses
+      http://www.traversymedia.com
+      
+      Follow Traversy Media:
+      http://www.facebook.com/traversymedia
+      http://www.twitter.com/traversymedia
+      http://www.instagram.com/traversymedia`,
       category: "JS",
-      stage: "Intermediate",
+      stage: 100,
       rating: 4.2,
       likes: 62
     },
     {
       id: 8,
       videoID:"9sWEecNUW-o",
+      created_at: "2023-01-31T19:21:34.735Z",
+      title: "Code your own YouTube app: YouTube API + HTML + CSS + JavaScript (full tutorial)",
+      thumbnail: "https://i.ytimg.com/vi/9sWEecNUW-o/sddefault.jpg",
+      description: `Create a dynamic YouTube playlist app using HTML, CSS, Javascript and jQuery.
+
+      🔗The Completed App - https://codepen.io/Middi/pen/QQrOdB
+      
+      🔗 Thumbnail image - https://i.ytimg.com/vi/qxWrnhZEuRU/mqdefault.jpg
+      🔗YouTube Logo - https://github.com/Middi/youtube-api/blob/master/images/logo.png
+      
+      🎥Check out Richard's YouTube channel - https://www.youtube.com/channel/UCimIdsDPn0mE03Cb7C6aR8Q
+      
+      --
+      
+      Learn to code for free and get a developer job: https://www.freecodecamp.com
+      
+      Read hundreds of articles on programming: https://medium.freecodecamp.com`,
       category: "CSS",
-      stage: "Intermediate",
+      stage: 34,
       rating: 2.0,
       likes: 8
     },
     {
       id: 9,
       videoID:"NQULKpW6hK4",
+      created_at: "2023-01-27T12:21:34.735Z",
+      title: "React Query Crash Course",
+      thumbnail: "https://i.ytimg.com/vi/NQULKpW6hK4/sddefault.jpg",
+      description: `This crash course will teach you all about React Query
+
+      Second Channel:
+      https://www.youtube.com/channel/UCfNFgrUzeDSb-W3L3nnjC5A
+      
+      GitHub Repo:
+      https://github.com/harblaith7/React-Query
+      
+      Timeline:
+      0:00 - Introduction
+      2:24 - Fetching without React Query
+      11:50 - Refactor to use React Query
+      23:48 - Pagination`,
       category: "React",
-      stage: "Intermediate",
+      stage: 68,
       rating: 2.8,
       likes: 34
     },
     {
       id: 10,
       videoID:"r8Dg0KVnfMA",
+      created_at: "2023-02-02T12:21:34.735Z",
+      title: "Learn React Query In 50 Minutes",
+      thumbnail: "https://i.ytimg.com/vi/r8Dg0KVnfMA/sddefault.jpg",
+      description: `Learn React Today Course: https://courses.webdevsimplified.com/learn-react-today
+
+      TanStack Query (also known as React Query) is my favorite way to interact with an external API. TanStack query is so easy to use and it gives you so many features by default which I love. In this video I go over everything you need to know about TanStack query in order to start implementing it in your React projects.
+      
+      
+      📚 Materials/References:
+      
+      Learn React Today Course: https://courses.webdevsimplified.com/learn-react-today
+      GitHub Code: https://github.com/WebDevSimplified/react-query-crash-course-example
+      What Is React Query Video: https://youtu.be/lVLz_ASqAio
+      
+      
+      🌎 Find Me Here:
+      
+      My Blog: https://blog.webdevsimplified.com
+      My Courses: https://courses.webdevsimplified.com
+      Patreon: https://www.patreon.com/WebDevSimplified
+      Twitter: https://twitter.com/DevSimplified
+      Discord: https://discord.gg/7StTjnR
+      GitHub: https://github.com/WebDevSimplified
+      CodePen: https://codepen.io/WebDevSimplified
+      
+      
+      ⏱️ Timestamps:
+      
+      00:00 - Introduction
+      00:44 - What Is TanStack Query
+      01:20 - Setup
+      03:18 - Basic Example
+      14:15 - useQuery Basics
+      26:10 - useMutation Basics
+      39:12 - Pagination
+      41:28 - Infinite Scrolling
+      44:40 - useQueries Hook
+      47:22 - Prefetching
+      49:13 - Initial/Placeholder Data
+      
+      
+      #TanStackQuery #WDS #ReactQuery`,
       category: "React",
-      stage: "Beginner",
+      stage: 33,
       rating: 4.1,
       likes: 87
     }
   ]
   // TODO DELETE THESE:
   const typeCategory = [
-    'CSS', 'React', 'Javascript', 'NodeJS', 'SQL', 'SASS', 'Ruby'
+    "JavaScript",
+    "HTML",
+    "CSS",
+    "React",
+    "Angular",
+    "Vue",
+    "Node.js",
+    "Express",
+    "Next.js",
+    "Ember",
+    "Meteor",
+    "jQuery",
+    "MongoDB",
+    "MySQL",
+    "PostgreSQL",
+    "GraphQL",
+    "Sass",
+    "Less",
+    "TypeScript",
+    "Ruby on Rails",
+    "Django",
+    "Flask",
+    "Spring",
+    "Express.js",
+    "Nest.js",
+    "Adonis.js",
+    "PHP",
+    "ASP.NET",
+    "Java",
+    "Python",
+    "C++",
+    "C#",
+    "Ruby",
+    "Go",
+    "Swift",
+    "Kotlin",
+    "Rust",
+    "Scala",
+    "SQL"
   ]
 
   const sampleComplexity = [
@@ -222,6 +566,22 @@ export default function Application(props) {
     // TODO move theme button  - light-dark to nav bar
     // TODO - remove the 'light mode' 'dark mode' text from theme button
 
+
+
+
+    // -------------------------------------------------------------
+  // Import Hooks
+  const {
+    newURL,
+    setNewURL,
+    newResource,
+    setNewResource,
+    handleNewResourceClose,
+    handleNewResourceOpen,
+  } = StateStatus();
+// -------------------------------------------------------------
+
+    
   return (
   (
     <ColorModeContext.Provider value={colorMode}>
@@ -229,19 +589,27 @@ export default function Application(props) {
     <CssBaseline enableColorScheme/>
       <div className="maincontainer">
         <NavBar/>
+
       <header>
         <Hero></Hero>
         {theme.palette.mode} mode
-      <IconButton sx={ {m1: 1} } onClick={colorMode.toggleColorMode} color="inherit">
-        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-      </IconButton>
-        </header>
+        <IconButton sx={ {m1: 1} } onClick={colorMode.toggleColorMode} color="inherit">
+          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </header>
+
+      <NewResource handleNewResourceOpen={() => handleNewResourceOpen()}/>
+      <AddNewResource 
+        open={newResource} handleNewResourceClose={handleNewResourceClose}
+        newURL={newURL} setNewURL={setNewURL}
+      />
 
         <Box sx={{ width: 1400, minHeight: 377 }}>
         <Masonry columns={4} spacing={2}>
         {sampledata.map((item, index) => (
-          <PreviewItem key={item.id} videoId={ item.videoID } stage={item.stage} category={item.category} nowloading={nowloading} rating={item.rating} complexity={sampleComplexity} typeCategory={typeCategory} likes={item.likes}>
+          <PreviewItem key={item.id} videoId={ item.videoID } stage={item.stage} category={item.category} nowloading={nowloading} rating={item.rating} complexity={sampleComplexity} typeCategory={typeCategory} likes={item.likes} title={item.title} thumbnail={item.thumbnail} description={item.description} created_at={item.created_at}>
           {item.id}
+          
           </PreviewItem>
         ))}
         </Masonry>
@@ -249,6 +617,8 @@ export default function Application(props) {
         
         <SiteFooter></SiteFooter>
       </div>
+      
+
 
       <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
 

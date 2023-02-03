@@ -5,6 +5,8 @@ import Fade from '@mui/material/Fade';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
 
 export const StarRating = (props) => {
 
@@ -27,14 +29,29 @@ export const StarRating = (props) => {
     )
   }
 
-  return (
-    <Tooltip title={props.ratingScore} >
-      <IconButton sx={{ "&:hover": {color: 'orange', cursor: "auto"} }}>
-        <Stars rating={props.rating} />
-      </IconButton>
-    </Tooltip>
-  )
-}
+
+    return (
+      <Stack spacing={1}>
+        <Tooltip title={props.ratingScore} >
+        <IconButton sx={{ "&:hover": { cursor: "auto"} }}>
+          <Rating name="half-rating-read" defaultValue={props.rating} precision={0.5} readOnly />
+          </IconButton>
+        </Tooltip>
+      </Stack>
+    );
+  }
+
+
+
+
+  // return (
+  //   <Tooltip title={props.ratingScore} >
+  //     <IconButton sx={{ "&:hover": {color: 'orange', cursor: "auto"} }}>
+  //       <Stars rating={props.rating} />
+  //     </IconButton>
+  //   </Tooltip>
+  // )
+// }
 
  
 export const StarStaleRating = (props) => {
@@ -118,6 +135,18 @@ export const StarStaleRating = (props) => {
     rating.push(EmptyStarRating(index))
     index ++
   }
+//All above in this function is not needed or used
 
-  return rating
+  return (
+      <IconButton aria-label="share">
+        <Rating 
+          name="simple-controlled"
+          value={props.star}
+          onChange={(event, newValue) => {
+          props.addStar(newValue);
+          }}
+          precision={0.5} 
+        />
+      </IconButton>
+  )  
 }

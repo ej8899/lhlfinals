@@ -25,23 +25,28 @@ import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, CardHeader, Icon } from '@mui/material';
 // --------------------------------------------------------
 
+
+
 // --------------------------------------------------------
 // React Router Imports
 import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 // --------------------------------------------------------
 
-
 // --------------------------------------------------------
 // Import Helper Functions
 import { randomNumber, randomColor, truncateText, colorGenerator } from "../../helpers/helpers";
+// --------------------------------------------------------
 
+// --------------------------------------------------------
 // Import State Hooks
 import StateStatus from '../../hooks/state';
 
 // Import Icon Hooks/Status
 import IconStatus from '../../hooks/iconStatus'
+// --------------------------------------------------------
 
+// --------------------------------------------------------
 // Import Icons
 import { FavouriteStats } from '../Icons/favourite.jsx'
 import { LessonStats } from '../Icons/lesson.jsx'
@@ -54,10 +59,16 @@ import { LikeStats } from "../Icons/like";
 import { MoreStats } from "../Icons/hamburger";
 import { StarRating } from "../Icons/stars";
 import { ExpandIcon, ExpandMore } from "../Icons/expand";
+import { NewBadge } from "../Icons/newbadge";
+// --------------------------------------------------------
 
+
+// --------------------------------------------------------
 // Import Modal
 import { DetailModal }  from "../ItemDetail/index.jsx";
 import { ShareModal } from "../Modal/share";
+import { StatusModal } from "../NewResource/status";
+import { SharedModal } from "../Modal/shared";
 // --------------------------------------------------------
 
 
@@ -83,6 +94,10 @@ export const PreviewItem = (props) => {
 // -------------------------------------------------------------
   // Import Hooks
   const {
+    newResource,
+    setNewResource,
+    handleNewResourceClose,
+    handleNewResourceOpen,
     title,
     setTitle,
     thumbnail,
@@ -96,10 +111,11 @@ export const PreviewItem = (props) => {
     setDescriptionExpanded,
     stage,
     setStage,
+    addSetStage,
     category,
     setCategory,
-    video,
-    setVideo,
+    // video,
+    // setVideo,
     open,
     setOpen,
     selectedResource,
@@ -114,7 +130,25 @@ export const PreviewItem = (props) => {
     setMyComplexity,
     myCategory,
     setMyCategory,
-    addMyCategory
+    addMyCategory,
+    sliderActive,
+    setSliderActive,
+    myStage,
+    setMyStage,
+    addMyStage,
+    newIcon,
+    setNewIcon,
+    addNewIcon,
+    sendingEmail,
+    setSendingEmail,
+    sendEmail,
+    emailMessage,
+    emailMyMessage,
+    emailTo,
+    emailMyTo,
+    emailSent,
+    setEmailSent,
+    handleSharedClose
   } = StateStatus();
 // -------------------------------------------------------------
 
@@ -171,9 +205,29 @@ export const PreviewItem = (props) => {
 // not using to save quieries
 // axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}&key=${API_KEY}`)
 // axios.get(`https://www.googleapis.com/`)
-  useEffect(() => {
-    axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}&key=${API_KEY}`)
+  // useEffect(() => {
+      useEffect(() => {
+        if (props.title) {
+          setTitle(props.title)
+          setDescriptionExpanded(props.description)
+          setCategory(`Category: ${props.category}`)
+          setOpen(false)
+          setThumbnail(props.thumbnail);
+          addNewIcon(props.created_at)
+          addSetStage(props.stage)
+
+          if(global.config.debug === true) {
+            //zlog('info',"data snippet follows:");
+            //console.log(response.data.items[0].snippet);
+          }
+
+
+        } else {
+        axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}&key=${API_KEY}`)
+    // axios.get(`https://www.googleapis.com/`)
       .then(response => {
+
+        zlog('API',"YouTube API Called:", props.videoId)
         // let title = response.data.items[0].snippet.title;
         // if (title) setTitle(truncateText(title,30));
         setTitle(response.data.items[0].snippet.title)
@@ -183,16 +237,19 @@ export const PreviewItem = (props) => {
         if (description) setDesc(truncateText(description,100));
 
         setDescriptionExpanded(response.data.items[0].snippet.description)
-        setStage(`Complexity: ${props.stage}`)
+        addNewIcon(props.created_at)
+        addSetStage(props.stage)
+
         setCategory(`Category: ${props.category}`)
-        setVideo(response.data.items[0].snippet.video)
+        // setVideo(response.data.items[0].snippet.video)
         setOpen(false)
         setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
+
         if(global.config.debug === true) {
           //zlog('info',"data snippet follows:");
           //console.log(response.data.items[0].snippet);
         }
-       
+
         /*
         REFERENCE:
         useful items in response data:
@@ -211,7 +268,7 @@ export const PreviewItem = (props) => {
       .catch(error => {
         // console.error(error);
       });
-  }, [videoId]);
+    }}, [videoId]);
 
 
 /*
@@ -222,27 +279,35 @@ export const PreviewItem = (props) => {
     </div>
 */
 
-const ratingScore = `Overall User Rating: ${props.rating}`
-const skeletonTimer = randomNumber(100,3000);
+  const ratingScore = `Overall User Rating: ${props.rating}`
+  const skeletonTimer = randomNumber(100,3000);
+
 
 
 
 // --------------------------------------------------------
   return (
-    <Card sx={{ maxWidth: 345 }} >
+    <div>
+    <Box display="flex" flexDirection="row" justifyContent="flex-end" overflow="visible" zIndex="1000" >
+      {props.nowloading ? null : (
+        <NewBadge display={newIcon} nowLoading={props.nowLoading}/>
+      )}
+    </Box>
+    <Card sx={{ MaxWidth: 345 }} >
       <CardActionArea onClick={() => (handleOpen(filter), setExpanded(false))} sx={{ filter: filter }}>
-
-
         {props.nowloading ? (
           <Skeleton sx={{ height: 140 }} animation="wave" variant="rectangular" />
         ) : (
           <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
+
             <CardMedia
               component="img"
               height="140"
               image={thumbnail}
               alt={title}
+              width="100%"
             />
+
           </Fade>
         )}
         <CardHeader
@@ -317,14 +382,12 @@ const skeletonTimer = randomNumber(100,3000);
           <CardContent sx={{ filter: filter }}>
             <Box
               display="flex"
-              flexDirection="column"
+              flexDirection="row"
               justifyContent="center"
               alignItems="center" 
             >
-              <Typography variant="body2" color="text.secondary" marginBottom={'-12px'}>
                 <StarRating ratingScore={ratingScore} rating={props.rating} />
                 <LikeStats like={like} addLike={() => addLike(filter)} likes={props.likes}/>
-              </Typography>
             </Box>
           </CardContent>
         </Fade>
@@ -352,6 +415,8 @@ const skeletonTimer = randomNumber(100,3000);
           myComments={myComments} addMyComments={addMyComments}
           myComplexity={myComplexity} addMyComplexity={addMyComplexity}
           myCategory={myCategory} addMyCategory={addMyCategory}
+          myStage={myStage} addMyStage={addMyStage}
+          sliderActive={sliderActive} setSliderActive={setSliderActive}
         />
 
       </div>
@@ -378,11 +443,28 @@ const skeletonTimer = randomNumber(100,3000);
           myComplexity={myComplexity} addMyComplexity={addMyComplexity}
           myCategory={myCategory} addMyCategory={addMyCategory}
           thumbnail={thumbnail} videoID={videoId}
+          setStatusOpen={setSendingEmail} 
+          sendEmail={sendEmail} emailMessage={emailMessage} emailMyMessage={emailMyMessage}
+          emailTo={emailTo} emailMyTo={emailMyTo}
         />
           {/* {background && ( <Routes>
             <Route path="modal" element={shareModal} />
           </Routes>)} */}
           {/* {shareModal} */}
+      </div>
+      <div>
+        <StatusModal 
+          open={sendingEmail} setStatusOpen={setSendingEmail} setExpanded={setExpanded} message={"Sharing Resource"}
+        />
+      </div>
+
+      <div>
+        <SharedModal
+          open={emailSent} setEmailSent={setEmailSent} 
+          handleSharedClose={() => handleSharedClose()} 
+          thumbnail={thumbnail} title={title}
+          emailTo={emailTo}
+        /> 
       </div>
 
       <Divider sx={{ filter: filter }}>
@@ -500,6 +582,7 @@ const skeletonTimer = randomNumber(100,3000);
       </Collapse>
 
     </Card>
+    </div>
   );
 };
 // --------------------------------------------------------

@@ -133,10 +133,10 @@ export default function IconStatus(props) {
   // Toggle star rating status
   // TODO pass star rating status to database
 
-  const [star, setStar] = useState(0)
-  const addStar = (event, num) => {
-    event.stopPropagation()
-    setStar(num+1)
+  const [star, setStar] = useState(null)
+  const addStar = (num) => {
+    // event.stopPropagation()
+    setStar(num)
   }
 // -------------------------------------------------------------
 
