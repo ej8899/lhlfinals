@@ -1,5 +1,5 @@
 module.exports = function(router, database) {
-  // Get Rankings with user id
+  // Get Rankings with resource id
   router.get('/resources/:id', async (req, res) => {
     const { id } = req.params;
     const rankings = await database.getRankingsWithResouceId(id)
