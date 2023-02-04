@@ -22,6 +22,8 @@ const resourcesRoutes = require('./routes/resources-api');
 const categoriesRoutes = require('./routes/categories-api');
 const ratingsRoutes = require('./routes/ratings-api');
 const commentsRoutes = require('./routes/comments-api');
+const rankingsRoutes = require('./routes/rankings-api');
+const rankingsDatabase = require('./db/queries/q_rankings');
 
 // /user/endpoints
 const usersRouter = express.Router();
@@ -32,6 +34,11 @@ app.use('/api/user', usersRouter);
 const profilesRouter = express.Router();
 profilesRoutes(profilesRouter, profilesDatabase);
 app.use('/api/profiles', profilesRouter);
+
+// /rankings/endpoints
+const rankingsRouter = express.Router();
+rankingsRoutes(rankingsRouter, rankingsDatabase);
+app.use('/api/rankings', rankingsRouter);
 
 app.use('/api/resources',resourcesRoutes);
 app.use('/api/categories',categoriesRoutes);
