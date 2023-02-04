@@ -43,13 +43,16 @@ export const AddNewResource= (props) => {
       BackdropProps={{
         timeout: 500,
       }}
+      disableScrollLock={true}
     >
       <Box sx={style}>
         <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
           <Typography variant="h5" style={{ marginLeft : 8, marginBottom : 10}}>
             Add New Resource
           </Typography>
+          <Box>
           <CloseModal handleClose={props.handleNewResourceClose}/>
+          </Box>
         </Box>
           <Box
             sx={{
@@ -67,7 +70,7 @@ export const AddNewResource= (props) => {
             />
         </Box>
         <Box display="flex" justifyContent="flex-end">
-          <Button variant="contained" href="" onClick={() => props.handleNewResourceClose()} >
+          <Button variant="contained" href="" onClick={() => props.handleNewResourceClose(props.fetchNewResource(props.newURL, props.isYoutubeUrl, props.getYoutubeVideoId ))} >
             Add
           </Button>
           </Box>

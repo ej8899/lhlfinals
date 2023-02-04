@@ -22,7 +22,7 @@ export const LikeStats = (props) => {
     if (count === 0) {
       return 'error';
     }
-    if (count > 1 && count <= 20 ) {
+    if (count >= 1 && count <= 20 ) {
       return 'warning';
     }
     if (count > 20 && count <= 60 ) {

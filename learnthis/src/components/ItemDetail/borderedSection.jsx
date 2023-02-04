@@ -79,6 +79,7 @@ const OutlinedBox = (props) => {
                   onMouseDown={() => props.setSliderActive(false)}
                   style={{color : props.sliderActive}}
                   onChange={(event, value) => props.addMyStage(value)}
+                  disabled={props.disabled}
                 />
         </Box>
         <fieldset aria-hidden={"true"} style={{

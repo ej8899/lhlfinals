@@ -10,6 +10,8 @@ export default function Tags(props) {
     listing.push(element)
   });
 
+  const type = props.type
+
   return (
     <Stack spacing={3} sx={{ width: 300 }}>
       <Autocomplete
@@ -17,6 +19,7 @@ export default function Tags(props) {
         id="tags-outlined"
         options={listing}
         filterSelectedOptions
+        readOnly={props.readOnly}
         renderInput={(params) => (
           <TextField
             {...params}

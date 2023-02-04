@@ -40,6 +40,7 @@ const style = {
   borderTopRightRadius: 5,
   boxShadow: 24,
   p: 4,
+  minWidth: "450px"
 };
 
 //-------------------------------------------------------------------
@@ -57,13 +58,16 @@ export const SharedModal= (props) => {
       BackdropProps={{
         timeout: 500,
       }}
+      disableScrollLock={true}
     >
       <Box sx={style}>
-        <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
+        <Box display="flex" width="100%"  justifyContent="space-between" gap="2rem">
           <Typography variant="h5" style={{ marginLeft : 8, marginBottom : 10}}>
             {props.title}
           </Typography>
+          <Box>
           <CloseModal handleClose={props.handleSharedClose}/>
+          </Box>
         </Box>
         <Box display="flex" width="100%" justifyContent="space-around" flexDirection="column" >
           <Box display="flex" width="100%" justifyContent="center" >
@@ -79,7 +83,7 @@ export const SharedModal= (props) => {
             </Box>
           </Box>
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-            <Typography variant="h6" textAlign="center">
+            <Typography variant="body2" textAlign="center">
               Resource was shared with: {props.emailTo}
             </Typography>
           </Box>

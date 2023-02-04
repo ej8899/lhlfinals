@@ -49,14 +49,15 @@ const style = {
 
 //-------------------------------------------------------------------
 // TODO pass props to this component w data
-export const StatusModal= (props) => {
+// TODO - bottom where my resource - add anchor to link?
+export const ResultModal= (props) => {
 
   return (
     <Modal
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
-      closeAfterTransition
+      onClose={props.handleSharedClose}
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500,
@@ -65,22 +66,34 @@ export const StatusModal= (props) => {
     >
       <Box sx={style}>
         <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
-
-        {!props.wheel && 
-          <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
-            <CircularProgress color="primary" />
-          </Stack>
-        } 
-        <Box display="flex" flexDirection="column">
-          <Typography variant='h6' textAlign="center">
-            {props.message}
+        <Typography variant="h5" style={{ marginLeft : 8, marginBottom : 10}}>
+            {props.title}
           </Typography>
-        {props.submessage &&
-          <Typography variant='body1' textAlign="center">
-            {props.submessage}
-          </Typography>
-        } 
+          <Box>
+          <CloseModal handleClose={props.handleClose}/>
+          </Box>
         </Box>
+        <Box display="flex" width="100%" justifyContent="space-around" flexDirection="column" >
+          <Box display="flex" width="100%" justifyContent="center" >
+            <Box display="flex" width="55%" justifyContent="center">
+              <CardMedia
+                component="img"
+                height="140"
+                width="345"
+                image={props.thumbnail}
+                alt={props.title}
+                sx={{marginBottom : 2}}
+              />
+            </Box>
+          </Box>
+          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+            <Typography variant="h6" textAlign="center">
+              {props.message}
+            </Typography>
+            <Typography variant="body2" textAlign="center">
+              {props.submessage}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Modal>

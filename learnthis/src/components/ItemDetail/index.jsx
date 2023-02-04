@@ -27,6 +27,10 @@ import { LikeStaleStats } from '../Icons/like';
 import { CloseModal } from '../Icons/close';
 import { StarStaleRating } from '../Icons/stars';
 import DiscreteSliderMarks from './slider';
+import { isYoutubeUrl, getYoutubeVideoId, extractDomain } from '../../helpers/helpers';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+
 //-------------------------------------------------------------------
 
 const style = {
@@ -59,7 +63,6 @@ export const DetailModal = (props) => {
     },
   };
 
-
   return (
     <Modal
       aria-labelledby="detail-modal-title"
@@ -71,20 +74,41 @@ export const DetailModal = (props) => {
       BackdropProps={{
         timeout: 500,
       }}
+      disableScrollLock={true}
     >
       <Fade in={props.open}>
         <Box sx={style}>
-          <Box display="flex" width="100%" justifyContent="space-between">
+          <Box display="flex" width="100%" justifyContent="space-between" alignItems="center">
             <Typography id="detail-modal-title" variant="h5" component="h2">
               {props.title}
             </Typography>
+            <Box>
             <CloseModal handleClose={props.handleClose}/>
+            </Box>
           </Box>
           <Box display="flex" width="100%" justifyContent="space-around">
             <Box>
-              <YouTube videoId={props.videoId} opts={videoPlayerOpts} />
+              {isYoutubeUrl(props.videoURL) && <YouTube videoId={getYoutubeVideoId(props.videoURL)} opts={videoPlayerOpts} />}
+              {!isYoutubeUrl(props.videoURL) && 
+                <Box display="flex" alignItems="center" flexDirection="column">
+                  <CardMedia
+                    component="img"
+                    height="360"
+                    width="640"
+                    image={props.thumbnail}
+                    alt={props.title}
+                    sx={{marginBottom : 2}}
+                  />
+                  <Typography variant='body2' sx={{marginBottom : "2"}}> 
+                    View Source Resource Here:  &nbsp;
+                    <a href={props.videoURL} target="_blank">
+                      {props.domain}                      
+                    </a>
+                  </Typography>
+                </Box>
+              }
               <Box display={props.show} alignItems="center" marginTop="1rem">
-              <DiscreteSliderMarks myStage={props.myStage} addMyStage={props.addMyStage}         sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
+              <DiscreteSliderMarks label={"Rate Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage}         sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
 
                 {/* <Box style={{paddingTop:20, paddingLeft:15}}>
                   <ComboBox listData={props.complexity} message={'Select the lesson complexity...'} mySelection={props.myComplexity} addMySelection={props.addMyComplexity}/>
@@ -94,16 +118,23 @@ export const DetailModal = (props) => {
                   <Tags listData={props.typeCategory} message={'Select the lesson category...'} mySelection={props.myCategory} addMySelection={props.addMyCategory}/>
                 {/* </Box> */}
               </Box>
-            </Box>
-     
-            <Box display={props.show} flexDirection="column">
-              <Box flexDirection="row" textAlign="center">
-                Rate This Video: <StarStaleRating star={props.star} addStar={props.addStar}/>
+              <Box display={props.show}>
+              <Box  flexDirection="row" sx={{mt : 1.5}}>
+                Rate This Resource: <StarStaleRating star={props.star} addStar={props.addStar}/>
               </Box>
-              <MultilineTextFields display={props.show} myComments={props.myComments} addMyComments={props.addMyComments} rows={17} width={"40ch"} label={'My Comments'} placeholder={"Make your notes here."} margin={1}/>
+              </Box>
             </Box>
 
-            <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around">
+            <Box display={props.show} flexDirection="column">
+              <MultilineTextFields display={props.show} myComments={props.myComments} addMyComments={props.addMyComments} rows={19} width={"40ch"} label={'My Comments'} placeholder={"Make your notes here."} marginLeft={1}/>
+              <Box display="flex" justifyContent="flex-end" sx={{m:1}}>
+              <Button variant="contained" sx={{width: "5em"}} href="" onClick={() => props.handleClose(props.addingNewResourceSQL())} >
+                Save
+              </Button>
+            </Box>
+          </Box>
+
+            <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around" paddingBottom="3rem">
               <RateStaleStats rateReview={props.rateReview} rate={props.rate} addRate={props.addRate}/>
               <FavouriteStaleStats favourite={props.favourite} addFavourites={props.addFavourites}/>
               <LikeStaleStats like={props.like} addLike={props.addLike} />

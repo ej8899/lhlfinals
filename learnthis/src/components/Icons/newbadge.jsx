@@ -10,7 +10,7 @@ export const NewBadge = (props) => {
   const StyledBadgeNew = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
       right: -15,
-      top: -8,
+      top: 0,
       border: `2px solid ${theme.palette.background.paper}`,
       borderRadius: "50%",
       padding: '0px 4px',

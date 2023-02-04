@@ -59,6 +59,9 @@ export const colorGenerator = (stage) => {
   const intermediate = "#03a9f4"
   const advanced = "#e53935"
 
+  if(stage === null) 
+    return "default"
+
   if (stage <= 33 && stage >= 0)
     return beginner;
 
@@ -71,3 +74,36 @@ export const colorGenerator = (stage) => {
   return 'default'
 }
 
+
+// extractTLD
+// ** UNTESTED **
+export const extractDomain = (url) => {
+  const hostname = new URL(url).hostname;
+  const parts = hostname.split('.');
+  const domain = parts.slice(parts.length - 2, parts.length - 1)[0];
+  const extn = parts[parts.length - 1];
+  return ('http://'+ domain + '.' + extn);
+}
+// const fullURL = "https://www.example.com/path/to/page";
+// console.log(extractDomain(fullURL));
+// output: example.com
+
+
+// isURLValid('http://www.example.com')
+// verify a URL by actually fetching it..needs to get a 2xx response
+export const isURLValid = async (url) => {
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+// const url = "https://www.example.com";
+// isURLValid(url).then(result => {
+//   console.log(result); // Output: true or false
+// });

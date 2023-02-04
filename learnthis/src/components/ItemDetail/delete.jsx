@@ -8,6 +8,8 @@ import CardMedia from '@mui/material/CardMedia';
 import { useNavigate } from "react-router-dom";
 import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import Divider from '@mui/material/Divider';
+import SendIcon from '@mui/icons-material/Send';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 //-------------------------------------------------------------------
@@ -15,9 +17,7 @@ import MultilineTextFields from '../ItemDetail/commentbox';
 import InputWithIcon from '../ItemDetail/emailbox';
 //-------------------------------------------------------------------
 
-
-import Stack from '@mui/material/Stack';
-import CircularProgress from '@mui/material/CircularProgress';
+import { isYoutubeUrl, getYoutubeVideoId } from '../../helpers/helpers';
 
 
 //-------------------------------------------------------------------
@@ -49,13 +49,14 @@ const style = {
 
 //-------------------------------------------------------------------
 // TODO pass props to this component w data
-export const StatusModal= (props) => {
+export const DeleteModal= (props) => {
 
   return (
     <Modal
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
+      onClose={props.handleClose}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
@@ -63,26 +64,48 @@ export const StatusModal= (props) => {
       }}
       disableScrollLock={true}
     >
-      <Box sx={style}>
-        <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
+        <Box sx={style}>
+          <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
+            <Typography variant='h6' textAlign="center">
+              Delete Resource
+            </Typography>
+            <Box>
+            <CloseModal handleClose={props.handleClose}/>
+            </Box>
+          </Box>
+          <Typography style={{ marginLeft : 8, marginBottom : 10}}>
+          {props.title}
 
-        {!props.wheel && 
-          <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
-            <CircularProgress color="primary" />
-          </Stack>
-        } 
-        <Box display="flex" flexDirection="column">
-          <Typography variant='h6' textAlign="center">
-            {props.message}
           </Typography>
-        {props.submessage &&
-          <Typography variant='body1' textAlign="center">
-            {props.submessage}
-          </Typography>
-        } 
-        </Box>
-        </Box>
-      </Box>
+          <Box display="flex" width="100%" justifyContent="space-around" flexDirection="column" >
+            <Box display="flex" width="100%" justifyContent="center" >
+            <Box display="flex" width="55%" justifyContent="center">
+              <CardMedia
+                component="img"
+                height="140"
+                width="345"
+                image={props.thumbnail}
+                alt={props.title}
+                sx={{marginBottom : 2}}
+              />
+              </Box>
+              </Box>
+
+            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+              <Typography>
+                Are you sure you want to delete the resource?
+              </Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-evenly" sx={{ m: 2 }}>
+                <Button variant="contained" href="" onClick={() => props.handleClose()} >
+                  Cancel
+                </Button>
+                <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleClose(props.handleOpenDeleting())} startIcon={<DeleteIcon />}>
+                    Delete
+                </Button>
+              </Box>
+            </Box>
+          </Box>
     </Modal>
   );
 }

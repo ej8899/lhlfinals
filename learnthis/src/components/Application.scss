@@ -5,7 +5,9 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-
+.root {
+  overflow-y: scroll;
+}
 
 #light {
   background-color: $white;

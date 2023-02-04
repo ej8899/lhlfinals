@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -19,10 +19,16 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import zlog from '../../helpers/zlog';
 import Login from '../Signin.jsx';
 import SignUp from '../SignUp.jsx';
+import PersistentDrawerLeft from "./LeftMenu.jsx";
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+
+//import { AuthContext } from '../../hooks/handleUsers';
 
 import {  modalSignUp,
           modalSignIn
 } from './signinup.jsx';
+
 
 import AboutDialog from "../Modal/about.jsx"
 
@@ -66,9 +72,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  // userauth
+  // const { user, handleChange, handleLogin, handleLogout } = useContext(
+  //   //AuthContext
+  // );
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -139,7 +150,7 @@ export default function PrimarySearchAppBar() {
   // SIGN IN
   const [loginopen, setLOpen] = React.useState(false);
   const handleLoginClose = () => setLOpen(false);
-  const handleLogin = (event) => {
+  const handleLoginForm = (event) => {
     setAnchorEl(null);
     handleMobileMenuClose();
     setLOpen(true);
@@ -172,7 +183,7 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem onClick={() => handleUserModals('profile')}>Profile</MenuItem>
       <MenuItem onClick={() => handleUserModals('account')}>My account</MenuItem>
-      <MenuItem onClick={handleLogin}>Sign In</MenuItem>
+      <MenuItem onClick={handleLoginForm}>Sign In</MenuItem>
       <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>
       <MenuItem onClick={() => handleUserModals('logout')}>Logout</MenuItem>
     </Menu>
@@ -180,6 +191,17 @@ export default function PrimarySearchAppBar() {
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
 
+
+  //
+  // menu drawer
+  //
+  const [dopen, setDOpen] = React.useState(false);
+  const handleDrawerOpen = () => {
+    setDOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setDOpen(false);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -192,7 +214,8 @@ export default function PrimarySearchAppBar() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
+            onClick={handleDrawerOpen}
+            sx={{ mr: 2, ...(dopen && { display: 'none' }) }}
           >
             <MenuIcon />
           </IconButton>
@@ -226,6 +249,16 @@ export default function PrimarySearchAppBar() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            
+            <IconButton 
+              size="large" 
+              aria-label="toggle light and dark modes"
+              sx={ {m1: 1} } 
+              onClick={props.handleDarkMode} 
+              color="inherit">
+            {props.darkMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+
             <IconButton
               size="large"
               edge="end"
@@ -237,6 +270,7 @@ export default function PrimarySearchAppBar() {
             >
               <AccountCircle />
             </IconButton>
+            
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -254,6 +288,8 @@ export default function PrimarySearchAppBar() {
       </AppBar>
       {renderMenu}
       <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
+      <PersistentDrawerLeft
+        open={dopen} close= {handleDrawerClose}></PersistentDrawerLeft>
     </Box>
   );
 }

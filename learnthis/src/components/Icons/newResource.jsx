@@ -12,18 +12,17 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 export const NewResource = (props) => {
 
   return (
-    <div>
+    <div >
     <Tooltip title="Add New Resource">
       <IconButton 
         fontSize="large"
         aria-label="add to playlist" 
         onClick={props.handleNewResourceOpen}
         sx={{
-          position: 'absolute',
+          position: 'absolute !important',
           zIndex: 1,
           top: 75,
           right: 20,
-
           "&:hover" : {backgroundColor : "transparent"}
         }}
         >

@@ -15,6 +15,9 @@ import MultilineTextFields from '../ItemDetail/commentbox';
 import InputWithIcon from '../ItemDetail/emailbox';
 //-------------------------------------------------------------------
 
+import { isYoutubeUrl, getYoutubeVideoId } from '../../helpers/helpers';
+
+
 //-------------------------------------------------------------------
 // Import Icons Functions
 import { CloseModal } from '../Icons/close';
@@ -57,13 +60,16 @@ export const ShareModal= (props) => {
       BackdropProps={{
         timeout: 500,
       }}
+      disableScrollLock={true}
     >
         <Box sx={style}>
           <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
             <Typography variant='h6' textAlign="center">
               Share Resource
             </Typography>
+            <Box>
             <CloseModal handleClose={props.handleShareClose}/>
+            </Box>
           </Box>
           <Typography style={{ marginLeft : 8, marginBottom : 10}}>
           {props.title}
@@ -104,9 +110,9 @@ export const ShareModal= (props) => {
                 </Typography>
             <Box textAlign="center" justifyContent="center" alignContent="middle" display="flex">
                 <Typography variant="caption" sx={{ "&:hover": {color: "green"}}}>
-                {`${window.location.toString()}ref/:${props.videoId}`} &nbsp;
-                <CopyToClipboardButton videoId={props.videoId} style={{verticalAlign:"middle"}}/>
-            </Typography>
+                  {`${window.location.toString()}ref/:${props.id}`} &nbsp;
+                  <CopyToClipboardButton id={props.id} style={{verticalAlign:"middle"}}/>
+              </Typography>
             </Box>
             </Box>
           </Box>

@@ -23,6 +23,10 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, CardHeader, Icon } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
+import { DeleteModal } from "../ItemDetail/delete";
+import { EditResourceModal } from "../NewResource/newResourceModal";
+import { ResultModal } from "../NewResource/result";
 // --------------------------------------------------------
 
 
@@ -35,7 +39,7 @@ import { useNavigate } from "react-router-dom";
 
 // --------------------------------------------------------
 // Import Helper Functions
-import { randomNumber, randomColor, truncateText, colorGenerator } from "../../helpers/helpers";
+import { randomNumber, randomColor, truncateText, colorGenerator, extractDomain } from "../../helpers/helpers";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -69,76 +73,120 @@ import { DetailModal }  from "../ItemDetail/index.jsx";
 import { ShareModal } from "../Modal/share";
 import { StatusModal } from "../NewResource/status";
 import { SharedModal } from "../Modal/shared";
+import { ViewDetailModal } from "../ItemDetail/view";
 // --------------------------------------------------------
 
 
 // TODO - any benefit to removing react-youtube and rolling our own variant?
 
 export const PreviewItem = (props) => {
-  // console.log("preview item props:",props)
-  const API_KEY = global.config.youtubekey;
-  const testVideoID = "hY7m5jjJ9mM";
 
-  const videoId = testVideoID;
-
-  // reference: https://www.npmjs.com/package/react-youtube
-  const videoPlayerOpts = {
-    height: '390',
-    width: '640',
-    playerVars: {
-      // https://developers.google.com/youtube/player_parameters
-      autoplay: 0,
-    },
-  };
+  // window.location.reload(true);
 
 // -------------------------------------------------------------
   // Import Hooks
   const {
+    domain, 
+    setDomain,
+
+    openDeleted, 
+    setOpenDeleted,
+    openDeleting,
+    setOpenDeleting,
+    handleDeletingClose,
+    handleOpenDeleting,
+
+    handleEditedClose,
+    openEdited,
+    setOpenEdited,
+    openEditing, 
+    setOpenEditing,
+    openEdit,
+    setOpenEdit,
+    handleOpenEdit,
+    handleEditClose,
+
+    openDelete,
+    setOpenDelete,
+    handleDeleteClose,
+    handleOpenDelete,
+
+    openReview, 
+    setOpenReview,
+    handleReviewOpen,
+    handleReviewClose,
+
+    categoryExpanded,
+    setCategoryExpanded,
+
+    videoURL,
+    setVideoURL,
+    videoId,
+    setVideoId,
+
     newResource,
     setNewResource,
     handleNewResourceClose,
     handleNewResourceOpen,
+    newURL,
+    setNewURL,
+    addNewResource,
+    setAddNewResource,
+    fetchingNewResource,
+    setFetchingNewResource,
+    handleAddNewResourceClose,
+
     title,
     setTitle,
     thumbnail,
     setThumbnail,
     description,
     setDesc,
+    descriptionExpanded,
+    setDescriptionExpanded,
+
     expanded,
     setExpanded,
     handleExpandClick,
-    descriptionExpanded,
-    setDescriptionExpanded,
+
     stage,
     setStage,
     addSetStage,
+
     category,
     setCategory,
-    // video,
-    // setVideo,
+
     open,
     setOpen,
-    selectedResource,
-    setSelectedResource,
     handleClose,
     handleOpen,
+
+    selectedResource,
+    setSelectedResource,
+
     myComments,
     setMyComments,
     addMyComments,
+
     myComplexity,
     addMyComplexity,
     setMyComplexity,
+
     myCategory,
     setMyCategory,
     addMyCategory,
+
     sliderActive,
     setSliderActive,
+
     myStage,
     setMyStage,
     addMyStage,
+
     newIcon,
     setNewIcon,
     addNewIcon,
+
     sendingEmail,
     setSendingEmail,
     sendEmail,
@@ -186,6 +234,8 @@ export const PreviewItem = (props) => {
     like,
     setLike,
     addLike,
+    likes,
+    setLikes,
     more,
     setMore,
     addMore,
@@ -201,88 +251,84 @@ export const PreviewItem = (props) => {
   } = IconStatus();
 
 // -------------------------------------------------------------
+  useEffect(() => {
+    setTitle(props.title)
+    setDescriptionExpanded(props.description)
+    setOpen(false)
+    setThumbnail(props.thumbnail);
+    addNewIcon(props.created_at)
+    addSetStage(props.stage)
+    setLikes(props.likes)
+    setVideoURL(props.videoURL)
+    setDomain(extractDomain(props.videoURL))
 
-// not using to save quieries
-// axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}&key=${API_KEY}`)
-// axios.get(`https://www.googleapis.com/`)
-  // useEffect(() => {
-      useEffect(() => {
-        if (props.title) {
-          setTitle(props.title)
-          setDescriptionExpanded(props.description)
-          setCategory(`Category: ${props.category}`)
-          setOpen(false)
-          setThumbnail(props.thumbnail);
-          addNewIcon(props.created_at)
-          addSetStage(props.stage)
-
-          if(global.config.debug === true) {
-            //zlog('info',"data snippet follows:");
-            //console.log(response.data.items[0].snippet);
-          }
-
-
-        } else {
-        axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${props.videoId}&key=${API_KEY}`)
-    // axios.get(`https://www.googleapis.com/`)
-      .then(response => {
-
-        zlog('API',"YouTube API Called:", props.videoId)
-        // let title = response.data.items[0].snippet.title;
-        // if (title) setTitle(truncateText(title,30));
-        setTitle(response.data.items[0].snippet.title)
-
-        // TODO - truncate description
-        let description = response.data.items[0].snippet.description;
-        if (description) setDesc(truncateText(description,100));
-
-        setDescriptionExpanded(response.data.items[0].snippet.description)
-        addNewIcon(props.created_at)
-        addSetStage(props.stage)
-
-        setCategory(`Category: ${props.category}`)
-        // setVideo(response.data.items[0].snippet.video)
-        setOpen(false)
-        setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
-
-        if(global.config.debug === true) {
-          //zlog('info',"data snippet follows:");
-          //console.log(response.data.items[0].snippet);
-        }
-
-        /*
-        REFERENCE:
-        useful items in response data:
-        .snippet.
-          categoryId
-          channelId,
-          channelTitle,
-          description,
-          title,
-          thumbnails.default.url, 120x90
-          thumbnails.high.url, 480x360
-          thumbnails.medium.url, 320x180
-          thumbnails.standard.url, 640x480
-        */
-      })
-      .catch(error => {
-        // console.error(error);
+  
+    if (props.category.length === 0) {
+      setCategory(`Category: TBD`)
+    } else {
+      let displayCategories = "Category: "
+      props.category.forEach((element, index) => {
+        index === 0 ? displayCategories += element : displayCategories += `, ${element}`
       });
-    }}, [videoId]);
+      setCategoryExpanded(displayCategories)
+      setCategory(truncateText(displayCategories, 28))
+    }
+  }, [videoId]);
 
-
-/*
-    <div className="previewItemWrapper">
-    <h3>{title}</h3>
-    <img src={thumbnail} alt=""></img>
-    <YouTube videoId={testVideoID} opts={videoPlayerOpts} />
-    </div>
-*/
-
-  const ratingScore = `Overall User Rating: ${props.rating}`
   const skeletonTimer = randomNumber(100,3000);
 
+  const deletingResourceSQL = () => {
+    setOpenDeleting(true)
+    setOpenDelete(false)
+    setOpen(false)
 
+    const deleteURLResource = props.sampledata.filter(
+      resource => resource.id !== props.id
+    )
+
+  // TODO -- setting the state is included in the timeout until database update happens with backendcode
+    setTimeout(() => {
+      setOpenDeleting(false)
+      setOpenDeleted(true)
+      props.setsampledata(deleteURLResource);
+    }, 2000)
+  }
+
+  const updatingResourceSQL = () => {
+    setOpenEdit(false)
+    setOpenEditing(true)
+    setOpen(false)
+
+    const updateURLResource = []
+    props.sampledata.forEach(resource => {
+
+      if (resource.id === props.id) {
+        updateURLResource.push({
+          "id" : props.id,
+          "videoURL" : videoURL,
+          "created_at" : props.created_at,
+          "updated_at" : new Date().toISOString(),
+          "title" : title,
+          "thumbnail" : thumbnail,
+          "description" : descriptionExpanded,
+          "category" : myCategory,
+          "stage" : stage,
+          "rating" : props.rating,
+          "likes" : likes 
+        })
+      } else {
+        updateURLResource.push(resource)
+      }
+
+  })
+
+  // TODO -- setting the state is included in the timeout until database update happens with backendcode
+    setTimeout(() => {
+      setOpenEditing(false)
+      setOpenEdited(true)
+      props.setsampledata(updateURLResource);
+    }, 2000)
+  }
 
 
 // --------------------------------------------------------
@@ -332,9 +378,11 @@ export const PreviewItem = (props) => {
                 style={{ marginBottom: 6 }}
               />) : (
               <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
+                <Tooltip title={categoryExpanded}>
                 <Typography>
                   {category}
                 </Typography>
+                </Tooltip>
               </Fade>
             )
           }
@@ -386,8 +434,13 @@ export const PreviewItem = (props) => {
               justifyContent="center"
               alignItems="center" 
             >
-                <StarRating ratingScore={ratingScore} rating={props.rating} />
-                <LikeStats like={like} addLike={() => addLike(filter)} likes={props.likes}/>
+                {!props.rating &&
+                <StarRating ratingScore={`Overall User Rating: Unrated`} rating={props.rating} 
+                />}
+                {props.rating &&
+                <StarRating ratingScore={`Overall User Rating: ${props.rating}`} rating={props.rating} 
+                />}
+                <LikeStats like={like} addLike={() => addLike(filter)} likes={likes}/>
             </Box>
           </CardContent>
         </Fade>
@@ -395,10 +448,10 @@ export const PreviewItem = (props) => {
 
       <div>
         <DetailModal 
-          open={open} setOpen={setOpen} setExpanded={setExpanded}
-          handleClose={() => handleClose()} 
-          videoId={props.videoId} 
-          title={title} 
+          open={openReview} setOpen={setOpenReview} setExpanded={setExpanded}
+          handleClose={() => handleReviewClose()} 
+          videoURL={videoURL} domain={domain}
+          title={title} id={props.id} thumbnail={thumbnail}
           complexity={props.complexity} 
           typeCategory={props.typeCategory} 
           favourite={favourite} addFavourites={() => addFavourites(filter)}
@@ -409,7 +462,8 @@ export const PreviewItem = (props) => {
           playlist={playlist} addPlaylist={addPlaylist}
           share={share} addShare={() => addShare(filter)} shareOpen={shareOpen} handleShareClose={handleShareClose} handleShareOpen={handleShareOpen}
           report={report} addReport={addReport}
-          like={like} addLike={() => addLike(filter)} setLike={setLike}
+          like={like} addLike={() => addLike(filter)} setLike={setLike} 
+          likes={likes} setLikes={setLikes}
           more={more} addMore={addMore} setMore={setMore}
           star={star} addStar={addStar}
           myComments={myComments} addMyComments={addMyComments}
@@ -418,14 +472,72 @@ export const PreviewItem = (props) => {
           myStage={myStage} addMyStage={addMyStage}
           sliderActive={sliderActive} setSliderActive={setSliderActive}
         />
-
+      </div>
+      {/* <div>
+        <EditDetailModal 
+          open={openEdit} setOpen={setOpenEdit} setExpanded={setExpanded}
+          handleClose={() => handleEditClose()} 
+          videoURL={videoURL} thumbnail={thumbnail}
+          title={title} id={props.id} description={description}
+          complexity={props.complexity} 
+          typeCategory={props.typeCategory} 
+          favourite={favourite} addFavourites={() => addFavourites(filter)}
+          lesson={lesson} addLesson={addLesson}
+          rate={rate} rateReview={rateReview}
+          show={show}
+          bookmark={bookmark} addBookmark={addBookmark}
+          playlist={playlist} addPlaylist={addPlaylist}
+          share={share} addShare={() => addShare(filter)} shareOpen={shareOpen} handleShareClose={handleShareClose} handleShareOpen={handleShareOpen}
+          report={report} addReport={addReport}
+          like={like} addLike={() => addLike(filter)} setLike={setLike} 
+          likes={likes} setLikes={setLikes}
+          more={more} addMore={addMore} setMore={setMore}
+          star={star} addStar={addStar}
+          myComments={myComments} addMyComments={addMyComments}
+          myComplexity={myComplexity} addMyComplexity={addMyComplexity}
+          myCategory={myCategory} addMyCategory={addMyCategory}
+          myStage={myStage} addMyStage={addMyStage}
+          sliderActive={sliderActive} setSliderActive={setSliderActive}
+        />
+      </div> */}
+      <div>
+        <ViewDetailModal 
+            open={open} setOpen={setOpen} setExpanded={setExpanded}
+            handleClose={() => handleClose()} 
+            handleReviewOpen={() => handleReviewOpen()}
+            videoURL={videoURL} domain={domain}
+            title={title} id={props.id} thumbnail={thumbnail}
+            complexity={props.complexity} 
+            typeCategory={props.typeCategory} 
+            favourite={favourite} addFavourites={() => addFavourites(filter)}
+            lesson={lesson} addLesson={addLesson}
+            rate={rate} rateReview={rateReview}
+            show={show}
+            bookmark={bookmark} addBookmark={addBookmark}
+            playlist={playlist} addPlaylist={addPlaylist}
+            share={share} addShare={() => addShare(filter)} shareOpen={shareOpen} handleShareClose={handleShareClose} handleShareOpen={handleShareOpen}
+            report={report} addReport={addReport}
+            like={like} addLike={() => addLike(filter)} setLike={setLike} 
+            likes={likes} setLikes={setLikes}
+            more={more} addMore={addMore} setMore={setMore}
+            star={star} addStar={addStar}
+            myComments={myComments} addMyComments={addMyComments}
+            myComplexity={myComplexity} addMyComplexity={addMyComplexity}
+            myCategory={myCategory} addMyCategory={addMyCategory}
+            myStage={myStage} addMyStage={addMyStage}
+            sliderActive={sliderActive} setSliderActive={setSliderActive}
+            openEdit={openEdit} setOpenEdit={setOpenEdit}
+            handleOpenEdit={handleOpenEdit} handleEditClose={handleEditClose}
+            openDelete={openDelete} setOpenDelete={setOpenDelete}
+            handleDeleteClose={handleDeleteClose} handleOpenDelete={handleOpenDelete}
+          />
       </div>
       <div>
         <ShareModal 
           open={shareOpen} setShareOpen={setShareOpen} setExpanded={setExpanded}
           handleShareClose={() => handleShareClose()} 
-          videoId={props.videoId} 
-          title={title} 
+          videoURL={videoURL} domain={domain}
+          title={title} id={props.id}
           complexity={props.complexity} 
           typeCategory={props.typeCategory} 
           favourite={favourite} addFavourites={() => addFavourites(filter)}
@@ -453,8 +565,52 @@ export const PreviewItem = (props) => {
           {/* {shareModal} */}
       </div>
       <div>
+        <EditResourceModal 
+          open={openEdit} setOpen={setOpenEdit} 
+          handleClose={() => handleEditClose()} 
+          addingNewResourceSQL={updatingResourceSQL}
+          videoURL={videoURL} thumbnail={thumbnail}
+          title={title} setTitle={setTitle} domain={domain}
+          descriptionExpanded={descriptionExpanded} setDescriptionExpanded={setDescriptionExpanded}
+          complexity={props.sampleComplexity} 
+          typeCategory={props.typeCategory} 
+          favourite={favourite} addFavourites={() => addFavourites(filter)}
+          lesson={lesson} addLesson={addLesson}
+          show={"flex"}
+          bookmark={bookmark} addBookmark={addBookmark}
+          playlist={playlist} addPlaylist={addPlaylist}
+          like={like} addLike={() => addLike(filter)} setLike={setLike}
+          star={star} addStar={addStar}
+          myComments={myComments} addMyComments={addMyComments}
+          myComplexity={myComplexity} addMyComplexity={addMyComplexity}
+          myCategory={myCategory} addMyCategory={addMyCategory}
+          myStage={myStage} addMyStage={addMyStage}
+          sliderActive={sliderActive} setSliderActive={setSliderActive}
+        />
+      </div>
+      <div>
         <StatusModal 
           open={sendingEmail} setStatusOpen={setSendingEmail} setExpanded={setExpanded} message={"Sharing Resource"}
+        />
+      </div>
+
+      <div>
+        <DeleteModal
+          handleClose={() => handleDeleteClose()}
+          open={openDelete} setOpenDelete={setOpenDelete}
+          handleOpenDeleting={deletingResourceSQL}
+          title={title} thumbnail={thumbnail}
+        />
+      </div>
+      <div>
+        <StatusModal 
+          open={openDeleting} setStatusOpen={setOpenDeleting} message={"Deleting Resource"}
+        />
+      </div>
+
+      <div>
+        <StatusModal 
+          open={openEditing} setStatusOpen={setOpenEditing} message={"Updating Resource"}
         />
       </div>
 
@@ -465,6 +621,14 @@ export const PreviewItem = (props) => {
           thumbnail={thumbnail} title={title}
           emailTo={emailTo}
         /> 
+      </div>
+      <div>
+        <ResultModal 
+          open={openEdited} setStatusOpen={setOpenEdited} 
+          handleClose={() => handleEditedClose()} 
+          message={"Success! Resource has been updated."} submessage={"Checkout 'My Resources' for resources you've added."}
+          thumbnail={thumbnail} title={title}
+        />
       </div>
 
       <Divider sx={{ filter: filter }}>

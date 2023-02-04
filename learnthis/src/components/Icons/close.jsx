@@ -1,7 +1,6 @@
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import React from 'react';
-import Fade from '@mui/material/Fade';
 import CloseIcon from '@mui/icons-material/Close';
 
 export const CloseModal = (props) => {

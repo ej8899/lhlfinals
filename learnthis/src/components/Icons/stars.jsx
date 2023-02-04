@@ -146,6 +146,7 @@ export const StarStaleRating = (props) => {
           props.addStar(newValue);
           }}
           precision={0.5} 
+          disabled={props.disabled}
         />
       </IconButton>
   )  

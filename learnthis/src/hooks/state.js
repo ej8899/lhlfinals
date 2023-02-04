@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from "axios"; // npx install axios
+import zlog from "../helpers/zlog";
 
 export default function StateStatus() {
 
@@ -9,14 +11,18 @@ export default function StateStatus() {
   const [description, setDesc] = useState('');
   const [descriptionExpanded, setDescriptionExpanded] = useState('');
   const [category, setCategory] = useState('');
+  const [categoryExpanded, setCategoryExpanded] = useState('')
+  const [videoId, setVideoId] = useState('');
+  const [videoURL, setVideoURL] = useState('');
+  const [domain, setDomain] = useState('')
 // -------------------------------------------------------------
 
 
 // -------------------------------------------------------------
-const [stage, setStage] = useState('');
+const [stage, setStage] = useState(null);
 
 const addSetStage = (rating) => {
-  if (rating === -1) {
+  if (rating === null || rating === -1) {
       setStage(`Complexity: Unrated`)
     } else if (rating <= 33 && rating >= 0) {
       setStage(`Complexity: Beginner`)
@@ -42,7 +48,7 @@ const addSetStage = (rating) => {
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
-// handle open and close of item detail modal
+// handle open and close of item view detail modal
   const [open, setOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState();
 
@@ -57,6 +63,68 @@ const addSetStage = (rating) => {
     setOpen(false);
   };
 // -------------------------------------------------------------
+
+// -------------------------------------------------------------
+// handle open and close of item review detail modal
+const [openReview, setOpenReview] = useState(false);
+
+const handleReviewOpen = () => {
+    setOpenReview(true);
+  return
+}
+
+const handleReviewClose = () => {
+  setOpenReview(false);
+};
+// -------------------------------------------------------------
+
+// -------------------------------------------------------------
+// handle open and close of item edit detail modal
+const [openEdit, setOpenEdit] = useState(false);
+const [openEditing, setOpenEditing] = useState(false)
+const [openEdited, setOpenEdited] = useState(false);
+
+
+const handleOpenEdit = () => {
+    setOpenEdit(true);
+  return
+}
+
+const handleEditClose = () => {
+  setOpenEdit(false);
+};
+
+const handleEditedClose = () => {
+  setOpenEdited(false);
+};
+// -------------------------------------------------------------
+
+// -------------------------------------------------------------
+// handle open and close of item delete detail modal
+const [openDelete, setOpenDelete] = useState(false);
+const [openDeleting, setOpenDeleting] = useState(false)
+const [openDeleted, setOpenDeleted] = useState(false)
+
+const handleOpenDelete = () => {
+    setOpenDelete(true);
+  return
+}
+
+const handleDeleteClose = () => {
+  setOpenDelete(false);
+};
+
+const handleOpenDeleting = () => {
+  setOpenDeleting(true);
+  setOpen(false)
+return
+}
+
+const handleDeletingClose = () => {
+  setOpenDeleting(false);
+};
+// -------------------------------------------------------------
+
 
 // -------------------------------------------------------------
 // State for my comments date
@@ -126,17 +194,20 @@ const addNewIcon = (created_at) => {
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
+// Share Resource through Email
 const [sendingEmail, setSendingEmail] = useState(false)
 const [emailMessage, emailMyMessage] = useState('')
 const [emailTo, emailMyTo] = useState('')
 const [emailSent, setEmailSent] = useState(false)
 
+// TODO -- This will become a PUT statement or other API for email
 const sendEmail = (email, message) => {
   setSendingEmail(true)
   setTimeout(() => {
     setSendingEmail(false)
     setEmailSent(true)
-    console.log(`Email Sent To: ${email} -> with message ${message}`)
+    zlog('Info',"Email sent to:", email) 
+    zlog('Info',"Email was sent With message:", message) 
   }, 2000)
 } 
 
@@ -149,8 +220,26 @@ const handleSharedClose = () => {
 
 // -------------------------------------------------------------
 // handle open and close of new resource modal
+  // Screen to add website link under add new resource
 const [newResource, setNewResource] = useState(false);
+
+  // State for new url added after hit save
 const [newURL, setNewURL] = useState('')
+
+  // Edit screen for new resource
+const [addNewResource, setAddNewResource] = useState(false);
+
+  //API calls for new resource
+const [fetchingNewResource, setFetchingNewResource] = useState(false)
+
+  //Status Screen for saving to database
+const [savingNewResource, setSavingNewResource] = useState(false)
+
+  //Status Screen for success saved to database
+const [savedNewResource, setSavedNewResource] = useState(false)
+
+  //Status Screen for error saving to database
+const [errorSavingNewResource, setSavingErrorNewResource] = useState(false)
 
 const handleNewResourceOpen = () => {
   setNewResource(true);
@@ -159,16 +248,77 @@ const handleNewResourceOpen = () => {
 const handleNewResourceClose = () => {
   setNewResource(false);
 };
+
+const handleAddNewResourceClose =() => {
+  setAddNewResource(false);
+}
+
+const handleSavedClose =() => {
+  setSavedNewResource(false);
+}
+
+
 // -------------------------------------------------------------
 
   return {
+
+    domain, 
+    setDomain,
+    
+    openDeleted, 
+    setOpenDeleted,
+    openDeleting,
+    setOpenDeleting,
+    handleDeletingClose,
+    handleOpenDeleting,
+
+    handleEditedClose,
+    openEdited,
+    setOpenEdited,
+    openEditing, 
+    setOpenEditing,
+    openEdit,
+    setOpenEdit,
+    handleOpenEdit,
+    handleEditClose,
+
+    openDelete,
+    setOpenDelete,
+    handleDeleteClose,
+    handleOpenDelete,
+
+    openReview, 
+    setOpenReview,
+    handleReviewOpen,
+    handleReviewClose,
+
+    categoryExpanded,
+    setCategoryExpanded,
+
+    savingNewResource, 
+    setSavingNewResource,
+    savedNewResource, 
+    setSavedNewResource,
+    errorSavingNewResource, 
+    setSavingErrorNewResource,
+    handleSavedClose,
+
+    videoURL,
+    setVideoURL,
+    videoId,
+    setVideoId,
+
     newResource,
     setNewResource,
     handleNewResourceClose,
     handleNewResourceOpen,
-
     newURL,
     setNewURL,
+    addNewResource,
+    setAddNewResource,
+    fetchingNewResource,
+    setFetchingNewResource,
+    handleAddNewResourceClose,
 
     title,
     setTitle,
@@ -189,9 +339,6 @@ const handleNewResourceClose = () => {
 
     category,
     setCategory,
-
-    // video,
-    // setVideo,
 
     open,
     setOpen,

@@ -7,7 +7,7 @@ export default function MultilineTextFields(props) {
     <Box display={props.display} alignItems="flex-start"
       component="form"
       sx={{
-        '& .MuiTextField-root': { m: props.margin, width: props.width, marginBottom: props.botMargin},
+        '& .MuiTextField-root': { ml: props.marginLeft, width: props.width, marginBottom: props.botMargin},
       }}
       noValidate
       autoComplete="off"
@@ -21,6 +21,7 @@ export default function MultilineTextFields(props) {
           placeholder={props.placeholder}
           value={props.myComments}
           onChange={(event) => props.addMyComments(event.target.value)}
+          disabled={props.disabled}
         />
       </div>
     </Box>

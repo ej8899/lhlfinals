@@ -35,6 +35,9 @@ import { green, red } from "@mui/material/colors";
 import StateStatus from '../hooks/state';
 import { NewResource } from "./Icons/newResource";
 import { AddNewResource } from "./NewResource/newResource";
+import { StatusModal } from "../components/NewResource/status";
+import AddResourceFlow from "./NewResource/AddResource";
+import Fade from '@mui/material/Fade';
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 //
@@ -42,10 +45,12 @@ const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 //
 export default function Application(props) {
 
-  const sampledata = [
+  const [sampledata, setsampledata] = useState([
     {
       id: 1,
-      videoID: "rxnX1jdoI6c",
+      profile_id : 1,
+      // videoID: "rxnX1jdoI6c",
+      videoURL: 'https://www.youtube.com/watch?v=rxnX1jdoI6c',
       created_at: "2023-01-31T13:54:46.365Z",
       title: "5 common beginner CSS mistakes",
       thumbnail: "https://i.ytimg.com/vi/rxnX1jdoI6c/sddefault.jpg",
@@ -100,14 +105,16 @@ export default function Application(props) {
       ---
       
       And whatever you do, don't forget to keep on making your corner of the internet just a little bit more awesome!`,
-      category:"CSS",
+      category:["CSS"],
       stage: 15,
       rating: 3.7,
       likes: 32
     },
     {
       id: 2,
-      videoID:"0KEpWHtG10M",
+      profile_id : 2,
+      // videoID:"0KEpWHtG10M",
+      videoURL: 'https://www.youtube.com/watch?v=0KEpWHtG10M',
       created_at: "2023-02-01T13:54:46.365Z",
       title: "Material UI Tutorial #1 - Intro & Setup",
       thumbnail: "https://i.ytimg.com/vi/0KEpWHtG10M/sddefault.jpg",
@@ -136,14 +143,16 @@ export default function Application(props) {
       Facebook - https://www.facebook.com/thenetninjauk
       Twitter - https://twitter.com/thenetninjauk
       Instagram - https://www.instagram.com/thenetninja/`,
-      category: "JS",
+      category: ["JavaScript", "React"],
       stage:50,
       rating: 1.2,
       likes: 0
     },
     {
       id: 3,
-      videoID:"r8Dg0KVnfMA",
+      profile_id : 1,
+      // videoID:"r8Dg0KVnfMA",
+      videoURL: 'https://www.youtube.com/watch?v=r8Dg0KVnfMA&t=1s',
       created_at: "2023-01-28T08:54:46.365Z",
       title: "Learn React Query In 50 Minutes",
       thumbnail: "https://i.ytimg.com/vi/r8Dg0KVnfMA/sddefault.jpg",
@@ -186,14 +195,16 @@ export default function Application(props) {
       
       
       #TanStackQuery #WDS #ReactQuery`,
-      category: "React",
+      category: ["React"],
       stage: -1,
       rating: 4,
       likes:56
     },
     {
       id: 4,
-      videoID:"3VHCxuxtuL8",
+      profile_id : 2,
+      // videoID:"3VHCxuxtuL8",
+      videoURL: 'https://www.youtube.com/watch?v=3VHCxuxtuL8',
       created_at: "2023-01-29T23:01:46.365Z",
       title: "How to Use YouTube API in Node - Full Tutorial",
       thumbnail: "https://i.ytimg.com/vi/3VHCxuxtuL8/sddefault.jpg",
@@ -233,14 +244,16 @@ export default function Application(props) {
       ► My standing desk - https://www.fully.com/en-eu/standing-desks/jarvis/jarvis-adjustable-height-desk-laminate.html
       
       Disclosures: All opinions are my own. Sponsors are acknowledged. Some links in the description are affiliate links that if you click on one of the product links, I’ll receive a commission at no additional cost to you.  As an Amazon Associate I earn a small commission from qualifying purchases.`,
-      category: "NodeJS",
+      category: ["Node.js"],
       stage: 0,
       rating: 2.7,
       likes: 18
     },
     {
       id: 5,
-      videoID:"ha3a63YjLro",
+      profile_id : 1,
+      // videoID:"ha3a63YjLro",
+      videoURL: 'https://www.youtube.com/watch?v=ha3a63YjLro',
       created_at: "2023-02-02T19:21:34.735Z",
       title: "Material UI Tutorial #2 - Typography",
       thumbnail: "https://i.ytimg.com/vi/ha3a63YjLro/sddefault.jpg",
@@ -269,14 +282,16 @@ export default function Application(props) {
       Facebook - https://www.facebook.com/thenetninjauk
       Twitter - https://twitter.com/thenetninjauk
       Instagram - https://www.instagram.com/thenetninja/`,
-      category: "JS",
+      category: ["JavaScript", "React"],
       stage: 89,
       rating: 4.9,
       likes: 101
     },
     {
       id: 6,
-      videoID:"s-yvlPTDak0",
+      profile_id : 2,
+      // videoID:"s-yvlPTDak0",
+      videoURL: 'https://www.youtube.com/watch?v=s-yvlPTDak0',
       created_at: "2023-01-31T19:21:34.735Z",
       title: "ChatGPT Teaches Flexbox!",
       thumbnail: "https://i.ytimg.com/vi/s-yvlPTDak0/sddefault.jpg",
@@ -285,14 +300,16 @@ export default function Application(props) {
       Let me know your thoughts in the comments down below :).
       
       ⭐⭐ Get access to all courses (including premium courses not found anywhere else) on Net Ninja Pro - https://netninja.dev/`,
-      category: "JS",
+      category: ["JavaScript", "CSS"],
       stage: 67,
       rating: 3.6,
       likes: 54
     },
     {
       id: 7,
-      videoID:"r-yxNNO1EI8",
+      profile_id : 3,
+      // videoID:"r-yxNNO1EI8",
+      videoURL: 'https://www.youtube.com/watch?v=r-yxNNO1EI8',
       created_at: "2023-01-26T19:21:34.735Z",
       title: "YouTube API Project With Authentication",
       thumbnail: "https://i.ytimg.com/vi/r-yxNNO1EI8/sddefault.jpg",
@@ -318,14 +335,16 @@ export default function Application(props) {
       http://www.facebook.com/traversymedia
       http://www.twitter.com/traversymedia
       http://www.instagram.com/traversymedia`,
-      category: "JS",
+      category: ["JavaScript"],
       stage: 100,
       rating: 4.2,
       likes: 62
     },
     {
       id: 8,
-      videoID:"9sWEecNUW-o",
+      profile_id : 1,
+      // videoID:"9sWEecNUW-o",
+      videoURL: 'https://www.youtube.com/watch?v=9sWEecNUW-o',
       created_at: "2023-01-31T19:21:34.735Z",
       title: "Code your own YouTube app: YouTube API + HTML + CSS + JavaScript (full tutorial)",
       thumbnail: "https://i.ytimg.com/vi/9sWEecNUW-o/sddefault.jpg",
@@ -343,14 +362,16 @@ export default function Application(props) {
       Learn to code for free and get a developer job: https://www.freecodecamp.com
       
       Read hundreds of articles on programming: https://medium.freecodecamp.com`,
-      category: "CSS",
+      category: ["CSS", "HTML", "JavaScript"],
       stage: 34,
       rating: 2.0,
       likes: 8
     },
     {
       id: 9,
-      videoID:"NQULKpW6hK4",
+      profile_id : 1,
+      // videoID:"NQULKpW6hK4",
+      videoURL: "https://www.youtube.com/watch?v=NQULKpW6hK4",
       created_at: "2023-01-27T12:21:34.735Z",
       title: "React Query Crash Course",
       thumbnail: "https://i.ytimg.com/vi/NQULKpW6hK4/sddefault.jpg",
@@ -367,14 +388,16 @@ export default function Application(props) {
       2:24 - Fetching without React Query
       11:50 - Refactor to use React Query
       23:48 - Pagination`,
-      category: "React",
+      category: ["React"],
       stage: 68,
       rating: 2.8,
       likes: 34
     },
     {
       id: 10,
-      videoID:"r8Dg0KVnfMA",
+      profile_id : 3,
+      // videoID:"r8Dg0KVnfMA",
+      videoURL: "https://www.youtube.com/watch?v=r8Dg0KVnfMA",
       created_at: "2023-02-02T12:21:34.735Z",
       title: "Learn React Query In 50 Minutes",
       thumbnail: "https://i.ytimg.com/vi/r8Dg0KVnfMA/sddefault.jpg",
@@ -417,53 +440,72 @@ export default function Application(props) {
       
       
       #TanStackQuery #WDS #ReactQuery`,
-      category: "React",
+      category: [],
       stage: 33,
       rating: 4.1,
       likes: 87
+    },
+    {
+      id: 11,
+      profile_id : 2,
+
+      videoURL: "https://stackoverflow.com/questions/70693305/modal-windows-in-react",
+      created_at: "2023-02-03T12:21:34.735Z",
+      title: "Modal Windows In React",
+      thumbnail: "https://storage.screenshotapi.net/stackoverflow_com_questions_70693305_modal_windows_0142c12e6da4.png",
+      description: `
+      Here you can see my code in React.js
+      
+      I want to have several modal windows in one React component. I tried to use Modal from “react-native”, but it did not work.`,
+      category: ["React"],
+      stage: 34,
+      rating: 2.8,
+      likes: 34
     }
-  ]
+  ])
+
   // TODO DELETE THESE:
   const typeCategory = [
-    "JavaScript",
-    "HTML",
-    "CSS",
-    "React",
+    "Adonis.js",
     "Angular",
-    "Vue",
-    "Node.js",
-    "Express",
-    "Next.js",
+    "ASP.NET",
+    "C#",
+    "C++",
+    "CSS",
+    "Django",
     "Ember",
-    "Meteor",
+    "Express",
+    "Express.js",
+    "Flask",
+    "Go",
+    "GraphQL",
+    "HTML",
+    "Java",
+    "JavaScript",
     "jQuery",
+    "Kotlin",
+    "Less",
+    "Meteor",
     "MongoDB",
     "MySQL",
-    "PostgreSQL",
-    "GraphQL",
-    "Sass",
-    "Less",
-    "TypeScript",
-    "Ruby on Rails",
-    "Django",
-    "Flask",
-    "Spring",
-    "Express.js",
     "Nest.js",
-    "Adonis.js",
+    "Next.js",
+    "Node.js",
     "PHP",
-    "ASP.NET",
-    "Java",
+    "PostgreSQL",
     "Python",
-    "C++",
-    "C#",
+    "React",
+    "Ruby on Rails",
     "Ruby",
-    "Go",
-    "Swift",
-    "Kotlin",
     "Rust",
+    "Sass",
     "Scala",
-    "SQL"
+    "Spring",
+    "SQL",
+    "Swift",
+    "TypeScript",
+    "Vue",
+    
   ]
 
   const sampleComplexity = [
@@ -477,11 +519,15 @@ export default function Application(props) {
   //  setup controlled page loader -- NOTE check our useEffect for smooth load of app itself
   const [pageLoading,setPageLoading] = useState(true);
   const [nowloading, setLoading] = useState(true);
+  const [showAddResource, setShowAddResource] = useState("none")
   const pageloader = document.getElementById('pageloader');
   if(pageLoading === true) {
     global.config.goSleep(2000).then(()=> {   // update here if we want to delay even more
       pageloader.style.display = "none";
       setPageLoading(false);
+      setTimeout(() => {
+        setShowAddResource("flex")
+      }, 4000)
     })
   }
   // classes for main display
@@ -512,9 +558,28 @@ export default function Application(props) {
         palette: {
           mode,
         },
+        components: {
+          MuiCssBaseline: {
+            styleOverrides: {
+              root: {
+                height: '100vh',
+                overflowY: 'scroll'
+              },
+              body: {
+                // color: "darkred",
+                // backgroundColor: "grey",
+                // "& h1": {
+                //   color: "orange"
+                // }
+       
+              }
+            }
+          }
+        }    
       }),
     [mode],
   );
+  
 
 
   // COOKIES Modal
@@ -569,53 +634,38 @@ export default function Application(props) {
 
 
 
-    // -------------------------------------------------------------
-  // Import Hooks
-  const {
-    newURL,
-    setNewURL,
-    newResource,
-    setNewResource,
-    handleNewResourceClose,
-    handleNewResourceOpen,
-  } = StateStatus();
-// -------------------------------------------------------------
+    
 
     
   return (
   (
     <ColorModeContext.Provider value={colorMode}>
+      
     <ThemeProvider theme={theme}>
-    <CssBaseline enableColorScheme/>
+    <CssBaseline  enableColorScheme/>
+    
       <div className="maincontainer">
-        <NavBar/>
+        <NavBar darkMode={theme.palette.mode} handleDarkMode={colorMode.toggleColorMode}></NavBar>
 
       <header>
-        <Hero></Hero>
-        {theme.palette.mode} mode
-        <IconButton sx={ {m1: 1} } onClick={colorMode.toggleColorMode} color="inherit">
-          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-        </IconButton>
+        <Hero catList={typeCategory}></Hero>
       </header>
 
-      <NewResource handleNewResourceOpen={() => handleNewResourceOpen()}/>
-      <AddNewResource 
-        open={newResource} handleNewResourceClose={handleNewResourceClose}
-        newURL={newURL} setNewURL={setNewURL}
-      />
+      <Box display={showAddResource}>
+          <AddResourceFlow complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} />
+      </Box>
 
         <Box sx={{ width: 1400, minHeight: 377 }}>
         <Masonry columns={4} spacing={2}>
         {sampledata.map((item, index) => (
-          <PreviewItem key={item.id} videoId={ item.videoID } stage={item.stage} category={item.category} nowloading={nowloading} rating={item.rating} complexity={sampleComplexity} typeCategory={typeCategory} likes={item.likes} title={item.title} thumbnail={item.thumbnail} description={item.description} created_at={item.created_at}>
+          <PreviewItem key={item.id} id={item.id} videoURL={ item.videoURL } stage={item.stage} category={item.category} nowloading={nowloading} rating={item.rating} complexity={sampleComplexity} typeCategory={typeCategory} likes={item.likes} title={item.title} thumbnail={item.thumbnail} description={item.description} created_at={item.created_at} sampledata={sampledata} setsampledata={setsampledata}>
           {item.id}
-          
           </PreviewItem>
         ))}
         </Masonry>
         </Box>
         
-        <SiteFooter></SiteFooter>
+        <SiteFooter/>
       </div>
       
 

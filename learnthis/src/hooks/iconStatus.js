@@ -113,9 +113,16 @@ export default function IconStatus(props) {
   // Toggle like status
   // TODO pass like status to database
   const [like, setLike] = useState('default')
+  const [likes, setLikes] = useState(0)
   const addLike = (filter) => {
     if (filter === 'blur(0px)') {
-      like === 'purple'? setLike('default') : setLike('purple')
+      if (like === 'purple') {
+        setLike('default')
+        setLikes(likes - 1)
+      } else {
+        setLike('purple')
+        setLikes(likes + 1)
+      } 
     }
     return
   }
@@ -194,6 +201,8 @@ export default function IconStatus(props) {
     like,
     setLike,
     addLike,
+    likes,
+    setLikes,
 
     more,
     setMore,
