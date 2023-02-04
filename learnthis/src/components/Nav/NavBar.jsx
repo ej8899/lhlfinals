@@ -197,7 +197,7 @@ export default function PrimarySearchAppBar(props) {
     >
       {isAuth ? <MenuItem onClick={() => handleUserModals('profile')}>Profile</MenuItem> : null}
       {isAuth ? <MenuItem onClick={() => handleUserModals('account')}>My account</MenuItem> : null}
-      <MenuItem onClick={handleLoginForm}>Sign In</MenuItem>
+      {isAuth ? null : <MenuItem onClick={handleLoginForm}>Sign In</MenuItem>}
       <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>
       {isAuth ? <MenuItem onClick={() => handlelogout()}>Logout</MenuItem> : null}
     </Menu>
