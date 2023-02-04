@@ -6,6 +6,7 @@ import Modal from '@mui/material/Modal';
 import { Paper, Toolbar, Box, Grid } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
+import { AuthContext } from '../../hooks/handleUsers';
 
 
 

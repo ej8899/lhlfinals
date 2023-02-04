@@ -1,9 +1,21 @@
+// --------------------------------------------------------
+// React Imports
 import React from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import Fade from '@mui/material/Fade';
 import Grow from '@mui/material/Grow';
 import Collapse from '@mui/material/Collapse';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
+// --------------------------------------------------------
+
 
 export const NewBadge = (props) => {
 

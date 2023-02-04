@@ -1,6 +1,17 @@
+// --------------------------------------------------------
+// React Imports
 import * as React from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
+// --------------------------------------------------------
 
 export default function MultilineTextFields(props) {
   return (

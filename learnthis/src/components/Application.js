@@ -4,15 +4,15 @@ import Masonry from '@mui/lab/Masonry';
 import CssBaseline from '@mui/material/CssBaseline';
 // TODO This element needs to lazy load with 'shimmer' effect
 
+// userauth
+import { AuthProvider } from '../hooks/handleUsers.js';
+
 // light and dark mode switch / theme switch
 import {
   getDefaultTheme, ThemeContext
 } from "./ThemeContext.jsx";
-import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 // console log helper
 import zlog from "../helpers/zlog.js";
@@ -639,8 +639,8 @@ export default function Application(props) {
     
   return (
   (
+    
     <ColorModeContext.Provider value={colorMode}>
-      
     <ThemeProvider theme={theme}>
     <CssBaseline  enableColorScheme/>
     
@@ -671,9 +671,10 @@ export default function Application(props) {
 
 
       <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
-
+      
     </ThemeProvider>
     </ColorModeContext.Provider>
+    
     )
   );
 }

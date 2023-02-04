@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 export default function IconStatus(props) {
 
-  // -------------------------------------------------------------
+// -------------------------------------------------------------
   // Toggle Favourite Status
   // TODO pass favourite status to database
   const [favourite, setFavourite] = useState('default')
@@ -79,7 +79,6 @@ export default function IconStatus(props) {
     }
     return
   }
-
   const handleShareOpen = () => {
     if (filter === 'blur(0px)') {
       setShare('purple')
@@ -87,7 +86,6 @@ export default function IconStatus(props) {
     }
     return
   }
-
   const handleShareClose = () => {
     if (filter === 'blur(0px)') {
       setShare('default')
@@ -95,7 +93,6 @@ export default function IconStatus(props) {
     }
     return
   }
-
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
@@ -139,7 +136,6 @@ export default function IconStatus(props) {
 // -------------------------------------------------------------
   // Toggle star rating status
   // TODO pass star rating status to database
-
   const [star, setStar] = useState(null)
   const addStar = (num) => {
     // event.stopPropagation()
@@ -158,9 +154,6 @@ export default function IconStatus(props) {
     setAnchorEl(null);
   };
 // -------------------------------------------------------------
-
-
-
 
   return {
     favourite,
@@ -197,6 +190,8 @@ export default function IconStatus(props) {
     report,
     setReport,
     addReport,
+    filter,
+    setFilter,
 
     like,
     setLike,
@@ -215,10 +210,7 @@ export default function IconStatus(props) {
     anchorEl,
     setAnchorEl,
     handleClick,
-    handleCloseOut,
-
-    filter,
-    setFilter
+    handleCloseOut
   }
 
 }

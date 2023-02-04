@@ -1,17 +1,37 @@
+// --------------------------------------------------------
+// React Imports
 import React, {useState} from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
-import { useNavigate } from "react-router-dom";
-import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
-import { CloseModal } from '../Icons/close';
 import Button from '@mui/material/Button';
+// --------------------------------------------------------
 
+// --------------------------------------------------------
+// Material UI Icon Imports
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Import Manual Field Functions
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Import Helper Functions
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Import Icons Functions
+import { CloseModal } from '../Icons/close';
+// --------------------------------------------------------
 
 const style = {
   position: 'absolute',
@@ -51,29 +71,29 @@ export const AddNewResource= (props) => {
             Add New Resource
           </Typography>
           <Box>
-          <CloseModal handleClose={props.handleNewResourceClose}/>
+            <CloseModal handleClose={props.handleNewResourceClose}/>
           </Box>
         </Box>
-          <Box
-            sx={{
-              width: 500,
-              maxWidth: '100%',
-              m: 2
-            }}
-          >
-            <TextField 
-              fullWidth 
-              label="New Resource URL" 
-              id="fullWidth" 
-              value={props.newURL} 
-              onChange={(event) => props.setNewURL(event.target.value)}
-            />
+        <Box
+          sx={{
+            width: 500,
+            maxWidth: '100%',
+            m: 2
+          }}
+        >
+          <TextField 
+            fullWidth 
+            label="New Resource URL" 
+            id="fullWidth" 
+            value={props.newURL} 
+            onChange={(event) => props.setNewURL(event.target.value)}
+          />
         </Box>
         <Box display="flex" justifyContent="flex-end">
           <Button variant="contained" href="" onClick={() => props.handleNewResourceClose(props.fetchNewResource(props.newURL, props.isYoutubeUrl, props.getYoutubeVideoId ))} >
             Add
           </Button>
-          </Box>
+        </Box>
       </Box>
     </Modal>
   );

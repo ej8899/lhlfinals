@@ -1,12 +1,18 @@
+// --------------------------------------------------------
+// React Imports
 import * as React from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import Box from '@mui/material/Box';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { useSlotProps } from '@mui/base';
+// --------------------------------------------------------
 
 export default function InputWithIcon(props) {
   return (

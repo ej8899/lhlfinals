@@ -1,9 +1,21 @@
-import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
+// --------------------------------------------------------
+// React Imports
 import React from "react";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Tooltip from '@mui/material/Tooltip';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import Fade from '@mui/material/Fade';
+import { styled } from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
+import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// --------------------------------------------------------
+
 
 
 // ExpandMore Button for preview cards

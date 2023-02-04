@@ -29,6 +29,9 @@ import {  modalSignUp,
           modalSignIn
 } from './signinup.jsx';
 
+// userauth
+import { AuthContext } from '../../hooks/handleUsers.js';
+
 
 import AboutDialog from "../Modal/about.jsx"
 
@@ -76,10 +79,7 @@ export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  // userauth
-  // const { user, handleChange, handleLogin, handleLogout } = useContext(
-  //   //AuthContext
-  // );
+
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -107,6 +107,11 @@ export default function PrimarySearchAppBar(props) {
       setTextInput(event.target.value);
       zlog('info',"SEARCH BAR:",event.target.value)
   };
+
+
+  // userauth
+  const { isAuth, user, logoutf } = useContext(AuthContext);
+  zlog("debug","isAuth",isAuth)
 
   // LOGIN
   const [open, setOpen] = React.useState(false);
@@ -136,6 +141,9 @@ export default function PrimarySearchAppBar(props) {
       case 'ppolicy':
         setTitle("Privacy Policy...");
         //setContent(modalPrivacyPolicy());
+        break;
+      case 'logout':
+        logoutf();
         break;
       default:
         setTitle("oops.. not found");
@@ -259,6 +267,14 @@ export default function PrimarySearchAppBar(props) {
             {props.darkMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
 
+            <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ display: { xs: 'none', sm: 'block' } }} >
+            {user}
+            </Typography>
+            
             <IconButton
               size="large"
               edge="end"

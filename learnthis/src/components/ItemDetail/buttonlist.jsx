@@ -1,10 +1,22 @@
+// --------------------------------------------------------
+// React Imports
 import * as React from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
+// --------------------------------------------------------
 
 export default function ComboBox(props) {
 
   const listing = [];
+  
   props.listData.forEach((element, index) => {
     listing.push(element)
   });

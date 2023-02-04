@@ -17,8 +17,8 @@ export default function StateStatus() {
   const [domain, setDomain] = useState('')
 // -------------------------------------------------------------
 
-
 // -------------------------------------------------------------
+// State for complexity
 const [stage, setStage] = useState(null);
 
 const addSetStage = (rating) => {
@@ -127,7 +127,7 @@ const handleDeletingClose = () => {
 
 
 // -------------------------------------------------------------
-// State for my comments date
+// State for my comments data
 // TODO - add comments to database
   const [myComments, setMyComments] = useState('');
   const addMyComments = (comments) => {
@@ -261,16 +261,49 @@ const handleSavedClose =() => {
 // -------------------------------------------------------------
 
   return {
+    title,
+    setTitle,
+    thumbnail,
+    setThumbnail,
+
+    description,
+    setDesc,
+    descriptionExpanded,
+    setDescriptionExpanded,
+
+    category,
+    setCategory,
+    categoryExpanded,
+    setCategoryExpanded,
+
+    videoURL,
+    setVideoURL,
+    videoId,
+    setVideoId,
 
     domain, 
     setDomain,
     
-    openDeleted, 
-    setOpenDeleted,
-    openDeleting,
-    setOpenDeleting,
-    handleDeletingClose,
-    handleOpenDeleting,
+    stage,
+    setStage,
+    addSetStage,
+
+    expanded,
+    setExpanded,
+    handleExpandClick,
+
+    open,
+    setOpen,
+    handleClose,
+    handleOpen,
+
+    selectedResource,
+    setSelectedResource,
+
+    openReview, 
+    setOpenReview,
+    handleReviewOpen,
+    handleReviewClose,
 
     handleEditedClose,
     openEdited,
@@ -286,67 +319,12 @@ const handleSavedClose =() => {
     setOpenDelete,
     handleDeleteClose,
     handleOpenDelete,
-
-    openReview, 
-    setOpenReview,
-    handleReviewOpen,
-    handleReviewClose,
-
-    categoryExpanded,
-    setCategoryExpanded,
-
-    savingNewResource, 
-    setSavingNewResource,
-    savedNewResource, 
-    setSavedNewResource,
-    errorSavingNewResource, 
-    setSavingErrorNewResource,
-    handleSavedClose,
-
-    videoURL,
-    setVideoURL,
-    videoId,
-    setVideoId,
-
-    newResource,
-    setNewResource,
-    handleNewResourceClose,
-    handleNewResourceOpen,
-    newURL,
-    setNewURL,
-    addNewResource,
-    setAddNewResource,
-    fetchingNewResource,
-    setFetchingNewResource,
-    handleAddNewResourceClose,
-
-    title,
-    setTitle,
-    thumbnail,
-    setThumbnail,
-    description,
-    setDesc,
-    descriptionExpanded,
-    setDescriptionExpanded,
-
-    expanded,
-    setExpanded,
-    handleExpandClick,
-
-    stage,
-    setStage,
-    addSetStage,
-
-    category,
-    setCategory,
-
-    open,
-    setOpen,
-    handleClose,
-    handleOpen,
-
-    selectedResource,
-    setSelectedResource,
+    openDeleted, 
+    setOpenDeleted,
+    openDeleting,
+    setOpenDeleting,
+    handleDeletingClose,
+    handleOpenDeleting,
 
     myComments,
     setMyComments,
@@ -380,6 +358,26 @@ const handleSavedClose =() => {
     emailMyTo,
     emailSent,
     setEmailSent,
-    handleSharedClose
+    handleSharedClose,
+
+    savingNewResource, 
+    setSavingNewResource,
+    savedNewResource, 
+    setSavedNewResource,
+    errorSavingNewResource, 
+    setSavingErrorNewResource,
+    handleSavedClose,
+
+    newResource,
+    setNewResource,
+    handleNewResourceClose,
+    handleNewResourceOpen,
+    newURL,
+    setNewURL,
+    addNewResource,
+    setAddNewResource,
+    fetchingNewResource,
+    setFetchingNewResource,
+    handleAddNewResourceClose,
   };
 };

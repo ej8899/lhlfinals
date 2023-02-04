@@ -1,10 +1,21 @@
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
+// --------------------------------------------------------
+// React Imports
 import React from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
+import Tooltip from '@mui/material/Tooltip';
 import Fade from '@mui/material/Fade';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
+import Badge from '@mui/material/Badge';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
+import IconButton from '@mui/material/IconButton';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+// --------------------------------------------------------
 
 export const LikeStats = (props) => {
 

@@ -1,43 +1,27 @@
+// --------------------------------------------------------
+// React Imports
 import React, { useEffect, useRef, useState, useContext } from "react";
 import axios from "axios"; // npx install axios
-import zlog from "../../helpers/zlog";
-
-// --------------------------------------------------------
-// Material UI Icons
-import YouTubeIcon from '@mui/icons-material/YouTube';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
 // Material UI Imports
-import { blue } from '@mui/material/colors';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import Chip from '@mui/material/Chip';
-import Skeleton from '@mui/material/Skeleton';
-import Fade from '@mui/material/Fade';
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions, CardHeader, Icon } from '@mui/material';
 // --------------------------------------------------------
 
-import { getYoutubeVideoId, isYoutubeUrl } from "../../helpers/helpers";
+// --------------------------------------------------------
+// Material UI Icon Imports
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Import Manual Field Functions
 import { NewResource } from "../Icons/newResource";
 import { AddNewResource } from "../NewResource/newResource";
-import { EditResourceModal } from "./newResourceModal";
-
-// --------------------------------------------------------
-// React Router Imports
-import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
 // Import Helper Functions
-import { randomNumber, randomColor, truncateText, colorGenerator } from "../../helpers/helpers";
+import zlog from "../../helpers/zlog";
+import { getYoutubeVideoId, isYoutubeUrl } from "../../helpers/helpers";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -49,83 +33,53 @@ import IconStatus from '../../hooks/iconStatus'
 // --------------------------------------------------------
 
 // --------------------------------------------------------
-// Import Icons
-import { FavouriteStats } from '../Icons/favourite.jsx'
-import { LessonStats } from '../Icons/lesson.jsx'
-import { RateStats } from '../Icons/review.jsx'
-import { BookmarkStats } from "../Icons/bookmark";
-import { PlaylistStats } from "../Icons/playlist";
-import { ShareStats } from "../Icons/share";
-import { ReportStats } from "../Icons/report";
-import { LikeStats } from "../Icons/like";
-import { MoreStats } from "../Icons/hamburger";
-import { StarRating } from "../Icons/stars";
-import { ExpandIcon, ExpandMore } from "../Icons/expand";
-import { NewBadge } from "../Icons/newbadge";
+// Import Icons Functions
 // --------------------------------------------------------
-
 
 // --------------------------------------------------------
 // Import Modal
-import { DetailModal }  from "../ItemDetail/index.jsx";
-import { ShareModal } from "../Modal/share";
 import { StatusModal } from "../NewResource/status";
-import { SharedModal } from "../Modal/shared";
 import { ResultModal } from "./result";
+import { EditResourceModal } from "./newResourceModal";
 // --------------------------------------------------------
 
 
 export const AddResourceFlow = (props) => {
   const API_KEY = global.config.youtubekey;
 
-// -------------------------------------------------------------
+// --------------------------------------------------------
   // Import Hooks
   const {
-
-    savingNewResource, 
-    setSavingNewResource,
-    savedNewResource, 
-    setSavedNewResource,
-    errorSavingNewResource, 
-    setSavingErrorNewResource,
-    handleSavedClose,
-    
-    videoURL,
-    setVideoURL,
-    videoId,
-    setVideoId,
-
-    newResource,
-    setNewResource,
-    handleNewResourceClose,
-    handleNewResourceOpen,
-    newURL,
-    setNewURL,
-    addNewResource,
-    setAddNewResource,
-    fetchingNewResource,
-    setFetchingNewResource,
-    handleAddNewResourceClose,
-
     title,
     setTitle,
     thumbnail,
     setThumbnail,
+
     description,
     setDesc,
     descriptionExpanded,
     setDescriptionExpanded,
 
-    expanded,
-    setExpanded,
-    handleExpandClick,
+    category,
+    setCategory,
+    categoryExpanded,
+    setCategoryExpanded,
 
+    videoURL,
+    setVideoURL,
+    videoId,
+    setVideoId,
+
+    domain, 
+    setDomain,
+    
     stage,
     setStage,
     addSetStage,
 
-    category,
-    setCategory,
+    expanded,
+    setExpanded,
+    handleExpandClick,
 
     open,
     setOpen,
@@ -134,6 +88,32 @@ export const AddResourceFlow = (props) => {
 
     selectedResource,
     setSelectedResource,
+
+    openReview, 
+    setOpenReview,
+    handleReviewOpen,
+    handleReviewClose,
+
+    handleEditedClose,
+    openEdited,
+    setOpenEdited,
+    openEditing, 
+    setOpenEditing,
+    openEdit,
+    setOpenEdit,
+    handleOpenEdit,
+    handleEditClose,
+
+    openDelete,
+    setOpenDelete,
+    handleDeleteClose,
+    handleOpenDelete,
+    openDeleted, 
+    setOpenDeleted,
+    openDeleting,
+    setOpenDeleting,
+    handleDeletingClose,
+    handleOpenDeleting,
 
     myComments,
     setMyComments,
@@ -167,31 +147,56 @@ export const AddResourceFlow = (props) => {
     emailMyTo,
     emailSent,
     setEmailSent,
-    handleSharedClose
-  } = StateStatus();
-// -------------------------------------------------------------
+    handleSharedClose,
 
-// -------------------------------------------------------------
+    savingNewResource, 
+    setSavingNewResource,
+    savedNewResource, 
+    setSavedNewResource,
+    errorSavingNewResource, 
+    setSavingErrorNewResource,
+    handleSavedClose,
+
+    newResource,
+    setNewResource,
+    handleNewResourceClose,
+    handleNewResourceOpen,
+    newURL,
+    setNewURL,
+    addNewResource,
+    setAddNewResource,
+    fetchingNewResource,
+    setFetchingNewResource,
+    handleAddNewResourceClose
+  } = StateStatus();
+// --------------------------------------------------------
+
+// --------------------------------------------------------
 // Import Icon Status
   const {
     favourite,
     setFavourite,
     addFavourites,
+
     lesson,
     setLesson,
     addLesson,
+
     rate,
     setRate,
     addRate,
     rateReview,
     show,
     setShow,
+
     bookmark,
     setBookmark,
     addBookmark,
+
     playlist,
     setPlaylist,
     addPlaylist,
+
     share,
     setShare,
     addShare,
@@ -199,37 +204,44 @@ export const AddResourceFlow = (props) => {
     setShareOpen,
     handleShareClose,
     handleShareOpen,
+
     report,
     setReport,
     addReport,
+    filter,
+    setFilter,
+
     like,
     setLike,
     addLike,
+    likes,
+    setLikes,
+
     more,
     setMore,
     addMore,
+
     star,
     setStar,
     addStar,
+
     anchorEl,
     setAnchorEl,
     handleClick,
-    handleCloseOut,
-    filter,
-    setFilter
+    handleCloseOut
   } = IconStatus();
+// --------------------------------------------------------
 
-// -------------------------------------------------------------
 
+// --------------------------------------------------------
+// TODO -- Need to add when not a youtube resource
+// Fetch from API new resource
   const fetchNewResource = (URL, isYoutubeUrl, getYoutubeVideoId) => {
-
     setFetchingNewResource(true)
-  
     if (isYoutubeUrl(URL)) {
       const videoId =  getYoutubeVideoId(URL)
       setVideoId(videoId)
       setVideoURL(URL)
-
       axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`)
     // axios.get(`https://www.googleapis.com/`)
       .then(response => { 
@@ -241,7 +253,6 @@ export const AddResourceFlow = (props) => {
         setTitle(response.data.items[0].snippet.title)
         setDescriptionExpanded(response.data.items[0].snippet.description)
         setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
-
         /*
         REFERENCE:
         useful items in response data:
@@ -269,58 +280,59 @@ export const AddResourceFlow = (props) => {
       }, 2000)
     }
   }
-
-    // TODO - sample data - need to tie difference between user and overall && need axios put
-    const addingNewResourceSQL = () => {
-      setSavingNewResource(true)
-
-      const newURLResource = {
-        "id" : props.sampledata.length + 1,
-        "videoURL" : newURL,
-        "created_at" : new Date().toISOString(),
-        "title" : title,
-        "thumbnail" : thumbnail,
-        "description" : descriptionExpanded,
-        "category" : myCategory,
-        "stage" : myStage,
-        "rating" : star,
-        "likes" : like === "default" ? 0 : 1
-      }
-
-      props.setsampledata([...props.sampledata, newURLResource]);
-      // window.location.reload(true);
-
-      setTimeout(() => {
-        setSavingNewResource(false)
-        setSavedNewResource(true)
-        setNewURL('')
-      }, 2000)
-    }
-
+// --------------------------------------------------------
 
 // --------------------------------------------------------
+// Adding new resource to SQL database
+  // TODO - sample data - need to tie difference between user and overall && need axios put
+  const addingNewResourceSQL = () => {
+    setSavingNewResource(true)
+
+    const newURLResource = {
+      "id" : props.sampledata.length + 1,
+      "videoURL" : newURL,
+      "created_at" : new Date().toISOString(),
+      "title" : title,
+      "thumbnail" : thumbnail,
+      "description" : descriptionExpanded,
+      "category" : myCategory,
+      "stage" : myStage,
+      "rating" : star,
+      "likes" : like === "default" ? 0 : 1
+    }
+
+    props.setsampledata([...props.sampledata, newURLResource]);
+    // window.location.reload(true);
+    setTimeout(() => {
+      setSavingNewResource(false)
+      setSavedNewResource(true)
+      setNewURL('')
+    }, 2000)
+  }
+// --------------------------------------------------------
+
   return (
     <div>
-    <NewResource handleNewResourceOpen={() => handleNewResourceOpen()}/>
-    <AddNewResource 
-      open={newResource} handleNewResourceClose={handleNewResourceClose}
-      newURL={newURL} setNewURL={setNewURL} 
-      fetchNewResource={fetchNewResource} 
-      isYoutubeUrl={isYoutubeUrl} getYoutubeVideoId={getYoutubeVideoId}
-    />
-    <StatusModal 
-      open={fetchingNewResource} setStatusOpen={setFetchingNewResource} message={"Fetching New Resource"}
-    />
-    <StatusModal 
-      open={savingNewResource} setStatusOpen={setSavingNewResource} message={"Saving New Resource"}
-    />
-    <ResultModal 
-      open={savedNewResource} setStatusOpen={setSavedNewResource} 
-      handleClose={() => handleSavedClose()} 
-      message={"Success! Resource has been added."} submessage={"Checkout 'My Resources' for resources you've added."}
-      thumbnail={thumbnail} title={title}
-    />
-    <EditResourceModal 
+      <NewResource handleNewResourceOpen={() => handleNewResourceOpen()}/>
+      <AddNewResource 
+        open={newResource} handleNewResourceClose={handleNewResourceClose}
+        newURL={newURL} setNewURL={setNewURL} 
+        fetchNewResource={fetchNewResource} 
+        isYoutubeUrl={isYoutubeUrl} getYoutubeVideoId={getYoutubeVideoId}
+      />
+      <StatusModal 
+        open={fetchingNewResource} setStatusOpen={setFetchingNewResource} message={"Fetching New Resource"}
+      />
+      <StatusModal 
+        open={savingNewResource} setStatusOpen={setSavingNewResource} message={"Saving New Resource"}
+      />
+      <ResultModal 
+        open={savedNewResource} setStatusOpen={setSavedNewResource} 
+        handleClose={() => handleSavedClose()} 
+        message={"Success! Resource has been added."} submessage={"Checkout 'My Resources' for resources you've added."}
+        thumbnail={thumbnail} title={title}
+      />
+      <EditResourceModal 
         open={addNewResource} setOpen={setAddNewResource} 
         handleClose={() => handleAddNewResourceClose()} 
         addingNewResourceSQL={addingNewResourceSQL}
@@ -345,6 +357,5 @@ export const AddResourceFlow = (props) => {
     </div>
   );
 };
-// --------------------------------------------------------
 
 export default AddResourceFlow

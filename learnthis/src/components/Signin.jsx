@@ -15,6 +15,13 @@ import Dialog from '@mui/material/Dialog';
 
 import { styled } from '@mui/material/styles';
 
+// userauth
+import { useContext } from 'react';
+import { AuthContext } from '../hooks/handleUsers.js';
+
+
+import zlog from '../helpers/zlog.js';
+
 // TODO - add a "close" button to this modal box
 // TODO - add the content for 'singup'
 // TODO - add the content for 'forgot'
@@ -45,15 +52,41 @@ function Copyright(props) {
 
 const Login=(props)=>{
 
-    const handleSubmit = (event) => {
+    // userauth
+    const { loginf } = useContext(AuthContext);
+    zlog('info',"authLOGIN:",loginf)
+
+    const handleSubmit = async (event) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
+
+      const username = data.get('email');
+      const password = data.get('password')
       console.log({
-        email: data.get('email'),
-        password: data.get('password'),
+        email: username,
+        password: password,
       });
+
+      const success = await loginf(username, password);
+      if (success) {
+        console.log('Login Successful!');
+      } else {
+        console.log('Login Failed');
+      }
       props.close();
     };
+
+
+    
+    // const handleSubmit = (event) => {
+    //   event.preventDefault();
+    //   const data = new FormData(event.currentTarget);
+    //   console.log({
+    //     email: data.get('email'),
+    //     password: data.get('password'),
+    //   });
+    //   props.close();
+    // };
 
     return(
 <BootstrapDialog

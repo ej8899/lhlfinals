@@ -1,7 +1,19 @@
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
+// --------------------------------------------------------
+// React Imports
 import React from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
+import Tooltip from '@mui/material/Tooltip';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
+import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+// --------------------------------------------------------
+
 
 export const CloseModal = (props) => {
 

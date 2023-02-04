@@ -1,20 +1,41 @@
+// --------------------------------------------------------
+// React Imports
 import React, {useState} from 'react';
+import YouTube from 'react-youtube'; // npx install react-youtube
+import { Route, Routes, useLocation, Outlet, Link } from "react-router-dom";
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
-import YouTube from 'react-youtube'; // npx install react-youtube
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import { Route, Routes, useLocation, Outlet, Link } from "react-router-dom";
 import TextField from '@mui/material/TextField';
-//-------------------------------------------------------------------
+import Button from '@mui/material/Button';
+import CardMedia from '@mui/material/CardMedia';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Import Manual Field Functions
 import MultilineTextFields from '../ItemDetail/commentbox';
 import Tags from '../ItemDetail/multichoice';
-//-------------------------------------------------------------------
+import DiscreteSliderMarks from '../ItemDetail/slider';
+// --------------------------------------------------------
 
-//-------------------------------------------------------------------
+// --------------------------------------------------------
+// Import Helper Functions
+import { isYoutubeUrl, getYoutubeVideoId, extractDomain } from '../../helpers/helpers';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
 // Import Icons Functions
 import { FavouriteStaleStats} from '../Icons/favourite.jsx'
 import { LessonStaleStats} from '../Icons/lesson.jsx'
@@ -26,12 +47,7 @@ import { ReportStaleStats } from '../Icons/report';
 import { LikeStaleStats } from '../Icons/like';
 import { CloseModal } from '../Icons/close';
 import { StarStaleRating } from '../Icons/stars';
-import DiscreteSliderMarks from '../ItemDetail/slider';
-import Button from '@mui/material/Button';
-import { isYoutubeUrl, getYoutubeVideoId, extractDomain } from '../../helpers/helpers';
-import CardMedia from '@mui/material/CardMedia';
-
-//-------------------------------------------------------------------
+// --------------------------------------------------------
 
 const style = {
   position: 'absolute',
@@ -48,8 +64,6 @@ const style = {
   p: 4,
 };
 
-//-------------------------------------------------------------------
-// TODO pass props to this component w data
 export const EditResourceModal = (props) => {
 
   // reference: https://www.npmjs.com/package/react-youtube
@@ -62,7 +76,6 @@ export const EditResourceModal = (props) => {
     border: '2px solid #000'
     },
   };
-
 
   return (
     <Modal
@@ -80,16 +93,16 @@ export const EditResourceModal = (props) => {
       <Fade in={props.open}>
         <Box sx={style}>
           <Box display="flex" width="100%" justifyContent="space-between" alignItems="center" sx={{marginBottom : 2}}>
-              <TextField
-                required
-                id="outlined-required"
-                sx={{width:"95%"}}
-                label="Choose Title"
-                value={props.title}
-                onChange={(event) => props.setTitle(event.target.value)}
-              />
+            <TextField
+              required
+              id="outlined-required"
+              sx={{width:"95%"}}
+              label="Choose Title"
+              value={props.title}
+              onChange={(event) => props.setTitle(event.target.value)}
+            />
             <Box>
-            <CloseModal handleClose={props.handleClose}/>
+              <CloseModal handleClose={props.handleClose}/>
             </Box>
           </Box>
           <Box display="flex" width="100%" justifyContent="space-around">
@@ -114,25 +127,23 @@ export const EditResourceModal = (props) => {
                 </Box>
               }
               <Box display={props.show} alignItems="center" marginTop="1rem">
-              <DiscreteSliderMarks label={"Rate Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage} sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
-                  <Tags listData={props.typeCategory} message={'Select the lesson category...'} mySelection={props.myCategory} addMySelection={props.addMyCategory}/>
+                <DiscreteSliderMarks label={"Rate Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage} sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
+                <Tags listData={props.typeCategory} message={'Select the lesson category...'} mySelection={props.myCategory} addMySelection={props.addMyCategory}/>
               </Box>
               <Box display={props.show}>
-              <Box  flexDirection="row" sx={{mt : 1.5}}>
+                <Box  flexDirection="row" sx={{mt : 1.5}}>
                 Rate This Resource: <StarStaleRating star={props.star} addStar={props.addStar}/>
-              </Box>
+                </Box>
               </Box>
             </Box>
-     
             <Box display={props.show} flexDirection="column" >
               <MultilineTextFields display={props.show} myComments={props.descriptionExpanded} addMyComments={props.setDescriptionExpanded} rows={19} width={"40ch"} label={'Resource Description'} placeholder={"Add resource description here."} marginLeft={1}/>
-            <Box display="flex" justifyContent="flex-end" sx={{m:1}}>
-              <Button variant="contained" sx={{width: "5em"}} href="" onClick={() => props.handleClose(props.addingNewResourceSQL())} >
-                Save
-              </Button>
+              <Box display="flex" justifyContent="flex-end" sx={{m:1}}>
+                <Button variant="contained" sx={{width: "5em"}} href="" onClick={() => props.handleClose(props.addingNewResourceSQL())} >
+                  Save
+                </Button>
+              </Box>
             </Box>
-          </Box>
-
             <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around" paddingBottom="3rem" paddingLeft="0.8em">
               <FavouriteStaleStats favourite={props.favourite} addFavourites={props.addFavourites}/>
               <LikeStaleStats like={props.like} addLike={props.addLike} />
@@ -141,11 +152,8 @@ export const EditResourceModal = (props) => {
               <PlaylistStaleStats playlist={props.playlist} addPlaylist={props.addPlaylist} />
             </Typography>
           </Box>
-
         </Box>
       </Fade>
-
     </Modal>
-
   );
 }

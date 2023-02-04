@@ -1,35 +1,26 @@
+// --------------------------------------------------------
+// React Imports
 import React, {useState} from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
-import { useNavigate } from "react-router-dom";
-import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom";
-import Divider from '@mui/material/Divider';
-import SendIcon from '@mui/icons-material/Send';
+import Button from '@mui/material/Button';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
 import DeleteIcon from '@mui/icons-material/Delete';
-
-
-//-------------------------------------------------------------------
-import MultilineTextFields from '../ItemDetail/commentbox';
-import InputWithIcon from '../ItemDetail/emailbox';
-//-------------------------------------------------------------------
-
-import { isYoutubeUrl, getYoutubeVideoId } from '../../helpers/helpers';
-
+// --------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Import Icons Functions
 import { CloseModal } from '../Icons/close';
-import { Tooltip } from '@mui/material';
-//-------------------------------------------------------------------
-
-//-------------------------------------------------------------------
-// Copy to Clipboard & Share
-import CopyToClipboardButton from '../Icons/copyclipboard';
-import Button from '@mui/material/Button';
 //-------------------------------------------------------------------
 
 const style = {
@@ -64,21 +55,20 @@ export const DeleteModal= (props) => {
       }}
       disableScrollLock={true}
     >
-        <Box sx={style}>
-          <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
-            <Typography variant='h6' textAlign="center">
-              Delete Resource
-            </Typography>
-            <Box>
-            <CloseModal handleClose={props.handleClose}/>
-            </Box>
-          </Box>
-          <Typography style={{ marginLeft : 8, marginBottom : 10}}>
-          {props.title}
-
+      <Box sx={style}>
+        <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
+          <Typography variant='h6' textAlign="center">
+            Delete Resource
           </Typography>
-          <Box display="flex" width="100%" justifyContent="space-around" flexDirection="column" >
-            <Box display="flex" width="100%" justifyContent="center" >
+          <Box>
+            <CloseModal handleClose={props.handleClose}/>
+          </Box>
+        </Box>
+        <Typography style={{ marginLeft : 8, marginBottom : 10}}>
+        {props.title}
+        </Typography>
+        <Box display="flex" width="100%" justifyContent="space-around" flexDirection="column" >
+          <Box display="flex" width="100%" justifyContent="center" >
             <Box display="flex" width="55%" justifyContent="center">
               <CardMedia
                 component="img"
@@ -88,24 +78,23 @@ export const DeleteModal= (props) => {
                 alt={props.title}
                 sx={{marginBottom : 2}}
               />
-              </Box>
-              </Box>
-
-            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-              <Typography>
-                Are you sure you want to delete the resource?
-              </Typography>
-            </Box>
-            <Box display="flex" justifyContent="space-evenly" sx={{ m: 2 }}>
-                <Button variant="contained" href="" onClick={() => props.handleClose()} >
-                  Cancel
-                </Button>
-                <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleClose(props.handleOpenDeleting())} startIcon={<DeleteIcon />}>
-                    Delete
-                </Button>
-              </Box>
             </Box>
           </Box>
+          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+            <Typography>
+              Are you sure you want to delete the resource?
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="space-evenly" sx={{ m: 2 }}>
+            <Button variant="contained" href="" onClick={() => props.handleClose()} >
+              Cancel
+            </Button>
+            <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleClose(props.handleOpenDeleting())} startIcon={<DeleteIcon />}>
+                Delete
+            </Button>
+          </Box>
+        </Box>
+      </Box>
     </Modal>
   );
 }

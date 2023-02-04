@@ -1,48 +1,45 @@
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
+// --------------------------------------------------------
+// React Imports
 import React from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
+import Tooltip from '@mui/material/Tooltip';
 import Fade from '@mui/material/Fade';
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarHalfIcon from '@mui/icons-material/StarHalf';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Icon Imports
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import IconButton from '@mui/material/IconButton';
+import StarHalfIcon from '@mui/icons-material/StarHalf'
+// --------------------------------------------------------
+
 
 export const StarRating = (props) => {
 
-  // Star Rating Generator
-  const Stars = (props) => {
-    const stars = Math.round(props.rating * 100) / 100;
-    const finalstars = [];
-    for (let i=0; i<Math.trunc(stars); i++) {
-      finalstars.push(<StarIcon key={i}/>)
-    }
-    stars-Math.trunc(stars) < 0.2 ? finalstars.push(<StarBorderIcon key={4}/>) : stars-Math.trunc(stars) > 0.9 ? finalstars.push(<StarIcon key={4}/>): finalstars.push(<StarHalfIcon key={4}/>)
-    for (let j=0; j<5-Math.trunc(stars)-1; j++) {
-      finalstars.push(<StarBorderIcon key={j+5}/>)
-    }
+  // Star Rating Generator NOT USED
+  // const Stars = (props) => {
+  //   const stars = Math.round(props.rating * 100) / 100;
+  //   const finalstars = [];
+  //   for (let i=0; i<Math.trunc(stars); i++) {
+  //     finalstars.push(<StarIcon key={i}/>)
+  //   }
+  //   stars-Math.trunc(stars) < 0.2 ? finalstars.push(<StarBorderIcon key={4}/>) : stars-Math.trunc(stars) > 0.9 ? finalstars.push(<StarIcon key={4}/>): finalstars.push(<StarHalfIcon key={4}/>)
+  //   for (let j=0; j<5-Math.trunc(stars)-1; j++) {
+  //     finalstars.push(<StarBorderIcon key={j+5}/>)
+  //   }
 
-    return (
-      <React.Fragment>
-        {finalstars}
-      </React.Fragment>
-    )
-  }
-
-
-    return (
-      <Stack spacing={1}>
-        <Tooltip title={props.ratingScore} >
-        <IconButton sx={{ "&:hover": { cursor: "auto"} }}>
-          <Rating name="half-rating-read" defaultValue={props.rating} precision={0.5} readOnly />
-          </IconButton>
-        </Tooltip>
-      </Stack>
-    );
-  }
-
-
-
+  //   return (
+  //     <React.Fragment>
+  //       {finalstars}
+  //     </React.Fragment>
+  //   )
+  // }
 
   // return (
   //   <Tooltip title={props.ratingScore} >
@@ -52,6 +49,22 @@ export const StarRating = (props) => {
   //   </Tooltip>
   // )
 // }
+
+  return (
+    <Stack spacing={1}>
+      <Tooltip title={props.ratingScore} >
+      <IconButton sx={{ "&:hover": { cursor: "auto"} }}>
+        <Rating name="half-rating-read" defaultValue={props.rating} precision={0.5} readOnly />
+        </IconButton>
+      </Tooltip>
+    </Stack>
+  );
+}
+
+
+
+
+
 
  
 export const StarStaleRating = (props) => {
@@ -87,67 +100,68 @@ export const StarStaleRating = (props) => {
   //   )
   // }
 
-  const rating = [];
-  const fullStars = props.star;
-  const emptyStars = 5 - props.star;
-  let index = 0
+  // // Manual Star rating - NOW USED
+  // const rating = [];
+  // const fullStars = props.star;
+  // const emptyStars = 5 - props.star;
+  // let index = 0
 
-  const WholeStarRating = (num) => {
-    let numStars = ""
-    if (num === 0) {
-      numStars = `Rate ${num + 1} Star`
-    } else {
-      numStars = `Rate ${num + 1} Stars`
-    }
+  // const WholeStarRating = (num) => {
+  //   let numStars = ""
+  //   if (num === 0) {
+  //     numStars = `Rate ${num + 1} Star`
+  //   } else {
+  //     numStars = `Rate ${num + 1} Stars`
+  //   }
 
-    return (
-      <Tooltip key={num} title={numStars}>
-        <IconButton key={num} aria-label="share" sx={{ color: 'orange', "&:hover": {color: 'orange', backgroundColor: '#fff'}}} onClick={(event) => props.addStar(event, num)}>
-          <StarIcon/>
-        </IconButton>
-      </Tooltip>
-    )  
-  }
+  //   return (
+  //     <Tooltip key={num} title={numStars}>
+  //       <IconButton key={num} aria-label="share" sx={{ color: 'orange', "&:hover": {color: 'orange', backgroundColor: '#fff'}}} onClick={(event) => props.addStar(event, num)}>
+  //         <StarIcon/>
+  //       </IconButton>
+  //     </Tooltip>
+  //   )  
+  // }
 
-  const EmptyStarRating = (num) => {
-    let numStars = ""
-    if (num === 0) {
-      numStars = `Rate ${num + 1} Star`
-    } else {
-      numStars = `Rate ${num + 1} Stars`
-    }
+  // const EmptyStarRating = (num) => {
+  //   let numStars = ""
+  //   if (num === 0) {
+  //     numStars = `Rate ${num + 1} Star`
+  //   } else {
+  //     numStars = `Rate ${num + 1} Stars`
+  //   }
 
-    return (
-      <Tooltip key={num} title={numStars}>
-        <IconButton key={num} aria-label="share" sx={{"&:hover": {color: 'orange', backgroundColor: '#fff'} }} onClick={(event) => props.addStar(event, num)}>
-          <StarBorderIcon key={num}/>
-        </IconButton>
-      </Tooltip>
-    )  
-  }
+  //   return (
+  //     <Tooltip key={num} title={numStars}>
+  //       <IconButton key={num} aria-label="share" sx={{"&:hover": {color: 'orange', backgroundColor: '#fff'} }} onClick={(event) => props.addStar(event, num)}>
+  //         <StarBorderIcon key={num}/>
+  //       </IconButton>
+  //     </Tooltip>
+  //   )  
+  // }
 
-  for (let y = 0; y < fullStars; y++) {
-    rating.push(WholeStarRating(index))
-    index ++
-  }
+  // for (let y = 0; y < fullStars; y++) {
+  //   rating.push(WholeStarRating(index))
+  //   index ++
+  // }
 
-  for (let x = 0; x < emptyStars; x++) {
-    rating.push(EmptyStarRating(index))
-    index ++
-  }
+  // for (let x = 0; x < emptyStars; x++) {
+  //   rating.push(EmptyStarRating(index))
+  //   index ++
+  // }
 //All above in this function is not needed or used
 
   return (
-      <IconButton aria-label="share">
-        <Rating 
-          name="simple-controlled"
-          value={props.star}
-          onChange={(event, newValue) => {
-          props.addStar(newValue);
-          }}
-          precision={0.5} 
-          disabled={props.disabled}
-        />
-      </IconButton>
+    <IconButton aria-label="share">
+      <Rating 
+        name="simple-controlled"
+        value={props.star}
+        onChange={(event, newValue) => {
+        props.addStar(newValue);
+        }}
+        precision={0.5} 
+        disabled={props.disabled}
+      />
+    </IconButton>
   )  
 }

@@ -1,36 +1,34 @@
+// --------------------------------------------------------
+// React Imports
 import React, {useState} from 'react';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
-import { useNavigate } from "react-router-dom";
-import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom";
-import Divider from '@mui/material/Divider';
+// --------------------------------------------------------
 
+// --------------------------------------------------------
+// Material UI Icon Imports
+// --------------------------------------------------------
 
-//-------------------------------------------------------------------
-import MultilineTextFields from '../ItemDetail/commentbox';
-import InputWithIcon from '../ItemDetail/emailbox';
-//-------------------------------------------------------------------
+// --------------------------------------------------------
+// Import Manual Field Functions
+// --------------------------------------------------------
 
+// --------------------------------------------------------
+// Import Helper Functions
+// --------------------------------------------------------
 
-import Stack from '@mui/material/Stack';
-import CircularProgress from '@mui/material/CircularProgress';
-
-
-//-------------------------------------------------------------------
+// --------------------------------------------------------
 // Import Icons Functions
 import { CloseModal } from '../Icons/close';
-import { Tooltip } from '@mui/material';
-//-------------------------------------------------------------------
-
-//-------------------------------------------------------------------
-// Copy to Clipboard & Share
-import CopyToClipboardButton from '../Icons/copyclipboard';
-import Button from '@mui/material/Button';
-//-------------------------------------------------------------------
+// --------------------------------------------------------
 
 const style = {
   position: 'absolute',
@@ -47,8 +45,6 @@ const style = {
   p: 4,
 };
 
-//-------------------------------------------------------------------
-// TODO pass props to this component w data
 // TODO - bottom where my resource - add anchor to link?
 export const ResultModal= (props) => {
 
@@ -70,7 +66,7 @@ export const ResultModal= (props) => {
             {props.title}
           </Typography>
           <Box>
-          <CloseModal handleClose={props.handleClose}/>
+            <CloseModal handleClose={props.handleClose}/>
           </Box>
         </Box>
         <Box display="flex" width="100%" justifyContent="space-around" flexDirection="column" >

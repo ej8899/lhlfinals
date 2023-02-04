@@ -86,11 +86,11 @@ export default function PersistentDrawerLeft(props) {
             <ListItem key={text} disablePadding onClick={() => handleClick(text)}>
               <ListItemButton>
                 <ListItemIcon>
-                  {index === 0 ? <AddCircleIcon/> : <null/>}
-                  {index === 1 ? <HomeIcon/> : <null/>}
-                  {index === 2 ? <FavoriteIcon/> : <null/>}
-                  {index === 3 ? <BookmarkIcon/> : <null/>}
-                  {index === 4 ? <ListIcon/> : <null/>}
+                  {index === 0 ? <AddCircleIcon/> : <span/>}
+                  {index === 1 ? <HomeIcon/> : <span/>}
+                  {index === 2 ? <FavoriteIcon/> : <span/>}
+                  {index === 3 ? <BookmarkIcon/> : <span/>}
+                  {index === 4 ? <ListIcon/> : <span/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -103,8 +103,8 @@ export default function PersistentDrawerLeft(props) {
             <ListItem key={text} disablePadding onClick={() => handleClick(text)}>
               <ListItemButton>
                 <ListItemIcon>
-                  {index === 0 ? <ReportIcon/> : <null/>}
-                  {index === 1 ? <DeleteIcon/> : <null/>}
+                  {index === 0 ? <ReportIcon/> : <span/>}
+                  {index === 1 ? <DeleteIcon/> : <span/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
