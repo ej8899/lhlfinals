@@ -77,7 +77,7 @@ export default function Hero(props) {
           <ChipsArray catList={props.catList}></ChipsArray>
           <Stack direction="row" spacing={1} sx={{alignItems: "flex-end"}}>
           {chipData.map((chip, index) => (
-            <div><DoDivider type={chip} key={index} label={chip} color="success" variant={filled[index] ? "default" : "outlined"}
+            <div key={index}><DoDivider type={chip} key={index} label={chip} color="success" variant={filled[index] ? "default" : "outlined"}
             onClick={()=> {handleClick(index)}}
             ></DoDivider>
             </div>
