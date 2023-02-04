@@ -1,8 +1,8 @@
 module.exports = function(router, database) {
-  // Get profiles
-  router.get('/', async (req, res) => {
-    const { email } = req.body;
-    const profiles = await database.getProfilesWithUserEmail(email)
+  // Get profiles with user id
+  router.get('/user/:id', async (req, res) => {
+    const { id } = req.params;
+    const profiles = await database.getProfilesWithUserId(id)
                         .catch(err => res.status(500).json({ error: err.message }));
 
     if (!profiles) {
@@ -18,7 +18,27 @@ module.exports = function(router, database) {
         success: "Profiles found",
         profiles,
     });
+  });
 
+  // Get a profile with profile id
+  router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    const profile = await database.getProfileWithId(id)
+                        .catch(err => res.status(500).json({ error: err.message }));
+
+    if (!profile) {
+      res
+        .status(500)
+        .json({ error: "The profile has not been existing" });
+      return;
+    }
+
+    res
+      .status(200)
+      .json({
+        success: "Profile found",
+        profile,
+    });
   });
 
   // Create a profile
@@ -44,9 +64,10 @@ module.exports = function(router, database) {
   });
 
   // Update a profile
-  router.put('/', async (req, res) => {
+  router.put('/:id', async (req, res) => {
+    const { id } = req.params;
     const profile = req.body;
-    const updatedProfile = await database.updateProfilerWithId(profile)
+    const updatedProfile = await database.updateProfilerWithId({ id, ...profile })
                           .catch(err => res.status(500).json({ error: err.message }));
 
     if (!updatedProfile) {
@@ -65,8 +86,8 @@ module.exports = function(router, database) {
   });
 
   // Delete a Profile
-  router.delete('/', async (req, res) => {
-    const { id } = req.body;
+  router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
     const deletedProfile = await database.deleteProfileWithId(id)
                           .catch(err => res.status(500).json({ error: err.message }));
 
