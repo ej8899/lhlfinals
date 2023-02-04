@@ -639,7 +639,7 @@ export default function Application(props) {
     
   return (
   (
-    
+    <AuthProvider>
     <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
     <CssBaseline  enableColorScheme/>
@@ -674,7 +674,7 @@ export default function Application(props) {
       
     </ThemeProvider>
     </ColorModeContext.Provider>
-    
+    </AuthProvider>
     )
   );
 }

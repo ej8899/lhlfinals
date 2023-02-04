@@ -19,13 +19,15 @@ const sampleUserData = [
   }
 ];
 
-export const AuthContext = React.createContext(noUser);
+
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState("nouser");
+  const [userid, setUserid] = useState("0");
 
-  const loginf = async (username, password) => {
+  const login = async (username, password) => {
     try {
       // const response = await axios.post('http://localhost:5000/login', {
       //   username,
@@ -33,16 +35,18 @@ export const AuthProvider = ({ children }) => {
       // });
 
       // setUser(response.data.user);
-      setUser(username);
+      setUser("ernie")
       setIsAuth(true);
+      setUserid("1");
       return true;
     } catch (error) {
       return false;
     }
   };
 
-  const logoutf = () => {
-    setUser({});
+  const logout = () => {
+    setUser("nouser");
+    setUserid('0')
     setIsAuth(false);
   };
 
@@ -51,11 +55,13 @@ export const AuthProvider = ({ children }) => {
       value={{
         isAuth,
         user,
-        loginf,
-        logoutf,
+        userid,
+        login,
+        logout,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+

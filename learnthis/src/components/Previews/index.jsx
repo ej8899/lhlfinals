@@ -199,13 +199,16 @@ export const PreviewItem = (props) => {
     emailMyTo,
     emailSent,
     setEmailSent,
-    handleSharedClose
+    handleSharedClose,
+    handleAddNewResourceAbort
   } = StateStatus();
 // --------------------------------------------------------
 
 // --------------------------------------------------------
 // Import Icon Status
   const {
+    handleIconReset,
+
     favourite,
     setFavourite,
     addFavourites,
@@ -549,6 +552,7 @@ export const PreviewItem = (props) => {
           <EditResourceModal 
             open={openEdit} setOpen={setOpenEdit} 
             handleClose={() => handleEditClose()} 
+            handleAbort={() => handleEditClose()}
             addingNewResourceSQL={updatingResourceSQL}
             videoURL={videoURL} thumbnail={thumbnail}
             title={title} setTitle={setTitle} domain={domain}

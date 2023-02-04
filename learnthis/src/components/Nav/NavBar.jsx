@@ -23,7 +23,6 @@ import PersistentDrawerLeft from "./LeftMenu.jsx";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-//import { AuthContext } from '../../hooks/handleUsers';
 
 import {  modalSignUp,
           modalSignIn
@@ -110,8 +109,10 @@ export default function PrimarySearchAppBar(props) {
 
 
   // userauth
-  const { isAuth, user, logoutf } = useContext(AuthContext);
-  zlog("debug","isAuth",isAuth)
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+  zlog("debug","user:",user)
+  zlog("debug","userid:",userid)
+  zlog("debug","isAuth:",isAuth)
 
   // LOGIN
   const [open, setOpen] = React.useState(false);
@@ -143,7 +144,7 @@ export default function PrimarySearchAppBar(props) {
         //setContent(modalPrivacyPolicy());
         break;
       case 'logout':
-        logoutf();
+        logout();
         break;
       default:
         setTitle("oops.. not found");
@@ -154,6 +155,11 @@ export default function PrimarySearchAppBar(props) {
   }
   const handleClose = () => setOpen(false);
 
+  function handlelogout() {
+    setAnchorEl(null);
+    handleMenuClose();
+    logout();
+  }
 
   // SIGN IN
   const [loginopen, setLOpen] = React.useState(false);
@@ -189,11 +195,11 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => handleUserModals('profile')}>Profile</MenuItem>
-      <MenuItem onClick={() => handleUserModals('account')}>My account</MenuItem>
+      {isAuth ? <MenuItem onClick={() => handleUserModals('profile')}>Profile</MenuItem> : null}
+      {isAuth ? <MenuItem onClick={() => handleUserModals('account')}>My account</MenuItem> : null}
       <MenuItem onClick={handleLoginForm}>Sign In</MenuItem>
       <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>
-      <MenuItem onClick={() => handleUserModals('logout')}>Logout</MenuItem>
+      {isAuth ? <MenuItem onClick={() => handlelogout()}>Logout</MenuItem> : null}
     </Menu>
   );
 
@@ -272,7 +278,7 @@ export default function PrimarySearchAppBar(props) {
             noWrap
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }} >
-            {user}
+            {user ? user : "null user"}
             </Typography>
             
             <IconButton

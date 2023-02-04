@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 // userauth
 import { useContext } from 'react';
 import { AuthContext } from '../hooks/handleUsers.js';
+import { login,logout } from '../hooks/handleUsers.js';
 
 
 import zlog from '../helpers/zlog.js';
@@ -53,8 +54,8 @@ function Copyright(props) {
 const Login=(props)=>{
 
     // userauth
-    const { loginf } = useContext(AuthContext);
-    zlog('info',"authLOGIN:",loginf)
+    const { login } = useContext(AuthContext);
+    zlog('info',"authLOGIN:",login)
 
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -67,7 +68,7 @@ const Login=(props)=>{
         password: password,
       });
 
-      const success = await loginf(username, password);
+      const success = await login(username, password);
       if (success) {
         console.log('Login Successful!');
       } else {

@@ -21,7 +21,7 @@ import { AddNewResource } from "../NewResource/newResource";
 // --------------------------------------------------------
 // Import Helper Functions
 import zlog from "../../helpers/zlog";
-import { getYoutubeVideoId, isYoutubeUrl } from "../../helpers/helpers";
+import { getYoutubeVideoId, isYoutubeUrl, extractDomain } from "../../helpers/helpers";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -167,13 +167,16 @@ export const AddResourceFlow = (props) => {
     setAddNewResource,
     fetchingNewResource,
     setFetchingNewResource,
-    handleAddNewResourceClose
+    handleAddNewResourceClose,
+    handleAddNewResourceAbort
   } = StateStatus();
 // --------------------------------------------------------
 
 // --------------------------------------------------------
 // Import Icon Status
   const {
+    handleIconReset,
+
     favourite,
     setFavourite,
     addFavourites,
@@ -242,6 +245,7 @@ export const AddResourceFlow = (props) => {
       const videoId =  getYoutubeVideoId(URL)
       setVideoId(videoId)
       setVideoURL(URL)
+      setDomain(extractDomain(URL))
       axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`)
     // axios.get(`https://www.googleapis.com/`)
       .then(response => { 
@@ -290,7 +294,7 @@ export const AddResourceFlow = (props) => {
 
     const newURLResource = {
       "id" : props.sampledata.length + 1,
-      "videoURL" : newURL,
+      "videoURL" : videoURL,
       "created_at" : new Date().toISOString(),
       "title" : title,
       "thumbnail" : thumbnail,
@@ -300,13 +304,14 @@ export const AddResourceFlow = (props) => {
       "rating" : star,
       "likes" : like === "default" ? 0 : 1
     }
-
     props.setsampledata([...props.sampledata, newURLResource]);
     // window.location.reload(true);
     setTimeout(() => {
       setSavingNewResource(false)
       setSavedNewResource(true)
-      setNewURL('')
+      setStar(null)
+      setLike('default')
+      handleIconReset()
     }, 2000)
   }
 // --------------------------------------------------------
@@ -334,8 +339,10 @@ export const AddResourceFlow = (props) => {
       />
       <EditResourceModal 
         open={addNewResource} setOpen={setAddNewResource} 
-        handleClose={() => handleAddNewResourceClose()} 
+        handleClose={() => handleAddNewResourceClose(handleIconReset())} 
+        handleAbort={() => handleAddNewResourceAbort(handleIconReset())}
         addingNewResourceSQL={addingNewResourceSQL}
+        setNewURL={setNewURL} domain={domain}
         videoURL={videoURL} thumbnail={thumbnail}
         title={title} setTitle={setTitle} 
         descriptionExpanded={descriptionExpanded} setDescriptionExpanded={setDescriptionExpanded}

@@ -247,14 +247,34 @@ const handleNewResourceOpen = () => {
 
 const handleNewResourceClose = () => {
   setNewResource(false);
+  setNewURL("");
 };
 
 const handleAddNewResourceClose =() => {
   setAddNewResource(false);
 }
+const handleAddNewResourceAbort =() => {
+  setAddNewResource(false);
+  setNewURL('')
+  setTitle('')
+  setDescriptionExpanded('')
+  setThumbnail('')
+  setMyCategory([])
+  setMyStage(null)
+  setVideoURL('')
+  setDomain('')
+}
 
 const handleSavedClose =() => {
   setSavedNewResource(false);
+  setNewURL('')
+  setTitle('')
+  setDescriptionExpanded('')
+  setThumbnail('')
+  setMyCategory([])
+  setMyStage(null)
+  setVideoURL('')
+  setDomain('')
 }
 
 
@@ -379,5 +399,6 @@ const handleSavedClose =() => {
     fetchingNewResource,
     setFetchingNewResource,
     handleAddNewResourceClose,
+    handleAddNewResourceAbort
   };
 };

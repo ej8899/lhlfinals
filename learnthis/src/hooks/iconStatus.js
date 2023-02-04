@@ -155,7 +155,23 @@ export default function IconStatus(props) {
   };
 // -------------------------------------------------------------
 
+// -------------------------------------------------------------
+// Handle Icon Reset
+  const handleIconReset = () => {
+    setFavourite('default')
+    setLesson('dafault')
+    setRate('default')
+    setBookmark('default')
+    setPlaylist('default')
+    setLike('default')
+    setStar(null)
+  }
+
+// -------------------------------------------------------------
+
   return {
+  handleIconReset,
+
     favourite,
     setFavourite,
     addFavourites,
