@@ -2,10 +2,10 @@ module.exports = function(router, database) {
   // Get Rankings with user id
   router.get('/resources/:id', async (req, res) => {
     const { id } = req.params;
-    const Rankings = await database.getRankingsWithResouceId(id)
+    const rankings = await database.getRankingsWithResouceId(id)
                         .catch(err => res.status(500).json({ error: err.message }));
 
-    if (!Rankings) {
+    if (!rankings) {
       res
         .status(500)
         .json({ error: "The Rankings have not been existing" });
@@ -16,7 +16,7 @@ module.exports = function(router, database) {
       .status(200)
       .json({
         success: "Rankings found",
-        Rankings,
+        rankings,
     });
   });
 
