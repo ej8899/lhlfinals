@@ -57,14 +57,14 @@ exports.addProfile = addProfile;
 * @param {{id: string, userId: string, firstName: string, lastName: string, avatar: string}} profile
 * @return {Promise<{}>} A promise of the profile.
 */
-const updateProfilerWithId = function(profile) {
+const updateProfileWithId = function(profile) {
   const queryValue = [profile.id, profile.userId, profile.firstName, profile.lastName, profile.avatar];
   return query(`
     UPDATE profiles SET (user_id, first_name, last_name, avatar, updated_at) = ($2, $3, $4, $5, NOW()) WHERE id=$1 AND deleted_at IS NULL RETURNING *;`,
     queryValue, result => result.rows[0]
   );
 };
-exports.updateProfilerWithId = updateProfilerWithId;
+exports.updateProfileWithId = updateProfileWithId;
 
 /**
 * Delete a profile.

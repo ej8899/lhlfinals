@@ -67,7 +67,7 @@ module.exports = function(router, database) {
   router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const profile = req.body;
-    const updatedProfile = await database.updateProfilerWithId({ id, ...profile })
+    const updatedProfile = await database.updateProfileWithId({ id, ...profile })
                           .catch(err => res.status(500).json({ error: err.message }));
 
     if (!updatedProfile) {
