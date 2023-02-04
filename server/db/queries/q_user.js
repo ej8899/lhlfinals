@@ -34,21 +34,21 @@ exports.addUser = addUser;
 
 /**
 * Update a user.
-* @param {{previousEmail: string, updatedEmail: string, updatedPassword: string}} user
+* @param {{id: string, updatedEmail: string, updatedPassword: string}} user
 * @return {Promise<{}>} A promise of the user.
 */
-const updateUserWithEmail = function(user) {
-  const queryValue = [user.previousEmail, user.updatedEmail, user.updatedPassword];
-  return query(`UPDATE users SET email=$2, password=$3 updated_at=NOW() WHERE email=$1 RETURNING *;`, queryValue, result => result.rows[0]);
+const updateUser = function(user) {
+  const queryValue = [user.id, user.updatedEmail, user.updatedPassword];
+  return query(`UPDATE users SET email=$2, password=$3, updated_at=NOW() WHERE id=$1 RETURNING *;`, queryValue, result => result.rows[0]);
 };
-exports.updateUserWithEmail = updateUserWithEmail;
+exports.updateUser = updateUser;
 
 /**
 * Delete a user.
-* @param {email: string} email
+* @param {id: string} user id
 * @return {Promise<{}>} A promise of the user.
 */
-const deleteUserWithEmail = function(email) {
-  return query(`UPDATE users SET deleted_at=NOW() WHERE email=$1 RETURNING *;`, [email], result => result.rows[0]);
+const deleteUserWithId = function(id) {
+  return query(`UPDATE users SET deleted_at=NOW() WHERE id=$1 RETURNING *;`, [id], result => result.rows[0]);
 };
-exports.deleteUserWithEmail = deleteUserWithEmail;
+exports.deleteUserWithId = deleteUserWithId;

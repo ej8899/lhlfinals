@@ -12,19 +12,34 @@ const query = (text, params, callback) => {
 };
 
 /**
-* Get user pfofiles from the user email.
-* @param {String} email The email of the user.
+* Get user pfofiles from the user id.
+* @param {id: string} The id of the user.
 * @return {Promise<{}>} A promise of the profiles.
 */
-const getProfilesWithUserEmail = function(email) {
+const getProfilesWithUserId = function(id) {
   return query(
-    `SELECT * FROM profiles AS p
+    `SELECT p.*, u.email FROM profiles AS p
     LEFT JOIN users AS u ON p.user_id=u.id
-    WHERE u.email=$1 AND u.deleted_at IS NULL AND p.deleted_at IS NULL;`,
-    [email], result => result.rows
+    WHERE u.id=$1 AND u.deleted_at IS NULL AND p.deleted_at IS NULL;`,
+    [id], result => result.rows
   );
 };
-exports.getProfilesWithUserEmail = getProfilesWithUserEmail;
+exports.getProfilesWithUserId = getProfilesWithUserId;
+
+/**
+* Get user pfofiles from the user id.
+* @param {id: string} The id of the user.
+* @return {Promise<{}>} A promise of the profiles.
+*/
+const getProfileWithId = function(id) {
+  return query(
+    `SELECT p.*, u.email FROM profiles AS p
+    LEFT JOIN users AS u ON p.user_id=u.id
+    WHERE p.id=$1 AND u.deleted_at IS NULL AND p.deleted_at IS NULL;`,
+    [id], result => result.rows[0]
+  );
+};
+exports.getProfileWithId = getProfileWithId;
 
 /**
 * Add a new profile.
@@ -45,7 +60,7 @@ exports.addProfile = addProfile;
 const updateProfilerWithId = function(profile) {
   const queryValue = [profile.id, profile.userId, profile.firstName, profile.lastName, profile.avatar];
   return query(`
-    UPDATE profiles SET (user_id, first_name, last_name, avatar, updated_at) = ($2, $3, $4, $5, NOW()) WHERE id=$1 RETURNING *;`,
+    UPDATE profiles SET (user_id, first_name, last_name, avatar, updated_at) = ($2, $3, $4, $5, NOW()) WHERE id=$1 AND deleted_at IS NULL RETURNING *;`,
     queryValue, result => result.rows[0]
   );
 };

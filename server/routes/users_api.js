@@ -77,7 +77,8 @@ module.exports = function(router, database) {
   });
 
   // Update a user
-  router.put('/', async (req, res) => {
+  router.put('/:id', async (req, res) => {
+    const { id } = req.params;
     const user = req.body;
     user.updatedPassword = bcrypt.hashSync(user.updatedPassword, 12);
 
@@ -89,8 +90,8 @@ module.exports = function(router, database) {
       return;
     }
 
-    const { previousEmail, updatedEmail, updatedPassword } = user;
-    const updatedUser = await database.updateUserWithEmail({ previousEmail, updatedEmail, updatedPassword })
+    const { updatedEmail, updatedPassword } = user;
+    const updatedUser = await database.updateUser({ id, updatedEmail, updatedPassword })
                           .catch(err => res.status(500).json({ error: err.message }));
 
     if (!updatedUser) {
@@ -110,7 +111,7 @@ module.exports = function(router, database) {
   });
 
   // Delete a user
-  router.delete('/', async (req, res) => {
+  router.delete('/:id', async (req, res) => {
     const { userId } = req.session;
 
     if (!userId) {
@@ -120,18 +121,8 @@ module.exports = function(router, database) {
       return;
     }
 
-    const user = req.body;
-    const foundUser = await database.getUserWithEmail(user.email)
-                        .catch(err => res.status(500).json({ error: err.message }));
-
-    if (!foundUser) {
-      res
-        .status(500)
-        .json({ error: "The user has not been existing" });
-      return;
-    }
-
-    const deletedUser = await database.deleteUserWithEmail(user.email)
+    const { id } = req.params;
+    const deletedUser = await database.deleteUserWithId(id)
                           .catch(err => res.status(500).json({ error: err.message }));
 
     if (!deletedUser) {
