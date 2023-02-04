@@ -1,86 +1,87 @@
 module.exports = function(router, database) {
-  // Get Rankings with resource id
+  // Get likes with resource id
   router.get('/resources/:id', async (req, res) => {
     const { id } = req.params;
-    const rankings = await database.getRankingsWithResouceId(id)
+    const likes = await database.getLikesWithResouceId(id)
                         .catch(err => res.status(500).json({ error: err.message }));
 
-    if (!rankings) {
+    if (!likes) {
       res
         .status(500)
-        .json({ error: "The Rankings have not been existing" });
+        .json({ error: "The likes have not been existing" });
       return;
     }
 
     res
       .status(200)
       .json({
-        success: "Rankings found",
-        rankings,
+        success: "Likes found",
+        likes,
     });
   });
 
-  // Create a ranking
+  // Create a like
   router.post('/', async (req, res) => {
-    const ranking = req.body;
-    const createdRanking = await database.addRanking(ranking)
+    console.log(database);
+    const like = req.body;
+    const createdLike = await database.addLike(like)
                           .catch(err => res.status(500).json({ error: err.message }));
 
-    if (!createdRanking) {
+    if (!createdLike) {
       res
         .status(500)
-        .json({ error: "Create Ranking error" });
+        .json({ error: "Create like error" });
       return;
     }
 
     res
       .status(200)
       .json({
-        success: "Ranking created",
-        createdRanking,
+        success: "Like created",
+        createdLike,
     });
   });
 
-  // Update a ranking
+  // Update a like
   router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const ranking = req.body;
-    const updatedRanking = await database.updateRankingWithId({ id, ...ranking })
+    const like = req.body;
+    const updatedLike = await database.updateLikeWithId({ id, ...like })
                           .catch(err => res.status(500).json({ error: err.message }));
 
-    if (!updatedRanking) {
+    if (!updatedLike) {
       res
         .status(500)
-        .json({ error: "Update Ranking error" });
+        .json({ error: "Update like error" });
       return;
     }
 
     res
       .status(500)
       .json({
-        success: "Ranking updated",
-        updatedRanking,
+        success: "Like updated",
+        updatedLike,
     });
   });
 
-  // Delete a ranking
+  // Delete a Like
   router.delete('/:id', async (req, res) => {
     const { id } = req.params;
-    const deletedRanking = await database.deleteRankingWithId(id)
+    const deletedLike = await database.deleteLikeWithId(id)
                           .catch(err => res.status(500).json({ error: err.message }));
 
-    if (!deletedRanking) {
+    if (!deletedLike) {
       res
         .status(500)
-        .json({ error: "Delete Ranking error" });
+        .json({ error: "Delete like error" });
       return;
     }
 
     res
       .status(200)
       .json({
-        success: "Ranking deleted",
-        deletedRanking,
+        success: "Like deleted",
+        deletedLike,
     });
   });
 

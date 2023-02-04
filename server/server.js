@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const usersDatabase = require('./db/queries/q_user');
-const usersRoutes = require('./routes/users_api');
+const usersRoutes = require('./routes/users-api');
 const profilesDatabase = require('./db/queries/q_profiles');
 const profilesRoutes = require('./routes/profiles-api');
 const resourcesRoutes = require('./routes/resources-api');
@@ -24,6 +24,8 @@ const ratingsRoutes = require('./routes/ratings-api');
 const commentsRoutes = require('./routes/comments-api');
 const rankingsRoutes = require('./routes/rankings-api');
 const rankingsDatabase = require('./db/queries/q_rankings');
+const likesRoutes = require('./routes/likes-api');
+const likesDatabase = require('./db/queries/q_likes');
 
 // /user/endpoints
 const usersRouter = express.Router();
@@ -39,6 +41,11 @@ app.use('/api/profiles', profilesRouter);
 const rankingsRouter = express.Router();
 rankingsRoutes(rankingsRouter, rankingsDatabase);
 app.use('/api/rankings', rankingsRouter);
+
+// /likes/endpoints
+const likesRouter = express.Router();
+likesRoutes(likesRouter, likesDatabase);
+app.use('/api/likes', likesRouter);
 
 app.use('/api/resources',resourcesRoutes);
 app.use('/api/categories',categoriesRoutes);
