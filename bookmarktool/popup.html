@@ -135,7 +135,15 @@
       text-align: right;
     }
 
-  
+    div.dropdown-menu.open{
+  max-height: 314px !important;
+  overflow: hidden;
+}
+ul.dropdown-menu.inner{
+  max-height: 260px !important;
+  overflow-y: auto;
+}
+
   </style>
   <link rel="stylesheet" href="spinner.css">
   </head>
@@ -156,15 +164,8 @@
       <input type="text" id="page-title" value="">
 
       <label for="options">Category:</label>
-      <select id="options" name="options">
-        <option value="1">HTML</option>
-        <option value="2">CSS</option>
-        <option value="3">Javscript</option>
-        <option value="4">C / C++ / C#</option>
-        <option value="5">PHP</option>
-        <option value="6">SQL</option>
-        <option value="7">Ruby</option>
-        <option value="8">Java</option>
+      <select id="options" name="options" size="1">
+        
       </select>
       <div class="form-group"><br>
         <label for="note">Note:</label>
@@ -179,6 +180,7 @@
 
       </div>
     <input type="hidden" id="page-url" value="">
+    <input type="hidden" id="page-description" value="">
     </form> 
     </div>
 
