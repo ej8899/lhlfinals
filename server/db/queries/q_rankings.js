@@ -14,7 +14,7 @@ const query = (text, params, callback) => {
 /**
 * Get user rankings from the resource id.
 * @param {id: string} The resource id.
-* @return {Promise<{}>} A promise of the profiles.
+* @return {Promise<{}>} A promise of the rankings.
 */
 const getRankingsWithResouceId = function(id) {
   return query(
@@ -27,7 +27,7 @@ exports.getRankingsWithResouceId = getRankingsWithResouceId;
 /**
 * Add a new ranking.
 * @param {{resourceId: string, profileId: string, name: string, scale: string, note: string}} ranking
-* @return {Promise<{}>} A ranking of the profile.
+* @return {Promise<{}>} A ranking of the ranking.
 */
 const addRanking = function(ranking) {
 const queryValue = [ranking.resourceId, ranking.profileId, ranking.name, ranking.scale, ranking.note];
@@ -40,7 +40,7 @@ exports.addRanking = addRanking;
 /**
 * Update a ranking.
 * @param {{id: string, resourceId: string, profileId: string, name: string, scale: string, note: string}} ranking
-* @return {Promise<{}>} A promise of the profile.
+* @return {Promise<{}>} A promise of the ranking.
 */
 const updateRankingWithId = function(ranking) {
   const queryValue = [
@@ -62,7 +62,7 @@ exports.updateRankingWithId = updateRankingWithId;
 /**
 * Delete a ranking.
 * @param {id: string} id
-* @return {Promise<{}>} A promise of the profile.
+* @return {Promise<{}>} A promise of the ranking.
 */
 const deleteRankingWithId = function(id) {
   return query(`UPDATE rankings SET deleted_at=NOW() WHERE id=$1 RETURNING *;`, [id], result => result.rows[0]);
