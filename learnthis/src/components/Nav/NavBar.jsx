@@ -223,6 +223,7 @@ export default function PrimarySearchAppBar(props) {
       <SignUp open={signupopen} close={handleSignUpClose}></SignUp>
       <AppBar position="static">
         <Toolbar>
+          { isAuth ? 
           <IconButton
             size="large"
             edge="start"
@@ -233,6 +234,7 @@ export default function PrimarySearchAppBar(props) {
           >
             <MenuIcon />
           </IconButton>
+          : null}
           <Typography
             variant="h6"
             noWrap
