@@ -11,5 +11,36 @@ VALUES
     2,
     'George',
     'Michael',
+    'https://cdn.pixabay.com/photo/2014/04/03/10/32/businessman-310819__340.png'
+  ),
+  (
+    3,
+    'Tristan',
+    'Jacobs',
+    'https://cdn.pixabay.com/photo/2014/04/03/10/32/businessman-310819__340.png'
+  ),
+  (
+    4,
+    'Jane',
+    'Smith',
+    'https://cdn.pixabay.com/photo/2016/04/26/07/57/woman-1353825__340.png'
+  ),
+  (
+    5,
+    'Lucy',
+    'Milton',
+    'https://cdn.pixabay.com/photo/2016/04/26/07/57/woman-1353825__340.png'
+  ),
+  (
+    6,
+    'Gloria',
+    'Sanders',
+    'https://cdn.pixabay.com/photo/2016/04/26/07/57/woman-1353825__340.png'
+  ),
+  (
+    7,
+    'Roger',
+    'Roger',
     'https://cdn.pixabay.com/photo/2016/04/26/07/57/woman-1353825__340.png'
   );
+
