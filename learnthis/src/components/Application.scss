@@ -5,7 +5,9 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-
+.root {
+  overflow-y: scroll;
+}
 
 #light {
   background-color: $white;
@@ -31,4 +33,6 @@ example for specific items for light/dark mode changes:  use #mode .classname
 
 .maincontainer {
   height: 100vh;
+  width: 100%;
+  
 }

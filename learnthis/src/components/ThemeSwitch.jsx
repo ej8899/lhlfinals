@@ -4,6 +4,7 @@ import { ThemeContext } from './ThemeContext.jsx';
 import './Application.scss';
 import './ThemeSwitch.css';
 
+
 function ThemeSwitch() {
   const { theme, setTheme } = useContext(ThemeContext);
 
@@ -34,3 +35,5 @@ function ThemeSwitch() {
   );
 };
 export default ThemeSwitch;
+
+

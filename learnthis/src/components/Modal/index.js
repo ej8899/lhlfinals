@@ -27,8 +27,8 @@ export default function ZModal(props) {
   }, [closeOnEscapeKeyDown]);
 
   // props.title - deprecated 2022-11-14 - along with zmodal-title class
-  // todo - separate out the close button as an 'abort' vs a button as an accept
-  // todo - add option for second button on bottom so we have a 'cancel' / 'confirm' setup
+  // TODO - separate out the close button as an 'abort' vs a button as an accept
+  // TODO - add option for second button on bottom so we have a 'cancel' / 'confirm' setup
   return (
     <div className={`zmodal ${props.show ? 'showzmodal' : ''}`} onClick={props.onClose}>
       <div className="zmodal-content" onClick={e => e.stopPropagation()}>
