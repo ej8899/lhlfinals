@@ -24,7 +24,6 @@ options.forEach(option => {
 });
 
 // TODO - check if user logged in
-// TODO - fetch categories
 
 document.getElementById("spinner").style.display = "none";
 

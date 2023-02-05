@@ -3,6 +3,7 @@
 import React, {useState} from 'react';
 import YouTube from 'react-youtube'; // npx install react-youtube
 import { Route, Routes, useLocation, Outlet, Link } from "react-router-dom";
+import {useContext} from 'react';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -52,6 +53,11 @@ import { StarStaleRating } from '../Icons/stars';
 import { isYoutubeUrl, getYoutubeVideoId, extractDomain } from '../../helpers/helpers';
 //-------------------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import user authentication
+import { AuthContext } from '../../hooks/handleUsers.js';
+//-------------------------------------------------------------------
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -82,6 +88,9 @@ export const ViewDetailModal = (props) => {
     },
   };
 
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+  // console.log(`Profile: ${props.profile_id} & UserId : ${userid}`)
+  // console.log(props.profile_id === userid)
 
   return (
     <Modal
@@ -145,16 +154,30 @@ export const ViewDetailModal = (props) => {
                       Rate & Review
                   </Button>
                 </Tooltip>
-                <Tooltip title="Edit My Resource">
-                  <Button variant="outlined" onClick={() => props.handleClose(props.handleOpenEdit())} startIcon={<NoteAltIcon/>} sx={{"&:hover" : {color : "warning"}}} >
+                {userid === props.profile_id &&
+                  <Tooltip title="Edit My Resource">
+                    <Button variant="outlined" onClick={() => props.handleClose(props.handleOpenEdit())} startIcon={<NoteAltIcon/>} sx={{"&:hover" : {color : "warning"}}} >
+                      Edit
+                    </Button>
+                  </Tooltip>
+                }
+                {userid !== props.profile_id &&
+                  <Button variant="outlined" onClick={() => props.handleClose(props.handleOpenEdit())} startIcon={<NoteAltIcon/>} sx={{"&:hover" : {color : "warning"}}} disabled>
                     Edit
                   </Button>
-                </Tooltip>
-                <Tooltip title="Delete My Resource">
-                  <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleOpenDelete()} startIcon={<DeleteIcon />}>
+                }
+                {userid === props.profile_id &&
+                  <Tooltip title="Delete My Resource">
+                    <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleOpenDelete()} startIcon={<DeleteIcon />}>
+                      Delete
+                    </Button>
+                  </Tooltip>
+                }
+                {userid !== props.profile_id &&
+                  <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} startIcon={<DeleteIcon />} disabled>
                     Delete
                   </Button>
-                </Tooltip>
+                }
               </Box>
             </Box>
             <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around" paddingBottom="3rem">

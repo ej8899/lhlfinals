@@ -22,7 +22,8 @@ import SignUp from '../SignUp.jsx';
 import PersistentDrawerLeft from "./LeftMenu.jsx";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-
+import Divider from '@mui/material/Divider';
+import RandomAvatar from './RandomAvatar';
 
 import {  modalSignUp,
           modalSignIn
@@ -178,6 +179,7 @@ export default function PrimarySearchAppBar(props) {
     setSOpen(true);
   }
 
+  
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -196,9 +198,9 @@ export default function PrimarySearchAppBar(props) {
       onClose={handleMenuClose}
     >
       {isAuth ? <MenuItem onClick={() => handleUserModals('profile')}>Profile</MenuItem> : null}
-      {isAuth ? <MenuItem onClick={() => handleUserModals('account')}>My account</MenuItem> : null}
       {isAuth ? null : <MenuItem onClick={handleLoginForm}>Sign In</MenuItem>}
-      <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>
+      {isAuth ? null : <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>}
+      {isAuth ? <Divider variant="middle"  /> : null}
       {isAuth ? <MenuItem onClick={() => handlelogout()}>Logout</MenuItem> : null}
     </Menu>
   );
@@ -217,14 +219,19 @@ export default function PrimarySearchAppBar(props) {
     setDOpen(false);
   };
 
+  // TODO - get rid of &nbsp; by user logged in name - how to pad the vertical divider?
+
+  let condition;
+  if(!isAuth) condition = "disabled";
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Login open={loginopen} close={handleLoginClose}></Login>
       <SignUp open={signupopen} close={handleSignUpClose}></SignUp>
       <AppBar position="static">
         <Toolbar>
-          { isAuth ? 
+          
           <IconButton
+            disabled = {condition}
             size="large"
             edge="start"
             color="inherit"
@@ -234,7 +241,7 @@ export default function PrimarySearchAppBar(props) {
           >
             <MenuIcon />
           </IconButton>
-          : null}
+          
           <Typography
             variant="h6"
             noWrap
@@ -254,7 +261,7 @@ export default function PrimarySearchAppBar(props) {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ alignItems:"center", display: { xs: 'none', md: 'flex' } }}>
             
             <IconButton
               size="large"
@@ -275,12 +282,15 @@ export default function PrimarySearchAppBar(props) {
             {props.darkMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
 
+            <Divider  component="div" orientation="vertical" variant="middle" flexItem sx={{borderBottomWidth: 4}}/>&nbsp;&nbsp;
+
             <Typography
             variant="h6"
             noWrap
-            component="div"
+            component="li"
             sx={{ display: { xs: 'none', sm: 'block' } }} >
-            {user ? user : "null user"}
+            
+            {isAuth ? user : null}
             </Typography>
             
             <IconButton
@@ -292,7 +302,7 @@ export default function PrimarySearchAppBar(props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              {isAuth ? <RandomAvatar/> : <AccountCircle />}
             </IconButton>
             
           </Box>

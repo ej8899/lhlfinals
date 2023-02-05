@@ -241,13 +241,15 @@ const [savedNewResource, setSavedNewResource] = useState(false)
   //Status Screen for error saving to database
 const [errorSavingNewResource, setSavingErrorNewResource] = useState(false)
 
+  //Status Screen for error fecthing youtube url
+const [errorFetchingNewResource, setFetchingErrorNewResource] = useState(false)
+
 const handleNewResourceOpen = () => {
   setNewResource(true);
 }
 
 const handleNewResourceClose = () => {
   setNewResource(false);
-  setNewURL("");
 };
 
 const handleAddNewResourceClose =() => {
@@ -277,6 +279,9 @@ const handleSavedClose =() => {
   setDomain('')
 }
 
+const handleErrorFetchingNewResourceClose = () => {
+  setFetchingErrorNewResource(false);
+};
 
 // -------------------------------------------------------------
 
@@ -399,6 +404,9 @@ const handleSavedClose =() => {
     fetchingNewResource,
     setFetchingNewResource,
     handleAddNewResourceClose,
-    handleAddNewResourceAbort
+    handleAddNewResourceAbort,
+    errorFetchingNewResource, 
+    setFetchingErrorNewResource,
+    handleErrorFetchingNewResourceClose
   };
 };

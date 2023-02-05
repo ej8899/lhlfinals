@@ -102,7 +102,7 @@ export function modalAboutMessage() {
 //
 export function modalPrivacyPolicy() {
   return (
-    <div>
+    <Paper style={{ height: 400, overflow: 'auto' }}>
             <Typography gutterBottom>
             Privacy Policy
 
@@ -143,7 +143,7 @@ If you have any questions about this policy or our handling of your personal inf
 Last updated: [insert date]
             </Typography>
          
-    </div>
+    </Paper>
     );
 }
 
@@ -191,5 +191,41 @@ export function modalAboutTeam() {
               ullamcorper nulla non metus auctor fringilla.
             </Typography>
     </div>
+    );
+}
+
+
+
+//
+// privacy policy modal
+//
+export function modalCookiePolicy() {
+  return (
+    <Paper style={{ height: 400, overflow: 'auto' }}>
+            <Typography gutterBottom>
+            Cookies Policy
+
+            Cookies Policy for [Website Name]
+
+[Website Name] uses cookies to enhance your browsing experience and provide a more personalized service. By using our website, you consent to our use of cookies in accordance with this policy.
+
+What are Cookies?
+Cookies are small text files that are placed on your device by websites that you visit. They are used to store information about your preferences and activity on the website.
+
+Types of Cookies Used:
+
+Essential Cookies: These cookies are necessary for the website to function properly and cannot be disabled.
+Performance Cookies: These cookies collect information about how you use the website, such as which pages you visit and if you encounter any errors.
+Functionality Cookies: These cookies remember your preferences and enhance your experience on the website, such as your preferred language or region.
+Managing Cookies:
+
+You may manage the use of cookies in your browser settings.
+If you disable cookies, some features of the website may not be fully functional.
+Changes to this Cookies Policy:
+
+We may update this Cookies Policy from time to time to reflect changes in our practices or relevant laws. We will notify you of any material changes by posting the updated policy on our website.
+Last updated: [Date]
+            </Typography>
+    </Paper>
     );
 }

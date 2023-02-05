@@ -1,23 +1,24 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-const noUser = [
-  {
-  uid: 0,
-  username: "",
-  email: "",
-  password: ""
-  }
-]
+// Pulling from API - no longer needed
+// const noUser = [
+//   {
+//   uid: 0,
+//   username: "",
+//   email: "",
+//   password: ""
+//   }
+// ]
 
-const sampleUserData = [
-  {
-    uid: 1,
-    username: "ernie",
-    email: "ej8899@gmail.com",
-    password: "123"
-  }
-];
+// const sampleUserData = [
+//   {
+//     uid: 1,
+//     username: "ernie",
+//     email: "ej8899@gmail.com",
+//     password: "123"
+//   }
+// ];
 
 
 export const AuthContext = createContext();
@@ -25,29 +26,36 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState("nouser");
-  const [userid, setUserid] = useState("0");
+  const [userid, setUserid] = useState(null);
 
-  const login = async (username, password) => {
-    try {
-      // const response = await axios.post('http://localhost:5000/login', {
-      //   username,
-      //   password,
-      // });
+  const login = ({email, password}, close) => {
 
-      // setUser(response.data.user);
-      setUser("ernie")
+    return axios.post('http://localhost:8080/api/user/login', { "email": email, "password": password})
+    .then(response => {
+      // TODO -- right now receiving only email address - want to update to first and last name
+      setUser(response.data.authenticatedUser.email)
       setIsAuth(true);
-      setUserid("1");
-      return true;
-    } catch (error) {
-      return false;
-    }
+      setUserid(response.data.authenticatedUser.id);
+      close();
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
   };
 
   const logout = () => {
-    setUser("nouser");
-    setUserid('0')
-    setIsAuth(false);
+
+    return axios.post('http://localhost:8080/api/user/logout')
+    .then(response => {
+      // TODO -- right now receiving only email address - want to update to first and last name
+      setUser("nouser");
+      setUserid(null)
+      setIsAuth(false);
+    })
+    .catch(error => {
+      console.error(error);
+    });
   };
 
   return (

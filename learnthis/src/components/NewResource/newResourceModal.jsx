@@ -82,7 +82,7 @@ export const EditResourceModal = (props) => {
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
-      onClose={props.handleClose}
+      onClose={props.handleAbort}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
@@ -102,7 +102,7 @@ export const EditResourceModal = (props) => {
               onChange={(event) => props.setTitle(event.target.value)}
             />
             <Box>
-              <CloseModal handleClose={props.handleClose}/>
+              <CloseModal handleClose={props.handleAbort}/>
             </Box>
           </Box>
           <Box display="flex" width="100%" justifyContent="space-around">
@@ -138,7 +138,10 @@ export const EditResourceModal = (props) => {
             </Box>
             <Box display={props.show} flexDirection="column" >
               <MultilineTextFields display={props.show} myComments={props.descriptionExpanded} addMyComments={props.setDescriptionExpanded} rows={19} width={"40ch"} label={'Resource Description'} placeholder={"Add resource description here."} marginLeft={1}/>
-              <Box display="flex" justifyContent="flex-end" sx={{m:1}}>
+              <Box display="flex" justifyContent="flex-end" sx={{mt:1, mb: 1, gap: 5}}>
+                <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleCancel(props.setNewURL(""))}>
+                  Cancel
+                </Button>
                 <Button variant="contained" sx={{width: "5em"}} href="" onClick={() => props.handleClose(props.addingNewResourceSQL())} >
                   Save
                 </Button>

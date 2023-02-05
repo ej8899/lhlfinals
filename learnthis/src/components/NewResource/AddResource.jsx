@@ -41,7 +41,13 @@ import IconStatus from '../../hooks/iconStatus'
 import { StatusModal } from "../NewResource/status";
 import { ResultModal } from "./result";
 import { EditResourceModal } from "./newResourceModal";
+import { ErrorModal } from "./error";
 // --------------------------------------------------------
+
+//-------------------------------------------------------------------
+// Import user authentication
+import { AuthContext } from '../../hooks/handleUsers.js';
+//-------------------------------------------------------------------
 
 
 export const AddResourceFlow = (props) => {
@@ -168,7 +174,10 @@ export const AddResourceFlow = (props) => {
     fetchingNewResource,
     setFetchingNewResource,
     handleAddNewResourceClose,
-    handleAddNewResourceAbort
+    handleAddNewResourceAbort,
+    errorFetchingNewResource, 
+    setFetchingErrorNewResource,
+    handleErrorFetchingNewResourceClose
   } = StateStatus();
 // --------------------------------------------------------
 
@@ -249,28 +258,36 @@ export const AddResourceFlow = (props) => {
       axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`)
     // axios.get(`https://www.googleapis.com/`)
       .then(response => { 
-        setTimeout(() => {
-          setAddNewResource(true)
-          setFetchingNewResource(false)
-        }, 1200)
-        zlog('API',"YouTube API Called:", videoId)
-        setTitle(response.data.items[0].snippet.title)
-        setDescriptionExpanded(response.data.items[0].snippet.description)
-        setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
-        /*
-        REFERENCE:
-        useful items in response data:
-        .snippet.
-          categoryId
-          channelId,
-          channelTitle,
-          description,
-          title,
-          thumbnails.default.url, 120x90
-          thumbnails.high.url, 480x360
-          thumbnails.medium.url, 320x180
-          thumbnails.standard.url, 640x480
-        */
+        if(response.data.items[0] === undefined) {
+          console.log(`ERROR: ${URL} Video Not Found`)
+          setTimeout(() => {
+            setFetchingErrorNewResource(true)
+            setFetchingNewResource(false)
+          }, 1200)
+        } else {
+          setTimeout(() => {
+            setAddNewResource(true)
+            setFetchingNewResource(false)
+          }, 1200)
+          zlog('API',"YouTube API Called:", videoId)
+          setTitle(response.data.items[0].snippet.title)
+          setDescriptionExpanded(response.data.items[0].snippet.description)
+          setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
+          /*
+          REFERENCE:
+          useful items in response data:
+          .snippet.
+            categoryId
+            channelId,
+            channelTitle,
+            description,
+            title,
+            thumbnails.default.url, 120x90
+            thumbnails.high.url, 480x360
+            thumbnails.medium.url, 320x180
+            thumbnails.standard.url, 640x480
+          */
+        }
       })
       .catch(error => {
         console.error(error);
@@ -289,11 +306,15 @@ export const AddResourceFlow = (props) => {
 // --------------------------------------------------------
 // Adding new resource to SQL database
   // TODO - sample data - need to tie difference between user and overall && need axios put
+
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+
   const addingNewResourceSQL = () => {
     setSavingNewResource(true)
 
     const newURLResource = {
       "id" : props.sampledata.length + 1,
+      "profile_id" : userid,
       "videoURL" : videoURL,
       "created_at" : new Date().toISOString(),
       "title" : title,
@@ -317,8 +338,11 @@ export const AddResourceFlow = (props) => {
 // --------------------------------------------------------
 
   return (
+
     <div>
-      <NewResource handleNewResourceOpen={() => handleNewResourceOpen()}/>
+      {userid &&
+        <React.Fragment>
+      <NewResource handleNewResourceOpen={() => handleNewResourceOpen(console.log(props.sampledata))}/>
       <AddNewResource 
         open={newResource} handleNewResourceClose={handleNewResourceClose}
         newURL={newURL} setNewURL={setNewURL} 
@@ -327,9 +351,14 @@ export const AddResourceFlow = (props) => {
       />
       <StatusModal 
         open={fetchingNewResource} setStatusOpen={setFetchingNewResource} message={"Fetching New Resource"}
-      />
+      /> 
       <StatusModal 
         open={savingNewResource} setStatusOpen={setSavingNewResource} message={"Saving New Resource"}
+      />
+      <ErrorModal 
+        open={errorFetchingNewResource} handleErrorFetchingNewResourceClose={handleErrorFetchingNewResourceClose} 
+        message={"Oops - The Youtube link is wrong or no longer exists"} submessage={"Would you like to Try Again?"} 
+        setNewResource={setNewResource} setNewURL={setNewURL}
       />
       <ResultModal 
         open={savedNewResource} setStatusOpen={setSavedNewResource} 
@@ -341,6 +370,7 @@ export const AddResourceFlow = (props) => {
         open={addNewResource} setOpen={setAddNewResource} 
         handleClose={() => handleAddNewResourceClose(handleIconReset())} 
         handleAbort={() => handleAddNewResourceAbort(handleIconReset())}
+        handleCancel={() => handleAddNewResourceAbort(handleIconReset())}
         addingNewResourceSQL={addingNewResourceSQL}
         setNewURL={setNewURL} domain={domain}
         videoURL={videoURL} thumbnail={thumbnail}
@@ -361,7 +391,9 @@ export const AddResourceFlow = (props) => {
         myStage={myStage} addMyStage={addMyStage}
         sliderActive={sliderActive} setSliderActive={setSliderActive}
       />
-    </div>
+      </React.Fragment>
+  }
+  </div>
   );
 };
 

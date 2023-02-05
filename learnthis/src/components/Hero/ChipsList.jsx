@@ -8,11 +8,15 @@ import CssIcon from '@mui/icons-material/Css';
 import PhpIcon from '@mui/icons-material/Php';
 import VpnLockIcon from '@mui/icons-material/VpnLock';
 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import UnpublishedIcon from '@mui/icons-material/Unpublished';
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
 import zlog from "../../helpers/zlog.js";
+import { useEffect } from 'react';
+
 
 const useStyles = {
   boundary: {
@@ -37,49 +41,61 @@ const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-// TODO props.catList
+
 export default function ChipsArray(props) {
 
   let object = {};
   let objectArray = [
-    {key: 0, label: 'All'},
-    {key: 1, label: 'New'},
   ];
-  for (let i = 1; i < props.catList.length; i++) {
+  for (let i = 0; i < props.catList.length; i++) {
     object = {
-      key: i + 1,
+      key: i,
       label: props.catList[i]
     };
     objectArray.push(object);
   }
   const [chipData, setChipData] = React.useState(objectArray);
+  const [filled, setFilled] = React.useState(false);
+
+  useEffect(() => {
+    const tagInit= {};
+    for (let i = 0; i < objectArray.length+1; i++) {
+      tagInit[i] = true;
+    }  
+    setFilled({...tagInit})
+    console.log("filled",filled)
+  }, []);
   
-  // // TODO this should ultimately come from database - not hard coded
-  // // TODO - these can be "top" categories - 'most active' or randomized?
-  // const [chipData, setChipData] = React.useState([
-  //   { key: 0, label: 'All' },
-  //   { key: 9, label: 'Recent' },
-  //   { key: 1, label: 'jQuery' },
-  //   { key: 2, label: 'Svelte' },
-  //   { key: 3, label: 'React' },
-  //   { key: 4, label: 'Vue.js' },
-  //   { key: 5, label: 'C++' },
-  //   { key: 6, label: 'HTML' },
-  //   { key: 7, label: 'CSS' },
-  //   { key: 8, label: 'CyberSecurity' },
-  //   { key: 10, label: 'JavaScript' },
-  //   { key: 11, label: 'PHP' },
-  //   { key: 12, label: 'SQL' },
-  // ]);
+  
 
   const handleDelete = (chipToDelete) => () => {
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
   };
+
   const handleClick = (chipID) => {
     zlog('action',"chip clicked:",chipID)
+    if(chipID === 100) {
+        console.log('is on, turn off')
+        const tagInit= {};
+        for (let i = 0; i < objectArray.length; i++) {
+          tagInit[i] = true;
+        }  
+        setFilled({...tagInit})
+    } 
+    else if(chipID === 200) {
+        console.log('is off, turn on')
+        const tagInit= {};
+        for (let i = 0; i < objectArray.length; i++) {
+          tagInit[i] = false;
+        }  
+        setFilled({...tagInit})  
+      }
+    else {
+      setFilled({...filled, [chipID]: !filled[chipID]});
+    }
   };
 
-  // TODO - could we add an overflow to scroll the chip list left and right?
+  
   return (
     <Paper
       sx={{
@@ -91,32 +107,55 @@ export default function ChipsArray(props) {
         m: 0,
         overflow: "auto",
       }}
-      component="ul"
-    >
+      component="ul">
+      
       <Tabs
           variant="scrollable"
           value={false}
           scrollButtons="auto"
           aria-label="select a search filter"
           >
+            <Tab    
+              disableRipple
+              key="100"
+              sx={{
+                    minWidth: "0px",
+                    margin: "2px",
+                    padding: "1px"
+                  }}
+              label={
+            <Chip
+              color="warning"
+              label="all"
+              icon={<CheckCircleIcon />}
+              variant="default"
+              sx={{ textTransform: "none",
+                    fontWeight: "normal",
+                    borderRadius: "5px"
+                  }}
+              onClick={()=> {handleClick(100)}}
+            />}/>
+            <Tab
+              disableRipple
+              key="200"
+              sx={{
+                    margin: "2px",
+                    padding: "1px",
+                    minWidth: "0px",
+                  }}
+              label={
+            <Chip
+              color="warning"
+              label="none"
+              icon={<UnpublishedIcon />}
+              variant="default"
+              sx={{ textTransform: "none",
+                    fontWeight: "normal",
+                    borderRadius: "5px"
+                  }}
+              onClick={()=> {handleClick(200)}}
+            />}/>
       {chipData.map((data) => {
-        let icon;
-
-        if (data.label === 'React') {
-          icon = <TagFacesIcon />;
-        }
-        if (data.label === 'JavaScript') {
-          icon = <JavascriptIcon />;
-        }
-        if (data.label === 'CSS') {
-          icon = <CssIcon />;
-        }
-        if (data.label === 'PHP') {
-          icon = <PhpIcon />;
-        }
-        if (data.label === 'CyberSecurity') {
-          icon = <VpnLockIcon/>;
-        }
 
         return (
           
@@ -129,8 +168,9 @@ export default function ChipsArray(props) {
                   }}
               label={
             <Chip
-              icon={icon}
+              color="success"
               label={data.label}
+              variant={filled[data.key] ? "default" : "outlined"}
               sx={{ textTransform: "none",
                     fontWeight: "normal",
                     borderRadius: "5px"

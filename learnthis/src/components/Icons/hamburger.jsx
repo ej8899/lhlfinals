@@ -64,6 +64,7 @@ export const MoreStats = (props) => {
           }}
           display="flex"
           flex-direction="column"
+          disableScrollLock={true}
         >
           <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" textAlign="center">
             <MenuItem onClick={props.handleCloseOut}><RateStaleStats rate={props.rate} rateReview={() => {props.rateReview(true, props.handleOpen())}}/></MenuItem>

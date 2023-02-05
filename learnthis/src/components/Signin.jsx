@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Dialog from '@mui/material/Dialog';
+import axios from "axios";
 
 import { styled } from '@mui/material/styles';
 
@@ -57,37 +58,18 @@ const Login=(props)=>{
     const { login } = useContext(AuthContext);
     zlog('info',"authLOGIN:",login)
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
 
-      const username = data.get('email');
+      const email = data.get('email');
       const password = data.get('password')
-      console.log({
-        email: username,
-        password: password,
-      });
 
-      const success = await login(username, password);
-      if (success) {
-        console.log('Login Successful!');
-      } else {
-        console.log('Login Failed');
-      }
-      props.close();
+      login({"email": email, "password": password}, props.close)
     };
 
 
-    
-    // const handleSubmit = (event) => {
-    //   event.preventDefault();
-    //   const data = new FormData(event.currentTarget);
-    //   console.log({
-    //     email: data.get('email'),
-    //     password: data.get('password'),
-    //   });
-    //   props.close();
-    // };
+ 
 
     return(
 <BootstrapDialog

@@ -200,7 +200,10 @@ export const PreviewItem = (props) => {
     emailSent,
     setEmailSent,
     handleSharedClose,
-    handleAddNewResourceAbort
+    handleAddNewResourceAbort,
+    errorFetchingNewResource, 
+    setFetchingErrorNewResource,
+    handleErrorFetchingNewResourceClose
   } = StateStatus();
 // --------------------------------------------------------
 
@@ -324,6 +327,7 @@ export const PreviewItem = (props) => {
     if (resource.id === props.id) {
       updateURLResource.push({
         "id" : props.id,
+        "profile_id": props.profile_id,
         "videoURL" : videoURL,
         "created_at" : props.created_at,
         "updated_at" : new Date().toISOString(),
@@ -461,6 +465,8 @@ export const PreviewItem = (props) => {
           <DetailModal 
             open={openReview} setOpen={setOpenReview} setExpanded={setExpanded}
             handleClose={() => handleReviewClose()} 
+            handleCancel={() => handleReviewClose(setOpen(true))}
+            addingNewResourceSQL={updatingResourceSQL}
             videoURL={videoURL} domain={domain}
             title={title} id={props.id} thumbnail={thumbnail}
             complexity={props.complexity} 
@@ -514,6 +520,7 @@ export const PreviewItem = (props) => {
             handleOpenEdit={handleOpenEdit} handleEditClose={handleEditClose}
             openDelete={openDelete} setOpenDelete={setOpenDelete}
             handleDeleteClose={handleDeleteClose} handleOpenDelete={handleOpenDelete}
+            profile_id={props.profile_id}
           />
         </div>
         <div>
@@ -553,6 +560,8 @@ export const PreviewItem = (props) => {
             open={openEdit} setOpen={setOpenEdit} 
             handleClose={() => handleEditClose()} 
             handleAbort={() => handleEditClose()}
+            handleCancel={() => handleEditClose(setOpen(true))}
+            setNewURL={setNewURL}
             addingNewResourceSQL={updatingResourceSQL}
             videoURL={videoURL} thumbnail={thumbnail}
             title={title} setTitle={setTitle} domain={domain}

@@ -62,7 +62,8 @@ export default function Hero(props) {
   };
 
 
-  const chipData = ["New", "Favorites", "Watch Later","Rated 3+","spacer","Beginner", "Intermediate", "Advanced",  ];
+  const chipData = ["New", "Favorites", "Watch Later","Rated 3+",];
+  const chipDataComplexity = ["Beginner", "Intermediate", "Advanced",  ];
 
   return (
 
@@ -72,10 +73,13 @@ export default function Hero(props) {
         <div style={heroContent}>
           <Typography variant="h2">Welcome to our site!</Typography>
           <Typography variant="subtitle1">
-          hero component<br/><br/> put other 'chips' or buttons here for quick sort of primary categories
+          hero component<br/>
           </Typography>
           <ChipsArray catList={props.catList}></ChipsArray>
-          <Stack direction="row" spacing={1} sx={{alignItems: "flex-end"}}>
+          <Grid container spacing={3}>
+        <Grid item xs={6} sx={{my: 1}}>
+          <div >
+          <Stack direction="row" spacing={2} sx={{alignItems: "flex-start"}}>
           {chipData.map((chip, index) => (
             <div key={index}><DoDivider type={chip} key={index} label={chip} color="success" variant={filled[index] ? "default" : "outlined"}
             onClick={()=> {handleClick(index)}}
@@ -83,6 +87,22 @@ export default function Hero(props) {
             </div>
           ))}
           </Stack>
+          </div>
+        </Grid>
+        <Grid item xs={6} sx={{my: 1}}>
+          <div >
+          <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{alignItems: "flex-end"}}>
+          {chipDataComplexity.map((chip, index) => (
+            <div key={index+10}><DoDivider type={chip} key={index+10} label={chip} color="success" variant={filled[index+10] ? "default" : "outlined"}
+            onClick={()=> {handleClick(index+10)}}
+            ></DoDivider>
+            </div>
+          ))}
+          </Stack>
+          </div>
+        </Grid>
+      </Grid>
+          
         </div>
       </Grid>
     </Grid>

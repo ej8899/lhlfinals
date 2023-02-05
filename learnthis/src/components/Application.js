@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Application.scss";
 import Masonry from '@mui/lab/Masonry';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Container, Grid, Typography,Button } from "@mui/material";
+
+
 // TODO This element needs to lazy load with 'shimmer' effect
 
 // userauth
@@ -604,13 +607,9 @@ export default function Application(props) {
       zlog('info',"THEME FROM localstorage:",isDarkMode)
     }
     
-
-    // TODO why is userwarning showing twice.. need only 1
-    //zlog('userwarning');
-
-    // TODO convert this cookies code to use the MUI modal, but need to save state of acceptance to localstorage
+    // TODO cookies modal to save state of acceptance to localstorage - expires every x days (10days example)
     // TODO - cookies modal should be 'disabled' if user has already been to site and accepted cookies modal - 
-    // this should set for 30 days and then come back on until they accept again.
+  
     if (global.config.cookiesModal) {
       //cookiesModal(true);
       setLoading(true)
@@ -655,15 +654,17 @@ export default function Application(props) {
           <AddResourceFlow complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} />
       </Box>
 
-        <Box sx={{ width: 1400, minHeight: 377 }}>
+      <Grid container justifyContent="center">
+        <Box sx={{ width: 1400, minHeight: 377 }} display="flex" justifyContent="center" alignItems="center">
         <Masonry columns={4} spacing={2}>
         {sampledata.map((item, index) => (
-          <PreviewItem key={item.id} id={item.id} videoURL={ item.videoURL } stage={item.stage} category={item.category} nowloading={nowloading} rating={item.rating} complexity={sampleComplexity} typeCategory={typeCategory} likes={item.likes} title={item.title} thumbnail={item.thumbnail} description={item.description} created_at={item.created_at} sampledata={sampledata} setsampledata={setsampledata}>
+          <PreviewItem key={item.id} id={item.id} videoURL={ item.videoURL } stage={item.stage} category={item.category} nowloading={nowloading} rating={item.rating} complexity={sampleComplexity} typeCategory={typeCategory} likes={item.likes} title={item.title} thumbnail={item.thumbnail} description={item.description} created_at={item.created_at} sampledata={sampledata} setsampledata={setsampledata} profile_id={item.profile_id}>
           {item.id}
           </PreviewItem>
         ))}
         </Masonry>
         </Box>
+        </Grid>
         
         <SiteFooter/>
       </div>

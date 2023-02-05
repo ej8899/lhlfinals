@@ -141,7 +141,10 @@ export const DetailModal = (props) => {
             </Box>
             <Box display={props.show} flexDirection="column">
               <MultilineTextFields display={props.show} myComments={props.myComments} addMyComments={props.addMyComments} rows={19} width={"40ch"} label={'My Comments'} placeholder={"Make your notes here."} marginLeft={1}/>
-              <Box display="flex" justifyContent="flex-end" sx={{m:1}}>
+              <Box display="flex" justifyContent="flex-end" sx={{mt:1, mb: 1, gap: 5}}>
+                <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleCancel()}>
+                  Cancel
+                </Button>
                 <Button variant="contained" sx={{width: "5em"}} href="" onClick={() => props.handleClose(props.addingNewResourceSQL())} >
                   Save
                 </Button>

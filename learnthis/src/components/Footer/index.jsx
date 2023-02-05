@@ -14,12 +14,11 @@ import zlog from '../../helpers/zlog';
 import {  modalAboutMessage, 
           modalPrivacyPolicy,
           modalAboutTeam,
+          modalCookiePolicy,
          } from '../Modal/contentMisc.jsx';
 
 export default function SiteFooter(props) {
-  function showAbout() {
-    // TODO - this is in Application.js currently - needs moved to helper function file for import elsewhere
-  }
+ 
     // TODO - remove unused icons and CDN scrips below if all icons are transferred to MUI icons
 
     // TODO - p0 - fix spacing between icons and menu items - same as menu to copyright
@@ -47,7 +46,7 @@ export default function SiteFooter(props) {
           break;
         case 'cpolicy':
           setTitle("Cookies Policy...");
-          setContent("content for cookies plicy");
+          setContent(modalCookiePolicy());
           break;
         case 'ppolicy':
           setTitle("Privacy Policy...");

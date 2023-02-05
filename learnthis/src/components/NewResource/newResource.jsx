@@ -57,7 +57,7 @@ export const AddNewResource= (props) => {
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
-      onClose={props.handleNewResourceClose}
+      onClose={() => props.handleNewResourceClose(props.setNewURL(""))}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
@@ -71,7 +71,7 @@ export const AddNewResource= (props) => {
             Add New Resource
           </Typography>
           <Box>
-            <CloseModal handleClose={props.handleNewResourceClose}/>
+            <CloseModal handleClose={() => props.handleNewResourceClose(props.setNewURL(""))}/>
           </Box>
         </Box>
         <Box
