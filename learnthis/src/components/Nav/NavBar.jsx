@@ -221,17 +221,26 @@ export default function PrimarySearchAppBar(props) {
 
   // TODO - get rid of &nbsp; by user logged in name - how to pad the vertical divider?
 
-  let condition;
-  if(!isAuth) condition = "disabled";
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Login open={loginopen} close={handleLoginClose}></Login>
       <SignUp open={signupopen} close={handleSignUpClose}></SignUp>
       <AppBar position="static">
         <Toolbar>
-          
+          {!isAuth && 
           <IconButton
-            disabled = {condition}
+            disabled
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            sx={{ mr: 2, ...(dopen && { display: 'none' }) }}
+          >
+            <MenuIcon />
+          </IconButton>}
+          {isAuth && 
+          <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -240,7 +249,7 @@ export default function PrimarySearchAppBar(props) {
             sx={{ mr: 2, ...(dopen && { display: 'none' }) }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton>}
           
           <Typography
             variant="h6"
