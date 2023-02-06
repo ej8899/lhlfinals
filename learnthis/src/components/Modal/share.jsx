@@ -96,11 +96,11 @@ export const ShareModal= (props) => {
           </Box>
           <Divider/>
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-            <InputWithIcon label={"To: Name, Group, or Email"} width={"38ch"} margin={0} botMargin={2} emailTo={props.emailTo} emailMyTo={props.emailMyTo} />
+            <InputWithIcon label={"Email Address"} width={"38ch"} margin={0} botMargin={2} emailTo={props.emailTo} emailMyTo={props.emailMyTo} errorBlank={props.errorBlank} errorEmail={props.errorEmail} />
             <MultilineTextFields myComments={props.emailMessage} rows={3} width={"41ch"} label={'Message...'} placeholder={"Type Your Message Here"} margin={0} addMyComments={props.emailMyMessage} botMargin={0}/>
           </Box>
           <Box display="flex" justifyContent="flex-end" sx={{ m: 2 }}>
-            <Button variant="contained" href="" onClick={() => props.handleShareClose(props.sendEmail(props.emailTo, props.emailMessage, props.emailMyTo, props.emailMyMessage))} endIcon={<SendIcon />} >
+            <Button variant="contained" href="" onClick={() => props.sendEmail(props.emailTo, props.emailMessage, props.handleShareClose)} endIcon={<SendIcon />} >
               Share
             </Button>
           </Box>

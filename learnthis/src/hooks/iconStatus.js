@@ -134,7 +134,7 @@ export default function IconStatus(props) {
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
-  // Toggle star rating status
+  // Toggle star rating status (user rating - not overall rating)
   // TODO pass star rating status to database
   const [star, setStar] = useState(null)
   const addStar = (num) => {

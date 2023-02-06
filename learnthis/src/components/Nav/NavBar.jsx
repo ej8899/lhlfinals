@@ -2,8 +2,6 @@ import * as React from 'react';
 import {useState, useContext} from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
@@ -24,6 +22,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Divider from '@mui/material/Divider';
 import RandomAvatar from './RandomAvatar';
+import { Paper, Toolbar, Box, Grid } from "@mui/material";
 
 import {  modalSignUp,
           modalSignIn
@@ -34,6 +33,51 @@ import { AuthContext } from '../../hooks/handleUsers.js';
 
 
 import AboutDialog from "../Modal/about.jsx"
+import { useEffect } from 'react';
+
+
+//
+// profile modal
+//
+function ProfilePageData(url,user) {
+  
+  
+  return (
+  <div>
+  <Grid sx={{ border: "0px solid red" }} container spacing={2} justifyContent="center" >
+  <Grid item 
+            align="left"
+            
+            alignItems="flex-end"
+            justify="center" 
+            >
+    <img
+      className="fashadow "
+      src={url}
+      alt="user avatar"
+      width="150"
+      height="150"
+    />
+  </Grid>
+  <Grid item xs={8} 
+            container
+            align="left"
+            
+            alignItems="flex-end"
+            justify="center"
+            >
+    
+  
+  <Typography variant="body1">
+    This is the user profile modal for {user}<br/>
+  </Typography>
+
+  </Grid>
+  </Grid>
+  </div>
+  );
+}
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -109,6 +153,16 @@ export default function PrimarySearchAppBar(props) {
   };
 
 
+  // setup avatar
+  const [avatarUrl, setAvatarUrl] = React.useState(null);
+  React.useEffect(() => {
+    let x = (Math.random())
+    let url = "https://api.dicebear.com/5.x/bottts-neutral/svg?radius=50&seed=" + x;
+    setAvatarUrl(url);
+    console.log(avatarUrl)
+  }, []);
+
+
   // userauth
   const { isAuth, user, userid, logout } = useContext(AuthContext);
   zlog("debug","user:",user)
@@ -123,29 +177,14 @@ export default function PrimarySearchAppBar(props) {
     setAnchorEl(null);
     handleMenuClose();
     zlog('info',"user MODAL:",modal);
+
     switch (modal) {
-      case 'about':
-        setTitle("About...");
-        //setContent(modalAboutMessage());
-        break;
-      case 'team':
-        setTitle("The Dev Team...");
-        //setContent(modalAboutTeam());
-        break;
-      case 'contact':
-        setTitle("Contact Us...");
-        //setContent("content for contact");
-        break;
-      case 'cpolicy':
-        setTitle("Cookies Policy...");
-        //setContent("content for cookies plicy");
-        break;
-      case 'ppolicy':
-        setTitle("Privacy Policy...");
-        //setContent(modalPrivacyPolicy());
-        break;
       case 'logout':
         logout();
+        break;
+      case 'profile':
+        setTitle("Profile...")
+        setContent(ProfilePageData(avatarUrl,user));
         break;
       default:
         setTitle("oops.. not found");
@@ -197,7 +236,7 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {isAuth ? <MenuItem onClick={() => handleUserModals('profile')}>Profile</MenuItem> : null}
+      {isAuth ? <MenuItem avatar={avatarUrl} onClick={() => handleUserModals('profile')}>Profile</MenuItem> : null}
       {isAuth ? null : <MenuItem onClick={handleLoginForm}>Sign In</MenuItem>}
       {isAuth ? null : <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>}
       {isAuth ? <Divider variant="middle"  /> : null}
@@ -311,7 +350,7 @@ export default function PrimarySearchAppBar(props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              {isAuth ? <RandomAvatar/> : <AccountCircle />}
+              {isAuth ? <RandomAvatar url={avatarUrl}/> : <AccountCircle />}
             </IconButton>
             
           </Box>

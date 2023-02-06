@@ -64,7 +64,7 @@ const style = {
   p: 4,
 };
 
-export const NewResourceModal = (props) => {
+export const EditResourceModal = (props) => {
 
   // reference: https://www.npmjs.com/package/react-youtube
   const videoPlayerOpts = {

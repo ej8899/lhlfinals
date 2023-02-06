@@ -124,7 +124,7 @@ export const DetailModal = (props) => {
                 </Box>
               }
               <Box display={props.show} alignItems="center" marginTop="1rem">
-                <DiscreteSliderMarks label={"Rate Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage}         sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
+                <DiscreteSliderMarks label={"Rate Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage} sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
                 {/* <Box style={{paddingTop:20, paddingLeft:15}}>
                   <ComboBox listData={props.complexity} message={'Select the lesson complexity...'} mySelection={props.myComplexity} addMySelection={props.addMyComplexity}/>
                 </Box> */}
@@ -151,7 +151,7 @@ export const DetailModal = (props) => {
               </Box>
             </Box>
             <Typography id="detail-modal-description" display="flex" flexDirection="column" justifyContent="space-around" paddingBottom="3rem">
-              <RateStaleStats rateReview={props.rateReview} rate={props.rate} addRate={props.addRate}/>
+              <RateStaleStats rateReview={props.rateReview} rate={props.rate}/>
               <FavouriteStaleStats favourite={props.favourite} addFavourites={props.addFavourites}/>
               <LikeStaleStats like={props.like} addLike={props.addLike} />
               <LessonStaleStats lesson={props.lesson} addLesson={props.addLesson}/>

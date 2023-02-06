@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -20,7 +20,6 @@ import { styled } from '@mui/material/styles';
 import { useContext } from 'react';
 import { AuthContext } from '../hooks/handleUsers.js';
 import { login,logout } from '../hooks/handleUsers.js';
-
 
 import zlog from '../helpers/zlog.js';
 
@@ -53,6 +52,28 @@ function Copyright(props) {
 // TODO - sign UP link needs to work
 
 const Login=(props)=>{
+  const [emaildata, setEmailData] = React.useState(localStorage.getItem("defaultemail"));
+  const handleEmailChange = (event) => {
+    setEmailData(event.target.value);
+  };
+
+  // rememberMe
+  const [rememberMe, setRememberMe] = useState(
+    localStorage.getItem("rememberMe") === "true"
+  );
+  const [rememberMeEmail, setRememberMeEmail] = useState(
+    localStorage.getItem("defaultemail") === ""
+  );
+  const handleRememberMeChange = (event) => {
+    setRememberMe(event.target.checked);
+    localStorage.setItem("rememberMe", event.target.checked);
+  };
+  let storeduser = "";
+
+  React.useEffect(() => {
+    storeduser = localStorage.getItem("defaultemail")
+    setRememberMeEmail(storeduser)
+  }, []);
 
     // userauth
     const { login } = useContext(AuthContext);
@@ -65,20 +86,26 @@ const Login=(props)=>{
       const email = data.get('email');
       const password = data.get('password')
 
+      if (rememberMe) {
+        localStorage.setItem("rememberMe", "true");
+        localStorage.setItem("defaultemail",email)
+      } else {
+        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("defaultemail");
+      }
+
       login({"email": email, "password": password}, props.close)
     };
 
 
- 
-
-    return(
-<BootstrapDialog
+  return(
+    <BootstrapDialog
         onClose={props.close}
         aria-labelledby="customized-dialog-title"
         open={props.open}
       >
 
-<Container component="main" maxWidth="xs" sx={{
+    <Container component="main" maxWidth="xs" sx={{
             marginTop: 4,
             display: 'flex',
             flexDirection: 'column',
@@ -108,6 +135,8 @@ const Login=(props)=>{
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={handleEmailChange}
+              value={emaildata}
             />
             <TextField
               margin="normal"
@@ -122,6 +151,7 @@ const Login=(props)=>{
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
+              onChange={handleRememberMeChange}
             />
             <Button
               type="submit"

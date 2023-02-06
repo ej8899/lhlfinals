@@ -40,14 +40,15 @@ import IconStatus from '../../hooks/iconStatus'
 // Import Modal
 import { StatusModal } from "../NewResource/status";
 import { ResultModal } from "./result";
-import { EditResourceModal } from "./newResourceModal";
+import { NewResourceModal } from "./newResourceModal";
 import { ErrorModal } from "./error";
+import { DeletedModal } from "../ItemDetail/deleted";
 // --------------------------------------------------------
 
-//-------------------------------------------------------------------
+//---------------------------------------------------------
 // Import user authentication
 import { AuthContext } from '../../hooks/handleUsers.js';
-//-------------------------------------------------------------------
+//---------------------------------------------------------
 
 
 export const AddResourceFlow = (props) => {
@@ -120,6 +121,7 @@ export const AddResourceFlow = (props) => {
     setOpenDeleting,
     handleDeletingClose,
     handleOpenDeleting,
+    handleDeletedClose,
 
     myComments,
     setMyComments,
@@ -163,6 +165,8 @@ export const AddResourceFlow = (props) => {
     setSavingErrorNewResource,
     handleSavedClose,
 
+    errorBlank, 
+    setErrorBlank,
     newResource,
     setNewResource,
     handleNewResourceClose,
@@ -249,56 +253,62 @@ export const AddResourceFlow = (props) => {
 // TODO -- Need to add when not a youtube resource
 // Fetch from API new resource
   const fetchNewResource = (URL, isYoutubeUrl, getYoutubeVideoId) => {
-    setFetchingNewResource(true)
-    if (isYoutubeUrl(URL)) {
-      const videoId =  getYoutubeVideoId(URL)
-      setVideoId(videoId)
-      setVideoURL(URL)
-      setDomain(extractDomain(URL))
-      axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`)
-    // axios.get(`https://www.googleapis.com/`)
-      .then(response => { 
-        if(response.data.items[0] === undefined) {
-          console.log(`ERROR: ${URL} Video Not Found`)
-          setTimeout(() => {
-            setFetchingErrorNewResource(true)
-            setFetchingNewResource(false)
-          }, 1200)
-        } else {
-          setTimeout(() => {
-            setAddNewResource(true)
-            setFetchingNewResource(false)
-          }, 1200)
-          zlog('API',"YouTube API Called:", videoId)
-          setTitle(response.data.items[0].snippet.title)
-          setDescriptionExpanded(response.data.items[0].snippet.description)
-          setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
-          /*
-          REFERENCE:
-          useful items in response data:
-          .snippet.
-            categoryId
-            channelId,
-            channelTitle,
-            description,
-            title,
-            thumbnails.default.url, 120x90
-            thumbnails.high.url, 480x360
-            thumbnails.medium.url, 320x180
-            thumbnails.standard.url, 640x480
-          */
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    if (!URL) {
+      setErrorBlank(true);
     } else {
-      setTimeout(() => {
-        setAddNewResource(true)
-        setFetchingNewResource(false)
-        isYoutubeUrl(URL) ? console.log(getYoutubeVideoId(URL)) :
-        console.log(`ERROR: ${URL}`)
-      }, 2000)
+      setErrorBlank(false);
+      setNewResource(false);
+      setFetchingNewResource(true)
+      if (isYoutubeUrl(URL)) {
+        const videoId =  getYoutubeVideoId(URL)
+        setVideoId(videoId)
+        setVideoURL(URL)
+        setDomain(extractDomain(URL))
+        axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`)
+      // axios.get(`https://www.googleapis.com/`)
+        .then(response => { 
+          if(response.data.items[0] === undefined) {
+            console.log(`ERROR: ${URL} Video Not Found`)
+            setTimeout(() => {
+              setFetchingErrorNewResource(true)
+              setFetchingNewResource(false)
+            }, 1200)
+          } else {
+            setTimeout(() => {
+              setAddNewResource(true)
+              setFetchingNewResource(false)
+            }, 1200)
+            zlog('API',"YouTube API Called:", videoId)
+            setTitle(response.data.items[0].snippet.title)
+            setDescriptionExpanded(response.data.items[0].snippet.description)
+            setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
+            /*
+            REFERENCE:
+            useful items in response data:
+            .snippet.
+              categoryId
+              channelId,
+              channelTitle,
+              description,
+              title,
+              thumbnails.default.url, 120x90
+              thumbnails.high.url, 480x360
+              thumbnails.medium.url, 320x180
+              thumbnails.standard.url, 640x480
+            */
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      } else {
+        setTimeout(() => {
+          setAddNewResource(true)
+          setFetchingNewResource(false)
+          isYoutubeUrl(URL) ? console.log(getYoutubeVideoId(URL)) :
+          console.log(`ERROR: ${URL}`)
+        }, 2000)
+      }
     }
   }
 // --------------------------------------------------------
@@ -310,30 +320,44 @@ export const AddResourceFlow = (props) => {
   const { isAuth, user, userid, logout } = useContext(AuthContext);
 
   const addingNewResourceSQL = () => {
-    setSavingNewResource(true)
-
-    const newURLResource = {
-      "id" : props.sampledata.length + 1,
-      "profile_id" : userid,
-      "videoURL" : videoURL,
-      "created_at" : new Date().toISOString(),
-      "title" : title,
-      "thumbnail" : thumbnail,
-      "description" : descriptionExpanded,
-      "category" : myCategory,
-      "stage" : myStage,
-      "rating" : star,
-      "likes" : like === "default" ? 0 : 1
-    }
-    props.setsampledata([...props.sampledata, newURLResource]);
-    // window.location.reload(true);
-    setTimeout(() => {
-      setSavingNewResource(false)
-      setSavedNewResource(true)
-      setStar(null)
-      setLike('default')
+    if (!title) {
+      setErrorBlank(true)
+    } else {
+      setSavingNewResource(true)
+      handleAddNewResourceClose()
       handleIconReset()
-    }, 2000)
+      const newURLResource = {
+        "id" : props.sampledata.length + 1,
+        "profile_id" : userid,
+
+        "resource_id": props.sampledata.length + 1,
+        "videoURL" : videoURL,
+        "title" : title,
+        "thumbnail" : thumbnail,
+        "description" : descriptionExpanded,
+        "created_at" : new Date().toISOString(),
+
+        "category" : myCategory,
+        "stage" : myStage,
+        "rating" : star,
+        "likes" : like === "default" ? 0 : 1,
+
+        "myCategory" : myCategory,
+        "myStage" : myStage,
+        "star" : star,
+        "myComments" : myComments
+      }
+      props.setsampledata([...props.sampledata, newURLResource]);
+      // window.location.reload(true);
+      setTimeout(() => {
+        setSavingNewResource(false)
+        setSavedNewResource(true)
+        setStar(null)
+        setLike('default')
+        handleIconReset()
+        setErrorBlank(false)
+      }, 2000)
+    }
   }
 // --------------------------------------------------------
 
@@ -345,7 +369,7 @@ export const AddResourceFlow = (props) => {
       <NewResource handleNewResourceOpen={() => handleNewResourceOpen(console.log(props.sampledata))}/>
       <AddNewResource 
         open={newResource} handleNewResourceClose={handleNewResourceClose}
-        newURL={newURL} setNewURL={setNewURL} 
+        newURL={newURL} setNewURL={setNewURL} errorBlank={errorBlank}
         fetchNewResource={fetchNewResource} 
         isYoutubeUrl={isYoutubeUrl} getYoutubeVideoId={getYoutubeVideoId}
       />
@@ -366,13 +390,13 @@ export const AddResourceFlow = (props) => {
         message={"Success! Resource has been added."} submessage={"Checkout 'My Resources' for resources you've added."}
         thumbnail={thumbnail} title={title}
       />
-      <EditResourceModal 
+      <NewResourceModal 
         open={addNewResource} setOpen={setAddNewResource} 
         handleClose={() => handleAddNewResourceClose(handleIconReset())} 
         handleAbort={() => handleAddNewResourceAbort(handleIconReset())}
         handleCancel={() => handleAddNewResourceAbort(handleIconReset())}
         addingNewResourceSQL={addingNewResourceSQL}
-        setNewURL={setNewURL} domain={domain}
+        setNewURL={setNewURL} domain={domain} errorBlank={errorBlank}
         videoURL={videoURL} thumbnail={thumbnail}
         title={title} setTitle={setTitle} 
         descriptionExpanded={descriptionExpanded} setDescriptionExpanded={setDescriptionExpanded}

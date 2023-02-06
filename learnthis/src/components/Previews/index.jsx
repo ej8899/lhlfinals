@@ -63,7 +63,7 @@ import { NewBadge } from "../Icons/newbadge";
 // --------------------------------------------------------
 // Import Modals
 import { DeleteModal } from "../ItemDetail/delete";
-import { EditResourceModal } from "../NewResource/newResourceModal";
+import { EditResourceModal } from "../ItemDetail/edit";
 import { ResultModal } from "../NewResource/result";
 import { DetailModal }  from "../ItemDetail/index.jsx";
 import { ShareModal } from "../Modal/share";
@@ -79,6 +79,12 @@ import StateStatus from '../../hooks/state';
 // Import Icon Hooks/Status
 import IconStatus from '../../hooks/iconStatus'
 // --------------------------------------------------------
+
+//---------------------------------------------------------
+// Import user authentication
+import { AuthContext } from '../../hooks/handleUsers.js';
+//---------------------------------------------------------
+
 
 
 // TODO - any benefit to removing react-youtube and rolling our own variant?
@@ -98,6 +104,8 @@ export const PreviewItem = (props) => {
     setOpenDeleting,
     handleDeletingClose,
     handleOpenDeleting,
+    handleDeletedClose,
+    handleDeletedOpen,
 
     handleEditedClose,
     openEdited,
@@ -127,6 +135,8 @@ export const PreviewItem = (props) => {
     videoId,
     setVideoId,
 
+    errorBlank, 
+    setErrorBlank,
     newResource,
     setNewResource,
     handleNewResourceClose,
@@ -190,6 +200,8 @@ export const PreviewItem = (props) => {
     setNewIcon,
     addNewIcon,
 
+    errorEmail, 
+    setErrorEmail,
     sendingEmail,
     setSendingEmail,
     sendEmail,
@@ -274,15 +286,19 @@ export const PreviewItem = (props) => {
 // --------------------------------------------------------
 // Use effect - initial load from database
   useEffect(() => {
+    setOpen(false)
+
+    setVideoURL(props.videoURL)
     setTitle(props.title)
     setDescriptionExpanded(props.description)
-    setOpen(false)
     setThumbnail(props.thumbnail);
     addNewIcon(props.created_at)
+
     addSetStage(props.stage)
     setLikes(props.likes)
-    setVideoURL(props.videoURL)
+    
     setDomain(extractDomain(props.videoURL))
+    
     if (props.category.length === 0) {
       setCategory(`Category: TBD`)
     } else {
@@ -293,6 +309,20 @@ export const PreviewItem = (props) => {
       setCategoryExpanded(displayCategories)
       setCategory(truncateText(displayCategories, 28))
     }
+
+    setMyCategory(props.myCategory)
+    setMyStage(props.myStage)
+    setMyComments(props.myComments)
+    setStar(props.star)
+
+    tmpsetMyCategory(props.myCategory)
+    tmpsetMyStage(props.myStage)
+    tmpsetMyComments(props.myComments)
+    tmpsetStar(props.star)
+
+    tmpsetTitle(props.title)
+    tmpsetDescriptionExpanded(props.description)
+
   }, [videoId]);
 // --------------------------------------------------------
 
@@ -309,7 +339,7 @@ export const PreviewItem = (props) => {
   // TODO -- setting the state is included in the timeout until database update happens with backendcode
     setTimeout(() => {
       setOpenDeleting(false)
-      setOpenDeleted(true)
+      props.setOpenDeleted(true)
       props.setsampledata(deleteURLResource);
     }, 2000)
   }
@@ -319,40 +349,110 @@ export const PreviewItem = (props) => {
 // Updating Resource SQL database
 // TODO -- need to tie to database call
   const updatingResourceSQL = () => {
-    setOpenEdit(false)
-    setOpenEditing(true)
-    setOpen(false)
-    const updateURLResource = []
-    props.sampledata.forEach(resource => {
-    if (resource.id === props.id) {
-      updateURLResource.push({
-        "id" : props.id,
-        "profile_id": props.profile_id,
-        "videoURL" : videoURL,
-        "created_at" : props.created_at,
-        "updated_at" : new Date().toISOString(),
-        "title" : title,
-        "thumbnail" : thumbnail,
-        "description" : descriptionExpanded,
-        "category" : myCategory,
-        "stage" : stage,
-        "rating" : props.rating,
-        "likes" : likes 
-      })
+    if (!tmptitle) {
+      setErrorBlank(true)
     } else {
-      updateURLResource.push(resource)
+      setOpenEdit(false)
+      setOpenEditing(true)
+      setOpen(false)
+
+      const updateURLResource = []
+      props.sampledata.forEach(resource => {
+      if (resource.id === props.id) {
+        updateURLResource.push({
+          "id" : props.id,
+          "profile_id": props.profile_id,
+
+          "resource_id" : props.resource_id,
+          "videoURL" : videoURL,
+          "title" : tmptitle,
+          "thumbnail" : thumbnail,
+          "description" : tmpdescriptionExpanded,
+          "created_at" : props.created_at,
+          "updated_at" : new Date().toISOString(),
+          
+          "category" : category,
+          "stage" : stage,
+          "rating" : props.rating,
+          "likes" : likes,
+
+          "myCategory" : tmpmyCategory,
+          "myStage" : tmpmyStage,
+          "star" : tmpstar,
+          "myComments" : tmpmyComments
+        })
+      } else {
+        updateURLResource.push(resource)
+      }
+    })
+    // TODO -- setting the state is included in the timeout until database update happens with backendcode
+      setTimeout(() => {
+        setOpenEditing(false)
+        setOpenEdited(true)
+        props.setsampledata(updateURLResource);
+        console.log(updateURLResource)
+        setErrorBlank(true)
+
+        setMyCategory(tmpmyCategory)
+        setMyStage(tmpmyStage)
+        setMyComments(tmpmyComments)
+        setStar(tmpstar)
+
+        setTitle(tmptitle)
+        setDescriptionExpanded(tmpdescriptionExpanded)
+
+        tmpReset()
+      }, 2000)
     }
-  })
-  // TODO -- setting the state is included in the timeout until database update happens with backendcode
-    setTimeout(() => {
-      setOpenEditing(false)
-      setOpenEdited(true)
-      props.setsampledata(updateURLResource);
-    }, 2000)
+  }
+// --------------------------------------------------------
+
+
+
+// --------------------------------------------------------
+  // TMP set state for Rate & Review & Edit
+
+  // Resource Info
+  const [tmptitle, tmpsetTitle] = useState(title);
+  const [tmpdescriptionExpanded, tmpsetDescriptionExpanded] = useState(descriptionExpanded);
+
+  // User info
+  const [tmpmyComments, tmpsetMyComments] = useState(myComments);
+  const tmpaddMyComments = (comments) => {
+    tmpsetMyComments(comments)
+  }
+
+  const [tmpmyCategory, tmpsetMyCategory] = useState(myCategory);
+  const tmpaddMyCategory = (category) => {
+    tmpsetMyCategory(category)
+  }
+
+  const [tmpsliderActive, tmpsetSliderActive] = useState("grey")
+  const [tmpmyStage, tmpsetMyStage] = useState(myStage)
+
+  const tmpaddMyStage = (stage) => {
+    tmpsetMyStage(stage)
+    tmpsetSliderActive(false)
+  }
+
+  const [tmpstar, tmpsetStar] = useState(star)
+  const tmpaddStar = (num) => {
+    tmpsetStar(num)
+  }
+
+  const tmpReset = () => {
+    tmpsetMyCategory(myCategory)
+    tmpsetMyComments(myComments)
+    tmpsetMyStage(myStage)
+    tmpsetStar(star)
+    tmpsetTitle(title)
+    tmpsetDescriptionExpanded(descriptionExpanded)
   }
 // --------------------------------------------------------
 
   const skeletonTimer = randomNumber(100,3000);
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+
 
   return (
     <div>
@@ -464,12 +564,11 @@ export const PreviewItem = (props) => {
         <div>
           <DetailModal 
             open={openReview} setOpen={setOpenReview} setExpanded={setExpanded}
-            handleClose={() => handleReviewClose()} 
-            handleCancel={() => handleReviewClose(setOpen(true))}
+            handleClose={() => handleReviewClose(tmpReset())} 
+            handleCancel={() => handleReviewClose(setOpen(true), tmpReset())}
             addingNewResourceSQL={updatingResourceSQL}
             videoURL={videoURL} domain={domain}
-            title={title} id={props.id} thumbnail={thumbnail}
-            complexity={props.complexity} 
+            title={tmptitle} id={props.id} thumbnail={thumbnail}
             typeCategory={props.typeCategory} 
             favourite={favourite} addFavourites={() => addFavourites(filter)}
             lesson={lesson} addLesson={addLesson}
@@ -477,17 +576,14 @@ export const PreviewItem = (props) => {
             show={show}
             bookmark={bookmark} addBookmark={addBookmark}
             playlist={playlist} addPlaylist={addPlaylist}
-            share={share} addShare={() => addShare(filter)} shareOpen={shareOpen} handleShareClose={handleShareClose} handleShareOpen={handleShareOpen}
+            share={share} handleShareOpen={handleShareOpen}
             report={report} addReport={addReport}
             like={like} addLike={() => addLike(filter)} setLike={setLike} 
-            likes={likes} setLikes={setLikes}
-            more={more} addMore={addMore} setMore={setMore}
-            star={star} addStar={addStar}
-            myComments={myComments} addMyComments={addMyComments}
-            myComplexity={myComplexity} addMyComplexity={addMyComplexity}
-            myCategory={myCategory} addMyCategory={addMyCategory}
-            myStage={myStage} addMyStage={addMyStage}
-            sliderActive={sliderActive} setSliderActive={setSliderActive}
+            star={tmpstar} addStar={tmpaddStar}
+            myComments={tmpmyComments} addMyComments={tmpaddMyComments}
+            myCategory={tmpmyCategory} addMyCategory={tmpaddMyCategory}
+            myStage={tmpmyStage} addMyStage={tmpaddMyStage}
+            sliderActive={tmpsliderActive} setSliderActive={tmpsetSliderActive}
           />
         </div>
         <div>
@@ -497,7 +593,6 @@ export const PreviewItem = (props) => {
             handleReviewOpen={() => handleReviewOpen()}
             videoURL={videoURL} domain={domain}
             title={title} id={props.id} thumbnail={thumbnail}
-            complexity={props.complexity} 
             typeCategory={props.typeCategory} 
             favourite={favourite} addFavourites={() => addFavourites(filter)}
             lesson={lesson} addLesson={addLesson}
@@ -505,14 +600,12 @@ export const PreviewItem = (props) => {
             show={show}
             bookmark={bookmark} addBookmark={addBookmark}
             playlist={playlist} addPlaylist={addPlaylist}
-            share={share} addShare={() => addShare(filter)} shareOpen={shareOpen} handleShareClose={handleShareClose} handleShareOpen={handleShareOpen}
+            share={share} handleShareOpen={handleShareOpen}
             report={report} addReport={addReport}
             like={like} addLike={() => addLike(filter)} setLike={setLike} 
             likes={likes} setLikes={setLikes}
-            more={more} addMore={addMore} setMore={setMore}
             star={star} addStar={addStar}
             myComments={myComments} addMyComments={addMyComments}
-            myComplexity={myComplexity} addMyComplexity={addMyComplexity}
             myCategory={myCategory} addMyCategory={addMyCategory}
             myStage={myStage} addMyStage={addMyStage}
             sliderActive={sliderActive} setSliderActive={setSliderActive}
@@ -526,7 +619,7 @@ export const PreviewItem = (props) => {
         <div>
           <ShareModal 
             open={shareOpen} setShareOpen={setShareOpen} setExpanded={setExpanded}
-            handleShareClose={() => handleShareClose()} 
+            handleShareClose={() => handleShareClose(setErrorBlank(false))} 
             videoURL={videoURL} domain={domain}
             title={title} id={props.id}
             complexity={props.complexity} 
@@ -534,7 +627,7 @@ export const PreviewItem = (props) => {
             favourite={favourite} addFavourites={() => addFavourites(filter)}
             lesson={lesson} addLesson={addLesson}
             rate={rate} rateReview={rateReview}
-            show={show}
+            show={show} errorBlank={errorBlank} errorEmail={errorEmail}
             bookmark={bookmark} addBookmark={addBookmark}
             playlist={playlist} addPlaylist={addPlaylist}
             share={share} addShare={() => addShare(filter)}
@@ -558,15 +651,14 @@ export const PreviewItem = (props) => {
         <div>
           <EditResourceModal 
             open={openEdit} setOpen={setOpenEdit} 
-            handleClose={() => handleEditClose()} 
-            handleAbort={() => handleEditClose()}
-            handleCancel={() => handleEditClose(setOpen(true))}
-            setNewURL={setNewURL}
+            handleClose={() => handleEditClose(tmpReset())} 
+            handleAbort={() => handleEditClose(tmpReset())}
+            handleCancel={() => handleEditClose(setOpen(true), tmpReset())}
+            setNewURL={setNewURL} errorBlank={errorBlank}
             addingNewResourceSQL={updatingResourceSQL}
             videoURL={videoURL} thumbnail={thumbnail}
-            title={title} setTitle={setTitle} domain={domain}
-            descriptionExpanded={descriptionExpanded} setDescriptionExpanded={setDescriptionExpanded}
-            complexity={props.sampleComplexity} 
+            title={tmptitle} setTitle={tmpsetTitle} domain={domain}
+            descriptionExpanded={tmpdescriptionExpanded} setDescriptionExpanded={tmpsetDescriptionExpanded}
             typeCategory={props.typeCategory} 
             favourite={favourite} addFavourites={() => addFavourites(filter)}
             lesson={lesson} addLesson={addLesson}
@@ -574,17 +666,16 @@ export const PreviewItem = (props) => {
             bookmark={bookmark} addBookmark={addBookmark}
             playlist={playlist} addPlaylist={addPlaylist}
             like={like} addLike={() => addLike(filter)} setLike={setLike}
-            star={star} addStar={addStar}
-            myComments={myComments} addMyComments={addMyComments}
-            myComplexity={myComplexity} addMyComplexity={addMyComplexity}
-            myCategory={myCategory} addMyCategory={addMyCategory}
-            myStage={myStage} addMyStage={addMyStage}
-            sliderActive={sliderActive} setSliderActive={setSliderActive}
+            star={tmpstar} addStar={tmpaddStar}
+            myComments={tmpmyComments} addMyComments={tmpaddMyComments}
+            myCategory={tmpmyCategory} addMyCategory={tmpaddMyCategory}
+            myStage={tmpmyStage} addMyStage={tmpaddMyStage}
+            sliderActive={tmpsliderActive} setSliderActive={tmpsetSliderActive}
           />
         </div>
         <div>
           <StatusModal 
-            open={sendingEmail} setStatusOpen={setSendingEmail} setExpanded={setExpanded} message={"Sharing Resource"}
+            open={sendingEmail} message={"Sharing Resource"}
           />
         </div>
         <div>
@@ -597,12 +688,12 @@ export const PreviewItem = (props) => {
         </div>
         <div>
           <StatusModal 
-            open={openDeleting} setStatusOpen={setOpenDeleting} message={"Deleting Resource"}
+            open={openDeleting} message={"Deleting Resource"}
           />
         </div>
         <div>
           <StatusModal 
-            open={openEditing} setStatusOpen={setOpenEditing} message={"Updating Resource"}
+            open={openEditing} message={"Updating Resource"}
           />
         </div>
         <div>
@@ -616,7 +707,7 @@ export const PreviewItem = (props) => {
         <div>
           <ResultModal 
             open={openEdited} setStatusOpen={setOpenEdited} 
-            handleClose={() => handleEditedClose()} 
+            handleClose={() => handleEditedClose(tmpReset())} 
             message={"Success! Resource has been updated."} submessage={"Checkout 'My Resources' for resources you've added."}
             thumbnail={thumbnail} title={title}
           />

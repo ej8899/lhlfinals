@@ -11,8 +11,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
-import Divider from '@mui/material/Divider';
-import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 // --------------------------------------------------------
 
@@ -48,17 +47,15 @@ const style = {
   p: 4,
 };
 
-//-------------------------------------------------------------------
-// TODO pass props to this component w data
-export const AddNewResource= (props) => {
+// TODO - bottom where my resource - add anchor to link?
+export const DeletedModal= (props) => {
 
   return (
     <Modal
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
-      onClose={() => props.handleNewResourceClose()}
-      closeAfterTransition
+      onClose={() => props.handleClose()}
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500,
@@ -66,50 +63,14 @@ export const AddNewResource= (props) => {
       disableScrollLock={true}
     >
       <Box sx={style}>
-        <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
-          <Typography variant="h5" style={{ marginLeft : 8, marginBottom : 10}}>
-            Add New Resource
+        <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" sx={{gap: 3}}>
+          <Typography variant="h6" textAlign="center">
+            {props.message}
           </Typography>
-          <Box>
-            <CloseModal handleClose={() => props.handleNewResourceClose()}/>
-          </Box>
+          <CloseModal handleClose={props.handleClose}/>
         </Box>
-        <Box
-          sx={{
-            width: 500,
-            maxWidth: '100%',
-            m: 2
-          }}
-        >
-          {!props.errorBlank &&
-            <TextField 
-              fullWidth 
-              label="New Resource URL" 
-              id="fullWidth" 
-              value={props.newURL} 
-              onChange={(event) => props.setNewURL(event.target.value)}
-              sx={{marginBottom: "1.5em"}}
-            />
-          }
-          { props.errorBlank &&
-            <TextField
-              error
-              fullWidth
-              id="outlined-error-helper-text"
-              label="New Resource URL" 
-              value={props.newURL} 
-              onChange={(event) => props.setNewURL(event.target.value)}
-              helperText="URL cannot be blank."
-            />
-          }
-        </Box>
-        <Box display="flex" justifyContent="flex-end">
-          <Button variant="contained" href="" onClick={() =>props.fetchNewResource(props.newURL, props.isYoutubeUrl, props.getYoutubeVideoId)} >
-            Add
-          </Button>
-        </Box>
+
       </Box>
     </Modal>
   );
 }
-

@@ -33,10 +33,16 @@ export const AuthProvider = ({ children }) => {
     return axios.post('http://localhost:8080/api/user/login', { "email": email, "password": password})
     .then(response => {
       // TODO -- right now receiving only email address - want to update to first and last name
-      setUser(response.data.authenticatedUser.email)
-      setIsAuth(true);
-      setUserid(response.data.authenticatedUser.id);
-      close();
+      return axios.get(`http://localhost:8080/api/profiles/user/${response.data.authenticatedUser.id}`)
+      .then(response => {
+        setUser(`${response.data.profiles[0].first_name} ${response.data.profiles[0].last_name}`)
+        close();
+        setIsAuth(true);
+        setUserid(response.data.profiles[0].id);
+      })
+      .catch(error => {
+        console.error(error);
+      });
     })
     .catch(error => {
       console.error(error);

@@ -92,10 +92,12 @@ const handleOpenEdit = () => {
 
 const handleEditClose = () => {
   setOpenEdit(false);
+  setErrorBlank(false)
 };
 
 const handleEditedClose = () => {
   setOpenEdited(false);
+  setErrorBlank(false)
 };
 // -------------------------------------------------------------
 
@@ -103,7 +105,7 @@ const handleEditedClose = () => {
 // handle open and close of item delete detail modal
 const [openDelete, setOpenDelete] = useState(false);
 const [openDeleting, setOpenDeleting] = useState(false)
-const [openDeleted, setOpenDeleted] = useState(false)
+
 
 const handleOpenDelete = () => {
     setOpenDelete(true);
@@ -129,7 +131,7 @@ const handleDeletingClose = () => {
 // -------------------------------------------------------------
 // State for my comments data
 // TODO - add comments to database
-  const [myComments, setMyComments] = useState('');
+  const [myComments, setMyComments] = useState(undefined);
   const addMyComments = (comments) => {
     setMyComments(comments)
     // console.log(comments)
@@ -187,7 +189,7 @@ const addNewIcon = (created_at) => {
   // console.log(diffTime + " milliseconds");
   // console.log(diffDays + " days");
 
-  if (diffDays <= 1) {
+  if (diffDays <= 3) {
     setNewIcon("flex") 
   }
 }
@@ -199,22 +201,35 @@ const [sendingEmail, setSendingEmail] = useState(false)
 const [emailMessage, emailMyMessage] = useState('')
 const [emailTo, emailMyTo] = useState('')
 const [emailSent, setEmailSent] = useState(false)
+const [errorEmail, setErrorEmail] = useState(false)
 
 // TODO -- This will become a PUT statement or other API for email
-const sendEmail = (email, message) => {
-  setSendingEmail(true)
-  setTimeout(() => {
-    setSendingEmail(false)
-    setEmailSent(true)
-    zlog('Info',"Email sent to:", email) 
-    zlog('Info',"Email was sent With message:", message) 
-  }, 2000)
+const sendEmail = (email, message, close) => {
+  if (!email) {
+    setErrorBlank(true)
+  } else if (!email.includes("@")) {
+    setErrorEmail(true)
+  } else {
+    close()
+    setEmailSent(false)
+    setSendingEmail(true)
+    setErrorBlank(false)
+    setErrorEmail(false)
+    setTimeout(() => {
+      setSendingEmail(false)
+      setEmailSent(true)
+      zlog('Info',"Email sent to:", email) 
+      zlog('Info',"Email was sent With message:", message) 
+    }, 2000)
+  }
 } 
 
 const handleSharedClose = () => {
   setEmailSent(false)
   emailMyMessage("")
   emailMyTo("") 
+  setErrorBlank(false)
+  setErrorEmail(false)
 }
 // -------------------------------------------------------------
 
@@ -225,6 +240,9 @@ const [newResource, setNewResource] = useState(false);
 
   // State for new url added after hit save
 const [newURL, setNewURL] = useState('')
+
+  // Validation - blank url
+const [errorBlank, setErrorBlank] = useState(false)
 
   // Edit screen for new resource
 const [addNewResource, setAddNewResource] = useState(false);
@@ -250,6 +268,8 @@ const handleNewResourceOpen = () => {
 
 const handleNewResourceClose = () => {
   setNewResource(false);
+  setErrorBlank(false);
+  setNewURL("");
 };
 
 const handleAddNewResourceClose =() => {
@@ -265,6 +285,7 @@ const handleAddNewResourceAbort =() => {
   setMyStage(null)
   setVideoURL('')
   setDomain('')
+  setErrorBlank(false)
 }
 
 const handleSavedClose =() => {
@@ -277,6 +298,7 @@ const handleSavedClose =() => {
   setMyStage(null)
   setVideoURL('')
   setDomain('')
+  setErrorBlank(false)
 }
 
 const handleErrorFetchingNewResourceClose = () => {
@@ -344,12 +366,12 @@ const handleErrorFetchingNewResourceClose = () => {
     setOpenDelete,
     handleDeleteClose,
     handleOpenDelete,
-    openDeleted, 
-    setOpenDeleted,
+
     openDeleting,
     setOpenDeleting,
     handleDeletingClose,
     handleOpenDeleting,
+
 
     myComments,
     setMyComments,
@@ -374,6 +396,8 @@ const handleErrorFetchingNewResourceClose = () => {
     setNewIcon,
     addNewIcon,
 
+    errorEmail, 
+    setErrorEmail,
     sendingEmail,
     setSendingEmail,
     sendEmail,
@@ -393,6 +417,8 @@ const handleErrorFetchingNewResourceClose = () => {
     setSavingErrorNewResource,
     handleSavedClose,
 
+    errorBlank, 
+    setErrorBlank,
     newResource,
     setNewResource,
     handleNewResourceClose,

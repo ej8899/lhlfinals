@@ -1,6 +1,6 @@
 // --------------------------------------------------------
 // React Imports
-import React from 'react';
+import React, { useEffect, useRef, useState, useContext } from "react";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -15,27 +15,55 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 // --------------------------------------------------------
 
+//---------------------------------------------------------
+// Import user authentication
+import { AuthContext } from '../../hooks/handleUsers.js';
+//---------------------------------------------------------
 
 export const FavouriteStats = (props) => {
 
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+
   return (
-    <Fade in={!props.nowloading} timeout={{ enter: props.skeletonTimer }}>
-      <Tooltip title="Add to Favourites">
-        <IconButton aria-label="add to favourites" sx={{ color: `${props.favourite}`, "&:hover": {color: "pink"} }}  onClick={props.addFavourites}>
-          <FavoriteIcon />
-        </IconButton>
-      </Tooltip>
-    </Fade>
+    <React.Fragment>
+      {userid &&
+        <Fade in={!props.nowloading} timeout={{ enter: props.skeletonTimer }}>
+          <Tooltip title="Add to Favourites">
+            <IconButton aria-label="add to favourites" sx={{ color: `${props.favourite}`, "&:hover": {color: "pink"} }}  onClick={props.addFavourites}>
+              <FavoriteIcon />
+            </IconButton>
+          </Tooltip>
+        </Fade>
+      }
+      {!userid &&
+        <Fade in={!props.nowloading} timeout={{ enter: props.skeletonTimer }}>
+          <IconButton aria-label="add to favourites" disabled>
+            <FavoriteIcon />
+          </IconButton>
+        </Fade>
+      }
+    </React.Fragment>
   )
 }
 
 export const FavouriteStaleStats = (props) => {
 
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+
   return (
-    <Tooltip title="Add to Favourites">
-      <IconButton aria-label="add to favourites" sx={{ color: `${props.favourite}`, "&:hover": {color: "pink"} }}  onClick={props.addFavourites}>
-        <FavoriteIcon />
-      </IconButton>
-    </Tooltip>
+    <React.Fragment>
+      {userid &&
+        <Tooltip title="Add to Favourites">
+          <IconButton aria-label="add to favourites" sx={{ color: `${props.favourite}`, "&:hover": {color: "pink"} }}  onClick={props.addFavourites}>
+            <FavoriteIcon />
+          </IconButton>
+        </Tooltip>
+      }
+      {!userid &&
+        <IconButton aria-label="add to favourites" disabled>
+          <FavoriteIcon />
+        </IconButton>
+      }
+    </React.Fragment>
   )  
 }
