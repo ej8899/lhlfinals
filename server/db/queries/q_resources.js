@@ -8,6 +8,24 @@ const getAllResources = () => {
   //const params = ["NOT NULL"];
   return db
     .query(
+      `SELECT *
+    FROM resources
+    WHERE deleted_at IS NULL
+    ORDER BY id LIMIT 20;`
+    )
+    .then((data) => {
+      return data.rows;
+    });
+};
+
+/**
+ * Get all resources with addition of likes, categories, rankings and ratings
+ * @return {Promise<{}>} A promise of all resources in db that are not deleted limit by 20.
+ */
+const getAllResourcesWithAddition = () => {
+  //const params = ["NOT NULL"];
+  return db
+    .query(
       `SELECT res.*, COUNT(DISTINCT l.id) AS likes, array[c.name] AS categories, AVG(ran.SCALE) AS ranking, AVG(rat.rate) AS rating
     FROM resources AS res
     LEFT JOIN likes AS l on res.id=l.resource_id
@@ -114,6 +132,7 @@ const deleteResource = (data) => {
 
 module.exports = {
   getAllResources,
+  getAllResourcesWithAddition,
   postResource,
   updateResource,
   deleteResource
