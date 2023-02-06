@@ -21,6 +21,19 @@ router.get("/", (req, res) => {
 });
 
 /**
+ * Get all resources with addition of likes, categories, rankings and ratings
+ * @return {json} All resources in db that are not deleted limit by 20.
+ */
+router.get("/withAddition", (req, res) => {
+  q_resources
+    .getAllResourcesWithAddition()
+    .then((data) => res.json(data))
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+/**
  * Save new resource
  * @return {json} resource that is saved
  *
