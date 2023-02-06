@@ -25,6 +25,8 @@ import { BookmarkStaleStats } from './bookmark';
 import { RateStaleStats } from './review';
 import { PlaylistStaleStats } from './playlist';
 import { ReportStaleStats } from './report';
+import { EditStaleStats } from "./edit";
+import { DeleteStaleStats } from "./delete";
 // --------------------------------------------------------
 
 //---------------------------------------------------------
@@ -90,10 +92,12 @@ export const MoreStats = (props) => {
           disableScrollLock={true}
         >
           <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" textAlign="center">
-            <MenuItem onClick={props.handleCloseOut}><RateStaleStats rate={props.rate} rateReview={() => {props.rateReview(true, props.handleOpen())}}/></MenuItem>
+            <MenuItem onClick={props.handleCloseOut}><RateStaleStats rate={props.rate} rateReview={() => {props.rateReview(true, props.handleReviewOpen())}}/></MenuItem>
             <MenuItem onClick={props.handleCloseOut}><LessonStaleStats lesson={props.lesson} addLesson={props.addLesson}/></MenuItem>
             <MenuItem onClick={props.handleCloseOut}><BookmarkStaleStats bookmark={props.bookmark} addBookmark={props.addBookmark}/></MenuItem>
             <MenuItem onClick={props.handleCloseOut}><PlaylistStaleStats playlist={props.playlist} addPlaylist={props.addPlaylist}/></MenuItem>
+            <MenuItem onClick={props.handleCloseOut}><EditStaleStats profile_id={props.profile_id} handleOpenEdit={props.handleOpenEdit}/></MenuItem>
+            <MenuItem onClick={props.handleCloseOut}><DeleteStaleStats profile_id={props.profile_id} handleOpenDelete={props.handleOpenDelete}/></MenuItem>
             <MenuItem onClick={props.handleCloseOut}><ReportStaleStats report={props.report} addReport={() => props.addReport(props.setExpanded(false))}/></MenuItem>
           </Box>
         </Menu>

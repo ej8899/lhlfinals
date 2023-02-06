@@ -19,7 +19,8 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import zlog from '../../helpers/zlog';
-
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import Button from '@mui/material/Button';
 
 // Icons
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -41,49 +42,46 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const handleClick = (event) => {
-  zlog('action','Button was clicked:',event);
-};
-
 
 export default function PersistentDrawerLeft(props) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(props.open);
+  // const [open, setOpen] = React.useState(props.open);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  // const handleDrawerOpen = () => {
+  //   setOpen(true);
+  // };
+
+  // const handleDrawerClose = () => {
+  //   setOpen(false);
+  // };
+
+  // --------------------------------------------------------
+  // Import Hooks
+  // const { handleNewResourceOpen, setNewResource } = StateStatus();
+
+  const handleClick = (event, index) => {
+    zlog('action','Button was clicked:',event);
+    zlog('action','Button was clicked:', index);
+  
+    if(index === 0) {
+      props.handleNewResourceOpen()
+    } else if (index === 1) {
+      console.log("My Resources has been triggered")
+    }
   };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
   
 
-  return (
-  
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={props.open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={props.close}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
+
+  const list = (anchor) => (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={props.toggleDrawer(anchor, false)}
+      onKeyDown={props.toggleDrawer(anchor, false)}
+    >
+      <List>
           {['Add Resource', 'My Resources', 'Favorites', 'Saved for Later', 'Playlist'].map((text, index) => (
-            <ListItem key={text} disablePadding onClick={() => handleClick(text)}>
+            <ListItem key={text} disablePadding onClick={() => handleClick(text, index)}>
               <ListItemButton>
                 <ListItemIcon>
                   {index === 0 ? <AddCircleIcon/> : <span/>}
@@ -111,6 +109,38 @@ export default function PersistentDrawerLeft(props) {
             </ListItem>
           ))}
         </List>
-      </Drawer>
+
+        </Box>
+  )
+
+  return (
+    <SwipeableDrawer
+      anchor={props.anchor}
+      open={props.state[props.anchor]}
+      onClose={props.toggleDrawer(props.anchor, false)}
+      onOpen={props.toggleDrawer(props.anchor, true)}
+    >
+
+        {/* sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={props.open}
+        onClose={props.close}
+      > */}
+      <DrawerHeader>
+        <IconButton onClick={props.toggleDrawer(props.anchor, false)}>
+          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+        </IconButton>
+      </DrawerHeader>
+      <Divider />
+      {list(props.anchor)}
+    </SwipeableDrawer>
   );
 }

@@ -38,6 +38,9 @@ export default function IconStatus(props) {
     if (tmp === true) {
       setRate('teal')
       setShow('flex')
+    } else if (tmp === "close") {
+      setRate("default")
+      setShow("none")
     } else {
       addRate()
       if(show === "none") {
@@ -156,6 +159,15 @@ export default function IconStatus(props) {
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
+// Toggle Delete
+const [deleteIcon, setDeleteIcon] = useState('default')
+const addDeleteIcon = (tmp = false) => {
+  tmp === true ? setDeleteIcon("red") : setDeleteIcon("default")
+}
+
+// -------------------------------------------------------------
+
+// -------------------------------------------------------------
 // Handle Icon Reset
   const handleIconReset = () => {
     setFavourite('default')
@@ -166,11 +178,14 @@ export default function IconStatus(props) {
     setLike('default')
     setStar(null)
   }
-
 // -------------------------------------------------------------
 
   return {
-  handleIconReset,
+    handleIconReset,
+
+    deleteIcon,
+    setDeleteIcon,
+    addDeleteIcon,
 
     favourite,
     setFavourite,

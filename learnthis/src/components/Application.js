@@ -1,67 +1,65 @@
+// --------------------------------------------------------
+// React Imports
 import React, { useContext, useEffect, useRef, useState } from "react";
+import axios from 'axios';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// CSS/SCSS Imports
 import "./Application.scss";
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Material UI Imports
 import Masonry from '@mui/lab/Masonry';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Container, Grid, Typography,Button } from "@mui/material";
-
-
-// TODO This element needs to lazy load with 'shimmer' effect
-
-// userauth
-import { AuthProvider } from '../hooks/handleUsers.js';
-
-// light and dark mode switch / theme switch
-import {
-  getDefaultTheme, ThemeContext
-} from "./ThemeContext.jsx";
 import Box from '@mui/material/Box';
+import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import { green, red } from "@mui/material/colors";
+// --------------------------------------------------------
 
+// --------------------------------------------------------
+// Import Helper Functions
+import zlog from "../helpers/zlog";
+// --------------------------------------------------------
 
-// console log helper
-import zlog from "../helpers/zlog.js";
+// --------------------------------------------------------
+// Import Handle Users Hooks
+import { AuthProvider } from '../hooks/handleUsers.js';
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Import Modals
 import { modalCookiesMessage } from "./Modal/contentMisc.jsx";
-
-// modal windows  --
-// TODO this can be removed after all are converted to MUI modal
 import AboutDialog from "./Modal/about";
+// --------------------------------------------------------
 
+// --------------------------------------------------------
+// Import Components
 import NavBar from "./Nav/NavBar.jsx";
 import PreviewItem from "./Previews";
 import SiteFooter from "./Footer";
 import Hero from "./Hero/Hero.jsx";
-
-import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
-import { green, red } from "@mui/material/colors";
-
-// --------------------------------------------------------
-// Import 
-import StateStatus from '../hooks/state';
-import { NewResource } from "./Icons/newResource";
-import { AddNewResource } from "./NewResource/newResource";
-import { StatusModal } from "../components/NewResource/status";
 import AddResourceFlow from "./NewResource/AddResource";
-import Fade from '@mui/material/Fade';
-
-  // ------------------------------------------------------------
-  import { DeletedModal } from "./ItemDetail/deleted";
-  // ------------------------------------------------------------
+import { DeletedModal } from "./ItemDetail/deleted";
+// --------------------------------------------------------
 
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
-//
-// application - main function
-//
+// TODO This element needs to lazy load with 'shimmer' effect
+
 export default function Application(props) {
 
-  // ------------------------------------------------------------
+// --------------------------------------------------------
+  // Sample Date - to be removed with backend
   const [sampleresourcedata, setsampleresourcedata] = useState([
-    // ------------------------------------------------------------
   
       {
         id: 1,
         profile_id : 2,
         // videoID: "rxnX1jdoI6c",
-        videoURL: 'https://www.youtube.com/watch?v=rxnX1jdoI6c',
+        url: 'https://www.youtube.com/watch?v=rxnX1jdoI6c',
         created_at: "2023-01-31T13:54:46.365Z",
         title: "5 common beginner CSS mistakes",
         thumbnail: "https://i.ytimg.com/vi/rxnX1jdoI6c/sddefault.jpg",
@@ -116,8 +114,8 @@ export default function Application(props) {
         ---
         
         And whatever you do, don't forget to keep on making your corner of the internet just a little bit more awesome!`,
-        category:["CSS"],
-        stage: 15,
+        categories:["CSS"],
+        ranking: 15,
         rating: 3.7,
         likes: 32
       },
@@ -125,7 +123,7 @@ export default function Application(props) {
         id: 2,
         profile_id : 2,
         // videoID:"0KEpWHtG10M",
-        videoURL: 'https://www.youtube.com/watch?v=0KEpWHtG10M',
+        url: 'https://www.youtube.com/watch?v=0KEpWHtG10M',
         created_at: "2023-02-01T13:54:46.365Z",
         title: "Material UI Tutorial #1 - Intro & Setup",
         thumbnail: "https://i.ytimg.com/vi/0KEpWHtG10M/sddefault.jpg",
@@ -154,8 +152,8 @@ export default function Application(props) {
         Facebook - https://www.facebook.com/thenetninjauk
         Twitter - https://twitter.com/thenetninjauk
         Instagram - https://www.instagram.com/thenetninja/`,
-        category: ["JavaScript", "React"],
-        stage:50,
+        categories: ["JavaScript", "React"],
+        ranking:50,
         rating: 1.2,
         likes: 0
       },
@@ -163,7 +161,7 @@ export default function Application(props) {
         id: 3,
         profile_id : 1,
         // videoID:"r8Dg0KVnfMA",
-        videoURL: 'https://www.youtube.com/watch?v=r8Dg0KVnfMA&t=1s',
+        url: 'https://www.youtube.com/watch?v=r8Dg0KVnfMA&t=1s',
         created_at: "2023-01-28T08:54:46.365Z",
         title: "Learn React Query In 50 Minutes",
         thumbnail: "https://i.ytimg.com/vi/r8Dg0KVnfMA/sddefault.jpg",
@@ -206,8 +204,8 @@ export default function Application(props) {
         
         
         #TanStackQuery #WDS #ReactQuery`,
-        category: ["React"],
-        stage: -1,
+        categories: ["React"],
+        ranking: -1,
         rating: 4,
         likes:56
       },
@@ -215,7 +213,7 @@ export default function Application(props) {
         id: 4,
         profile_id : 2,
         // videoID:"3VHCxuxtuL8",
-        videoURL: 'https://www.youtube.com/watch?v=3VHCxuxtuL8',
+        url: 'https://www.youtube.com/watch?v=3VHCxuxtuL8',
         created_at: "2023-01-29T23:01:46.365Z",
         title: "How to Use YouTube API in Node - Full Tutorial",
         thumbnail: "https://i.ytimg.com/vi/3VHCxuxtuL8/sddefault.jpg",
@@ -255,8 +253,8 @@ export default function Application(props) {
         ► My standing desk - https://www.fully.com/en-eu/standing-desks/jarvis/jarvis-adjustable-height-desk-laminate.html
         
         Disclosures: All opinions are my own. Sponsors are acknowledged. Some links in the description are affiliate links that if you click on one of the product links, I’ll receive a commission at no additional cost to you.  As an Amazon Associate I earn a small commission from qualifying purchases.`,
-        category: ["Node.js"],
-        stage: 0,
+        categories: ["Node.js"],
+        ranking: 0,
         rating: 2.7,
         likes: 18
       },
@@ -264,7 +262,7 @@ export default function Application(props) {
         id: 5,
         profile_id : 1,
         // videoID:"ha3a63YjLro",
-        videoURL: 'https://www.youtube.com/watch?v=ha3a63YjLro',
+        url: 'https://www.youtube.com/watch?v=ha3a63YjLro',
         created_at: "2023-02-02T19:21:34.735Z",
         title: "Material UI Tutorial #2 - Typography",
         thumbnail: "https://i.ytimg.com/vi/ha3a63YjLro/sddefault.jpg",
@@ -293,8 +291,8 @@ export default function Application(props) {
         Facebook - https://www.facebook.com/thenetninjauk
         Twitter - https://twitter.com/thenetninjauk
         Instagram - https://www.instagram.com/thenetninja/`,
-        category: ["JavaScript", "React"],
-        stage: 89,
+        categories: ["JavaScript", "React"],
+        ranking: 89,
         rating: 4.9,
         likes: 101
       },
@@ -302,7 +300,7 @@ export default function Application(props) {
         id: 6,
         profile_id : 2,
         // videoID:"s-yvlPTDak0",
-        videoURL: 'https://www.youtube.com/watch?v=s-yvlPTDak0',
+        url: 'https://www.youtube.com/watch?v=s-yvlPTDak0',
         created_at: "2023-01-31T19:21:34.735Z",
         title: "ChatGPT Teaches Flexbox!",
         thumbnail: "https://i.ytimg.com/vi/s-yvlPTDak0/sddefault.jpg",
@@ -311,8 +309,8 @@ export default function Application(props) {
         Let me know your thoughts in the comments down below :).
         
         ⭐⭐ Get access to all courses (including premium courses not found anywhere else) on Net Ninja Pro - https://netninja.dev/`,
-        category: ["JavaScript", "CSS"],
-        stage: 67,
+        categories: ["JavaScript", "CSS"],
+        ranking: 67,
         rating: 3.6,
         likes: 54
       },
@@ -320,7 +318,7 @@ export default function Application(props) {
         id: 7,
         profile_id : 3,
         // videoID:"r-yxNNO1EI8",
-        videoURL: 'https://www.youtube.com/watch?v=r-yxNNO1EI8',
+        url: 'https://www.youtube.com/watch?v=r-yxNNO1EI8',
         created_at: "2023-01-26T19:21:34.735Z",
         title: "YouTube API Project With Authentication",
         thumbnail: "https://i.ytimg.com/vi/r-yxNNO1EI8/sddefault.jpg",
@@ -346,8 +344,8 @@ export default function Application(props) {
         http://www.facebook.com/traversymedia
         http://www.twitter.com/traversymedia
         http://www.instagram.com/traversymedia`,
-        category: ["JavaScript"],
-        stage: 100,
+        categories: ["JavaScript"],
+        ranking: 100,
         rating: 4.2,
         likes: 62
       },
@@ -355,7 +353,7 @@ export default function Application(props) {
         id: 8,
         profile_id : 1,
         // videoID:"9sWEecNUW-o",
-        videoURL: 'https://www.youtube.com/watch?v=9sWEecNUW-o',
+        url: 'https://www.youtube.com/watch?v=9sWEecNUW-o',
         created_at: "2023-01-31T19:21:34.735Z",
         title: "Code your own YouTube app: YouTube API + HTML + CSS + JavaScript (full tutorial)",
         thumbnail: "https://i.ytimg.com/vi/9sWEecNUW-o/sddefault.jpg",
@@ -373,8 +371,8 @@ export default function Application(props) {
         Learn to code for free and get a developer job: https://www.freecodecamp.com
         
         Read hundreds of articles on programming: https://medium.freecodecamp.com`,
-        category: ["CSS", "HTML", "JavaScript"],
-        stage: 34,
+        categories: ["CSS", "HTML", "JavaScript"],
+        ranking: 34,
         rating: 2.0,
         likes: 8
       },
@@ -382,7 +380,7 @@ export default function Application(props) {
         id: 9,
         profile_id : 1,
         // videoID:"NQULKpW6hK4",
-        videoURL: "https://www.youtube.com/watch?v=NQULKpW6hK4",
+        url: "https://www.youtube.com/watch?v=NQULKpW6hK4",
         created_at: "2023-01-27T12:21:34.735Z",
         title: "React Query Crash Course",
         thumbnail: "https://i.ytimg.com/vi/NQULKpW6hK4/sddefault.jpg",
@@ -399,8 +397,8 @@ export default function Application(props) {
         2:24 - Fetching without React Query
         11:50 - Refactor to use React Query
         23:48 - Pagination`,
-        category: ["React"],
-        stage: 68,
+        categories: ["React"],
+        ranking: 68,
         rating: 2.8,
         likes: 34
       },
@@ -408,7 +406,7 @@ export default function Application(props) {
         id: 10,
         profile_id : 3,
         // videoID:"r8Dg0KVnfMA",
-        videoURL: "https://www.youtube.com/watch?v=r8Dg0KVnfMA",
+        url: "https://www.youtube.com/watch?v=r8Dg0KVnfMA",
         created_at: "2023-02-02T12:21:34.735Z",
         title: "Learn React Query In 50 Minutes",
         thumbnail: "https://i.ytimg.com/vi/r8Dg0KVnfMA/sddefault.jpg",
@@ -451,8 +449,8 @@ export default function Application(props) {
         
         
         #TanStackQuery #WDS #ReactQuery`,
-        category: [],
-        stage: 33,
+        categories: [],
+        ranking: 33,
         rating: 4.1,
         likes: 87
       },
@@ -460,7 +458,7 @@ export default function Application(props) {
         id: 11,
         profile_id : 2,
   
-        videoURL: "https://stackoverflow.com/questions/70693305/modal-windows-in-react",
+        url: "https://stackoverflow.com/questions/70693305/modal-windows-in-react",
         created_at: "2023-02-03T12:21:34.735Z",
         title: "Modal Windows In React",
         thumbnail: "https://storage.screenshotapi.net/stackoverflow_com_questions_70693305_modal_windows_0142c12e6da4.png",
@@ -468,14 +466,13 @@ export default function Application(props) {
         Here you can see my code in React.js
         
         I want to have several modal windows in one React component. I tried to use Modal from “react-native”, but it did not work.`,
-        category: ["React"],
-        stage: 34,
+        categories: ["React"],
+        ranking: 34,
         rating: 2.8,
         likes: 34
       }
     ])
 
-  // TODO DELETE THESE:
   const typeCategory = [
     "Adonis.js",
     "Angular",
@@ -523,110 +520,123 @@ export default function Application(props) {
     'Beginner', 'Intermediate', 'Advanced'
   ]
 
-// ------------------------------------------------------------
+  const [sampleuserdata, setsampleuserdata] = useState([
+    {
+      profile_id : 1,
+      resource_id: 1,
+      myStage: 34,
+      myComments: undefined, 
+      myCategory: ["React"],
+      star: 3.4
+    },
+    {
+      profile_id : 1,
+      resource_id: 3,
+      myStage: null,
+      myComments: "What a great resource", 
+      star: null
+    },
+    {
+      profile_id : 1,
+      resource_id: 7,
+      myComments: undefined, 
+      myCategory: ["React", "CSS"],
+      star: 2.5
+    },
+    {
+      profile_id : 1,
+      resource_id: 8,
+      myStage: 87,
+      myCategory: []
+    }
+  ])
 
-const [sampleuserdata, setsampleuserdata] = useState([
-  {
-    profile_id : 1,
-    resource_id: 1,
-    myStage: 34,
-    myComments: undefined, 
-    myCategory: ["React"],
-    star: null
-  },
-  {
-    profile_id : 1,
-    resource_id: 3,
-    myStage: null,
-    myComments: "What a great resource", 
-    star: null
-  },
-  {
-    profile_id : 1,
-    resource_id: 7,
-    myComments: undefined, 
-    myCategory: ["React", "CSS"],
-    star: 2.5
-  },
-  {
-    profile_id : 1,
-    resource_id: 8,
-    myStage: 87,
-    myCategory: []
-  }
-])
+  const combinedData = (resource, user) => {
+    const data = []
+    resource.forEach((element, index) => {
+      user.forEach(item => {
+        if(item.resource_id === element.id) {
+          data.push({
+            id: element.id, 
+            profile_id : element.profile_id,
 
+            resource_id :element.id,
+            videoURL : element.url,
+            title : element.title,
+            thumbnail : element.thumbnail,
+            description: element.description,
+            created_at :element.created_at,
 
-const combinedData = (resource, user) => {
-  const data = []
-  resource.forEach((element, index) => {
-    user.forEach(item => {
-      if(item.resource_id === element.id) {
+            category : element.categories? element.categories : [],
+            stage: element.ranking ? Number(element.ranking) : null,
+            rating : element.rating ? Number(element.rating) : null,
+            likes : element.likes ? Number(element.likes) : 0,
+
+            myCategory : item.myCategory ? item.myCategory : [],
+            myStage : item.myStage ? Number(item.myStage) : null,
+            star : item.star ? Number(item.star) : null,
+            myComments : item.myComments ? item.myComments : ""
+          })
+        }
+      })
+    });
+    resource.forEach((element, index) => {
+      const isresource = data.findIndex((item) => item.id === element.id)
+      if(isresource === -1 ) {
         data.push({
           id: element.id, 
           profile_id : element.profile_id,
 
           resource_id :element.id,
-          videoURL : element.videoURL,
+          videoURL : element.url,
           title : element.title,
           thumbnail : element.thumbnail,
           description: element.description,
           created_at :element.created_at,
 
-          category : element.category,
-          stage: element.stage,
-          rating : element.rating,
-          likes : element.likes,
+          category : element.categories? element.categories : [],
+          stage: element.ranking ? Number(element.ranking) : null,
+          rating : element.rating ? Number(element.rating) : null,
+          likes : element.likes ? Number(element.likes) : 0,
 
-          myCategory : item.myCategory,
-          myStage : item.myStage,
-          star : item.star,
-          myComments : item.myComments
+          myCategory : [],
+          myStage : null,
+          star : null,
+          myComments : undefined
         })
       }
     })
-  });
-  resource.forEach((element, index) => {
-    const isresource = data.findIndex((item) => item.id === element.id)
-    if(isresource === -1 ) {
-      data.push({
-        id: element.id, 
-        profile_id : element.profile_id,
+    return data;
+  }
+// --------------------------------------------------------
 
-        resource_id :element.id,
-        videoURL : element.videoURL,
-        title : element.title,
-        thumbnail : element.thumbnail,
-        description: element.description,
-        created_at :element.created_at,
+// --------------------------------------------------------
+// Delete Modal & New Resource States
+  const [openDeleted, setOpenDeleted] = useState(false)
+  const handleDeletedClose = () => {
+    setOpenDeleted(false);
+  };
 
-        category : element.category,
-        stage: element.stage,
-        rating : element.rating,
-        likes : element.likes,
+  const [sampledata, setsampledata] = useState([])
+  // const [sampledata, setsampledata] = useState(combinedData(sampleresourcedata, sampleuserdata))
 
-        myCategory : [],
-        myStage : null,
-        star : null,
-        myComments : undefined
-      })
-    }
-  })
-  return data;
-}
-
-const [openDeleted, setOpenDeleted] = useState(false)
-const handleDeletedClose = () => {
-  setOpenDeleted(false);
-};
-
-const [sampledata, setsampledata] = useState(combinedData(sampleresourcedata, sampleuserdata))
-
-// console.log(combinedData(sampleresourcedata, sampleuserdata))
+  // console.log(combinedData(sampleresourcedata, sampleuserdata))
 
 
-// ------------------------------------------------------------
+  // Screen to add website link under add new resource
+  const [newResource, setNewResource] = useState(false);
+  const handleNewResourceOpen = () => {
+    setNewResource(true);
+  }
 
+  const handleNewResourceClose = () => {
+    setNewResource(false);
+  };
+// --------------------------------------------------------
+
+
+// --------------------------------------------------------
+// Page Load - Theme - Configuration
   global.config.youtubekey = process.env.REACT_APP_YOUTUBE_API_KEY;
 
   //  setup controlled page loader -- NOTE check our useEffect for smooth load of app itself
@@ -692,19 +702,19 @@ const [sampledata, setsampledata] = useState(combinedData(sampleresourcedata, sa
       }),
     [mode],
   );
-  
+// --------------------------------------------------------
 
-
+// --------------------------------------------------------
   // COOKIES Modal
   const [copen, setCOpen] = React.useState(false);
   const handleCClose = () => setCOpen(false);
 
   const [cookiesMessage,setCMessage] = useState('cookies default');
+// --------------------------------------------------------
 
-  //
+// --------------------------------------------------------
   // useEffect - actions on first load
   // https://dmitripavlutin.com/react-useeffect-explanation/
-  //
   useEffect(() => {
     // grab theme settings
     // localStorage.clear()
@@ -732,76 +742,77 @@ const [sampledata, setsampledata] = useState(combinedData(sampleresourcedata, sa
     setCMessage(modalCookiesMessage);
     setCOpen(true);
 
+    axios.get(`http://localhost:8080/api/resources`)
+      .then(response => {
+        console.log(response.data)
+        setsampledata(combinedData(response.data, sampleuserdata))
+        console.log(combinedData(response.data, sampleuserdata))
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
   }, []);
-
-    // TODO -load from localStorage - don't show modal if we've done it before (cookies only)
-    // TODO - update localStorage once user says ok
-  
-    // TODO move theme button  - light-dark to nav bar
-    // TODO - remove the 'light mode' 'dark mode' text from theme button
+// --------------------------------------------------------
 
 
-
-
-    
+  // TODO -load from localStorage - don't show modal if we've done it before (cookies only)
+  // TODO - update localStorage once user says ok
 
     
   return (
   (
     <AuthProvider>
-    <ColorModeContext.Provider value={colorMode}>
-    <ThemeProvider theme={theme}>
-    <CssBaseline  enableColorScheme/>
-    
-      <div className="maincontainer">
-        <NavBar darkMode={theme.palette.mode} handleDarkMode={colorMode.toggleColorMode}></NavBar>
-
-      <header>
-        <Hero catList={typeCategory}></Hero>
-      </header>
-
-      <Box display={showAddResource}>
-          <AddResourceFlow complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} />
-      </Box>
-      
-      < DeletedModal 
-        open={openDeleted} handleClose={() => handleDeletedClose()}
-        message={"Resource has been deleted."}
-      />
-
-      <Grid container justifyContent="center">
-        <Box sx={{ width: 1400, minHeight: 377 }} display="flex" justifyContent="center" alignItems="center">
-        <Masonry columns={4} spacing={2}>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline  enableColorScheme/>
         
-        {sampledata.map((item, index) => (
-          <PreviewItem 
-            key={item.id} nowloading={nowloading} typeCategory={typeCategory}
-            id={item.id} resource_id={item.resource_id} profile_id={item.profile_id}
-            videoURL={ item.videoURL } created_at={item.created_at}
-            title={item.title} thumbnail={item.thumbnail} description={item.description} 
-            stage={item.stage} category={item.category} rating={item.rating} likes={item.likes} 
-            sampledata={sampledata} setsampledata={setsampledata} 
-            myCategory={item.myCategory} myStage={item.myStage} 
-            star={item.star} myComments={item.myComments}
-            setOpenDeleted={setOpenDeleted}
-          >
-          {item.id}
-          </PreviewItem>
-        ))}
+          <div className="maincontainer">
+            <NavBar darkMode={theme.palette.mode} handleDarkMode={colorMode.toggleColorMode} handleNewResourceOpen={handleNewResourceOpen} setNewResource={setNewResource}
+            ></NavBar>
 
-        </Masonry>
-        </Box>
-        </Grid>
-        
-        <SiteFooter/>
-      </div>
-      
+            <header>
+              <Hero catList={typeCategory}></Hero>
+            </header>
 
+            <AddResourceFlow complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} 
+            newResource={newResource} setNewResource={setNewResource}
+            handleNewResourceOpen={handleNewResourceOpen} handleNewResourceClose={handleNewResourceClose}/>
+            
+            <DeletedModal 
+              open={openDeleted} handleClose={() => handleDeletedClose()}
+              message={"Resource has been deleted."}
+            />
 
-      <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
-      
-    </ThemeProvider>
-    </ColorModeContext.Provider>
+            <Grid container justifyContent="center">
+              <Box sx={{ width: 1400, minHeight: 377 }} display="flex" justifyContent="center" alignItems="center">
+                <Masonry columns={4} spacing={2}>
+                  {sampledata.map((item, index) => (
+                    <PreviewItem 
+                      key={item.id} nowloading={nowloading} typeCategory={typeCategory}
+                      id={item.id} resource_id={item.resource_id} profile_id={item.profile_id}
+                      videoURL={ item.videoURL } created_at={item.created_at}
+                      title={item.title} thumbnail={item.thumbnail} description={item.description} 
+                      stage={item.stage} category={item.category} rating={item.rating} likes={item.likes} 
+                      sampledata={sampledata} setsampledata={setsampledata} 
+                      myCategory={item.myCategory} myStage={item.myStage} 
+                      star={item.star} myComments={item.myComments}
+                      setOpenDeleted={setOpenDeleted}
+                    >
+                      {item.id}
+                    </PreviewItem>
+                  ))}
+                </Masonry>
+              </Box>
+            </Grid>
+              
+            <SiteFooter/>
+        </div>
+
+        <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
+
+        </ThemeProvider>
+      </ColorModeContext.Provider>
     </AuthProvider>
     )
   );

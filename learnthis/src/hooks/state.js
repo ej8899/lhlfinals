@@ -68,8 +68,10 @@ const addSetStage = (rating) => {
 // handle open and close of item review detail modal
 const [openReview, setOpenReview] = useState(false);
 
-const handleReviewOpen = () => {
+const handleReviewOpen = (filter) => {
+  if (filter === 'blur(0px)') {
     setOpenReview(true);
+  }
   return
 }
 
@@ -235,8 +237,7 @@ const handleSharedClose = () => {
 
 // -------------------------------------------------------------
 // handle open and close of new resource modal
-  // Screen to add website link under add new resource
-const [newResource, setNewResource] = useState(false);
+
 
   // State for new url added after hit save
 const [newURL, setNewURL] = useState('')
@@ -261,16 +262,6 @@ const [errorSavingNewResource, setSavingErrorNewResource] = useState(false)
 
   //Status Screen for error fecthing youtube url
 const [errorFetchingNewResource, setFetchingErrorNewResource] = useState(false)
-
-const handleNewResourceOpen = () => {
-  setNewResource(true);
-}
-
-const handleNewResourceClose = () => {
-  setNewResource(false);
-  setErrorBlank(false);
-  setNewURL("");
-};
 
 const handleAddNewResourceClose =() => {
   setAddNewResource(false);
@@ -419,10 +410,6 @@ const handleErrorFetchingNewResourceClose = () => {
 
     errorBlank, 
     setErrorBlank,
-    newResource,
-    setNewResource,
-    handleNewResourceClose,
-    handleNewResourceOpen,
     newURL,
     setNewURL,
     addNewResource,

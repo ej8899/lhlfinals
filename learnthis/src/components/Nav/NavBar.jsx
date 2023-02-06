@@ -159,15 +159,15 @@ export default function PrimarySearchAppBar(props) {
     let x = (Math.random())
     let url = "https://api.dicebear.com/5.x/bottts-neutral/svg?radius=50&seed=" + x;
     setAvatarUrl(url);
-    console.log(avatarUrl)
+    // console.log(avatarUrl)
   }, []);
 
 
   // userauth
   const { isAuth, user, userid, logout } = useContext(AuthContext);
-  zlog("debug","user:",user)
-  zlog("debug","userid:",userid)
-  zlog("debug","isAuth:",isAuth)
+  // zlog("debug","user:",user)
+  // zlog("debug","userid:",userid)
+  // zlog("debug","isAuth:",isAuth)
 
   // LOGIN
   const [open, setOpen] = React.useState(false);
@@ -258,6 +258,35 @@ export default function PrimarySearchAppBar(props) {
     setDOpen(false);
   };
 
+// -----------------------------------------------------
+const [state, setState] = React.useState({
+  left: false,
+});
+
+const anchor = "left"
+
+const toggleDrawer = (anchor, open) => (event) => {
+  if (
+    event &&
+    event.type === 'keydown' &&
+    (event.key === 'Tab' || event.key === 'Shift')
+  ) {
+    return;
+  }
+
+  setState({ ...state, [anchor]: open });
+};
+
+// -----------------------------------------------------
+
+
+
+
+
+
+
+
+
   // TODO - get rid of &nbsp; by user logged in name - how to pad the vertical divider?
 
   
@@ -284,7 +313,7 @@ export default function PrimarySearchAppBar(props) {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={toggleDrawer(anchor, true)}
             sx={{ mr: 2, ...(dopen && { display: 'none' }) }}
           >
             <MenuIcon />
@@ -371,7 +400,9 @@ export default function PrimarySearchAppBar(props) {
       {renderMenu}
       <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
       <PersistentDrawerLeft
-        open={dopen} close= {handleDrawerClose}></PersistentDrawerLeft>
+        state={state} setState={setState} toggleDrawer={toggleDrawer} anchor={anchor}
+        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource}
+      />
     </Box>
   );
 }

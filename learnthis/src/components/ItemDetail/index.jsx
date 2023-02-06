@@ -42,6 +42,8 @@ import { ReportStaleStats } from '../Icons/report';
 import { LikeStaleStats } from '../Icons/like';
 import { CloseModal } from '../Icons/close';
 import { StarStaleRating } from '../Icons/stars';
+import { EditStaleStats } from '../Icons/edit';
+import { DeleteStaleStats } from '../Icons/delete';
 // --------------------------------------------------------
 
 //-------------------------------------------------------------------
@@ -158,6 +160,8 @@ export const DetailModal = (props) => {
               <BookmarkStaleStats bookmark={props.bookmark} addBookmark={props.addBookmark} />
               <PlaylistStaleStats playlist={props.playlist} addPlaylist={props.addPlaylist} />
               <ShareStaleStats share={props.share} addShare={props.handleShareOpen}/>
+              <EditStaleStats profile_id={props.profile_id} handleClose={props.handleClose} handleOpenEdit={props.handleOpenEdit}/>
+              <DeleteStaleStats deleteIcon={props.deleteIcon} profile_id={props.profile_id} handleOpenDelete={props.handleOpenDelete}/>
               <ReportStaleStats report={props.report} addReport={() => {props.addReport(props.setOpen(false), props.setExpanded(false))}} />
             </Typography>
           </Box>

@@ -224,6 +224,10 @@ export const PreviewItem = (props) => {
   const {
     handleIconReset,
 
+    deleteIcon,
+    setDeleteIcon,
+    addDeleteIcon,
+
     favourite,
     setFavourite,
     addFavourites,
@@ -462,7 +466,7 @@ export const PreviewItem = (props) => {
         )}
       </Box>
       <Card sx={{ MaxWidth: 345 }} >
-        <CardActionArea onClick={() => (handleOpen(filter), setExpanded(false))} sx={{ filter: filter }}>
+        <CardActionArea onClick={() => (handleReviewOpen(filter), setExpanded(false))} sx={{ filter: filter }}>
           {props.nowloading ? (
             <Skeleton sx={{ height: 140 }} animation="wave" variant="rectangular" />
           ) : (
@@ -564,8 +568,8 @@ export const PreviewItem = (props) => {
         <div>
           <DetailModal 
             open={openReview} setOpen={setOpenReview} setExpanded={setExpanded}
-            handleClose={() => handleReviewClose(tmpReset())} 
-            handleCancel={() => handleReviewClose(setOpen(true), tmpReset())}
+            handleClose={() => handleReviewClose(tmpReset(), rateReview("close"))} 
+            handleCancel={() => tmpReset(rateReview())}
             addingNewResourceSQL={updatingResourceSQL}
             videoURL={videoURL} domain={domain}
             title={tmptitle} id={props.id} thumbnail={thumbnail}
@@ -584,9 +588,14 @@ export const PreviewItem = (props) => {
             myCategory={tmpmyCategory} addMyCategory={tmpaddMyCategory}
             myStage={tmpmyStage} addMyStage={tmpaddMyStage}
             sliderActive={tmpsliderActive} setSliderActive={tmpsetSliderActive}
+            openEdit={openEdit} setOpenEdit={setOpenEdit}
+            handleOpenEdit={handleOpenEdit} handleEditClose={handleEditClose}
+            openDelete={openDelete} setOpenDelete={setOpenDelete}
+            handleDeleteClose={() => handleDeleteClose(addDeleteIcon(false))} handleOpenDelete={() => handleOpenDelete(addDeleteIcon(true))}
+            profile_id={props.profile_id} deleteIcon={deleteIcon}
           />
         </div>
-        <div>
+        {/* <div>
           <ViewDetailModal 
             open={open} setOpen={setOpen} setExpanded={setExpanded}
             handleClose={() => handleClose()} 
@@ -615,7 +624,7 @@ export const PreviewItem = (props) => {
             handleDeleteClose={handleDeleteClose} handleOpenDelete={handleOpenDelete}
             profile_id={props.profile_id}
           />
-        </div>
+        </div> */}
         <div>
           <ShareModal 
             open={shareOpen} setShareOpen={setShareOpen} setExpanded={setExpanded}
@@ -653,7 +662,7 @@ export const PreviewItem = (props) => {
             open={openEdit} setOpen={setOpenEdit} 
             handleClose={() => handleEditClose(tmpReset())} 
             handleAbort={() => handleEditClose(tmpReset())}
-            handleCancel={() => handleEditClose(setOpen(true), tmpReset())}
+            handleCancel={() => handleEditClose(setOpenReview(true), tmpReset())}
             setNewURL={setNewURL} errorBlank={errorBlank}
             addingNewResourceSQL={updatingResourceSQL}
             videoURL={videoURL} thumbnail={thumbnail}
@@ -680,7 +689,7 @@ export const PreviewItem = (props) => {
         </div>
         <div>
           <DeleteModal
-            handleClose={() => handleDeleteClose()}
+            handleClose={() => handleDeleteClose(addDeleteIcon(false))}
             open={openDelete} setOpenDelete={setOpenDelete}
             handleOpenDeleting={deletingResourceSQL}
             title={title} thumbnail={thumbnail}
@@ -734,10 +743,13 @@ export const PreviewItem = (props) => {
                   bookmark={bookmark} addBookmark={addBookmark}
                   playlist={playlist} addPlaylist={addPlaylist}
                   report={report} addReport={addReport}
-                  handleOpen={() => handleOpen(filter)}
+                  handleReviewOpen={() => handleReviewOpen(filter)}
                   anchorEl={anchorEl} setAnchorEl={setAnchorEl} 
                   handleCloseOut={handleCloseOut} handleClick={handleClick}
                   setExpanded={setExpanded}
+                  handleOpenEdit={handleOpenEdit} 
+                  handleOpenDelete={handleOpenDelete}
+                  profile_id={props.profile_id}
                 />
               ) : (
                 <ReportStats nowloading={props.nowLoading} skeletonTimer={skeletonTimer} report={report} addReport={addReport} />

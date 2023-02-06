@@ -257,7 +257,7 @@ export const AddResourceFlow = (props) => {
       setErrorBlank(true);
     } else {
       setErrorBlank(false);
-      setNewResource(false);
+      props.setNewResource(false);
       setFetchingNewResource(true)
       if (isYoutubeUrl(URL)) {
         const videoId =  getYoutubeVideoId(URL)
@@ -356,6 +356,7 @@ export const AddResourceFlow = (props) => {
         setLike('default')
         handleIconReset()
         setErrorBlank(false)
+        console.log(thumbnail)
       }, 2000)
     }
   }
@@ -366,9 +367,9 @@ export const AddResourceFlow = (props) => {
     <div>
       {userid &&
         <React.Fragment>
-      <NewResource handleNewResourceOpen={() => handleNewResourceOpen(console.log(props.sampledata))}/>
+      {/* <NewResource handleNewResourceOpen={() => handleNewResourceOpen(console.log(props.sampledata))}/> */}
       <AddNewResource 
-        open={newResource} handleNewResourceClose={handleNewResourceClose}
+        open={props.newResource} handleNewResourceClose={() => props.handleNewResourceClose(setErrorBlank(false), setNewURL(""))}
         newURL={newURL} setNewURL={setNewURL} errorBlank={errorBlank}
         fetchNewResource={fetchNewResource} 
         isYoutubeUrl={isYoutubeUrl} getYoutubeVideoId={getYoutubeVideoId}
@@ -382,7 +383,7 @@ export const AddResourceFlow = (props) => {
       <ErrorModal 
         open={errorFetchingNewResource} handleErrorFetchingNewResourceClose={handleErrorFetchingNewResourceClose} 
         message={"Oops - The Youtube link is wrong or no longer exists"} submessage={"Would you like to Try Again?"} 
-        setNewResource={setNewResource} setNewURL={setNewURL}
+        setNewResource={props.setNewResource} setNewURL={setNewURL}
       />
       <ResultModal 
         open={savedNewResource} setStatusOpen={setSavedNewResource} 

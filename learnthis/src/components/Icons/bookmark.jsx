@@ -34,15 +34,15 @@ export const BookmarkStats = (props) => {
             </IconButton>
           </Tooltip>
         </Fade>
-          }
-          {!userid &&
-            <Fade in={!props.nowloading} timeout={{ enter: props.skeletonTimer }}>
-              <IconButton aria-label="save for later" disabled>
-                <BookmarkAddIcon />
-              </IconButton>
-            </Fade>
-          }
-          </React.Fragment>
+      }
+      {!userid &&
+        <Fade in={!props.nowloading} timeout={{ enter: props.skeletonTimer }}>
+          <IconButton aria-label="save for later" disabled>
+            <BookmarkAddIcon />
+          </IconButton>
+        </Fade>
+      }
+    </React.Fragment>
   )
 }
 

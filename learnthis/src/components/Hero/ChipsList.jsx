@@ -63,7 +63,7 @@ export default function ChipsArray(props) {
       tagInit[i] = true;
     }  
     setFilled({...tagInit})
-    console.log("filled",filled)
+    // console.log("filled",filled)
   }, []);
   
   

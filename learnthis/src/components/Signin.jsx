@@ -52,7 +52,7 @@ function Copyright(props) {
 // TODO - sign UP link needs to work
 
 const Login=(props)=>{
-  const [emaildata, setEmailData] = React.useState(localStorage.getItem("defaultemail"));
+  const [emaildata, setEmailData] = React.useState(localStorage.getItem("defaultemail") || "");
   const handleEmailChange = (event) => {
     setEmailData(event.target.value);
   };
@@ -77,7 +77,7 @@ const Login=(props)=>{
 
     // userauth
     const { login } = useContext(AuthContext);
-    zlog('info',"authLOGIN:",login)
+    // zlog('info',"authLOGIN:",login)
 
     const handleSubmit = (event) => {
       event.preventDefault();
