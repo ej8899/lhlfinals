@@ -110,17 +110,18 @@ export default function PersistentDrawerLeft(props) {
             'divider',
             'Reported',
             'Deleted'].map((text, index) => (
-            <div>
-            {text === 'divider' ? (<Divider textAlign="left" variant = "middle">{divlist[index]}</Divider>) : (
+            <div key={index}>
+            {text === 'divider' ? (<Divider key={index} textAlign="left" variant = "middle">{divlist[index]}</Divider>) : (
             <ListItem key={text} disablePadding 
                 onClick={() => handleClick(text, index)}
                 style={index === selectedIndex ? { backgroundColor: theme.palette.warning.main, color: theme.palette.warning.contrastText } : {}}
                 >
               <ListItemButton
+                key={index}
                 selected={selectedIndex === index}
                 onClick={(event) => { handleListItemClick(event, index);}}
               >
-                <ListItemIcon>
+                <ListItemIcon key={index}>
                   {index === 0 ? <AddCircleIcon/> : <span/>}
                   {text === 'My Resources' ? <HomeIcon/> : <span/>}
                   {text === 'My Favorites' ? <FavoriteIcon/> : <span />}
