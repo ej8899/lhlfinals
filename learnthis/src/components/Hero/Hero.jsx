@@ -70,7 +70,7 @@ export default function Hero(props) {
 
   const [filled, setFilled] = React.useState(false);
   const [chipfilled, setChipFilled] = React.useState(false);
-  const { filterData } = useContext(FilterContext);
+  const { filterData, totalkeys } = useContext(FilterContext);
   const { isAuth, user, userid, logout } = useContext(AuthContext);
   const {chipReset} = useContext(ChipContext)
 
@@ -113,7 +113,7 @@ export default function Hero(props) {
         <Grid item xs={6} sx={{my: 1}}>
           <div>
           <Stack direction="row" spacing={2} sx={{alignItems: "flex-start", marginLeft : "3em"}}>
-          {props.clearFilter &&
+          {totalkeys <= 1 &&
           <Chip
             color="primary"
             label="Clear Filters"
@@ -125,7 +125,7 @@ export default function Hero(props) {
                 }}
             disabled
           />}
-          {!props.clearFilter &&
+          {totalkeys > 1 &&
             <Chip
               color="primary"
               label="Clear Filters"

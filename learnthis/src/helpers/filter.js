@@ -64,7 +64,7 @@ export const FilterProvider = ({ children }) => {
 
   // const [myFilteredData, setMyFilteredData] = useState(filteredObject)
   const [myFilteredData, setMyFilteredData] = useState({resource: {}, user: {profile_id: null}})
-
+  const [totalkeys, settotalkeys] = useState(1)
 
 // TODO -- change when backend data avaialble - less parameters needed
   const filterData = (type, values, updateDatabase, tmpUserData, helperfunc) => {
@@ -321,8 +321,14 @@ export const FilterProvider = ({ children }) => {
       }
     }
 
-      // console.log(type)
-      // console.log("Total is:", total)
+    let count = 0;
+    for(let key in filteredObject.resource) {
+        ++count;
+    }
+    for(let key in filteredObject.user) {
+      ++count;
+    }
+    settotalkeys(count)
     setMyFilteredData(filteredObject)
     console.log(filteredObject)
 
@@ -358,7 +364,8 @@ export const FilterProvider = ({ children }) => {
         sinceCreated,
         isDeleted,
         filterData,
-        myFilteredData
+        myFilteredData,
+        totalkeys
       }}
     >
       {children}
