@@ -29,13 +29,13 @@ const postRecommend = (data) => {
   let query = `
   INSERT INTO
     recommends 
-      (resource_id, profile_id, is_recommend)
+      (resource_id, profile_id, is_recommended)
     VALUES
       ($1, $2, $3) RETURNING *;`;
   const params = [
     data.resource_id,
     data.profile_id,
-    data.is_recommend
+    data.is_recommended
   ];
 
   return db.query(query, params).then((data) => data.rows[0]);
@@ -51,12 +51,12 @@ const updateRecommend = (data) => {
   UPDATE
     recommends
   SET
-    is_recommend = $1,
+    is_recommended = $1,
     updated_at = NOW()
   WHERE
     id = $2 RETURNING *;`;
   const params = [
-    data.is_recommend,
+    data.is_recommended,
     data.id
   ];
 

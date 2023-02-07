@@ -757,6 +757,98 @@ returned:
 }
 ```
 
+## GET api/recommends/resources/[resource_id]
+description: retrieve all recommends for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_recommended": true,
+        "created_at": "2023-02-07T17:15:54.281Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_recommended": false,
+        "created_at": "2023-02-07T17:15:54.281Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/recommends
+description: create/save a recommend
+
+```json
+body: 
+{
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": true,
+    "created_at": "2023-02-07T17:19:34.882Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/recommends/[recommend_id]
+description: update a recommend
+
+```json
+body: 
+{
+    "id": 3,
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": false
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": false,
+    "created_at": "2023-02-07T17:19:34.882Z",
+    "updated_at": "2023-02-07T17:21:06.438Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/recommends/[recommend_id]
+description: delete a recommend
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 3,
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": false,
+    "created_at": "2023-02-07T17:19:34.882Z",
+    "updated_at": "2023-02-07T17:21:06.438Z",
+    "deleted_at": "2023-02-07T17:22:03.014Z"
+}
+```
+
 ## GET api/bookmarks/resources/[resource_id]
 description: retrieve all bookmarks for a specific resource
 

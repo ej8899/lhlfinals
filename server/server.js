@@ -26,9 +26,10 @@ const rankingsRoutes = require('./routes/rankings-api');
 const rankingsDatabase = require('./db/queries/q_rankings');
 const likesRoutes = require('./routes/likes-api');
 const likesDatabase = require('./db/queries/q_likes');
-const favouritesRoutes = require('./routes/favourites-api')
-const playlistsRoutes = require('./routes/playlists-api')
-const bookmarksRoutes = require('./routes/bookmarks-api')
+const favouritesRoutes = require('./routes/favourites-api');
+const playlistsRoutes = require('./routes/playlists-api');
+const bookmarksRoutes = require('./routes/bookmarks-api');
+const recommendsRoutes = require('./routes/recommends-api');
 
 // /user/endpoints
 const usersRouter = express.Router();
@@ -57,6 +58,7 @@ app.use('/api/comments',commentsRoutes);
 app.use('/api/favourites',favouritesRoutes);
 app.use('/api/playlists',playlistsRoutes);
 app.use('/api/bookmarks',bookmarksRoutes);
+app.use('/api/recommends',recommendsRoutes);
 
 app.use(express.static(publicPath));
 app.get("/*", function (req, res) {
