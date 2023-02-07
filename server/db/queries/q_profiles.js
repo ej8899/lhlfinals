@@ -36,7 +36,7 @@ exports.getProfileWithId = getProfileWithId;
 * @return {Promise<{}>} A promise of the profile.
 */
 const addProfile = function(profile) {
-const queryValue = [profile.userId, profile.firstName, profile.lastName, profile.avatar];
+const queryValue = [profile.user_id, profile.first_name, profile.last_name, profile.avatar];
   return query(`INSERT INTO profiles (user_id, first_name, last_name, avatar) values ($1, $2, $3, $4) RETURNING *;`, queryValue, result => result.rows[0]);
 };
 exports.addProfile = addProfile;
@@ -47,7 +47,7 @@ exports.addProfile = addProfile;
 * @return {Promise<{}>} A promise of the profile.
 */
 const updateProfileWithId = function(profile) {
-  const queryValue = [profile.id, profile.userId, profile.firstName, profile.lastName, profile.avatar];
+  const queryValue = [profile.id, profile.user_id, profile.first_name, profile.last_name, profile.avatar];
   return query(`
     UPDATE profiles SET (user_id, first_name, last_name, avatar, updated_at) = ($2, $3, $4, $5, NOW()) WHERE id=$1 AND deleted_at IS NULL RETURNING *;`,
     queryValue, result => result.rows[0]
