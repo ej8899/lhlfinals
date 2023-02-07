@@ -1,5 +1,16 @@
-import * as React from 'react';
+//---------------------------------------------------------
+// Import user authentication
+import { FilterContext } from "../../helpers/filter";
+//---------------------------------------------------------
+
+import React, { useEffect, useRef, useState, useContext } from "react";
+
 import { Container, Grid, Typography,Button } from "@mui/material";
+
+//---------------------------------------------------------
+// Import user authentication
+import { AuthContext } from "../../hooks/handleUsers";
+//---------------------------------------------------------
 
 import "../Application.scss";
 import SpringModal from "../ItemDetail/index.jsx";
@@ -55,10 +66,18 @@ function DoDivider(props) {
 }
 
 export default function Hero(props) {
+
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+
   const [filled, setFilled] = React.useState(false);
+  const { filterData } = useContext(FilterContext);
+
   const handleClick = (index) => {
     zlog('info','rating chip:',index);
     setFilled({...filled, [index]: !filled[index]});
+
+    console.log({...filled, [index]: !filled[index]})
+    filterData("complexity", {...filled, [index]: !filled[index]}, props.setsampledata, props.sampledata, props.combinedData, userid)
   };
 
 
@@ -75,7 +94,10 @@ export default function Hero(props) {
           <Typography variant="subtitle1">
           hero component<br/>
           </Typography>
-          <ChipsArray catList={props.catList}></ChipsArray>
+          <ChipsArray catList={props.catList}
+            setsampledata={props.setsampledata} sampledata={props.sampledata}
+            combinedData={props.combinedData}
+          ></ChipsArray>
           <Grid container spacing={3}>
         <Grid item xs={6} sx={{my: 1}}>
           <div >

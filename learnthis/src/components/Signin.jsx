@@ -149,7 +149,7 @@ const Login=(props)=>{
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value="remember"  color="primary"/>}
               label="Remember me"
               onChange={handleRememberMeChange}
             />

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
@@ -15,8 +15,12 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
 import zlog from "../../helpers/zlog.js";
-import { useEffect } from 'react';
 
+//---------------------------------------------------------
+// Import user authentication
+import { AuthContext } from "../../hooks/handleUsers";
+import { FilterContext } from "../../helpers/filter";
+//---------------------------------------------------------
 
 const useStyles = {
   boundary: {
@@ -44,6 +48,8 @@ const ListItem = styled('li')(({ theme }) => ({
 
 export default function ChipsArray(props) {
 
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+
   let object = {};
   let objectArray = [
   ];
@@ -56,6 +62,8 @@ export default function ChipsArray(props) {
   }
   const [chipData, setChipData] = React.useState(objectArray);
   const [filled, setFilled] = React.useState(false);
+  const { filterData } = useContext(FilterContext);
+
 
   useEffect(() => {
     const tagInit= {};
@@ -64,6 +72,7 @@ export default function ChipsArray(props) {
     }  
     setFilled({...tagInit})
     // console.log("filled",filled)
+    
   }, []);
   
   
@@ -74,6 +83,8 @@ export default function ChipsArray(props) {
 
   const handleClick = (chipID) => {
     zlog('action',"chip clicked:",chipID)
+    const categoryArray = []
+
     if(chipID === 100) {
         console.log('is on, turn off')
         const tagInit= {};
@@ -81,6 +92,7 @@ export default function ChipsArray(props) {
           tagInit[i] = true;
         }  
         setFilled({...tagInit})
+        chipData.map(chip => categoryArray.push(chip.label))
     } 
     else if(chipID === 200) {
         console.log('is off, turn on')
@@ -92,7 +104,16 @@ export default function ChipsArray(props) {
       }
     else {
       setFilled({...filled, [chipID]: !filled[chipID]});
+      
+      let tmpArray = {...filled, [chipID]: !filled[chipID]}
+      for (let x = 0; x < chipData.length; x++) {
+        if (tmpArray[x]) {
+          categoryArray.push(chipData[x].label)
+        }
+      }
     }
+
+    filterData("category", categoryArray, props.setsampledata, props.sampledata, props.combinedData, userid)
   };
 
   

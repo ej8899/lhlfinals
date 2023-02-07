@@ -186,7 +186,6 @@ body:
     "is_liked" : true,
     "is_favourite" : true,
     "is_bookmarked" : true,
-    "is_playlist" : true,
     "is_reported" : true,
     "is_playlist" : true,
     "is_recommended" : true,

@@ -27,6 +27,9 @@ import zlog from "../helpers/zlog";
 // --------------------------------------------------------
 // Import Handle Users Hooks
 import { AuthProvider } from '../hooks/handleUsers.js';
+
+// Import Handle Filter State
+import { FilterProvider } from "../helpers/filter";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -744,9 +747,9 @@ export default function Application(props) {
 
     axios.get(`http://localhost:8080/api/resources`)
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         setsampledata(combinedData(response.data, sampleuserdata))
-        console.log(combinedData(response.data, sampleuserdata))
+        // console.log(combinedData(response.data, sampleuserdata))
       })
       .catch(error => {
         console.error(error);
@@ -762,58 +765,63 @@ export default function Application(props) {
     
   return (
   (
-    <AuthProvider>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline  enableColorScheme/>
-        
-          <div className="maincontainer">
-            <NavBar darkMode={theme.palette.mode} handleDarkMode={colorMode.toggleColorMode} handleNewResourceOpen={handleNewResourceOpen} setNewResource={setNewResource}
-            ></NavBar>
+    <FilterProvider>
+      <AuthProvider>
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline  enableColorScheme/>
+          
+            <div className="maincontainer">
+              <NavBar darkMode={theme.palette.mode} handleDarkMode={colorMode.toggleColorMode} handleNewResourceOpen={handleNewResourceOpen} setNewResource={setNewResource}
+              ></NavBar>
 
-            <header>
-              <Hero catList={typeCategory}></Hero>
-            </header>
+              <header>
+                <Hero 
+                  catList={typeCategory} setsampledata={setsampledata} sampledata={sampledata}
+                  combinedData={combinedData}
+                />
+              </header>
 
-            <AddResourceFlow complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} 
-            newResource={newResource} setNewResource={setNewResource}
-            handleNewResourceOpen={handleNewResourceOpen} handleNewResourceClose={handleNewResourceClose}/>
-            
-            <DeletedModal 
-              open={openDeleted} handleClose={() => handleDeletedClose()}
-              message={"Resource has been deleted."}
-            />
-
-            <Grid container justifyContent="center">
-              <Box sx={{ width: 1400, minHeight: 377 }} display="flex" justifyContent="center" alignItems="center">
-                <Masonry columns={4} spacing={2}>
-                  {sampledata.map((item, index) => (
-                    <PreviewItem 
-                      key={item.id} nowloading={nowloading} typeCategory={typeCategory}
-                      id={item.id} resource_id={item.resource_id} profile_id={item.profile_id}
-                      videoURL={ item.videoURL } created_at={item.created_at}
-                      title={item.title} thumbnail={item.thumbnail} description={item.description} 
-                      stage={item.stage} category={item.category} rating={item.rating} likes={item.likes} 
-                      sampledata={sampledata} setsampledata={setsampledata} 
-                      myCategory={item.myCategory} myStage={item.myStage} 
-                      star={item.star} myComments={item.myComments}
-                      setOpenDeleted={setOpenDeleted}
-                    >
-                      {item.id}
-                    </PreviewItem>
-                  ))}
-                </Masonry>
-              </Box>
-            </Grid>
+              <AddResourceFlow complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} 
+              newResource={newResource} setNewResource={setNewResource}
+              handleNewResourceOpen={handleNewResourceOpen} handleNewResourceClose={handleNewResourceClose}/>
               
-            <SiteFooter/>
-        </div>
+              <DeletedModal 
+                open={openDeleted} handleClose={() => handleDeletedClose()}
+                message={"Resource has been deleted."}
+              />
 
-        <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
+              <Grid container justifyContent="center">
+                <Box sx={{ width: 1400, minHeight: 377 }} display="flex" justifyContent="center" alignItems="center">
+                  <Masonry columns={4} spacing={2}>
+                    {sampledata.map((item, index) => (
+                      <PreviewItem 
+                        key={item.id} nowloading={nowloading} typeCategory={typeCategory}
+                        id={item.id} resource_id={item.resource_id} profile_id={item.profile_id}
+                        videoURL={ item.videoURL } created_at={item.created_at}
+                        title={item.title} thumbnail={item.thumbnail} description={item.description} 
+                        stage={item.stage} category={item.category} rating={item.rating} likes={item.likes} 
+                        sampledata={sampledata} setsampledata={setsampledata} 
+                        myCategory={item.myCategory} myStage={item.myStage} 
+                        star={item.star} myComments={item.myComments}
+                        setOpenDeleted={setOpenDeleted}
+                      >
+                        {item.id}
+                      </PreviewItem>
+                    ))}
+                  </Masonry>
+                </Box>
+              </Grid>
+                
+              <SiteFooter/>
+          </div>
 
-        </ThemeProvider>
-      </ColorModeContext.Provider>
-    </AuthProvider>
+          <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
+
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      </AuthProvider>
+    </FilterProvider>
     )
   );
 }
