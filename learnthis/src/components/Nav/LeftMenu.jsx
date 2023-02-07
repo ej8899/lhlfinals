@@ -21,6 +21,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import zlog from '../../helpers/zlog';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
+import { useContext } from 'react';
 
 // Icons
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -33,6 +34,12 @@ import ReportIcon from '@mui/icons-material/Report';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import StarIcon from '@mui/icons-material/Star';
 import SchoolIcon from '@mui/icons-material/School';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+
+//---------------------------------------------------------
+// Import user filter
+import { FilterContext } from "../../helpers/filter";
+//---------------------------------------------------------
 
 const drawerWidth = 240;
 
@@ -49,6 +56,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 export default function PersistentDrawerLeft(props) {
+  const { filterData } = useContext(FilterContext);
   const theme = useTheme();
   // const [open, setOpen] = React.useState(props.open);
 
@@ -68,23 +76,23 @@ export default function PersistentDrawerLeft(props) {
     zlog('action','Button title clicked:',event);
     zlog('action','Button index clicked:', index);
   
-    if(index ===0) {
-      setSelectedIndex(false)
-    }
     if(index === 0) {
+      props.setSelectedIndex(false)
       props.handleNewResourceOpen()
     } else if (index === 1) {
       console.log("My Resources has been triggered")
-    }
+    } 
+
+    filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData)
   };
   
   // TODO - this needs a better system - use main list, but when divider, use something like divider|texthere & split it out
   const divlist = ["","my items:","","","","my ratings:","","","my lessons:","","","","other:"];
 
   // deal with toggling clicked items on or off
-  const [selectedIndex, setSelectedIndex] = React.useState(null);
+
   const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
+    props.setSelectedIndex(index);
   };
 
   const list = (anchor) => (
@@ -101,8 +109,8 @@ export default function PersistentDrawerLeft(props) {
             'My Favorites', 
             'My Playlist',
             'divider',
-            'My Rated < 3',
-            'My Rated > 3',
+            'My Low Ratings',
+            'My High Ratings',
             'divider',
             'My Beginner', 
             'My Intermediate',
@@ -114,19 +122,19 @@ export default function PersistentDrawerLeft(props) {
             {text === 'divider' ? (<Divider key={index} textAlign="left" variant = "middle">{divlist[index]}</Divider>) : (
             <ListItem key={text} disablePadding 
                 onClick={() => handleClick(text, index)}
-                style={index === selectedIndex ? { backgroundColor: theme.palette.warning.main, color: theme.palette.warning.contrastText } : {}}
+                style={index === props.selectedIndex ? { backgroundColor: theme.palette.warning.main, color: theme.palette.warning.contrastText } : {}}
                 >
               <ListItemButton
                 key={index}
-                selected={selectedIndex === index}
+                selected={props.selectedIndex === index}
                 onClick={(event) => { handleListItemClick(event, index);}}
               >
                 <ListItemIcon key={index}>
                   {index === 0 ? <AddCircleIcon/> : <span/>}
                   {text === 'My Resources' ? <HomeIcon/> : <span/>}
                   {text === 'My Favorites' ? <FavoriteIcon/> : <span />}
-                  {text === 'My Rated < 3' ? <StarHalfIcon/> : <span />}
-                  {text === 'My Rated > 3' ? <StarIcon/> : <span />}
+                  {text === 'My Low Ratings' ? <StarBorderIcon/> : <span />}
+                  {text === 'My High Ratings' ? <StarIcon/> : <span />}
                   {text === 'My Playlist' ? <ListIcon/> : <span/>}
                   {text === 'Reported' ? <ReportIcon/> : <span/>}
                   {text === 'Deleted' ? <DeleteIcon/> : <span/>}

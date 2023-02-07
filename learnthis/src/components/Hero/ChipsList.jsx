@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useRef, useState, useContext, createContext } from "react";
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
@@ -17,8 +17,7 @@ import Tab from "@mui/material/Tab";
 import zlog from "../../helpers/zlog.js";
 
 //---------------------------------------------------------
-// Import user authentication
-import { AuthContext } from "../../hooks/handleUsers";
+// Import user filter
 import { FilterContext } from "../../helpers/filter";
 //---------------------------------------------------------
 
@@ -46,9 +45,40 @@ const ListItem = styled('li')(({ theme }) => ({
 }));
 
 
-export default function ChipsArray(props) {
+export const ChipContext = createContext();
 
-  const { isAuth, user, userid, logout } = useContext(AuthContext);
+export const ChipProvider = ({ children }) => {
+  const chipReset = (categories, setFilled) => {
+    let object = {};
+    let objectArray = [
+    ];
+    for (let i = 0; i < categories.length; i++) {
+      object = {
+        key: i,
+        label: categories[i]
+      };
+      objectArray.push(object);
+    }
+    const tagInit= {};
+    for (let i = 0; i < objectArray.length+1; i++) {
+      tagInit[i] = true;
+    }  
+    setFilled({...tagInit})
+    return
+  }
+
+  return (
+    <ChipContext.Provider
+      value={{
+        chipReset
+      }}
+    >
+      {children}
+    </ChipContext.Provider>
+  )
+}
+
+export default function ChipsArray(props) {
 
   let object = {};
   let objectArray = [
@@ -61,9 +91,9 @@ export default function ChipsArray(props) {
     objectArray.push(object);
   }
   const [chipData, setChipData] = React.useState(objectArray);
-  const [filled, setFilled] = React.useState(false);
   const { filterData } = useContext(FilterContext);
-
+  const filled = props.filled
+  const setFilled = props.setFilled
 
   useEffect(() => {
     const tagInit= {};
@@ -83,7 +113,7 @@ export default function ChipsArray(props) {
 
   const handleClick = (chipID) => {
     zlog('action',"chip clicked:",chipID)
-    const categoryArray = []
+    let categoryArray = []
 
     if(chipID === 100) {
         console.log('is on, turn off')
@@ -92,7 +122,8 @@ export default function ChipsArray(props) {
           tagInit[i] = true;
         }  
         setFilled({...tagInit})
-        chipData.map(chip => categoryArray.push(chip.label))
+        // chipData.map(chip => categoryArray.push(chip.label))
+        categoryArray = null;
     } 
     else if(chipID === 200) {
         console.log('is off, turn on')
@@ -113,7 +144,7 @@ export default function ChipsArray(props) {
       }
     }
 
-    filterData("category", categoryArray, props.setsampledata, props.sampledata, props.combinedData, userid)
+    filterData("category", categoryArray, props.setsampledata, props.sampledata, props.combinedData)
   };
 
   
@@ -147,7 +178,7 @@ export default function ChipsArray(props) {
               label={
             <Chip
               color="warning"
-              label="all"
+              label="All"
               icon={<CheckCircleIcon />}
               variant="default"
               sx={{ textTransform: "none",
@@ -167,7 +198,7 @@ export default function ChipsArray(props) {
               label={
             <Chip
               color="warning"
-              label="none"
+              label="None"
               icon={<UnpublishedIcon />}
               variant="default"
               sx={{ textTransform: "none",

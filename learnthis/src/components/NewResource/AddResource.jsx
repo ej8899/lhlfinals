@@ -326,8 +326,33 @@ export const AddResourceFlow = (props) => {
       setSavingNewResource(true)
       handleAddNewResourceClose()
       handleIconReset()
+
+      // const newURLResource = {
+      //   resource: {
+      //     "profile_id" : userid,
+      //     "url": videoURL,
+      //     "title": title,
+      //     "description": descriptionExpanded,
+      //     "thumbnail": thumbnail,
+      //   },
+      //   user: {
+      //     "profile_id": userid,
+      //     "myComments_public" : myComments,
+      //     "myComments_private" : '',
+      //     "myRating": star,
+      //     "myRanking": myStage,
+      //     "myCategories": myCategory,
+      //     "is_liked" : like === "default" ? false : true,
+      //     "is_favourite" : favourite === "default" ? false : true,
+      //     "is_bookmarked" : bookmark === "default" ? false : true, 
+      //     "is_playlist" : playlist === "default" ? false : true,
+      //     "is_reported" : report === "default" ? false : true,
+      //     "is_recommended" : lesson === "default" ? false : true
+      //   }
+      // }
+
       const newURLResource = {
-        "id" : props.sampledata.length + 1,
+        "id" : props.sampledata.length + 1, //delete when tie in backend
         "profile_id" : userid,
 
         "resource_id": props.sampledata.length + 1,
@@ -347,6 +372,7 @@ export const AddResourceFlow = (props) => {
         "star" : star,
         "myComments" : myComments
       }
+      
       props.setsampledata([...props.sampledata, newURLResource]);
       // window.location.reload(true);
       setTimeout(() => {
@@ -388,8 +414,10 @@ export const AddResourceFlow = (props) => {
       <ResultModal 
         open={savedNewResource} setStatusOpen={setSavedNewResource} 
         handleClose={() => handleSavedClose()} 
-        message={"Success! Resource has been added."} submessage={"Checkout 'My Resources' for resources you've added."}
+        message={"Success! Resource has been added."} 
         thumbnail={thumbnail} title={title}
+        setsampledata={props.setsampledata} sampledata={props.sampledata}
+        combinedData={props.combinedData} handleReviewClose={handleReviewClose}
       />
       <NewResourceModal 
         open={addNewResource} setOpen={setAddNewResource} 

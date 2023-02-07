@@ -1,5 +1,10 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+
+//---------------------------------------------------------
+// Import user filter
+import { FilterContext } from "../helpers/filter";
+//---------------------------------------------------------
 
 // Pulling from API - no longer needed
 // const noUser = [
@@ -27,8 +32,9 @@ export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState("nouser");
   const [userid, setUserid] = useState(null);
+  const { filterData } = useContext(FilterContext);
 
-  const login = ({email, password}, close) => {
+  const login = ({email, password}, close, setsampledata, sampledata, combinedData, setClearFilter) => {
 
     return axios.post('http://localhost:8080/api/user/login', { "email": email, "password": password})
     .then(response => {
@@ -39,6 +45,10 @@ export const AuthProvider = ({ children }) => {
         close();
         setIsAuth(true);
         setUserid(response.data.profiles[0].id);
+
+        filterData("signin", response.data.profiles[0].id, setsampledata, sampledata, combinedData)
+        
+        setClearFilter(false)
       })
       .catch(error => {
         console.error(error);
@@ -50,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 
   };
 
-  const logout = () => {
+  const logout = (setsampledata, sampledata, combinedData, setClearFilter) => {
 
     return axios.post('http://localhost:8080/api/user/logout')
     .then(response => {
@@ -58,6 +68,8 @@ export const AuthProvider = ({ children }) => {
       setUser("nouser");
       setUserid(null)
       setIsAuth(false);
+      setClearFilter(false)
+      filterData("signin", null, setsampledata, sampledata, combinedData)
     })
     .catch(error => {
       console.error(error);

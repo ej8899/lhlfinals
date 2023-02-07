@@ -30,7 +30,7 @@ import {  modalSignUp,
 
 // userauth
 import { AuthContext } from '../../hooks/handleUsers.js';
-
+import { FilterContext } from "../../helpers/filter";
 
 import AboutDialog from "../Modal/about.jsx"
 import { useEffect } from 'react';
@@ -120,9 +120,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const { myFilteredData } = useContext(FilterContext);
 
 
   const isMenuOpen = Boolean(anchorEl);
@@ -180,7 +181,7 @@ export default function PrimarySearchAppBar(props) {
 
     switch (modal) {
       case 'logout':
-        logout();
+        logout(props.setsampledata, props.sampledata, props.combinedData, props.clearFilter, props.setClearFilter);
         break;
       case 'profile':
         setTitle("Profile...")
@@ -198,7 +199,7 @@ export default function PrimarySearchAppBar(props) {
   function handlelogout() {
     setAnchorEl(null);
     handleMenuClose();
-    logout();
+    logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter);
   }
 
   // SIGN IN
@@ -251,8 +252,10 @@ export default function PrimarySearchAppBar(props) {
   // menu drawer
   //
   const [dopen, setDOpen] = React.useState(false);
+  const [selectedIndex, setSelectedIndex] = React.useState(null);
   const handleDrawerOpen = () => {
     setDOpen(true);
+
   };
   const handleDrawerClose = () => {
     setDOpen(false);
@@ -266,6 +269,15 @@ const [state, setState] = React.useState({
 const anchor = "left"
 
 const toggleDrawer = (anchor, open) => (event) => {
+  if (props.clearFilter) {
+    setSelectedIndex(null)
+    props.setClearFilter(false)
+  }
+
+  if (myFilteredData.resource.created_by) {
+    setSelectedIndex(2)
+  }
+
   if (
     event &&
     event.type === 'keydown' &&
@@ -281,19 +293,23 @@ const toggleDrawer = (anchor, open) => (event) => {
 
 
 
-
-
-
-
-
-
   // TODO - get rid of &nbsp; by user logged in name - how to pad the vertical divider?
 
   
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Login open={loginopen} close={handleLoginClose}></Login>
-      <SignUp open={signupopen} close={handleSignUpClose}></SignUp>
+      <Login 
+        open={loginopen} close={handleLoginClose}
+        setsampledata={props.setsampledata} sampledata={props.sampledata}
+        combinedData={props.combinedData}
+        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter}
+      ></Login>
+      <SignUp 
+        open={signupopen} close={handleSignUpClose}
+        setsampledata={props.setsampledata} sampledata={props.sampledata}
+        combinedData={props.combinedData}
+        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter}
+      ></SignUp>
       <AppBar position="static">
         <Toolbar>
           {!isAuth && 
@@ -401,7 +417,7 @@ const toggleDrawer = (anchor, open) => (event) => {
       <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
       <PersistentDrawerLeft
         state={state} setState={setState} toggleDrawer={toggleDrawer} anchor={anchor}
-        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource}
+        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex}
       />
     </Box>
   );

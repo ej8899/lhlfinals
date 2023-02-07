@@ -1,7 +1,13 @@
 // --------------------------------------------------------
 // React Imports
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 // --------------------------------------------------------
+
+//---------------------------------------------------------
+// Import user filter
+import { FilterContext } from "../../helpers/filter";
+import { AuthContext } from "../../hooks/handleUsers.js";
+//---------------------------------------------------------
 
 // --------------------------------------------------------
 // Material UI Imports
@@ -48,12 +54,15 @@ const style = {
 // TODO - bottom where my resource - add anchor to link?
 export const ResultModal= (props) => {
 
+  const { filterData } = useContext(FilterContext);
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+
   return (
     <Modal
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
-      onClose={props.handleSharedClose}
+      onClose={props.handleClose}
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500,
@@ -87,7 +96,9 @@ export const ResultModal= (props) => {
               {props.message}
             </Typography>
             <Typography variant="body2" textAlign="center">
-              {props.submessage}
+              Checkout &nbsp; <b>
+                <a onClick={() => props.handleClose(filterData("mine", userid, props.setsampledata, props.sampledata, props.combinedData), props.handleReviewClose())} style={{color: "purple", cursor: "pointer", "&:hover" : {color: "green"}}}>'My Resources'</a> 
+                </b> &nbsp; for resources you've added.
             </Typography>
           </Box>
         </Box>

@@ -363,6 +363,33 @@ export const PreviewItem = (props) => {
       const updateURLResource = []
       props.sampledata.forEach(resource => {
       if (resource.id === props.id) {
+        // updateURLResource.push({
+        //   resource: {
+        //     "id" : props.id,
+        //     "profile_id": props.profile_id,
+  
+        //     "resource_id" : props.resource_id,
+        //     "url": videoURL,
+        //     "title": tmptitle,
+        //     "description": tmpdescriptionExpanded,
+        //     "thumbnail": thumbnail,
+        //   },
+        //   user: {
+        //     "profile_id": userid,
+        //     "myComments_public" : tmpmyComments,
+        //     "myComments_private" : '',
+        //     "myRating": tmpstar,
+        //     "myRanking": tmpmyStage,
+        //     "myCategories": tmpmyCategory,
+        //     "is_liked" : like === "default" ? false : true,
+        //     "is_favourite" : favourite === "default" ? false : true,
+        //     "is_bookmarked" : bookmark === "default" ? false : true, 
+        //     "is_playlist" : playlist === "default" ? false : true,
+        //     "is_reported" : report === "default" ? false : true,
+        //     "is_recommended" : lesson === "default" ? false : true
+        //   }
+        // })
+
         updateURLResource.push({
           "id" : props.id,
           "profile_id": props.profile_id,
@@ -717,8 +744,11 @@ export const PreviewItem = (props) => {
           <ResultModal 
             open={openEdited} setStatusOpen={setOpenEdited} 
             handleClose={() => handleEditedClose(tmpReset())} 
-            message={"Success! Resource has been updated."} submessage={"Checkout 'My Resources' for resources you've added."}
+            message={"Success! Resource has been updated."} 
             thumbnail={thumbnail} title={title}
+            setsampledata={props.setsampledata} sampledata={props.sampledata}
+            combinedData={props.combinedData}
+            handleReviewClose={handleReviewClose}
           />
         </div>
         <Divider sx={{ filter: filter }}>
