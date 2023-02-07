@@ -50,6 +50,107 @@ returned:
 }
 ```
 
+## POST api/profiles
+description: create/save a new profile
+
+```json
+body: 
+{
+	"user_id": 3,
+	"first_name": "George",
+	"last_name": "Lucas",
+	"avatar": "My avatar url"
+}
+
+returned:
+{
+    "success": "Profile created",
+    "createdProfile": {
+        "id": 6,
+        "user_id": 3,
+        "first_name": "George",
+        "last_name": "Lucas",
+        "avatar": "My avatar url",
+        "created_at": "2023-02-07T01:47:34.558Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+}
+```
+
+## GET api/profiles/user/[user_id]
+description: retrieve profile by user id
+
+```json
+returned:
+{
+    "success": "Profiles found",
+    "profiles": [
+        {
+            "id": 6,
+            "user_id": 3,
+            "first_name": "Georgy",
+            "last_name": "Luck",
+            "avatar": "My avatar url",
+            "created_at": "2023-02-07T01:47:34.558Z",
+            "updated_at": "2023-02-07T01:52:25.897Z",
+            "deleted_at": null,
+            "email": "123435@test.com"
+        }
+    ]
+}
+```
+
+## GET api/profiles/[profile_id]
+description: retrieve profile by profile id
+
+```json
+returned:
+{
+    "success": "Profile found",
+    "profile": {
+        "id": 6,
+        "user_id": 3,
+        "first_name": "Georgy",
+        "last_name": "Luck",
+        "avatar": "My avatar url",
+        "created_at": "2023-02-07T01:47:34.558Z",
+        "updated_at": "2023-02-07T01:52:25.897Z",
+        "deleted_at": null,
+        "email": "123435@test.com"
+    }
+}
+```
+
+## UPDATE api/profiles/6
+description: create/save a new profile
+
+```json
+body: 
+{
+    "id": 6,
+    "user_id": 3,
+	"first_name": "Georgy",
+	"last_name": "Luck",
+	"avatar": "My avatar url"
+}
+
+returned:
+{
+    "success": "Profile updated",
+    "updatedProfile": {
+        "id": 6,
+        "user_id": 3,
+        "first_name": "Georgy",
+        "last_name": "Luck",
+        "avatar": "My avatar url",
+        "created_at": "2023-02-07T01:47:34.558Z",
+        "updated_at": "2023-02-07T01:52:25.897Z",
+        "deleted_at": null
+    }
+}
+```
+
 ## GET api/resources
 description: retrieve all resources from all users
 
@@ -469,5 +570,97 @@ returned:
     "created_at": "2023-02-02T14:15:55.207Z",
     "updated_at": "2023-02-02T14:19:55.068Z",
     "deleted_at": "2023-02-02T14:21:56.902Z"
+}
+```
+
+## GET api/favourites/resources/[resource_id]
+description: retrieve all favourites for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_favourite": true,
+        "created_at": "2023-02-06T22:34:36.572Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_favourite": false,
+        "created_at": "2023-02-06T22:34:36.572Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/favourites
+description: create/save a favourite
+
+```json
+body: 
+{
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": false
+}
+
+returned:
+{
+    "id": 5,
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": false,
+    "created_at": "2023-02-07T01:57:47.278Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/favourites/[favourite_id]
+description: update a favourite
+
+```json
+body: 
+{
+    "id": 5,
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": true
+}
+
+returned:
+{
+    "id": 5,
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": true,
+    "created_at": "2023-02-07T01:57:47.278Z",
+    "updated_at": "2023-02-07T02:02:02.344Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/favourites/[favourite_id]
+description: delete a favourite
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 5,
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": true,
+    "created_at": "2023-02-07T01:57:47.278Z",
+    "updated_at": "2023-02-07T02:02:02.344Z",
+    "deleted_at": "2023-02-07T02:03:03.164Z"
 }
 ```
