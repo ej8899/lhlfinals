@@ -71,7 +71,9 @@ const Login=(props)=>{
   let storeduser = "";
 
   React.useEffect(() => {
-    storeduser = localStorage.getItem("defaultemail")
+    if(rememberMe) {
+      storeduser = localStorage.getItem("defaultemail");
+    }
     setRememberMeEmail(storeduser)
   }, []);
 
@@ -149,7 +151,7 @@ const Login=(props)=>{
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember"  color="primary"/>}
+              control={<Checkbox checked={rememberMe} value="remember" color="primary"/>}
               label="Remember me"
               onChange={handleRememberMeChange}
             />
