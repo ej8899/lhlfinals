@@ -29,13 +29,13 @@ const postBookmark = (data) => {
   let query = `
   INSERT INTO
     bookmarks 
-      (resource_id, profile_id, is_bookmark)
+      (resource_id, profile_id, is_bookmarked)
     VALUES
       ($1, $2, $3) RETURNING *;`;
   const params = [
     data.resource_id,
     data.profile_id,
-    data.is_bookmark
+    data.is_bookmarked
   ];
 
   return db.query(query, params).then((data) => data.rows[0]);
@@ -51,12 +51,12 @@ const updateBookmark = (data) => {
   UPDATE
     bookmarks
   SET
-    is_bookmark = $1,
+    is_bookmarked = $1,
     updated_at = NOW()
   WHERE
     id = $2 RETURNING *;`;
   const params = [
-    data.is_bookmark,
+    data.is_bookmarked,
     data.id
   ];
 

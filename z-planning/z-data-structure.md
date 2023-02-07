@@ -756,3 +756,95 @@ returned:
     "deleted_at": "2023-02-07T14:18:29.452Z"
 }
 ```
+
+## GET api/bookmarks/resources/[resource_id]
+description: retrieve all bookmarks for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_bookmarked": true,
+        "created_at": "2023-02-07T16:32:32.821Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_bookmarked": false,
+        "created_at": "2023-02-07T16:32:32.821Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/bookmarks
+description: create/save a bookmark
+
+```json
+body: 
+{
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true,
+    "created_at": "2023-02-07T16:35:51.203Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/bookmarks/[bookmark_id]
+description: update a bookmark
+
+```json
+body: 
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true,
+    "created_at": "2023-02-07T16:35:51.203Z",
+    "updated_at": "2023-02-07T16:52:44.380Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/bookmarks/[bookmark_id]
+description: delete a bookmark
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true,
+    "created_at": "2023-02-07T16:35:51.203Z",
+    "updated_at": "2023-02-07T16:52:44.380Z",
+    "deleted_at": "2023-02-07T16:54:34.563Z"
+}
+```
