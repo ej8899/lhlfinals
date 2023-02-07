@@ -22,6 +22,28 @@ const getCategoriesByResourceId = (id) => {
 };
 
 /**
+ * Get all categories by resource id that are still active from db
+ * @param {number} id profile id
+ * @return {Promise<{}>} A promise of all categories in db that are not deleted limit by 20.
+ */
+const getCategoriesByProfileId = (id) => {
+  let query = `
+  SELECT
+    resources.profile_id,
+    categories.*
+  FROM
+    categories
+    JOIN resources ON categories.resource_id = resources.id
+  WHERE
+    categories.deleted_at IS NULL AND resources.profile_id = $1;
+  `;
+    
+  const params = [id];
+
+  return db.query(query, params).then((data) => data.rows);
+};
+
+/**
  * Insert new category
  * @param {json} category data
  * @return {Promise<{}>} A promise of the category inserted.
@@ -86,6 +108,7 @@ const deleteCategory = (data) => {
 
 module.exports = {
   getCategoriesByResourceId,
+  getCategoriesByProfileId,
   postCategory,
   updateCategory,
   deleteCategory,
