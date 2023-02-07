@@ -664,3 +664,95 @@ returned:
     "deleted_at": "2023-02-07T02:03:03.164Z"
 }
 ```
+
+## GET api/playlists/resources/[resource_id]
+description: retrieve all playlists for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_playlist": true,
+        "created_at": "2023-02-07T13:54:43.881Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_playlist": false,
+        "created_at": "2023-02-07T13:54:43.881Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/playlists
+description: create/save a playlist
+
+```json
+body: 
+{
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": true,
+    "created_at": "2023-02-07T14:15:52.745Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/playlists/[playlist_id]
+description: update a playlist
+
+```json
+body: 
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": false
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": false,
+    "created_at": "2023-02-07T14:15:52.745Z",
+    "updated_at": "2023-02-07T14:17:20.899Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/playlists/[playlist_id]
+description: delete a playlist
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": false,
+    "created_at": "2023-02-07T14:15:52.745Z",
+    "updated_at": "2023-02-07T14:17:20.899Z",
+    "deleted_at": "2023-02-07T14:18:29.452Z"
+}
+```
