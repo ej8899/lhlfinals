@@ -21,6 +21,20 @@ router.get("/resources/:id", (req, res) => {
 });
 
 /**
+ * Get all categories by Profile Id
+ * @return {json} All categories pertain to a profile in db that are not deleted
+ */
+router.get("/profile/:id", (req, res) => {
+  const id = req.params.id
+  q_categories
+    .getCategoriesByProfileId(id)
+    .then((data) => res.json(data))
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+/**
  * Save new category
  * @return {json} category that is saved
  * 

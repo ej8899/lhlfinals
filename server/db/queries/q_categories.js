@@ -22,7 +22,7 @@ const getCategoriesByResourceId = (id) => {
 };
 
 /**
- * Get all categories by resource id that are still active from db
+ * Get all categories by profile id that are still active from db
  * @param {number} id profile id
  * @return {Promise<{}>} A promise of all categories in db that are not deleted limit by 20.
  */
