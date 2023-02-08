@@ -940,3 +940,95 @@ returned:
     "deleted_at": "2023-02-07T16:54:34.563Z"
 }
 ```
+
+## GET api/reports/resources/[resource_id]
+description: retrieve all reports for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_reported": true,
+        "created_at": "2023-02-08T14:43:15.090Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_reported": false,
+        "created_at": "2023-02-08T14:43:15.090Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/reports
+description: create/save a report
+
+```json
+body: 
+{
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": true,
+    "created_at": "2023-02-08T14:55:47.641Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/reportes/[report_id]
+description: update a report
+
+```json
+body: 
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": false
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": false,
+    "created_at": "2023-02-08T14:55:47.641Z",
+    "updated_at": "2023-02-08T14:57:41.877Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/reports/[report_id]
+description: delete a report
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": false,
+    "created_at": "2023-02-08T14:55:47.641Z",
+    "updated_at": "2023-02-08T14:57:41.877Z",
+    "deleted_at": "2023-02-08T14:58:29.160Z"
+}
+```
