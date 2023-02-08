@@ -91,17 +91,48 @@ const getAllResourcesByOptions = (options) => {
   }
 
   if (options.resource.created_last_num_hours) {
-    q.counter++;
     q.where = q.where
-      ? `${q.where} AND resources.created_at >= current_timestamp - interval '$${q.counter} hours'`
-      : `WHERE resources.created_at >= current_timestamp - interval '$${q.counter} hours'`;
-    q.params.push(options.created_last_num_hours);
+      ? `${q.where} AND resources.created_at >= current_timestamp - interval '${options.resource.created_last_num_hours} hours'`
+      : `WHERE resources.created_at >= current_timestamp - interval '${options.resource.created_last_num_hours} hours'`;
+  }
+
+  if (options.resource.limit) {
+    q.counter++;
+    q.limit = `LIMIT $${q.counter}`;
+    q.params.push(options.resource.limit);
+  }
+
+  if (options.resource.order_by) {
+    switch (options.resource.order_by) {
+      case "most_liked":
+        q.order = `ORDER BY likes.is_liked DESC`;
+        break;
+      case "top_rated":
+        q.order = `ORDER BY ratings.rate DESC`;
+        break;
+      case "top_ranked":
+        q.order = `ORDER BY rankings.scale DESC`;
+        break;
+      case "lowest_ranked":
+        q.order = `ORDER BY rankings.scale ASC`;
+        break;
+      case "newest":
+        q.order = `ORDER BY resources.created_at DESC`;
+        break;
+      case "alpha_a-z":
+        q.order = `ORDER BY resources.title ASC`;
+        break;
+      default:
+        q.order = `ORDER BY resources.title DESC`;
+    }
   }
 
   //Build Query
   q.query = `${q.select} \n${q.from} \n${q.where} \n${q.group} \n${q.having} \n${q.order} \n${q.limit};`;
-  
+
   //submit query to db
+  console.log("query: ", q.query);
+  console.log("params: ", q.params);
   return db.query(q.query, q.params).then((data) => data.rows);
 };
 

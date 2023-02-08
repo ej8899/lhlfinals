@@ -38,7 +38,8 @@ router.get("/withAddition", (req, res) => {
  * @return {json} All resources that fits the filter.
  */
 router.post("/options", (req, res) => {
-  const options  ={...req.body};
+  const options = {...req.body};
+  console.log('in options',options)
   q_resources
     .getAllResourcesByOptions(options)
     .then((data) => res.json(data))
