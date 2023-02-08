@@ -1,0 +1,19 @@
+.checkmark-container {
+  display: flex;
+  align-items: center;
+  margin: 50px;
+  text-align: center;
+}
+
+.checkmark-icon {
+  font-size: 36px;
+  color: green;
+  font-weight: bold;
+}
+
+.checkmark-text {
+  font-size: 36px;
+  color: green;
+  font-weight: bold;
+  margin-left: 10px;
+}

@@ -7,6 +7,7 @@ const serverUrl = "http://localhost:7070";
 const testdata = '{"title":"testfromfakeclipper", "description":"empty desc", "url":"https://github.com/remix-run/react-router/blob/dev/examples/modal/src/App.tsx", "profile_id":2}'
 
 
+
 const postData = (data) => {
   console.log("data inside async:",data)
   try {
@@ -19,7 +20,37 @@ const postData = (data) => {
       //body: testdata,
     }).then((data) => {
       console.log(data);
-      window.close();
+      
+      // TODO clear the form and post a 'success' display here instead w link to open LearnThis!
+      // delay for the spinner
+      // turn off spinner
+      document.getElementById("spinner").style.display = "none";
+      var div = document.getElementById("contentbody");
+      div.innerHTML = ` 
+      
+      <div class="success-container" style="
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      ">
+      
+      <div class="checkmark-container" style="
+      display: flex;
+      flex-align: row;
+      ">
+      <!--<span class="checkmark-icon">&#10003;</span>-->
+      <p class="checkmark-text">Saved!</p>
+      </div>
+
+      <div class="foot" style="text-align:center">
+      <div class="footer-link"><a href="http://localhost:3000/#" target_new class="footer-link">See on LearnThis!</a></div>
+      </div>
+
+      </div>
+      `
+
+      // window.close();
     })
     .catch((error) => {
       console.log(error)
@@ -164,14 +195,7 @@ function getCurrentTabUrl(event) {
 
   
   postData(formdataobject)
-    // .then(data => {
-    //   console.log("returned data:",data);
-    // })
-    // .catch(error => {
-    //   console.error("fetch post error:",error);
-    // });
 
-  
 }
 
 // check login state to server

@@ -34,7 +34,7 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "css": ["spinner.css"]  
+      "css": ["spinner.css","check.css","popup.css"]  
     }
   ]
 }
