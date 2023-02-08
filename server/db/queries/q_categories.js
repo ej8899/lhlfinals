@@ -3,7 +3,7 @@ const db = require("../connection");
 /**
  * Get all categories by resource id that are still active from db
  * @param {number} id resource id
- * @return {Promise<{}>} A promise of all categories in db that are not deleted limit by 20.
+ * @return {Promise<{}>} A promise of all categories in db that are not deleted.
  */
 const getCategoriesByResourceId = (id) => {
   let query = `
@@ -24,7 +24,7 @@ const getCategoriesByResourceId = (id) => {
 /**
  * Get all categories by profile id that are still active from db
  * @param {number} id profile id
- * @return {Promise<{}>} A promise of all categories in db that are not deleted limit by 20.
+ * @return {Promise<{}>} A promise of all categories in db that are not deleted.
  */
 const getCategoriesByProfileId = (id) => {
   let query = `
@@ -39,6 +39,27 @@ const getCategoriesByProfileId = (id) => {
   `;
     
   const params = [id];
+
+  return db.query(query, params).then((data) => data.rows);
+};
+
+/**
+ * Get all categories by profile id and resource id that are still active from db
+ * @param {number} profileId profile id inside the categories table
+ * @param {number} resourceId resource id insde the categories table
+ * @return {Promise<{}>} A promise of all categories in db that are not deleted.
+ */
+const getCategoriesByProfileIdAndResourceId = (profileId, resourceId) => {
+  let query = `
+  SELECT
+    *
+  FROM
+    categories
+  WHERE
+    deleted_at IS NULL AND profile_id = $1 AND resource_id = $2;
+  `;
+    
+  const params = [profileId,resourceId];
 
   return db.query(query, params).then((data) => data.rows);
 };

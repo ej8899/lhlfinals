@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS categories CASCADE;
 CREATE TABLE categories (
   id SERIAL PRIMARY KEY NOT NULL,
   resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
+  profile_id INTEGER REFERENCES profiles(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
   index INT NOT NULL,
   description VARCHAR(255),
