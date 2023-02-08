@@ -6,24 +6,32 @@ const serverUrl = "http://localhost:7070";
 
 const testdata = '{"title":"testfromfakeclipper", "description":"empty desc", "url":"https://github.com/remix-run/react-router/blob/dev/examples/modal/src/App.tsx", "profile_id":2}'
 
-const postData = async (data) => {
+
+const postData = (data) => {
+  console.log("data inside async:",data)
   try {
-    const response = await fetch("http://localhost:8080/api/resources", {
+    fetch("http://localhost:8080/api/resources", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      //body: JSON.stringify(data)
-      body: testdata
-    });
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    console.log("RESPONSE JSON: ", response.json());
-    const data_1 = await response.json();
-    console.log("data sent success:", data_1);
-    window.close();
-    alert('success');
+      body: JSON.stringify(data)
+      //body: testdata,
+    }).then((data) => {
+      console.log(data);
+      window.close();
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    // if (!response.ok) {
+    //   throw new Error("Network response was not ok");
+    // }
+    // // console.log("RESPONSE JSON: ", response.json());
+    // const data_1 = await response.json();
+    // console.log("data sent success:", data_1);
+    // window.close();
+    // alert('success');
   } catch (error) {
     console.error("problem in fetch POST:");
     console.log('error:' + error + '|');
@@ -115,7 +123,8 @@ function sortArrayAlphabetically(array)  {
 
 
 // process submit
-function getCurrentTabUrl() {
+function getCurrentTabUrl(event) {
+  event.preventDefault();
   let queryInfo = {
     active: true,
     currentWindow: true,
@@ -155,12 +164,12 @@ function getCurrentTabUrl() {
 
   
   postData(formdataobject)
-    .then(data => {
-      console.log("returned data:",data);
-    })
-    .catch(error => {
-      console.error("fetch post error:",error);
-    });
+    // .then(data => {
+    //   console.log("returned data:",data);
+    // })
+    // .catch(error => {
+    //   console.error("fetch post error:",error);
+    // });
 
   
 }
