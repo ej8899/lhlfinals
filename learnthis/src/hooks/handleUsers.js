@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 
   };
 
-  const logout = (setsampledata, sampledata, combinedData, setClearFilter) => {
+  const logout = (setsampledata, sampledata, combinedData, setClearFilter, setLessonTrue, setSelectedIndex) => {
 
     return axios.post('http://localhost:8080/api/user/logout')
     .then(response => {
@@ -70,6 +70,8 @@ export const AuthProvider = ({ children }) => {
       setIsAuth(false);
       setClearFilter(false)
       filterData("signin", null, setsampledata, sampledata, combinedData)
+      setLessonTrue(false)
+      setSelectedIndex(false)
     })
     .catch(error => {
       console.error(error);

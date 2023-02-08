@@ -8,13 +8,49 @@ const getAllResources = () => {
   //const params = ["NOT NULL"];
   return db
     .query(
-      `SELECT * 
-    FROM resources 
+      `SELECT *
+    FROM resources
     WHERE deleted_at IS NULL
     ORDER BY id LIMIT 20;`
     )
     .then((data) => {
       return data.rows;
+    });
+};
+
+/**
+ * Get all resources with addition of likes, categories, rankings and ratings
+ * @return {Promise<{}>} A promise of all resources in db that are not deleted limit by 20.
+ */
+const getAllResourcesWithAddition = () => {
+  //const params = ["NOT NULL"];
+  return db
+    .query(
+      `SELECT res.*, COUNT(DISTINCT l.id) AS likes, array[c.name] AS categories, AVG(ran.SCALE) AS ranking, AVG(rat.rate) AS rating
+    FROM resources AS res
+    LEFT JOIN likes AS l on res.id=l.resource_id
+    LEFT JOIN categories AS c on res.id=c.resource_id
+    LEFT JOIN rankings AS ran on res.id=ran.resource_id
+    LEFT JOIN ratings AS rat on res.id=rat.resource_id
+    WHERE res.deleted_at IS NULL
+    GROUP BY res.id, c.name
+    ORDER BY res.id LIMIT 20;`
+    )
+    .then((data) => {
+      if (data.rows.length === 0) {
+        return [];
+      }
+
+      const resources = [];
+      data.rows.forEach(resource => {
+        if (resources.map(r => r.id).includes(resource.id)) {
+          const index = resources.findIndex(r => r.id === resource.id);
+          resources[index] = { ...resources[index], categories: resources[index].categories.concat(resource.categories) };
+        } else {
+          resources.push(resource);
+        }
+      });
+      return resources;
     });
 };
 
@@ -96,6 +132,7 @@ const deleteResource = (data) => {
 
 module.exports = {
   getAllResources,
+  getAllResourcesWithAddition,
   postResource,
   updateResource,
   deleteResource

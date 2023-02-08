@@ -222,6 +222,9 @@ export const PreviewItem = (props) => {
 // --------------------------------------------------------
 // Import Icon Status
   const {
+    resourceKey,
+    setResourceKey,
+
     handleIconReset,
 
     deleteIcon,
@@ -326,6 +329,8 @@ export const PreviewItem = (props) => {
 
     tmpsetTitle(props.title)
     tmpsetDescriptionExpanded(props.description)
+
+    setResourceKey(props.id)
 
   }, [videoId]);
 // --------------------------------------------------------

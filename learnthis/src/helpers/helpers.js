@@ -107,3 +107,23 @@ export const isURLValid = async (url) => {
 // isURLValid(url).then(result => {
 //   console.log(result); // Output: true or false
 // });
+
+export const getdata = (data, stage, setsampledata) => {
+  let tmpArray = []
+  data.forEach( element => {
+    if (stage === "beginner") {
+      if (element.stage > 0 && element.stage <= 33 ) {
+        tmpArray.push(element)
+      }
+    } else if (stage === "intermediate") {
+      if (element.stage > 33  && element.stage < 68 ) {
+        tmpArray.push(element)
+      }
+    } else if (stage === "advanced") {
+      if (element.stage >= 68  && element.stage <= 100 ) {
+        tmpArray.push(element)
+      }
+    }
+  })
+  return tmpArray
+}

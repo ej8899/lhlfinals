@@ -101,10 +101,18 @@ export default function Hero(props) {
     <Grid container>
       <Grid item xs={12}>
         <div style={heroContent}>
-          <Typography variant="h2">Welcome to our site!</Typography>
-          <Typography variant="subtitle1">
-          hero component<br/>
-          </Typography>
+          {!props.lessonTrue &&
+          <div>
+            <Typography variant="h2">Welcome to our site!</Typography>
+            <Typography variant="subtitle1">
+            hero component<br/>
+            </Typography>
+            </div>
+          } 
+          {props.lessonTrue &&
+            <Typography variant="h2" sx={{marginBottom : "8px"}}>Welcome to Your Crowd Sourced Lesson Plan!</Typography>
+          }
+
           <ChipsArray catList={props.catList}
             setsampledata={props.setsampledata} sampledata={props.sampledata}
             combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} filled={chipfilled} setFilled={setChipFilled}

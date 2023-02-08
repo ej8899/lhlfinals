@@ -33,6 +33,9 @@ import { FilterProvider } from "../helpers/filter";
 
 // Import Handle for Chip Reset
 import { ChipProvider } from "./Hero/ChipsList";
+
+// Import Handle for Icon Status
+import { IconProvider } from "../hooks/handleIcons";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -45,13 +48,18 @@ import AboutDialog from "./Modal/about";
 // Import Components
 import NavBar from "./Nav/NavBar.jsx";
 import PreviewItem from "./Previews";
+import LessonItem from "./Previews/lessonplan"
 import SiteFooter from "./Footer";
 import Hero from "./Hero/Hero.jsx";
 import AddResourceFlow from "./NewResource/AddResource";
 import { DeletedModal } from "./ItemDetail/deleted";
 import { FavouriteStaleStats } from "./Icons/favourite";
-import PlaylistAdd from "@mui/icons-material/PlaylistAdd";
+import { LessonIndex } from "./Previews/lessonindex";
+import { getdata } from "../helpers/helpers";
 // --------------------------------------------------------
+
+
+
 
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
@@ -679,6 +687,12 @@ export default function Application(props) {
 
   // Clear Filter Handler
   const [clearFilter, setClearFilter] = useState(true)
+
+  const [sampleBdata, setsampleBdata] = useState([])
+  const [sampleIdata, setsampleIdata] = useState([])
+  const [sampleAdata, setsampleAdata] = useState([])
+  const [lessonTrue, setLessonTrue] = useState(false)
+
 // --------------------------------------------------------
 
 
@@ -789,16 +803,18 @@ export default function Application(props) {
     setCMessage(modalCookiesMessage);
     setCOpen(true);
 
-    // axios.get(`http://localhost:8080/api/resources`)
-    //   .then(response => {
+    axios.get(`http://localhost:8080/api/resources`)
+      .then(response => {
     //     // console.log(response.data)
     //     setsampledata(combinedData(response.data, sampleuserdata))
-    //     setsampledata(combinedData(response.data))
+    //     // setsampledata(combinedData(response.data))
     //     // console.log(combinedData(response.data, sampleuserdata))
-    //   })
-    //   .catch(error => {
-    //     console.error(error);
-    //   });
+
+
+      })
+      .catch(error => {
+        console.error(error);
+      });
 
   }, []);
 // --------------------------------------------------------
@@ -807,73 +823,91 @@ export default function Application(props) {
   // TODO -load from localStorage - don't show modal if we've done it before (cookies only)
   // TODO - update localStorage once user says ok
 
+
+  
     
   return (
   (
-    <ChipProvider>
-      <FilterProvider>
-        <AuthProvider>
-          <ColorModeContext.Provider value={colorMode}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline  enableColorScheme/>
-            
-              <div className="maincontainer">
-                <NavBar 
-                  darkMode={theme.palette.mode} handleDarkMode={colorMode.toggleColorMode} handleNewResourceOpen={handleNewResourceOpen} setNewResource={setNewResource}
-                  setsampledata={setsampledata} sampledata={sampledata}
-                  combinedData={combinedData} clearFilter={clearFilter} setClearFilter={setClearFilter}
-                ></NavBar>
+    <IconProvider>
+      <ChipProvider>
+        <FilterProvider>
+          <AuthProvider>
+            <ColorModeContext.Provider value={colorMode}>
+              <ThemeProvider theme={theme}>
+                <CssBaseline  enableColorScheme/>
+              
+                  <div className="maincontainer">
+                    <NavBar 
+                      darkMode={theme.palette.mode} handleDarkMode={colorMode.toggleColorMode} handleNewResourceOpen={handleNewResourceOpen} setNewResource={setNewResource}
+                      setsampledata={setsampledata} sampledata={sampledata}
+                      combinedData={combinedData} clearFilter={clearFilter} setClearFilter={setClearFilter} lessonTrue={lessonTrue} setLessonTrue={setLessonTrue}
+                    ></NavBar>
 
-                <header>
-                  <Hero 
-                    catList={typeCategory} setsampledata={setsampledata} sampledata={sampledata}
-                    combinedData={combinedData} clearFilter={clearFilter} setClearFilter={setClearFilter}
-                  />
-                </header>
+                    <header>
+                      <Hero 
+                        catList={typeCategory} setsampledata={setsampledata} sampledata={sampledata} lessonTrue={lessonTrue}
+                        combinedData={combinedData} clearFilter={clearFilter} setClearFilter={setClearFilter}
+                      />
+                    </header>
 
-                <AddResourceFlow 
-                  complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} combinedData={combinedData}
-                  newResource={newResource} setNewResource={setNewResource}
-                  handleNewResourceOpen={handleNewResourceOpen} handleNewResourceClose={handleNewResourceClose} clearFilter={clearFilter} setClearFilter={setClearFilter}
-                />
-                
-                <DeletedModal 
-                  open={openDeleted} handleClose={() => handleDeletedClose()}
-                  message={"Resource has been deleted."}
-                />
+                    <AddResourceFlow 
+                      complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} combinedData={combinedData}
+                      newResource={newResource} setNewResource={setNewResource}
+                      handleNewResourceOpen={handleNewResourceOpen} handleNewResourceClose={handleNewResourceClose} clearFilter={clearFilter} setClearFilter={setClearFilter} sampleuserdata={sampleuserdata} 
+                      setsampleAdata={setsampleAdata} setsampleBdata={setsampleBdata} setsampleIdata={setsampleIdata}
+                    />
+                    
+                    <DeletedModal 
+                      open={openDeleted} handleClose={() => handleDeletedClose()}
+                      message={"Resource has been deleted."}
+                    />
 
-                <Grid container justifyContent="center">
-                  <Box sx={{ width: 1400, minHeight: 377 }} display="flex" justifyContent="center" alignItems="center">
-                    <Masonry columns={4} spacing={2}>
-                      {sampledata.map((item, index) => (
-                        <PreviewItem 
-                          key={item.id} nowloading={nowloading} typeCategory={typeCategory}
-                          id={item.id} resource_id={item.resource_id} profile_id={item.profile_id}
-                          videoURL={ item.videoURL } created_at={item.created_at}
-                          title={item.title} thumbnail={item.thumbnail} description={item.description} 
-                          stage={item.stage} category={item.category} rating={item.rating} likes={item.likes} 
-                          sampledata={sampledata} setsampledata={setsampledata} 
-                          myCategory={item.myCategory} myStage={item.myStage} 
-                          star={item.star} myComments={item.myComments}
+                    {!lessonTrue &&
+                      <Box display="flex">
+                        <Grid container justifyContent="center">
+                          <Box sx={{ width: 1400, minHeight: 377 }} display="flex" justifyContent="center" alignItems="center">
+                            <Masonry columns={4} spacing={2}>
+                              {sampledata.map((item, index) => (
+                                <PreviewItem 
+                                  key={item.id} nowloading={nowloading} typeCategory={typeCategory}
+                                  id={item.id} resource_id={item.resource_id} profile_id={item.profile_id}
+                                  videoURL={ item.videoURL } created_at={item.created_at}
+                                  title={item.title} thumbnail={item.thumbnail} description={item.description} 
+                                  stage={item.stage} category={item.category} rating={item.rating} likes={item.likes} 
+                                  sampledata={sampledata} setsampledata={setsampledata} 
+                                  myCategory={item.myCategory} myStage={item.myStage} 
+                                  star={item.star} myComments={item.myComments}
+                                  setOpenDeleted={setOpenDeleted} combinedData={combinedData}
+                                >
+                                  {item.id}
+                                </PreviewItem>
+                              ))}
+                            </Masonry>
+                          </Box>
+                        </Grid>
+                      </Box>
+                    }
+                    { lessonTrue &&
+                      <Box display="flex" flexDirection="column">
+                        <LessonIndex
+                          sampledata={sampledata} nowloading={nowloading} typeCategory={typeCategory}
                           setOpenDeleted={setOpenDeleted} combinedData={combinedData}
+                          sampleBdata={sampleBdata} sampleAdata={sampleAdata} sampleIdata={sampleIdata} setsampledata={setsampledata} setsampleAdata={setsampleAdata} setsampleBdata={setsampleBdata} setsampleIdata={setsampleIdata}
                         >
-                          {item.id}
-                        </PreviewItem>
-                      ))}
-                    </Masonry>
-                  </Box>
-                </Grid>
-                  
-                <SiteFooter/>
-              </div>
+                        </LessonIndex>
+                      </Box>
+                    }
+                    <SiteFooter/>
+                  </div>
 
-              <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
+                  <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
 
-              </ThemeProvider>
-            </ColorModeContext.Provider>
-          </AuthProvider>
-        </FilterProvider>
-      </ChipProvider>
+                </ThemeProvider>
+              </ColorModeContext.Provider>
+            </AuthProvider>
+          </FilterProvider>
+        </ChipProvider>
+      </IconProvider>
     )
   );
 }

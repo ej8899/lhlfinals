@@ -181,7 +181,7 @@ export default function PrimarySearchAppBar(props) {
 
     switch (modal) {
       case 'logout':
-        logout(props.setsampledata, props.sampledata, props.combinedData, props.clearFilter, props.setClearFilter);
+        logout(props.setsampledata, props.sampledata, props.combinedData, props.clearFilter, props.setClearFilter, props.setLessonTrue, setSelectedIndex);
         break;
       case 'profile':
         setTitle("Profile...")
@@ -199,7 +199,7 @@ export default function PrimarySearchAppBar(props) {
   function handlelogout() {
     setAnchorEl(null);
     handleMenuClose();
-    logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter);
+    logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex);
   }
 
   // SIGN IN
@@ -275,7 +275,7 @@ const toggleDrawer = (anchor, open) => (event) => {
   }
 
   if (myFilteredData.resource.created_by) {
-    setSelectedIndex(2)
+    setSelectedIndex(4)
   }
 
   if (
@@ -417,7 +417,7 @@ const toggleDrawer = (anchor, open) => (event) => {
       <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
       <PersistentDrawerLeft
         state={state} setState={setState} toggleDrawer={toggleDrawer} anchor={anchor}
-        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex}
+        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} setLessonTrue={props.setLessonTrue}
       />
     </Box>
   );

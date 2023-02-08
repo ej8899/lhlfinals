@@ -21,7 +21,7 @@ import { AddNewResource } from "../NewResource/newResource";
 // --------------------------------------------------------
 // Import Helper Functions
 import zlog from "../../helpers/zlog";
-import { getYoutubeVideoId, isYoutubeUrl, extractDomain } from "../../helpers/helpers";
+import { getYoutubeVideoId, isYoutubeUrl, extractDomain, getdata } from "../../helpers/helpers";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -372,18 +372,47 @@ export const AddResourceFlow = (props) => {
         "star" : star,
         "myComments" : myComments
       }
-      
+
+      const tmpdata = {
+
+        "profile_id" : 1,
+        "url" : videoURL,
+        "title" : title,
+        "thumbnail" : thumbnail,
+        "description" : descriptionExpanded
+    }
+
+
+    return axios.post('http://localhost:8080/api/resources', tmpdata)
+    .then(response => {
+      console.log(response.data)
+      // props.setsampledata(props.combinedData(response.data, props.sampleuserdata))
       props.setsampledata([...props.sampledata, newURLResource]);
-      // window.location.reload(true);
-      setTimeout(() => {
-        setSavingNewResource(false)
-        setSavedNewResource(true)
-        setStar(null)
-        setLike('default')
-        handleIconReset()
-        setErrorBlank(false)
-        console.log(thumbnail)
-      }, 2000)
+      props.setsampleBdata(getdata([...props.sampledata, newURLResource], "beginner"))
+      props.setsampleIdata(getdata([...props.sampledata, newURLResource], "intermediate"))
+      props.setsampleAdata(getdata([...props.sampledata, newURLResource], "advanced"))
+
+
+      // setsampledata(combinedData(response.data))
+      // console.log(combinedData(response.data, sampleuserdata))
+            // window.location.reload(true);
+            setTimeout(() => {
+              setSavingNewResource(false)
+              setSavedNewResource(true)
+              setStar(null)
+              setLike('default')
+              handleIconReset()
+              setErrorBlank(false)
+              console.log(thumbnail)
+            }, 2000)
+    })
+    .catch(error => {
+      console.error(error);
+      setSavingNewResource(false)
+    });
+      // props.setsampledata([...props.sampledata, newURLResource]);
+
+
     }
   }
 // --------------------------------------------------------

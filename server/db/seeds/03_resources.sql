@@ -22,5 +22,5 @@ Want more from Mike? He ISs starting a coding RPG/Bootcamp',
     'This course introduces you to JavaScript, the most popular programming language for web development. You can also try the interactive version of the course here: https://scrimba.com/g/gintrotojavascript
 
   The course contains 14 lessons and 7 challenges. In the challenges, you will be encourage to jump into the code and get your hands dirty. This is both fun and great for making the knowledge stick.',
-    ''
+    'https://i.ytimg.com/vi/_y9oxzTGERs/sddefault.jpg'
   );

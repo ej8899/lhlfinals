@@ -4,6 +4,32 @@
 
 const serverUrl = "http://localhost:7070";
 
+const testdata = '{"title":"testfromfakeclipper", "description":"empty desc", "url":"https://github.com/remix-run/react-router/blob/dev/examples/modal/src/App.tsx", "profile_id":2}'
+
+const postData = async (data) => {
+  try {
+    const response = await fetch("http://localhost:8080/api/resources", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      //body: JSON.stringify(data)
+      body: testdata
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    console.log("RESPONSE JSON: ", response.json());
+    const data_1 = await response.json();
+    console.log("data sent success:", data_1);
+    window.close();
+    alert('success');
+  } catch (error) {
+    console.error("problem in fetch POST:");
+    console.log('error:' + error + '|');
+    alert('error in fetch post 1 catch');
+  }
+}
 
 //
 // MAIN script flow:
@@ -116,41 +142,33 @@ function getCurrentTabUrl() {
   // show spinner
   document.getElementById("spinner").style.display = "flex";
 
+  // TODO - default any blank items to prevent breaking
   
-  // TODO -format the data for the JSON body
   // save to the server:
-  fetch("http://localhost:7070/data", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ 
+  const formdataobject = {
     title: pageTitleText,
-    siteURL: pageUrlData,
-    note: noteText,
+    url: pageUrlData,
+    description: noteText,
     category: selectedOption,
-})
-})
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then(data => {
-    alert("Data was sent successfully:", data);
-    window.close();
-  })
-  .catch(error => {
-    alert("There was a problem with the fetch operation:", error);
-  });
-  alert(pageUrlData + " - category: " + selectedOption + " - notes: " + noteText + " - page title: " + pageTitleText + " - description: " + pageDescription);  
+    profile_id: 2, 
+  };
+
+  
+  postData(formdataobject)
+    .then(data => {
+      console.log("returned data:",data);
+    })
+    .catch(error => {
+      console.error("fetch post error:",error);
+    });
+
+  
 }
 
 // check login state to server
 const checkLoginStatus = async () => {
   try {
-    const response = await fetch("http://localhost:7070/is-logged-in");
+    const response = await fetch("http://localhost:8080/is-logged-in");
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }

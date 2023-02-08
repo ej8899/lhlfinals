@@ -170,7 +170,7 @@ export const FilterProvider = ({ children }) => {
             break;
           }
           case 10: {
-            filteredObject.resource["minimum_average_ranking"] = 0
+            filteredObject.resource["minimum_average_ranking"] = 1
             filteredObject.resource["maximum_average_ranking"] = 33
             filteredObject.resource["minimum_excluded_average_ranking"] = null
             filteredObject.resource["maximum_excluded_average_ranking"] = null
@@ -191,7 +191,7 @@ export const FilterProvider = ({ children }) => {
             break;
           }
           case 21: {
-            filteredObject.resource["minimum_average_ranking"] = 0
+            filteredObject.resource["minimum_average_ranking"] = 1
             filteredObject.resource["maximum_average_ranking"] = 67
             filteredObject.resource["minimum_excluded_average_ranking"] = null
             filteredObject.resource["maximum_excluded_average_ranking"] = null
@@ -200,7 +200,7 @@ export const FilterProvider = ({ children }) => {
           case 22: {
             filteredObject.resource["minimum_excluded_average_ranking"] = 34
             filteredObject.resource["maximum_excluded_average_ranking"] = 67
-            filteredObject.resource["minimum_average_ranking"] = 0
+            filteredObject.resource["minimum_average_ranking"] = 1
             filteredObject.resource["maximum_average_ranking"] = 100
             break; 
           }
@@ -236,74 +236,74 @@ export const FilterProvider = ({ children }) => {
         break;
       }
       case "nav" : {
-        for (let i = 0; i < 14; i++) {
+        for (let i = 0; i < 17; i++) {
 
           switch(i) {
-            case 2 : {
-              if (values === 2) {
+            case 4 : {
+              if (values === 4) {
                 filteredObject.resource["created_by"] = filteredObject.user.profile_id
               } else if (filteredObject.resource.hasOwnProperty('created_by')) {
                 delete filteredObject.resource.created_by
               }
             }
-            case 3 : {
-              if (values === 3) {
+            case 5 : {
+              if (values === 5) {
                 filteredObject.user["is_favourite"] = true
               } else if (filteredObject.user.hasOwnProperty('is_favourite')) {
                 delete filteredObject.user.is_favourite
               }
             }
-            case 4 : {
-              if (values === 4) {
+            case 6 : {
+              if (values === 6) {
                 filteredObject.user["is_playlist"] = true
               } else if (filteredObject.user.hasOwnProperty('is_playlist')) {
                 delete filteredObject.user.is_playlist
               }
             }
-            case 6 : {
-              if (values === 6) {
+            case 8 : {
+              if (values === 8) {
                 filteredObject.user["maximum_myRating"] = 2.5
               } else if (filteredObject.user.hasOwnProperty('maximum_myRating')) {
                 delete filteredObject.user.maximum_myRating
               }
             }
-            case 7 : {
-              if (values === 7) {
+            case 9 : {
+              if (values === 9) {
                 filteredObject.user["minimum_myRating"] = 3
               } else if (filteredObject.user.hasOwnProperty('minimum_myRating')) {
                 delete filteredObject.user.minimum_myRating
               }
             }
-            case 14 : {
-              if (values === 14) {
+            case 16 : {
+              if (values === 16) {
                 filteredObject.resource["is_deleted"] = true
               } else if (filteredObject.resource.hasOwnProperty('is_deleted')) {
                 delete filteredObject.resource.is_deleted
               }
             }
-            case 13 : {
-              if (values === 13) {
+            case 15 : {
+              if (values === 15) {
                 filteredObject.user["is_reported"] = true
               } else if (filteredObject.user.hasOwnProperty('is_reported')) {
                 delete filteredObject.user.is_reported
               }
             }
-            case 9 : {
-              if (values === 9) {
+            case 11 : {
+              if (values === 11) {
                 filteredObject.user["minimum_myRanking"] = 0
                 filteredObject.user["maximum_myRanking"] = 33
                 break
               } 
             }
-            case 10 : {
-              if (values === 10) {
+            case 12 : {
+              if (values === 12) {
                 filteredObject.user["minimum_myRanking"] = 34
                 filteredObject.user["maximum_myRanking"] = 67
                 break
               } 
             }
-            case 11 : {
-              if (values === 11) {
+            case 13 : {
+              if (values === 13) {
                 filteredObject.user["minimum_myRanking"] = 68
                 filteredObject.user["maximum_myRanking"] = 100
               } else if (filteredObject.user.hasOwnProperty('minimum_myRanking') ||  filteredObject.user.hasOwnProperty('maximum_myRanking')) {
@@ -332,12 +332,16 @@ export const FilterProvider = ({ children }) => {
     setMyFilteredData(filteredObject)
     console.log(filteredObject)
 
+    // TODO-- Link Server Code
     axios.get(`http://localhost:8080/api/resources`)
     .then(response => {
 
       // updateDatabase(helperfunc(response.data, tmpUserData))
       // setsampledata(combinedData(response.data, tmpUserData))
       // console.log(combinedData(response.data, sampleuserdata))
+
+      // This should be the only line needed
+      // updateDatabase(helperfunc(response.data))
     })
     .catch(error => {
       console.error(error);

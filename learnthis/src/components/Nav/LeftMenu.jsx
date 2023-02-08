@@ -35,10 +35,11 @@ import StarHalfIcon from '@mui/icons-material/StarHalf';
 import StarIcon from '@mui/icons-material/Star';
 import SchoolIcon from '@mui/icons-material/School';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-
+import FlashOnIcon from '@mui/icons-material/FlashOn';
 //---------------------------------------------------------
 // Import user filter
 import { FilterContext } from "../../helpers/filter";
+import FlashOn from '@mui/icons-material/FlashOn';
 //---------------------------------------------------------
 
 const drawerWidth = 240;
@@ -79,15 +80,18 @@ export default function PersistentDrawerLeft(props) {
     if(index === 0) {
       props.setSelectedIndex(false)
       props.handleNewResourceOpen()
-    } else if (index === 1) {
-      console.log("My Resources has been triggered")
-    } 
+      props.setLessonTrue(false)
+    } else if (index === 2) {
+      props.setLessonTrue(true)
+    } else {
+      props.setLessonTrue(false)
+    }
 
     filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData)
   };
   
   // TODO - this needs a better system - use main list, but when divider, use something like divider|texthere & split it out
-  const divlist = ["","my items:","","","","my ratings:","","","my lessons:","","","","other:"];
+  const divlist = ["","my lessons:","","my items:","","","","my ratings:","","","my complexity:","","","","other:"];
 
   // deal with toggling clicked items on or off
 
@@ -104,6 +108,8 @@ export default function PersistentDrawerLeft(props) {
     >
       <List>
           {['Add Resource',
+            'divider',
+            'Lesson Plan',
             'divider',
             'My Resources', 
             'My Favorites', 
@@ -131,6 +137,7 @@ export default function PersistentDrawerLeft(props) {
               >
                 <ListItemIcon key={index}>
                   {index === 0 ? <AddCircleIcon/> : <span/>}
+                  {text === "Lesson Plan" ? <SchoolIcon/> : <span/>}
                   {text === 'My Resources' ? <HomeIcon/> : <span/>}
                   {text === 'My Favorites' ? <FavoriteIcon/> : <span />}
                   {text === 'My Low Ratings' ? <StarBorderIcon/> : <span />}
@@ -138,9 +145,9 @@ export default function PersistentDrawerLeft(props) {
                   {text === 'My Playlist' ? <ListIcon/> : <span/>}
                   {text === 'Reported' ? <ReportIcon/> : <span/>}
                   {text === 'Deleted' ? <DeleteIcon/> : <span/>}
-                  {text === 'My Intermediate' ? <SchoolIcon/> : <span/>}
-                  {text === 'My Beginner' ? <SchoolIcon/> : <span/>}
-                  {text === 'My Advanced' ? <SchoolIcon/> : <span/>}
+                  {text === 'My Intermediate' ? <FlashOnIcon/> : <span/>}
+                  {text === 'My Beginner' ? <FlashOnIcon/> : <span/>}
+                  {text === 'My Advanced' ? <FlashOnIcon/> : <span/>}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
