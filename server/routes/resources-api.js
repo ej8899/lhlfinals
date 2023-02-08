@@ -34,6 +34,20 @@ router.get("/withAddition", (req, res) => {
 });
 
 /**
+ * Get all resources filtered using options
+ * @return {json} All resources that fits the filter.
+ */
+router.post("/options", (req, res) => {
+  const options  ={...req.body};
+  q_resources
+    .getAllResourcesByOptions(options)
+    .then((data) => res.json(data))
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+/**
  * Save new resource
  * @return {json} resource that is saved
  *

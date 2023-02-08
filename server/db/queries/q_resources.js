@@ -42,16 +42,67 @@ const getAllResourcesWithAddition = () => {
       }
 
       const resources = [];
-      data.rows.forEach(resource => {
-        if (resources.map(r => r.id).includes(resource.id)) {
-          const index = resources.findIndex(r => r.id === resource.id);
-          resources[index] = { ...resources[index], categories: resources[index].categories.concat(resource.categories) };
+      data.rows.forEach((resource) => {
+        if (resources.map((r) => r.id).includes(resource.id)) {
+          const index = resources.findIndex((r) => r.id === resource.id);
+          resources[index] = {
+            ...resources[index],
+            categories: resources[index].categories.concat(resource.categories),
+          };
         } else {
           resources.push(resource);
         }
       });
       return resources;
     });
+};
+
+const getAllResourcesByOptions = (options) => {
+  const q = {};
+  q.select = "SELECT resources.* ";
+  q.from = "FROM resources ";
+  q.where = "";
+  q.group = "";
+  q.having = "";
+  q.order = "";
+  q.limit = "";
+  q.counter = 0; //params counter
+  q.query = "";
+  q.params = [];
+
+  if (options.resource.is_deleted === false) {
+    q.where = q.where
+      ? `${q.where} AND resources.deleted_at IS NULL`
+      : "WHERE resources.deleted_at IS NULL";
+  }
+
+  if (options.resource.is_deleted === true) {
+    q.where = q.where
+      ? `${q.where} AND resources.deleted_at IS NOT NULL`
+      : "WHERE resources.deleted_at IS NOT NULL";
+  }
+
+  if (options.resource.created_by) {
+    q.counter++;
+    q.where = q.where
+      ? `${q.where} AND resources.profile_id = $${q.counter}`
+      : `WHERE resources.profile_id = $${q.counter}`;
+    q.params.push(options.resource.created_by);
+  }
+
+  if (options.resource.created_last_num_hours) {
+    q.counter++;
+    q.where = q.where
+      ? `${q.where} AND resources.created_at >= current_timestamp - interval '$${q.counter} hours'`
+      : `WHERE resources.created_at >= current_timestamp - interval '$${q.counter} hours'`;
+    q.params.push(options.created_last_num_hours);
+  }
+
+  //Build Query
+  q.query = `${q.select} \n${q.from} \n${q.where} \n${q.group} \n${q.having} \n${q.order} \n${q.limit};`;
+  
+  //submit query to db
+  return db.query(q.query, q.params).then((data) => data.rows);
 };
 
 /**
@@ -123,9 +174,7 @@ const deleteResource = (data) => {
     deleted_at = NOW()
   WHERE
     id = $1 RETURNING *;`;
-  const params = [
-    data.id
-  ];
+  const params = [data.id];
 
   return db.query(query, params).then((data) => data.rows[0]);
 };
@@ -133,7 +182,8 @@ const deleteResource = (data) => {
 module.exports = {
   getAllResources,
   getAllResourcesWithAddition,
+  getAllResourcesByOptions,
   postResource,
   updateResource,
-  deleteResource
+  deleteResource,
 };
