@@ -72,28 +72,59 @@ const getAllResourcesByOptions = (options) => {
 
   if (options.resource.is_deleted === false) {
     q.where = q.where
-      ? `${q.where} AND resources.deleted_at IS NULL`
+      ? `${q.where} AND \nresources.deleted_at IS NULL`
       : "WHERE resources.deleted_at IS NULL";
   }
 
   if (options.resource.is_deleted === true) {
     q.where = q.where
-      ? `${q.where} AND resources.deleted_at IS NOT NULL`
+      ? `${q.where} \nAND resources.deleted_at IS NOT NULL`
       : "WHERE resources.deleted_at IS NOT NULL";
   }
 
   if (options.resource.created_by) {
     q.counter++;
     q.where = q.where
-      ? `${q.where} AND resources.profile_id = $${q.counter}`
+      ? `${q.where} \nAND resources.profile_id = $${q.counter}`
       : `WHERE resources.profile_id = $${q.counter}`;
     q.params.push(options.resource.created_by);
   }
 
   if (options.resource.created_last_num_hours) {
     q.where = q.where
-      ? `${q.where} AND resources.created_at >= current_timestamp - interval '${options.resource.created_last_num_hours} hours'`
+      ? `${q.where} \nAND resources.created_at >= current_timestamp - interval '${options.resource.created_last_num_hours} hours'`
       : `WHERE resources.created_at >= current_timestamp - interval '${options.resource.created_last_num_hours} hours'`;
+  }
+
+  if (Array.isArray(options.resource.categories)) {
+    q.counter++;
+    let names = `$${q.counter}`;
+    q.params.push(options.resource.categories[0]);
+
+    for(let x=1;x<options.resource.categories.length;x++) {
+      q.counter++;
+      names += `,$${q.counter}`;
+      q.params.push(options.resource.categories[x]);
+    }
+
+    q.where = q.where
+      ? `${q.where} \nAND resources.id IN (
+        SELECT
+          resource_id
+        FROM
+          categories
+        WHERE
+          NAME in (${names})
+      )`
+      : `WHERE resources.id IN (
+        SELECT
+          resource_id
+        FROM
+          categories
+        WHERE
+          NAME in (${names})
+      )`;
+
   }
 
   if (options.resource.limit) {
