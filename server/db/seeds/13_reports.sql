@@ -1,5 +1,5 @@
 INSERT INTO
-  recommends (
+  reports (
     resource_id,
     profile_id,
     is_reported
