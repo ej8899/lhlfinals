@@ -101,7 +101,7 @@ const getAllResourcesByOptions = (options) => {
     let names = `$${q.counter}`;
     q.params.push(options.resource.categories[0]);
 
-    for(let x=1;x<options.resource.categories.length;x++) {
+    for (let x = 1; x < options.resource.categories.length; x++) {
       q.counter++;
       names += `,$${q.counter}`;
       q.params.push(options.resource.categories[x]);
@@ -124,7 +124,20 @@ const getAllResourcesByOptions = (options) => {
         WHERE
           NAME in (${names})
       )`;
+  }
 
+  if (options.resource.minimum_average_rating) {
+    q.counter++;
+
+    q.from += "\nLEFT JOIN ratings ON resources.id = ratings.resource_id";
+
+    q.having = q.having
+      ? `${q.having} \nAND AVG(ratings.rate) >= $${q.counter}`
+      : `HAVING AVG(ratings.rate) >= $${q.counter}`;
+
+    q.group = "GROUP BY \nresources.id";
+
+    q.params.push(options.resource.minimum_average_rating);
   }
 
   if (options.resource.limit) {
