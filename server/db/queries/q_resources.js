@@ -149,6 +149,10 @@ const getAllResourcesByOptions = (options) => {
 
     q.from += "\nLEFT JOIN likes ON resources.id = likes.resource_id";
 
+    q.where = q.where
+      ? `${q.where} \nAND likes.is_liked = true`
+      : `WHERE \nlikes.is_liked = true`;
+
     q.having = q.having
       ? `${q.having} \nAND COUNT(likes.id) >= $${q.counter}`
       : `HAVING \nCOUNT(likes.id) >= $${q.counter}`;
@@ -156,6 +160,26 @@ const getAllResourcesByOptions = (options) => {
     q.group = "GROUP BY \nresources.id";
 
     q.params.push(options.resource.minimum_likes);
+  }
+
+  if (options.resource.minimum_is_recommended) {
+    q.counter++;
+
+    q.select += ", \nCOUNT(recommends.id) AS total_recommends";
+
+    q.from += "\nLEFT JOIN recommends ON resources.id = recommends.resource_id";
+
+    q.where = q.where
+      ? `${q.where} \nAND recommends.is_recommended = true`
+      : `WHERE \nrecommends.is_recommended = true`;
+
+    q.having = q.having
+      ? `${q.having} \nAND COUNT(recommends.id) >= $${q.counter}`
+      : `HAVING \nCOUNT(recommends.id) >= $${q.counter}`;
+
+    q.group = "GROUP BY \nresources.id";
+
+    q.params.push(options.resource.minimum_is_recommended);
   }
 
   if (options.resource.limit) {
