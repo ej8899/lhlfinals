@@ -79,7 +79,8 @@ SELECT
   bookmarks.is_bookmarked,
   playlists.is_playlist,
   recommends.is_recommended,
-  ratings.rate AS my_rating
+  ratings.rate AS my_rating,
+  rankings.scale AS my_ranking
 FROM
   resources
   LEFT JOIN likes ON resources.id = likes.resource_id
@@ -112,7 +113,7 @@ WHERE
     playlists.is_playlist = true
     AND playlists.profile_id = 1
   )
-   AND (
+  AND (
     recommends.is_recommended = true
     AND recommends.profile_id = 1
   )
@@ -124,7 +125,8 @@ GROUP BY
   bookmarks.is_bookmarked,
   playlists.is_playlist,
   recommends.is_recommended,
-  ratings.rate
+  ratings.rate,
+  rankings.scale
 HAVING
   COUNT(likes.id) >= 2
   AND AVG(ratings.rate) >= 2
@@ -138,7 +140,18 @@ HAVING
   /* USER FILTER */
   AND AVG(ratings.rate) >= 2
   AND AVG(ratings.rate) <= 5
+  AND AVG(rankings.scale) >= 4
+  AND AVG(rankings.scale) <= 8
 ORDER BY
   resources.created_at
 LIMIT
   35;
+
+/*ARRAY OF CATEGORIES */
+SELECT
+  DISTINCT name
+from
+  categories
+where
+  id = 1
+  AND deleted_at IS NULL;
