@@ -266,20 +266,99 @@ returned:
     {
         "id": 1,
         "resource_id": 1,
+        "profile_id": null,
         "name": "Ruby",
         "index": 1,
         "description": null,
-        "created_at": "2023-01-31T13:54:46.368Z",
+        "created_at": "2023-02-08T15:41:48.752Z",
         "updated_at": null,
         "deleted_at": null
     },
     {
         "id": 2,
         "resource_id": 1,
+        "profile_id": null,
         "name": "VS Code",
         "index": 2,
         "description": null,
-        "created_at": "2023-01-31T13:54:46.368Z",
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## GET api/categories/profiles/[profile_id]
+description: retrieve all categories that user created for all the resources that they added. 
+
+```json
+returned:
+[
+    {
+        "resource_profile_id": 1,
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": null,
+        "name": "Ruby",
+        "index": 1,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "resource_profile_id": 1,
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": null,
+        "name": "VS Code",
+        "index": 2,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "resource_profile_id": 1,
+        "id": 3,
+        "resource_id": 2,
+        "profile_id": null,
+        "name": "JavaScript",
+        "index": 1,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "resource_profile_id": 1,
+        "id": 4,
+        "resource_id": 1,
+        "profile_id": 2,
+        "name": "Node.js",
+        "index": 3,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## GET api/categories/profiles/[profile_id]/resources/[resource_id]
+description: retrieve all categories that profile/user created for personal purpose
+
+```json
+returned:
+[
+    {
+        "id": 4,
+        "resource_id": 1,
+        "profile_id": 2,
+        "name": "Node.js",
+        "index": 3,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
         "updated_at": null,
         "deleted_at": null
     }

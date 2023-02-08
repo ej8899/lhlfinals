@@ -23,13 +23,13 @@ const getCategoriesByResourceId = (id) => {
 
 /**
  * Get all categories by profile id that are still active from db
- * @param {number} id profile id
+ * @param {number} id profile id of the original creator of the resource
  * @return {Promise<{}>} A promise of all categories in db that are not deleted.
  */
 const getCategoriesByProfileId = (id) => {
   let query = `
   SELECT
-    resources.profile_id,
+    resources.profile_id as resource_profile_id,
     categories.*
   FROM
     categories
@@ -131,6 +131,7 @@ const deleteCategory = (data) => {
 module.exports = {
   getCategoriesByResourceId,
   getCategoriesByProfileId,
+  getCategoriesByProfileIdAndResourceId,
   postCategory,
   updateCategory,
   deleteCategory,
