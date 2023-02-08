@@ -79,6 +79,50 @@ router.post("/", (req, res) => {
 });
 
 /**
+ * Save new resource with Addition
+ * @return {json} resource that is saved
+ *
+ */
+router.post("/withAddition", (req, res) => {
+  //const userId = req.session.userID;
+  const resourceData = { ...req.body };
+
+  if (!resourceData.thumbnail) {
+    console.log("creating a screenshot request")
+    screenshot(resourceData.resource.url)
+    .then((data) => {
+      console.log("screeshot data",data);
+      resourceData.resource.thumbnail = JSON.parse(data)["screenshot"];
+      console.log("resource data before saving",resourceData);
+      q_resources.postResourceWithAddition(resourceData)
+      .then((savedData) => {
+        console.log("Resource save returned obj: ", savedData);
+        return res.status(200).json(savedData);
+      })
+      .catch((err) => {
+        console.log("Error saving new resource", err);
+        return res.status(500).json({ error: err.message });
+      });
+    })
+    .catch((error) => {
+      console.log("Error getting thumbnail")
+      res.status(400).send(error)
+    });
+  } else {
+    q_resources
+      .postResource(resourceData)
+      .then((data) => {
+        console.log("Resource save returned obj: ", data);
+        return res.status(200).json(data);
+      })
+      .catch((err) => {
+        console.log("Error saving new resource", err);
+        return res.status(500).json({ error: err.message });
+      });
+  }
+});
+
+/**
  * Update existing resource
  * @return {json} resource that is updated
  *
