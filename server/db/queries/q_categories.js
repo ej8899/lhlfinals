@@ -12,7 +12,7 @@ const getCategoriesByResourceId = (id) => {
   from
     categories
   where
-    resource_id = $1 AND deleted_at IS NULL
+    resource_id = $1 AND deleted_at IS NULL AND profile_id IS NULL
   ORDER BY
     index;`;
     
@@ -45,6 +45,7 @@ const getCategoriesByProfileId = (id) => {
 
 /**
  * Get all categories by profile id and resource id that are still active from db
+ * This is for "personal" level, meaning the user that logged in that created categories to a resource that are being retrieved back.
  * @param {number} profileId profile id inside the categories table
  * @param {number} resourceId resource id insde the categories table
  * @return {Promise<{}>} A promise of all categories in db that are not deleted.
