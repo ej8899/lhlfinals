@@ -1,3 +1,21 @@
+## POST api/extract
+description: retrieve title, description, thumbnail of a url
+
+```json
+body: 
+{
+   "url": "https://www.youtube.com/watch?v=t_ispmWmdjY"
+}
+
+returned:
+{
+    "title": "Ruby Programming Language - Full Course - YouTube",
+    "description": "Learn the Ruby programming language in this full course / tutorial. The course is designed for new programmers, and will introduce common programming topics ...",
+    "thumbnail": "https://storage.screenshotapi.net/www_youtube_com_watch_v_t_ispmwmdjy_983a438ee7b2.png",
+    "url": "https://www.youtube.com/watch?v=t_ispmWmdjY"
+}
+```
+
 ## POST api/user
 description: create/save a new user
 
@@ -303,6 +321,14 @@ returned:
 
 ## POST api/resources/options
 description: retrieve resources using options/filtration
+order_by values:
+"most_liked" -> order descending from highest liked to lowest
+"top_rated" -> order descending from highest rated to lowest
+"top_ranked" -> order descending from highest ranked to lowest
+"lowest_ranked" -> order ascending from lowest ranked to highest
+"newest" -> order descending from most recent created to lastest
+"alpha_a-z" -> order ascending by title
+"alpha_z-a" -> order descending by title
 
 ```json
 body: 

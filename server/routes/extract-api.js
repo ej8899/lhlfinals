@@ -10,8 +10,9 @@ const {extract} = require("../helper/screenshot");
  * Get title, description, thumbnail for a url
  * @return {json} json containing url info
  */
-router.get("/extract", (req, res) => {
-  const url = req.body;
+router.post("/", (req, res) => {
+  const url = req.body.url;
+  console.log('url',url);
   extract(url)
     .then((data) => res.json(data))
     .catch((err) => {
