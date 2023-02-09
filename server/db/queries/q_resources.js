@@ -59,10 +59,31 @@ const getAllResourcesWithAddition = () => {
 
 const getAllResourcesByOptions = (options) => {
   const q = {};
-  q.select = "SELECT resources.*";
-  q.from = "FROM resources";
-  q.where = "";
-  q.group = "";
+  q.select = `
+  SELECT
+  resources.*,
+  count(likes.id) as total_likes,
+  AVG(ratings.rate) as avg_rating,
+  count(recommends.id) as total_recommends,
+  AVG(rankings.scale) as avg_ranking
+  `;
+  q.from = `
+  FROM
+  resources
+  LEFT JOIN likes ON resources.id = likes.resource_id
+  LEFT JOIN ratings ON resources.id = ratings.resource_id
+  LEFT JOIN recommends ON resources.id = recommends.resource_id
+  LEFT JOIN rankings ON resources.id = rankings.resource_id
+  `;
+  q.where = `
+  WHERE
+  likes.deleted_at IS NULL
+  AND recommends.deleted_at IS NULL
+  `;
+  q.group = `
+  GROUP BY
+  resources.id
+  `;
   q.having = "";
   q.order = "";
   q.limit = "";
@@ -71,29 +92,21 @@ const getAllResourcesByOptions = (options) => {
   q.params = [];
 
   if (options.resource.is_deleted === false) {
-    q.where = q.where
-      ? `${q.where} AND \nresources.deleted_at IS NULL`
-      : "WHERE \nresources.deleted_at IS NULL";
+    q.where = `${q.where} AND \nresources.deleted_at IS NULL`;
   }
 
   if (options.resource.is_deleted === true) {
-    q.where = q.where
-      ? `${q.where} \nAND resources.deleted_at IS NOT NULL`
-      : "WHERE \nresources.deleted_at IS NOT NULL";
+    q.where = `${q.where} \nAND resources.deleted_at IS NOT NULL`;
   }
 
   if (options.resource.created_by) {
     q.counter++;
-    q.where = q.where
-      ? `${q.where} \nAND resources.profile_id = $${q.counter}`
-      : `WHERE \nresources.profile_id = $${q.counter}`;
+    q.where = `${q.where} \nAND resources.profile_id = $${q.counter}`;
     q.params.push(options.resource.created_by);
   }
 
   if (options.resource.created_last_num_hours) {
-    q.where = q.where
-      ? `${q.where} \nAND resources.created_at >= current_timestamp - interval '${options.resource.created_last_num_hours} hours'`
-      : `WHERE \nresources.created_at >= current_timestamp - interval '${options.resource.created_last_num_hours} hours'`;
+    q.where = `${q.where} \nAND resources.created_at >= current_timestamp - interval '${options.resource.created_last_num_hours} hours'`;
   }
 
   if (Array.isArray(options.resource.categories)) {
@@ -107,16 +120,7 @@ const getAllResourcesByOptions = (options) => {
       q.params.push(options.resource.categories[x]);
     }
 
-    q.where = q.where
-      ? `${q.where} \nAND resources.id IN (
-        SELECT
-          resource_id
-        FROM
-          categories
-        WHERE
-          NAME in (${names})
-      )`
-      : `WHERE \nresources.id IN (
+    q.where = `${q.where} \nAND resources.id IN (
         SELECT
           resource_id
         FROM
@@ -129,15 +133,9 @@ const getAllResourcesByOptions = (options) => {
   if (options.resource.minimum_average_rating) {
     q.counter++;
 
-    q.select += ", \nAVG(ratings.rate) AS avg_rating";
-
-    q.from += "\nLEFT JOIN ratings ON resources.id = ratings.resource_id";
-
     q.having = q.having
       ? `${q.having} \nAND AVG(ratings.rate) >= $${q.counter}`
       : `HAVING \nAVG(ratings.rate) >= $${q.counter}`;
-
-    q.group = "GROUP BY \nresources.id";
 
     q.params.push(options.resource.minimum_average_rating);
   }
@@ -145,19 +143,11 @@ const getAllResourcesByOptions = (options) => {
   if (options.resource.minimum_likes) {
     q.counter++;
 
-    q.select += ", \ncount(likes.id) AS total_likes";
-
-    q.from += "\nLEFT JOIN likes ON resources.id = likes.resource_id";
-
-    q.where = q.where
-      ? `${q.where} \nAND likes.is_liked = true`
-      : `WHERE \nlikes.is_liked = true`;
+    q.where = `${q.where} \nAND likes.is_liked = true`;
 
     q.having = q.having
       ? `${q.having} \nAND COUNT(likes.id) >= $${q.counter}`
       : `HAVING \nCOUNT(likes.id) >= $${q.counter}`;
-
-    q.group = "GROUP BY \nresources.id";
 
     q.params.push(options.resource.minimum_likes);
   }
@@ -165,19 +155,11 @@ const getAllResourcesByOptions = (options) => {
   if (options.resource.minimum_is_recommended) {
     q.counter++;
 
-    q.select += ", \nCOUNT(recommends.id) AS total_recommends";
-
-    q.from += "\nLEFT JOIN recommends ON resources.id = recommends.resource_id";
-
-    q.where = q.where
-      ? `${q.where} \nAND recommends.is_recommended = true`
-      : `WHERE \nrecommends.is_recommended = true`;
+    q.where = `${q.where} \nAND recommends.is_recommended = true`;
 
     q.having = q.having
       ? `${q.having} \nAND COUNT(recommends.id) >= $${q.counter}`
       : `HAVING \nCOUNT(recommends.id) >= $${q.counter}`;
-
-    q.group = "GROUP BY \nresources.id";
 
     q.params.push(options.resource.minimum_is_recommended);
   }
@@ -185,15 +167,9 @@ const getAllResourcesByOptions = (options) => {
   if (options.resource.minimum_average_ranking) {
     q.counter++;
 
-    q.select += ", \nAVG(rankings.scale) AS avg_ranking";
-
-    q.from += "\nLEFT JOIN rankings ON resources.id = rankings.resource_id";
-
     q.having = q.having
       ? `${q.having} \nAND AVG(rankings.scale) >= $${q.counter}`
       : `HAVING \nAVG(rankings.scale) >= $${q.counter}`;
-
-    q.group = "GROUP BY \nresources.id";
 
     q.params.push(options.resource.minimum_average_ranking);
   }
@@ -201,23 +177,9 @@ const getAllResourcesByOptions = (options) => {
   if (options.resource.maximum_average_ranking) {
     q.counter++;
 
-    if (!q.select.includes("AVG(rankings.scale) AS avg_ranking")) {
-      q.select += ", \nAVG(rankings.scale) AS avg_ranking";
-    }
-
-    if (
-      !q.from.includes(
-        "LEFT JOIN rankings ON resources.id = rankings.resource_id"
-      )
-    ) {
-      q.from += "\nLEFT JOIN rankings ON resources.id = rankings.resource_id";
-    }
-
     q.having = q.having
       ? `${q.having} \nAND AVG(rankings.scale) <= $${q.counter}`
       : `HAVING \nAVG(rankings.scale) <= $${q.counter}`;
-
-    q.group = "GROUP BY \nresources.id";
 
     q.params.push(options.resource.maximum_average_ranking);
   }
@@ -225,23 +187,9 @@ const getAllResourcesByOptions = (options) => {
   if (options.resource.excluded_minimum_average_ranking) {
     q.counter++;
 
-    if (!q.select.includes("AVG(rankings.scale) AS avg_ranking")) {
-      q.select += ", \nAVG(rankings.scale) AS avg_ranking";
-    }
-
-    if (
-      !q.from.includes(
-        "LEFT JOIN rankings ON resources.id = rankings.resource_id"
-      )
-    ) {
-      q.from += "\nLEFT JOIN rankings ON resources.id = rankings.resource_id";
-    }
-
     q.having = q.having
       ? `${q.having} \nAND NOT AVG(rankings.scale) >= $${q.counter}`
       : `HAVING \nNOT AVG(rankings.scale) >= $${q.counter}`;
-
-    q.group = "GROUP BY \nresources.id";
 
     q.params.push(options.resource.excluded_minimum_average_ranking);
   }
@@ -249,23 +197,9 @@ const getAllResourcesByOptions = (options) => {
   if (options.resource.excluded_maximum_average_ranking) {
     q.counter++;
 
-    if (!q.select.includes("AVG(rankings.scale) AS avg_ranking")) {
-      q.select += ", \nAVG(rankings.scale) AS avg_ranking";
-    }
-
-    if (
-      !q.from.includes(
-        "LEFT JOIN rankings ON resources.id = rankings.resource_id"
-      )
-    ) {
-      q.from += "\nLEFT JOIN rankings ON resources.id = rankings.resource_id";
-    }
-
     q.having = q.having
       ? `${q.having} \nAND NOT AVG(rankings.scale) <= $${q.counter}`
       : `HAVING \nNOT AVG(rankings.scale) <= $${q.counter}`;
-
-    q.group = "GROUP BY \nresources.id";
 
     q.params.push(options.resource.excluded_maximum_average_ranking);
   }
