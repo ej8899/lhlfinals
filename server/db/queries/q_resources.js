@@ -206,296 +206,141 @@ const getAllResourcesByOptions = (options) => {
 
   /*USER FILTER*/
   if (options.user.profile_id) {
-    q.select += `, \n${options.user.profile_id} AS user_profile_id`;
+    q.select += `, \n${options.user.profile_id} AS user_profile_id,
+    likes.is_liked,
+    favourites.is_favourite,
+    bookmarks.is_bookmarked,
+    playlists.is_playlist,
+    reports.is_reported,
+    recommends.is_recommended,
+    ratings.rate AS my_rating,
+    rankings.scale AS my_ranking
+    `;
+
+    q.from += `
+     \nLEFT JOIN favourites ON resources.id = favourites.resource_id
+    LEFT JOIN bookmarks ON resources.id = bookmarks.resource_id
+    LEFT JOIN playlists ON resources.id = playlists.resource_id
+    LEFT JOIN reports ON resources.id = reports.resource_id
+    `;
+
+    q.where += `
+     \nAND likes.profile_id = ${options.user.profile_id}
+    AND favourites.profile_id = ${options.user.profile_id}
+    AND bookmarks.profile_id = ${options.user.profile_id}
+    AND playlists.profile_id = ${options.user.profile_id}
+    AND recommends.profile_id = ${options.user.profile_id}
+    AND reports.profile_id = ${options.user.profile_id}
+    AND ratings.profile_id = ${options.user.profile_id}
+    AND rankings.profile_id = ${options.user.profile_id}
+    `;
+
+    q.group += `
+     \n,likes.profile_id,
+     likes.is_liked,
+     favourites.is_favourite,
+     bookmarks.is_bookmarked,
+     playlists.is_playlist,
+     recommends.is_recommended,
+     ratings.rate,
+     rankings.scale,
+     reports.is_reported`;
 
     if (options.user.is_liked === true || options.user.is_liked === false) {
-      q.select += ", \nlikes.is_liked";
-
-      if (
-        !q.from.includes("LEFT JOIN likes ON resources.id = likes.resource_id")
-      ) {
-        q.from += "\nLEFT JOIN likes ON resources.id = likes.resource_id";
-      }
-
       q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND (
-          likes.is_liked = $${q.counter}
-          AND likes.profile_id = $${q.counter + 1}
-        )`
-        : `WHERE \nlikes.is_liked = $${q.counter}
-        AND likes.profile_id = $${q.counter + 1}`;
-      q.counter++;
+      q.where = `${q.where} \nAND likes.is_liked = $${q.counter}`;
       q.params.push(options.user.is_liked);
-      q.params.push(options.user.profile_id);
-
-      q.group = q.group ? `${q.group}, \nlikes.is_liked` : "";
     }
 
     if (
       options.user.is_favourite === true ||
       options.user.is_favourite === false
     ) {
-      q.select += ", \nfavourites.is_favourite";
-
-      if (
-        !q.from.includes(
-          "LEFT JOIN favourites ON resources.id = favourites.resource_id"
-        )
-      ) {
-        q.from +=
-          "\nLEFT JOIN favourites ON resources.id = favourites.resource_id";
-      }
-
       q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND (
-          favourites.is_favourite = $${q.counter}
-          AND favourites.profile_id = $${q.counter + 1}
-        )`
-        : `WHERE \nfavourites.is_favourite = $${q.counter}
-        AND favourites.profile_id = $${q.counter + 1}`;
-      q.counter++;
+      q.where = `${q.where} \nAND (
+          favourites.is_favourite = $${q.counter}`;
       q.params.push(options.user.is_favourite);
-      q.params.push(options.user.profile_id);
-
-      q.group = q.group ? `${q.group}, \nfavourites.is_favourite` : "";
     }
 
     if (
       options.user.is_bookmarked === true ||
       options.user.is_bookmarked === false
     ) {
-      q.select += ", \nbookmarks.is_bookmarked";
-
-      if (
-        !q.from.includes(
-          "LEFT JOIN bookmarks ON resources.id = bookmarks.resource_id"
-        )
-      ) {
-        q.from +=
-          "\nLEFT JOIN bookmarks ON resources.id = bookmarks.resource_id";
-      }
-
       q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND (
-          bookmarks.is_bookmarked = $${q.counter}
-          AND bookmarks.profile_id = $${q.counter + 1}
-        )`
-        : `WHERE \nbookmarks.is_bookmarked = $${q.counter}
-        AND bookmarks.profile_id = $${q.counter + 1}`;
-      q.counter++;
+      q.where = `${q.where} \nAND bookmarks.is_bookmarked = $${q.counter}`;
       q.params.push(options.user.is_bookmarked);
-      q.params.push(options.user.profile_id);
-
-      q.group = q.group ? `${q.group}, \nbookmarks.is_bookmarked` : "";
     }
 
     if (
       options.user.is_playlist === true ||
       options.user.is_playlist === false
     ) {
-      q.select += ", \nplaylists.is_playlist";
-
-      if (
-        !q.from.includes(
-          "LEFT JOIN playlists ON resources.id = playlists.resource_id"
-        )
-      ) {
-        q.from +=
-          "\nLEFT JOIN playlists ON resources.id = playlists.resource_id";
-      }
-
       q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND (
-          playlists.is_playlist = $${q.counter}
-          AND playlists.profile_id = $${q.counter + 1}
-        )`
-        : `WHERE \nplaylists.is_playlist = $${q.counter}
-        AND playlists.profile_id = $${q.counter + 1}`;
-      q.counter++;
+      q.where = `${q.where} \nAND playlists.is_playlist = $${q.counter}`;
       q.params.push(options.user.is_playlist);
-      q.params.push(options.user.profile_id);
-
-      q.group = q.group ? `${q.group}, \nplaylists.is_playlist` : "";
     }
 
     if (
       options.user.is_reported === true ||
       options.user.is_reported === false
     ) {
-      q.select += ", \nreports.is_reported";
-
-      if (
-        !q.from.includes(
-          "LEFT JOIN reports ON resources.id = reports.resource_id"
-        )
-      ) {
-        q.from += "\nLEFT JOIN reports ON resources.id = reports.resource_id";
-      }
-
       q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND (
-          reports.is_reported = $${q.counter}
-          AND reports.profile_id = $${q.counter + 1}
-        )`
-        : `WHERE \nreports.is_reported = $${q.counter}
-        AND reports.profile_id = $${q.counter + 1}`;
-      q.counter++;
+      q.where = `${q.where} \nAND reports.is_reported = $${q.counter}`;
       q.params.push(options.user.is_reported);
-      q.params.push(options.user.profile_id);
-
-      q.group = q.group ? `${q.group}, \nreports.is_reported` : "";
     }
 
     if (
       options.user.is_recommended === true ||
       options.user.is_recommended === false
     ) {
-      q.select += ", \nrecommends.is_recommended";
-
-      if (
-        !q.from.includes(
-          "LEFT JOIN recommends ON resources.id = recommends.resource_id"
-        )
-      ) {
-        q.from +=
-          "\nLEFT JOIN recommends ON resources.id = recommends.resource_id";
-      }
-
       q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND (
-          recommends.is_recommended = $${q.counter}
-          AND recommends.profile_id = $${q.counter + 1}
-        )`
-        : `WHERE \nrecommends.is_recommended = $${q.counter}
-        AND recommends.profile_id = $${q.counter + 1}`;
-      q.counter++;
+      q.where = `${q.where} \nAND recommends.is_recommended = $${q.counter}`;
       q.params.push(options.user.is_recommended);
-      q.params.push(options.user.profile_id);
-
-      q.group = q.group ? `${q.group}, \nrecommends.is_recommended` : "";
     }
 
     if (options.user.minimum_myRating) {
-      q.select += ", \nratings.rate AS my_rating";
-
-      if (
-        !q.from.includes(
-          "LEFT JOIN ratings ON resources.id = ratings.resource_id"
-        )
-      ) {
-        q.from += "\nLEFT JOIN ratings ON resources.id = ratings.resource_id";
-      }
-
-      q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND ratings.profile_id = $${q.counter}`
-        : `WHERE \nratings.profile_id = $${q.counter}`;
-      q.params.push(options.user.profile_id);
-
       q.counter++;
       q.having = q.having
         ? `${q.having} \nAND AVG(ratings.rate) >= $${q.counter}`
         : `HAVING \nAVG(ratings.rate) >= $${q.counter}`;
       q.params.push(options.user.minimum_myRating);
-
-      q.group = q.group
-        ? `${q.group}, \nratings.rate`
-        : "GROUP BY \nresource.*, \nratings.rate";
     }
 
     if (options.user.maximum_myRating) {
-      q.select += ", \nratings.rate AS my_rating";
-
-      if (
-        !q.from.includes(
-          "LEFT JOIN ratings ON resources.id = ratings.resource_id"
-        )
-      ) {
-        q.from += "\nLEFT JOIN ratings ON resources.id = ratings.resource_id";
-      }
-
-      q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND ratings.profile_id = $${q.counter}`
-        : `WHERE \nratings.profile_id = $${q.counter}`;
-      q.params.push(options.user.profile_id);
-
       q.counter++;
       q.having = q.having
         ? `${q.having} \nAND AVG(ratings.rate) <= $${q.counter}`
         : `HAVING \nAVG(ratings.rate) <= $${q.counter}`;
       q.params.push(options.user.maximum_myRating);
-
-      if (!q.group.includes("ratings.rate")) {
-        q.group = q.group
-          ? `${q.group}, \nratings.rate`
-          : "GROUP BY \nresource.*, \nratings.rate";
-      }
     }
 
     if (options.user.minimum_myRanking) {
-      q.select += ", \nrankings.scale AS my_ranking";
-
-      if (
-        !q.from.includes(
-          "LEFT JOIN rankings ON resources.id = rankings.resource_id"
-        )
-      ) {
-        q.from += "\nLEFT JOIN rankings ON resources.id = rankings.resource_id";
-      }
-
-      q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND rankings.profile_id = $${q.counter}`
-        : `WHERE \nrankings.profile_id = $${q.counter}`;
-      q.params.push(options.user.profile_id);
-
       q.counter++;
       q.having = q.having
         ? `${q.having} \nAND AVG(rankings.scale) >= $${q.counter}`
         : `HAVING \nAVG(rankings.scale) >= $${q.counter}`;
       q.params.push(options.user.minimum_myRanking);
-
-      q.group = q.group
-        ? `${q.group}, \nrankings.scale`
-        : "GROUP BY \nresource.*, \nrankings.scale";
     }
 
     if (options.user.maximum_myRanking) {
-      q.select += ", \nrankings.scale AS my_ranking";
-
-      if (
-        !q.from.includes(
-          "LEFT JOIN rankings ON resources.id = rankings.resource_id"
-        )
-      ) {
-        q.from += "\nLEFT JOIN rankings ON resources.id = rankings.resource_id";
-      }
-
-      q.counter++;
-      q.where = q.where
-        ? `${q.where} \nAND rankings.profile_id = $${q.counter}`
-        : `WHERE \nrankings.profile_id = $${q.counter}`;
-      q.params.push(options.user.profile_id);
-
       q.counter++;
       q.having = q.having
         ? `${q.having} \nAND AVG(rankings.scale) <= $${q.counter}`
         : `HAVING \nAVG(rankings.scale) <= $${q.counter}`;
       q.params.push(options.user.maximum_myRanking);
-
-      if (!q.group.includes("rankings.scale")) {
-        q.group = q.group
-          ? `${q.group}, \nrankings.scale`
-          : "GROUP BY \nresource.*, \nrankings.scale";
-      }
     }
+  }else {
+    /*NO USER PROFILE*/
+    q.select += `, \nNULL AS user_profile_id,
+    NULL AS is_liked,
+    NULL AS is_favourite,
+    NULL AS is_bookmarked,
+    NULL AS is_playlist,
+    NULL AS is_reported,
+    NULL AS is_recommended,
+    NULL AS my_rating,
+    NULL AS my_ranking
+    `;
   }
 
   if (options.resource.limit) {
