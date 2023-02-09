@@ -6,6 +6,7 @@ const express = require("express");
 const router = express.Router();
 const q_resources = require("../db/queries/q_resources");
 const q_categories = require("../db/queries/q_categories");
+const q_comments = require("../db/queries/q_comments");
 const { screenshot } = require("../helper/screenshot");
 const { toArray, toFormat } = require("../helper/converter");
 
@@ -57,6 +58,30 @@ router.post("/options", (req, res) => {
               options.user.profile_id
             );
           element.my_categories = toArray(element.my_categories, "name");
+          element.my_comments_private =
+            await q_comments.getCommentsByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id
+            );
+          
+            if (element.my_comments_private) {
+              element.my_comments_private=element.my_comments_private.comment;
+            }else {
+              element.my_comments_private=null;
+            }
+          element.my_comments_public =
+            await q_comments.getCommentsByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id,
+              true
+            );
+
+            if (element.my_comments_public) {
+              element.my_comments_public=element.my_comments_public.comment;
+            }else {
+              element.my_comments_public=null;
+            }
+
           return element;
         })
       );
