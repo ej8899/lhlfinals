@@ -298,13 +298,19 @@ const getAllResourcesByOptions = (options) => {
       q.group = q.group ? `${q.group}, \nlikes.is_liked` : "";
     }
 
-    if (options.user.is_favourite === true || options.user.is_favourite === false) {
+    if (
+      options.user.is_favourite === true ||
+      options.user.is_favourite === false
+    ) {
       q.select += ", \nfavourites.is_favourite";
 
       if (
-        !q.from.includes("LEFT JOIN favourites ON resources.id = favourites.resource_id")
+        !q.from.includes(
+          "LEFT JOIN favourites ON resources.id = favourites.resource_id"
+        )
       ) {
-        q.from += "\nLEFT JOIN favourites ON resources.id = favourites.resource_id";
+        q.from +=
+          "\nLEFT JOIN favourites ON resources.id = favourites.resource_id";
       }
 
       q.counter++;
@@ -322,13 +328,19 @@ const getAllResourcesByOptions = (options) => {
       q.group = q.group ? `${q.group}, \nfavourites.is_favourite` : "";
     }
 
-    if (options.user.is_bookmarked === true || options.user.is_bookmarked=== false) {
+    if (
+      options.user.is_bookmarked === true ||
+      options.user.is_bookmarked === false
+    ) {
       q.select += ", \nbookmarks.is_bookmarked";
 
       if (
-        !q.from.includes("LEFT JOIN bookmarks ON resources.id = bookmarks.resource_id")
+        !q.from.includes(
+          "LEFT JOIN bookmarks ON resources.id = bookmarks.resource_id"
+        )
       ) {
-        q.from += "\nLEFT JOIN bookmarks ON resources.id = bookmarks.resource_id";
+        q.from +=
+          "\nLEFT JOIN bookmarks ON resources.id = bookmarks.resource_id";
       }
 
       q.counter++;
@@ -346,13 +358,19 @@ const getAllResourcesByOptions = (options) => {
       q.group = q.group ? `${q.group}, \nbookmarks.is_bookmarked` : "";
     }
 
-    if (options.user.is_playlist === true || options.user.is_playlist=== false) {
+    if (
+      options.user.is_playlist === true ||
+      options.user.is_playlist === false
+    ) {
       q.select += ", \nplaylists.is_playlist";
 
       if (
-        !q.from.includes("LEFT JOIN playlists ON resources.id = playlists.resource_id")
+        !q.from.includes(
+          "LEFT JOIN playlists ON resources.id = playlists.resource_id"
+        )
       ) {
-        q.from += "\nLEFT JOIN playlists ON resources.id = playlists.resource_id";
+        q.from +=
+          "\nLEFT JOIN playlists ON resources.id = playlists.resource_id";
       }
 
       q.counter++;
@@ -370,11 +388,16 @@ const getAllResourcesByOptions = (options) => {
       q.group = q.group ? `${q.group}, \nplaylists.is_playlist` : "";
     }
 
-    if (options.user.is_reported === true || options.user.is_reported=== false) {
+    if (
+      options.user.is_reported === true ||
+      options.user.is_reported === false
+    ) {
       q.select += ", \nreports.is_reported";
 
       if (
-        !q.from.includes("LEFT JOIN reports ON resources.id = reports.resource_id")
+        !q.from.includes(
+          "LEFT JOIN reports ON resources.id = reports.resource_id"
+        )
       ) {
         q.from += "\nLEFT JOIN reports ON resources.id = reports.resource_id";
       }
@@ -392,6 +415,36 @@ const getAllResourcesByOptions = (options) => {
       q.params.push(options.user.profile_id);
 
       q.group = q.group ? `${q.group}, \nreports.is_reported` : "";
+    }
+
+    if (
+      options.user.is_recommended === true ||
+      options.user.is_recommended === false
+    ) {
+      q.select += ", \nrecommends.is_recommended";
+
+      if (
+        !q.from.includes(
+          "LEFT JOIN recommends ON resources.id = recommends.resource_id"
+        )
+      ) {
+        q.from +=
+          "\nLEFT JOIN recommends ON resources.id = recommends.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND (
+          recommends.is_recommended = $${q.counter}
+          AND recommends.profile_id = $${q.counter + 1}
+        )`
+        : `WHERE \nrecommends.is_recommended = $${q.counter}
+        AND recommends.profile_id = $${q.counter + 1}`;
+      q.counter++;
+      q.params.push(options.user.is_recommended);
+      q.params.push(options.user.profile_id);
+
+      q.group = q.group ? `${q.group}, \nrecommends.is_recommended` : "";
     }
   }
 
