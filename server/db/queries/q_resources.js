@@ -272,9 +272,8 @@ const getAllResourcesByOptions = (options) => {
 
   /*USER FILTER*/
   if (options.user.profile_id) {
-     //q.counter++;
     q.select += `, \n${options.user.profile_id} AS user_profile_id`;
-    //q.params.push(options.user.profile_id); 
+
     if (options.user.is_liked === true || options.user.is_liked === false) {
       q.select += ", \nlikes.is_liked";
 
@@ -297,6 +296,30 @@ const getAllResourcesByOptions = (options) => {
       q.params.push(options.user.profile_id);
 
       q.group = q.group ? `${q.group}, \nlikes.is_liked` : "";
+    }
+
+    if (options.user.is_favourite === true || options.user.is_favourite === false) {
+      q.select += ", \nfavourites.is_favourite";
+
+      if (
+        !q.from.includes("LEFT JOIN favourites ON resources.id = favourites.resource_id")
+      ) {
+        q.from += "\nLEFT JOIN favourites ON resources.id = favourites.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND (
+          favourites.is_favourite = $${q.counter}
+          AND favourites.profile_id = $${q.counter + 1}
+        )`
+        : `WHERE \nfavourites.is_favourite = $${q.counter}
+        AND favourites.profile_id = $${q.counter + 1}`;
+      q.counter++;
+      q.params.push(options.user.is_favourite);
+      q.params.push(options.user.profile_id);
+
+      q.group = q.group ? `${q.group}, \nfavourites.is_favourite` : "";
     }
   }
 
