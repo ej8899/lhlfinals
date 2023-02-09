@@ -23,7 +23,6 @@ const postResourcesQueryHelper = (data, resourceId) => {
     queries.push({
       query: commentsQuery,
       params: privateCommentsParams,
-      recordName: 'privateComment',
     } );
   }
   if (data.user.myComments_public !== undefined) {
@@ -36,7 +35,6 @@ const postResourcesQueryHelper = (data, resourceId) => {
     queries.push({
       query: commentsQuery,
       params: publicCommentsParams,
-      recordName: 'publicComment',
     });
   }
 
@@ -55,7 +53,6 @@ const postResourcesQueryHelper = (data, resourceId) => {
     queries.push({
       query: raitingQuery,
       params: ratingParams,
-      recordName: 'rating'
     })
   }
 
@@ -83,7 +80,6 @@ const postResourcesQueryHelper = (data, resourceId) => {
       (resource_id, name, index)
     VALUES
       ($1, $2, $3) RETURNING *;`;
-
   if (data.user.myCategories !== undefined){
     for (const [index, category] of data.user.myCategories.entries()) {
       const categoriesParams = [
