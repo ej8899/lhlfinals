@@ -335,15 +335,63 @@ const getAllResourcesByOptions = (options) => {
       q.where = q.where
         ? `${q.where} \nAND (
           bookmarks.is_bookmarked = $${q.counter}
-          AND favourites.profile_id = $${q.counter + 1}
+          AND bookmarks.profile_id = $${q.counter + 1}
         )`
         : `WHERE \nbookmarks.is_bookmarked = $${q.counter}
-        AND favourites.profile_id = $${q.counter + 1}`;
+        AND bookmarks.profile_id = $${q.counter + 1}`;
       q.counter++;
       q.params.push(options.user.is_bookmarked);
       q.params.push(options.user.profile_id);
 
       q.group = q.group ? `${q.group}, \nbookmarks.is_bookmarked` : "";
+    }
+
+    if (options.user.is_playlist === true || options.user.is_playlist=== false) {
+      q.select += ", \nplaylists.is_playlist";
+
+      if (
+        !q.from.includes("LEFT JOIN playlists ON resources.id = playlists.resource_id")
+      ) {
+        q.from += "\nLEFT JOIN playlists ON resources.id = playlists.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND (
+          playlists.is_playlist = $${q.counter}
+          AND playlists.profile_id = $${q.counter + 1}
+        )`
+        : `WHERE \nplaylists.is_playlist = $${q.counter}
+        AND playlists.profile_id = $${q.counter + 1}`;
+      q.counter++;
+      q.params.push(options.user.is_playlist);
+      q.params.push(options.user.profile_id);
+
+      q.group = q.group ? `${q.group}, \nplaylists.is_playlist` : "";
+    }
+
+    if (options.user.is_reported === true || options.user.is_reported=== false) {
+      q.select += ", \nreports.is_reported";
+
+      if (
+        !q.from.includes("LEFT JOIN reports ON resources.id = reports.resource_id")
+      ) {
+        q.from += "\nLEFT JOIN reports ON resources.id = reports.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND (
+          reports.is_reported = $${q.counter}
+          AND reports.profile_id = $${q.counter + 1}
+        )`
+        : `WHERE \nreports.is_reported = $${q.counter}
+        AND reports.profile_id = $${q.counter + 1}`;
+      q.counter++;
+      q.params.push(options.user.is_reported);
+      q.params.push(options.user.profile_id);
+
+      q.group = q.group ? `${q.group}, \nreports.is_reported` : "";
     }
   }
 
