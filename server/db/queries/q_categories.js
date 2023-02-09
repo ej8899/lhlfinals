@@ -22,9 +22,9 @@ const getCategoriesByResourceId = (id) => {
 };
 
 /**
- * Get all categories by resource id that are still active from db
+ * Get all categories's name by resource id that are still active from db
  * @param {number} id resource id
- * @return {Promise<{}>} A promise of all categories in db that are not deleted.
+ * @return {Promise<{}>} A promise of all names in db that are not deleted.
  */
 const getCategoriesNameByResourceId = (id) => {
   let query = `
@@ -33,7 +33,7 @@ const getCategoriesNameByResourceId = (id) => {
   FROM
     categories
   WHERE
-    resource_id = 1
+    resource_id = $1
     AND deleted_at IS NULL
     AND profile_id IS NULL;
   `;
