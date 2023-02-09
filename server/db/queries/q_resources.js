@@ -321,6 +321,30 @@ const getAllResourcesByOptions = (options) => {
 
       q.group = q.group ? `${q.group}, \nfavourites.is_favourite` : "";
     }
+
+    if (options.user.is_bookmarked === true || options.user.is_bookmarked=== false) {
+      q.select += ", \nbookmarks.is_bookmarked";
+
+      if (
+        !q.from.includes("LEFT JOIN bookmarks ON resources.id = bookmarks.resource_id")
+      ) {
+        q.from += "\nLEFT JOIN bookmarks ON resources.id = bookmarks.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND (
+          bookmarks.is_bookmarked = $${q.counter}
+          AND favourites.profile_id = $${q.counter + 1}
+        )`
+        : `WHERE \nbookmarks.is_bookmarked = $${q.counter}
+        AND favourites.profile_id = $${q.counter + 1}`;
+      q.counter++;
+      q.params.push(options.user.is_bookmarked);
+      q.params.push(options.user.profile_id);
+
+      q.group = q.group ? `${q.group}, \nbookmarks.is_bookmarked` : "";
+    }
   }
 
   if (options.resource.limit) {
