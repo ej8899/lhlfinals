@@ -15,7 +15,7 @@ const getCategoriesByResourceId = (id) => {
     resource_id = $1 AND deleted_at IS NULL AND profile_id IS NULL
   ORDER BY
     index;`;
-    
+
   const params = [id];
 
   return db.query(query, params).then((data) => data.rows);
@@ -37,19 +37,19 @@ const getCategoriesNameByResourceId = (id) => {
     AND deleted_at IS NULL
     AND profile_id IS NULL;
   `;
-    
+
   const params = [id];
 
   return db.query(query, params).then((data) => data.rows);
 };
 
 /**
- * Get all personal categories 
+ * Get all personal categories
  * @param {number} resourceId resource id
  * @param {number} profieId profile id
  * @return {Promise<{}>} A promise of all names in db that are not deleted.
  */
-const getCategoriesNameByResourceIdAndProfileId = (resourceId,profileId) => {
+const getCategoriesNameByResourceIdAndProfileId = (resourceId, profileId) => {
   let query = `
   SELECT
     DISTINCT name
@@ -60,12 +60,11 @@ const getCategoriesNameByResourceIdAndProfileId = (resourceId,profileId) => {
     AND deleted_at IS NULL
     AND profile_id = $2;
   `;
-    
-  const params = [resourceId,profileId];
+
+  const params = [resourceId, profileId];
 
   return db.query(query, params).then((data) => data.rows);
 };
-
 
 /**
  * Get all categories by profile id that are still active from db
@@ -83,7 +82,7 @@ const getCategoriesByProfileId = (id) => {
   WHERE
     categories.deleted_at IS NULL AND resources.profile_id = $1;
   `;
-    
+
   const params = [id];
 
   return db.query(query, params).then((data) => data.rows);
@@ -105,8 +104,8 @@ const getCategoriesByProfileIdAndResourceId = (profileId, resourceId) => {
   WHERE
     deleted_at IS NULL AND profile_id = $1 AND resource_id = $2;
   `;
-    
-  const params = [profileId,resourceId];
+
+  const params = [profileId, resourceId];
 
   return db.query(query, params).then((data) => data.rows);
 };
@@ -123,11 +122,7 @@ const postCategory = (data) => {
       (resource_id, name, index)
     VALUES
       ($1, $2, $3) RETURNING *;`;
-  const params = [
-    data.resource_id,
-    data.name,
-    data.index
-  ];
+  const params = [data.resource_id, data.name, data.index];
 
   return db.query(query, params).then((data) => data.rows[0]);
 };
@@ -147,11 +142,7 @@ const updateCategory = (data) => {
     updated_at = NOW()
   WHERE
     id = $3 RETURNING *;`;
-  const params = [
-    data.name,
-    data.index,
-    data.id
-  ];
+  const params = [data.name, data.index, data.id];
 
   return db.query(query, params).then((data) => data.rows[0]);
 };
@@ -179,7 +170,7 @@ module.exports = {
   getCategoriesByProfileId,
   getCategoriesByProfileIdAndResourceId,
   getCategoriesNameByResourceId,
-  getCategoriesByProfileIdAndResourceId,
+  getCategoriesNameByResourceIdAndProfileId,
   postCategory,
   updateCategory,
   deleteCategory,

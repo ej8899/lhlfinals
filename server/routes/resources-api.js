@@ -7,7 +7,7 @@ const router = express.Router();
 const q_resources = require("../db/queries/q_resources");
 const q_categories = require("../db/queries/q_categories");
 const { screenshot } = require("../helper/screenshot");
-const {toArray} = require('../helper/converter');
+const { toArray, toFormat } = require("../helper/converter");
 
 /**
  * Get all resources comming from all users that are still active from db
@@ -48,8 +48,15 @@ router.post("/options", (req, res) => {
       const dataWithCategories = await Promise.all(
         data.map(async (element) => {
           element.categories = await q_categories.getCategoriesNameByResourceId(
-            element.id);
-          element.categories = toArray(element.categories,'name');
+            element.id
+          );
+          element.categories = toArray(element.categories, "name");
+          element.my_categories =
+            await q_categories.getCategoriesNameByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id
+            );
+          element.my_categories = toArray(element.my_categories, "name");
           return element;
         })
       );
@@ -57,7 +64,7 @@ router.post("/options", (req, res) => {
       return dataWithCategories;
     })
     .then((dataWithCategories) => {
-      res.status(200).json(dataWithCategories);
+      res.status(200).json(toFormat(dataWithCategories));
     })
     .catch((err) => {
       res.status(500).json({ error: err.message });

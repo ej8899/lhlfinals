@@ -8,4 +8,5 @@ VALUES
 INSERT INTO
   categories (resource_id, profile_id, name, index)
 VALUES
-  (1, 2, 'Node.js', 3);
+  (1, 2, 'Node.js', 1),
+  (1, 1, 'Node.js', 3);
