@@ -446,6 +446,64 @@ const getAllResourcesByOptions = (options) => {
 
       q.group = q.group ? `${q.group}, \nrecommends.is_recommended` : "";
     }
+
+    if (options.user.minimum_myRating) {
+      q.select += ", \nratings.rate AS my_rating";
+
+      if (
+        !q.from.includes(
+          "LEFT JOIN ratings ON resources.id = ratings.resource_id"
+        )
+      ) {
+        q.from += "\nLEFT JOIN ratings ON resources.id = ratings.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND ratings.profile_id = $${q.counter}`
+        : `WHERE \nratings.profile_id = $${q.counter}`;
+      q.params.push(options.user.profile_id);
+
+      q.counter++;
+      q.having = q.having
+        ? `${q.having} \nAND AVG(ratings.rate) >= $${q.counter}`
+        : `HAVING \nAVG(ratings.rate) >= $${q.counter}`;
+      q.params.push(options.user.minimum_myRating);
+
+      q.group = q.group
+        ? `${q.group}, \nratings.rate`
+        : "GROUP BY \nresource.*, \nratings.rate";
+    }
+
+    if (options.user.maximum_myRating) {
+      q.select += ", \nratings.rate AS my_rating";
+
+      if (
+        !q.from.includes(
+          "LEFT JOIN ratings ON resources.id = ratings.resource_id"
+        )
+      ) {
+        q.from += "\nLEFT JOIN ratings ON resources.id = ratings.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND ratings.profile_id = $${q.counter}`
+        : `WHERE \nratings.profile_id = $${q.counter}`;
+      q.params.push(options.user.profile_id);
+
+      q.counter++;
+      q.having = q.having
+        ? `${q.having} \nAND AVG(ratings.rate) <= $${q.counter}`
+        : `HAVING \nAVG(ratings.rate) <= $${q.counter}`;
+      q.params.push(options.user.maximum_myRating);
+
+      if (!q.group.includes("ratings.rate")) {
+        q.group = q.group
+          ? `${q.group}, \nratings.rate`
+          : "GROUP BY \nresource.*, \nratings.rate";
+      }
+    }
   }
 
   if (options.resource.limit) {

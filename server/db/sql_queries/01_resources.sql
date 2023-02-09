@@ -78,6 +78,7 @@ SELECT
   favourites.is_favourite,
   bookmarks.is_bookmarked,
   playlists.is_playlist,
+  reports.is_reported,
   recommends.is_recommended,
   ratings.rate AS my_rating,
   rankings.scale AS my_ranking
@@ -90,12 +91,21 @@ FROM
   LEFT JOIN favourites ON resources.id = favourites.resource_id
   LEFT JOIN bookmarks ON resources.id = bookmarks.resource_id
   LEFT JOIN playlists ON resources.id = playlists.resource_id
+  LEFT JOIN reports ON resources.id = reports.resource_id
 WHERE
   resources.profile_id = 1
   AND resources.deleted_at IS NULL
   AND resources.created_at >= current_timestamp - interval '36 hours'
   AND likes.is_liked = true
   AND recommends.is_recommended = true
+  AND resources.id IN (
+    SELECT
+      resource_id
+    FROM
+      categories
+    WHERE
+      NAME in ('Ruby', 'Javascript', 'CSS')
+  )
   /*USER FILTER */
   AND (
     likes.is_liked = true
@@ -117,6 +127,11 @@ WHERE
     recommends.is_recommended = true
     AND recommends.profile_id = 1
   )
+  AND (
+    reports.is_reported = true
+    AND reports.profile_id = 1
+  )
+  AND ratings.profile_id = 1
 GROUP BY
   resources.id,
   likes.profile_id,
@@ -126,7 +141,8 @@ GROUP BY
   playlists.is_playlist,
   recommends.is_recommended,
   ratings.rate,
-  rankings.scale
+  rankings.scale,
+  reports.is_reported
 HAVING
   COUNT(likes.id) >= 2
   AND AVG(ratings.rate) >= 2
@@ -147,11 +163,10 @@ ORDER BY
 LIMIT
   35;
 
-/*ARRAY OF CATEGORIES */
+
 SELECT
-  DISTINCT name
-from
+  resource_id
+FROM
   categories
-where
-  id = 1
-  AND deleted_at IS NULL;
+WHERE
+  NAME in ('Ruby', 'Javascript', 'CSS');
