@@ -81,13 +81,11 @@ router.post("/", (req, res) => {
 /**
  * Save new resource with Addition
  * @return {json} resource that is saved
- *
  */
 router.post("/withAddition", (req, res) => {
   //const userId = req.session.userID;
   const resourceData = { ...req.body };
-
-  if (!resourceData.thumbnail) {
+  if (!resourceData.resource.thumbnail) {
     console.log("creating a screenshot request")
     screenshot(resourceData.resource.url)
     .then((data) => {
@@ -110,7 +108,7 @@ router.post("/withAddition", (req, res) => {
     });
   } else {
     q_resources
-      .postResource(resourceData)
+      .postResourceWithAddition(resourceData)
       .then((data) => {
         console.log("Resource save returned obj: ", data);
         return res.status(200).json(data);
