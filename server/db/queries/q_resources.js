@@ -270,6 +270,36 @@ const getAllResourcesByOptions = (options) => {
     q.params.push(options.resource.excluded_maximum_average_ranking);
   }
 
+  /*USER FILTER*/
+  if (options.user.profile_id) {
+     //q.counter++;
+    q.select += `, \n${options.user.profile_id} AS user_profile_id`;
+    //q.params.push(options.user.profile_id); 
+    if (options.user.is_liked === true || options.user.is_liked === false) {
+      q.select += ", \nlikes.is_liked";
+
+      if (
+        !q.from.includes("LEFT JOIN likes ON resources.id = likes.resource_id")
+      ) {
+        q.from += "\nLEFT JOIN likes ON resources.id = likes.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND (
+          likes.is_liked = $${q.counter}
+          AND likes.profile_id = $${q.counter + 1}
+        )`
+        : `WHERE \nlikes.is_liked = $${q.counter}
+        AND likes.profile_id = $${q.counter + 1}`;
+      q.counter++;
+      q.params.push(options.user.is_liked);
+      q.params.push(options.user.profile_id);
+
+      q.group = q.group ? `${q.group}, \nlikes.is_liked` : "";
+    }
+  }
+
   if (options.resource.limit) {
     q.counter++;
     q.limit = `LIMIT $${q.counter}`;
