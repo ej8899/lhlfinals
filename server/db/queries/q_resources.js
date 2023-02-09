@@ -246,6 +246,30 @@ const getAllResourcesByOptions = (options) => {
     q.params.push(options.resource.excluded_minimum_average_ranking);
   }
 
+  if (options.resource.excluded_maximum_average_ranking) {
+    q.counter++;
+
+    if (!q.select.includes("AVG(rankings.scale) AS avg_ranking")) {
+      q.select += ", \nAVG(rankings.scale) AS avg_ranking";
+    }
+
+    if (
+      !q.from.includes(
+        "LEFT JOIN rankings ON resources.id = rankings.resource_id"
+      )
+    ) {
+      q.from += "\nLEFT JOIN rankings ON resources.id = rankings.resource_id";
+    }
+
+    q.having = q.having
+      ? `${q.having} \nAND NOT AVG(rankings.scale) <= $${q.counter}`
+      : `HAVING \nNOT AVG(rankings.scale) <= $${q.counter}`;
+
+    q.group = "GROUP BY \nresources.id";
+
+    q.params.push(options.resource.excluded_maximum_average_ranking);
+  }
+
   if (options.resource.limit) {
     q.counter++;
     q.limit = `LIMIT $${q.counter}`;

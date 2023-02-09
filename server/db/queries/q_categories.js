@@ -22,6 +22,28 @@ const getCategoriesByResourceId = (id) => {
 };
 
 /**
+ * Get all categories by resource id that are still active from db
+ * @param {number} id resource id
+ * @return {Promise<{}>} A promise of all categories in db that are not deleted.
+ */
+const getCategoriesNameByResourceId = (id) => {
+  let query = `
+  SELECT
+    DISTINCT name
+  FROM
+    categories
+  WHERE
+    resource_id = 1
+    AND deleted_at IS NULL
+    AND profile_id IS NULL;
+  `;
+    
+  const params = [id];
+
+  return db.query(query, params).then((data) => data.rows);
+};
+
+/**
  * Get all categories by profile id that are still active from db
  * @param {number} id profile id of the original creator of the resource
  * @return {Promise<{}>} A promise of all categories in db that are not deleted.
@@ -132,6 +154,7 @@ module.exports = {
   getCategoriesByResourceId,
   getCategoriesByProfileId,
   getCategoriesByProfileIdAndResourceId,
+  getCategoriesNameByResourceId,
   postCategory,
   updateCategory,
   deleteCategory,
