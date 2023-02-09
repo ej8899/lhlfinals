@@ -504,6 +504,64 @@ const getAllResourcesByOptions = (options) => {
           : "GROUP BY \nresource.*, \nratings.rate";
       }
     }
+
+    if (options.user.minimum_myRanking) {
+      q.select += ", \nrankings.scale AS my_ranking";
+
+      if (
+        !q.from.includes(
+          "LEFT JOIN rankings ON resources.id = rankings.resource_id"
+        )
+      ) {
+        q.from += "\nLEFT JOIN rankings ON resources.id = rankings.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND rankings.profile_id = $${q.counter}`
+        : `WHERE \nrankings.profile_id = $${q.counter}`;
+      q.params.push(options.user.profile_id);
+
+      q.counter++;
+      q.having = q.having
+        ? `${q.having} \nAND AVG(rankings.scale) >= $${q.counter}`
+        : `HAVING \nAVG(rankings.scale) >= $${q.counter}`;
+      q.params.push(options.user.minimum_myRanking);
+
+      q.group = q.group
+        ? `${q.group}, \nrankings.scale`
+        : "GROUP BY \nresource.*, \nrankings.scale";
+    }
+
+    if (options.user.maximum_myRanking) {
+      q.select += ", \nrankings.scale AS my_ranking";
+
+      if (
+        !q.from.includes(
+          "LEFT JOIN rankings ON resources.id = rankings.resource_id"
+        )
+      ) {
+        q.from += "\nLEFT JOIN rankings ON resources.id = rankings.resource_id";
+      }
+
+      q.counter++;
+      q.where = q.where
+        ? `${q.where} \nAND rankings.profile_id = $${q.counter}`
+        : `WHERE \nrankings.profile_id = $${q.counter}`;
+      q.params.push(options.user.profile_id);
+
+      q.counter++;
+      q.having = q.having
+        ? `${q.having} \nAND AVG(rankings.scale) <= $${q.counter}`
+        : `HAVING \nAVG(rankings.scale) <= $${q.counter}`;
+      q.params.push(options.user.maximum_myRanking);
+
+      if (!q.group.includes("rankings.scale")) {
+        q.group = q.group
+          ? `${q.group}, \nrankings.scale`
+          : "GROUP BY \nresource.*, \nrankings.scale";
+      }
+    }
   }
 
   if (options.resource.limit) {

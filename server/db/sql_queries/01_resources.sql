@@ -132,6 +132,7 @@ WHERE
     AND reports.profile_id = 1
   )
   AND ratings.profile_id = 1
+  AND rankings.profile_id = 1
 GROUP BY
   resources.id,
   likes.profile_id,
