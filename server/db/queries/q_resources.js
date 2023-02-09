@@ -32,7 +32,7 @@ const getAllResourcesWithAddition = () => {
     LEFT JOIN categories AS c on res.id=c.resource_id
     LEFT JOIN rankings AS ran on res.id=ran.resource_id
     LEFT JOIN ratings AS rat on res.id=rat.resource_id
-    WHERE res.deleted_at IS NULL
+    WHERE res.deleted_at IS NULL AND c.profile_id IS NULL
     GROUP BY res.id, c.name
     ORDER BY res.id LIMIT 20;`
     )

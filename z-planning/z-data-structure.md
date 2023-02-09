@@ -200,7 +200,6 @@ returned:
         "deleted_at": null,
         "likes": "2",
         "categories": [
-            "Node.js",
             "Ruby",
             "VS Code"
         ],
