@@ -7,4 +7,5 @@ INSERT INTO
   )
 VALUES
   (1, 1, NULL, true),
-  (1, 1, 2, true);
+  (1, 1, 2, true),
+  (2, 2, NULL, true);

@@ -5,7 +5,10 @@
 const express = require("express");
 const router = express.Router();
 const q_resources = require("../db/queries/q_resources");
+const q_categories = require("../db/queries/q_categories");
+const q_comments = require("../db/queries/q_comments");
 const { screenshot } = require("../helper/screenshot");
+const { toArray, toFormat } = require("../helper/converter");
 
 /**
  * Get all resources comming from all users that are still active from db
@@ -34,36 +37,96 @@ router.get("/withAddition", (req, res) => {
 });
 
 /**
+ * Get all resources filtered using options
+ * @return {json} All resources that fits the filter.
+ */
+router.post("/options", (req, res) => {
+  const options = { ...req.body };
+  console.log("in options", options);
+  q_resources
+    .getAllResourcesByOptions(options)
+    .then(async (data) => {
+      const dataWithCategories = await Promise.all(
+        data.map(async (element) => {
+          element.categories = await q_categories.getCategoriesNameByResourceId(
+            element.id
+          );
+          element.categories = toArray(element.categories, "name");
+          element.my_categories =
+            await q_categories.getCategoriesNameByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id
+            );
+          element.my_categories = toArray(element.my_categories, "name");
+          element.my_comments_private =
+            await q_comments.getCommentsByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id
+            );
+          
+            if (element.my_comments_private) {
+              element.my_comments_private=element.my_comments_private.comment;
+            }else {
+              element.my_comments_private=null;
+            }
+          element.my_comments_public =
+            await q_comments.getCommentsByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id,
+              true
+            );
+
+            if (element.my_comments_public) {
+              element.my_comments_public=element.my_comments_public.comment;
+            }else {
+              element.my_comments_public=null;
+            }
+
+          return element;
+        })
+      );
+
+      return dataWithCategories;
+    })
+    .then((dataWithCategories) => {
+      res.status(200).json(toFormat(dataWithCategories));
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+/**
  * Save new resource
  * @return {json} resource that is saved
  *
  */
 router.post("/", (req, res) => {
   //const userId = req.session.userID;
-  const resourceData ={...req.body};
+  const resourceData = { ...req.body };
 
   if (!resourceData.thumbnail) {
-    console.log("creating a screenshot request")
+    console.log("creating a screenshot request");
     screenshot(resourceData.url)
-    .then((data) => {
-      console.log("screeshot data",data);
-      resourceData.thumbnail = JSON.parse(data)["screenshot"];
-      console.log("resource data before saving",resourceData);
-      q_resources.postResource(resourceData)
-      .then((savedData) => {
-        console.log("Resource save returned obj: ", savedData);
-        return res.status(200).json(savedData);
+      .then((data) => {
+        console.log("screeshot data", data);
+        resourceData.thumbnail = JSON.parse(data)["screenshot"];
+        console.log("resource data before saving", resourceData);
+        q_resources
+          .postResource(resourceData)
+          .then((savedData) => {
+            console.log("Resource save returned obj: ", savedData);
+            return res.status(200).json(savedData);
+          })
+          .catch((err) => {
+            console.log("Error saving new resource", err);
+            return res.status(500).json({ error: err.message });
+          });
       })
-      .catch((err) => {
-        console.log("Error saving new resource", err);
-        return res.status(500).json({ error: err.message });
+      .catch((error) => {
+        console.log("Error getting thumbnail");
+        res.status(400).send(error);
       });
-    })
-    .catch((error) => {
-      console.log("Error getting thumbnail")
-      res.status(400).send(error)
-    });
-
   } else {
     q_resources
       .postResource(resourceData)

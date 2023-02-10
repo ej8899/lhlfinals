@@ -1,3 +1,21 @@
+## POST api/extract
+description: retrieve title, description, thumbnail of a url
+
+```json
+body: 
+{
+   "url": "https://www.youtube.com/watch?v=t_ispmWmdjY"
+}
+
+returned:
+{
+    "title": "Ruby Programming Language - Full Course - YouTube",
+    "description": "Learn the Ruby programming language in this full course / tutorial. The course is designed for new programmers, and will introduce common programming topics ...",
+    "thumbnail": "https://storage.screenshotapi.net/www_youtube_com_watch_v_t_ispmwmdjy_983a438ee7b2.png",
+    "url": "https://www.youtube.com/watch?v=t_ispmWmdjY"
+}
+```
+
 ## POST api/user
 description: create/save a new user
 
@@ -182,6 +200,50 @@ returned:
 ]
 ```
 
+## GET api/resources/withAddition
+description: retrieve all resources from all Users with details
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "profile_id": 1,
+        "url": "https://www.youtube.com/watch?v=t_ispmWmdjY",
+        "title": "Ruby Programming Language - Full Course",
+        "description": "Learn the Ruby programming language in this full course / tutorial. The course is designed for new programmers, and will introduce common programming topics using the ruby language.\nWant more from Mike? He ISs starting a coding RPG/Bootcamp",
+        "thumbnail": "https://i0.wp.com/www.alphr.com/wp-content/uploads/2021/11/How-to-Make-YouTube-Thumbnails-1.png?resize=738%2C320&ssl=1",
+        "created_at": "2023-02-09T04:55:52.720Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "likes": "2",
+        "categories": [
+            "Ruby",
+            "VS Code"
+        ],
+        "ranking": "7.0000000000000000",
+        "rating": "4.0000000000000000"
+    },
+    {
+        "id": 2,
+        "profile_id": 1,
+        "url": "https://www.youtube.com/watch?v=_y9oxzTGERs",
+        "title": "Introduction to JavaScript",
+        "description": "This course introduces you to JavaScript, the most popular programming language for web development. You can also try the interactive version of the course here: https://scrimba.com/g/gintrotojavascript\n\n  The course contains 14 lessons and 7 challenges. In the challenges, you will be encourage to jump into the code and get your hands dirty. This is both fun and great for making the knowledge stick.",
+        "thumbnail": "",
+        "created_at": "2023-02-09T04:55:52.720Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "likes": "1",
+        "categories": [
+            "JavaScript"
+        ],
+        "ranking": "3.0000000000000000",
+        "rating": "1.5000000000000000"
+    }
+]
+```
+
 ## DELETE api/resources/[resource_id]
 description: delete a resource
 
@@ -257,6 +319,92 @@ returned:
 }
 ```
 
+## POST api/resources/options
+description: retrieve resources using options/filtration
+order_by values:
+"most_liked" -> order descending from highest liked to lowest
+"top_rated" -> order descending from highest rated to lowest
+"top_ranked" -> order descending from highest ranked to lowest
+"lowest_ranked" -> order ascending from lowest ranked to highest
+"newest" -> order descending from most recent created to lastest
+"alpha_a-z" -> order ascending by title
+"alpha_z-a" -> order descending by title
+
+```json
+body: 
+{
+  "resource" : {
+		"is_deleted":false,
+		"created_by":1,
+		"created_last_num_hours":36,
+		"limit": 35,
+		"order_by": "newest",
+		"categories" : ["Ruby", "JavaScript", "CSS"],
+		"minimum_average_rating": 2,
+		"minimum_likes": 2,
+		"minimum_is_recommended": 2,
+		"minimum_average_ranking" : 1,
+		"maximum_average_ranking" : 8,
+		"excluded_minimum_average_ranking" : 8,
+		"excluded_maximum_average_ranking" : 5
+   },
+  "user": {
+  	"profile_id" : 1,
+    "is_liked" : true,
+    "is_favourite": true,
+    "is_bookmarked":true,
+    "is_playlist" : true,
+    "is_reported": true,
+    "is_recommended" : true,
+    "minimum_myRating" : 2,
+    "maximum_myRating" : 5,
+    "minimum_myRanking" : 4,
+    "maximum_myRanking" : 7
+  }
+}
+
+returned:
+[
+    {
+        "resource": {
+            "id": 1,
+            "profile_id": 1,
+            "url": "https://www.youtube.com/watch?v=t_ispmWmdjY",
+            "title": "Ruby Programming Language - Full Course",
+            "description": "Learn the Ruby programming language in this full course / tutorial. The course is designed for new programmers, and will introduce common programming topics using the ruby language.\nWant more from Mike? He ISs starting a coding RPG/Bootcamp",
+            "thumbnail": "https://i0.wp.com/www.alphr.com/wp-content/uploads/2021/11/How-to-Make-YouTube-Thumbnails-1.png?resize=738%2C320&ssl=1",
+            "created_at": "2023-02-09T04:55:52.720Z",
+            "updated_at": null,
+            "deleted_at": null,
+            "avg_rating": "4.0000000000000000",
+            "total_likes": "2",
+            "total_recommends": "2",
+            "avg_ranking": "7.0000000000000000",
+            "categories": [
+                "Ruby",
+                "VS Code"
+            ]
+        },
+        "user": {
+            "profile_id": 1,
+            "is_liked": true,
+            "is_favourite": true,
+            "is_bookmarked": true,
+            "is_playlist": true,
+            "is_reported": true,
+            "is_recommended": true,
+            "my_rating": 4,
+            "my_ranking": 7,
+            "my_categories": [
+                "Node.js"
+            ],
+            "my_comments_private": "Great Video",
+            "my_comments_public": null
+        }
+    }
+]
+```
+
 ## GET api/categories/resources/[resource_id]
 description: retrieve all categories for a specific resource
 
@@ -266,20 +414,99 @@ returned:
     {
         "id": 1,
         "resource_id": 1,
+        "profile_id": null,
         "name": "Ruby",
         "index": 1,
         "description": null,
-        "created_at": "2023-01-31T13:54:46.368Z",
+        "created_at": "2023-02-08T15:41:48.752Z",
         "updated_at": null,
         "deleted_at": null
     },
     {
         "id": 2,
         "resource_id": 1,
+        "profile_id": null,
         "name": "VS Code",
         "index": 2,
         "description": null,
-        "created_at": "2023-01-31T13:54:46.368Z",
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## GET api/categories/profiles/[profile_id]
+description: retrieve all categories that user created for all the resources that they added. 
+
+```json
+returned:
+[
+    {
+        "resource_profile_id": 1,
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": null,
+        "name": "Ruby",
+        "index": 1,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "resource_profile_id": 1,
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": null,
+        "name": "VS Code",
+        "index": 2,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "resource_profile_id": 1,
+        "id": 3,
+        "resource_id": 2,
+        "profile_id": null,
+        "name": "JavaScript",
+        "index": 1,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "resource_profile_id": 1,
+        "id": 4,
+        "resource_id": 1,
+        "profile_id": 2,
+        "name": "Node.js",
+        "index": 3,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## GET api/categories/profiles/[profile_id]/resources/[resource_id]
+description: retrieve all categories that profile/user created for personal purpose
+
+```json
+returned:
+[
+    {
+        "id": 4,
+        "resource_id": 1,
+        "profile_id": 2,
+        "name": "Node.js",
+        "index": 3,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
         "updated_at": null,
         "deleted_at": null
     }
@@ -938,5 +1165,97 @@ returned:
     "created_at": "2023-02-07T16:35:51.203Z",
     "updated_at": "2023-02-07T16:52:44.380Z",
     "deleted_at": "2023-02-07T16:54:34.563Z"
+}
+```
+
+## GET api/reports/resources/[resource_id]
+description: retrieve all reports for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_reported": true,
+        "created_at": "2023-02-08T14:43:15.090Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_reported": false,
+        "created_at": "2023-02-08T14:43:15.090Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/reports
+description: create/save a report
+
+```json
+body: 
+{
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": true,
+    "created_at": "2023-02-08T14:55:47.641Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/reportes/[report_id]
+description: update a report
+
+```json
+body: 
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": false
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": false,
+    "created_at": "2023-02-08T14:55:47.641Z",
+    "updated_at": "2023-02-08T14:57:41.877Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/reports/[report_id]
+description: delete a report
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": false,
+    "created_at": "2023-02-08T14:55:47.641Z",
+    "updated_at": "2023-02-08T14:57:41.877Z",
+    "deleted_at": "2023-02-08T14:58:29.160Z"
 }
 ```

@@ -30,6 +30,8 @@ const favouritesRoutes = require('./routes/favourites-api');
 const playlistsRoutes = require('./routes/playlists-api');
 const bookmarksRoutes = require('./routes/bookmarks-api');
 const recommendsRoutes = require('./routes/recommends-api');
+const reportsRoutes = require('./routes/reports-api');
+const extractRoutes = require('./routes/extract-api');
 
 // /user/endpoints
 const usersRouter = express.Router();
@@ -59,6 +61,8 @@ app.use('/api/favourites',favouritesRoutes);
 app.use('/api/playlists',playlistsRoutes);
 app.use('/api/bookmarks',bookmarksRoutes);
 app.use('/api/recommends',recommendsRoutes);
+app.use('/api/reports',reportsRoutes);
+app.use('/api/extract',extractRoutes)
 
 app.use(express.static(publicPath));
 app.get("/*", function (req, res) {

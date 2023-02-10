@@ -24,10 +24,25 @@ router.get("/resources/:id", (req, res) => {
  * Get all categories by Profile Id
  * @return {json} All categories pertain to a profile in db that are not deleted
  */
-router.get("/profile/:id", (req, res) => {
+router.get("/profiles/:id", (req, res) => {
   const id = req.params.id
   q_categories
     .getCategoriesByProfileId(id)
+    .then((data) => res.json(data))
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+/**
+ * Get all categories by "personal" level specific to a resource
+ * @return {json} All categories pertain to a profile in categories table and  that are not deleted
+ */
+router.get("/profiles/:profile_id/resources/:resource_id", (req, res) => {
+  const profileId = req.params.profile_id;
+  const resourceId = req.params.resource_id;
+  q_categories
+    .getCategoriesByProfileIdAndResourceId(profileId,resourceId)
     .then((data) => res.json(data))
     .catch((err) => {
       res.status(500).json({ error: err.message });
