@@ -24,13 +24,13 @@ const getAllResources = () => {
  */
 const getAllResourcesWithAddition = (id = undefined) => {
   const whereClause = id === undefined ? 'WHERE res.deleted_at IS NULL' : `WHERE res.id=${id} AND res.deleted_at IS NULL`;
-  const query = `SELECT res.*, COUNT(DISTINCT l.id) AS total_likes, array[c.name] AS categories, AVG(ran.SCALE) AS avg_ranking, AVG(rat.rate) AS avg_rating
+  const query = `
+    SELECT res.*, COUNT(DISTINCT l.id) AS total_likes, array[c.name] AS categories, AVG(ran.SCALE) AS avg_ranking, AVG(rat.rate) AS avg_rating
     FROM resources AS res
     LEFT JOIN likes AS l on res.id=l.resource_id
     LEFT JOIN categories AS c on res.id=c.resource_id
     LEFT JOIN rankings AS ran on res.id=ran.resource_id
     LEFT JOIN ratings AS rat on res.id=rat.resource_id
-
     ${whereClause}
     GROUP BY res.id, c.name
     ORDER BY res.id LIMIT 20;`;
@@ -48,7 +48,6 @@ const getAllResourcesWithAddition = (id = undefined) => {
           resources[index] = {
             ...resources[index],
             categories: resources[index].categories.concat(resource.categories) };
-
         } else {
           resources.push(resource);
         }
@@ -442,24 +441,18 @@ const postResourceWithAddition = async (data) => {
     const savedData = {};
     await db.query('BEGIN');
     const resource = await db.query(resourceQuery, resourceParams).then((data) => data.rows[0]);
-    savedData['resource'] = resource;
-    const resourceWithAddition = await getAllResourcesWithAddition(resource.id);
-    savedData['resource'] = {
-      ...savedData['resource'],
-      'categories': resourceWithAddition['categories'],
-      'avg_rating': resourceWithAddition['avg_raging'],
-      'avg_ranking': resourceWithAddition['avg_ranking'],
-      'total_likes': resourceWithAddition['total_likes'],
-    };
     if (data.user) {
       const postHelper = postResourcesQueryHelper(data, resource.id);
       for (helper of postHelper) {
         await db.query(helper.query, helper.params).then((data) => data.rows[0]);
       }
-      savedData['user'] = data.user;
     }
     await db.query('COMMIT');
-    return savedData;
+    const resourceWithAddition = await getAllResourcesWithAddition(resource.id);
+    return {
+      resource: resourceWithAddition,
+      user: data.user,
+    };
   } catch (err) {
     await db.query('ROLLBACK')
     throw err;
