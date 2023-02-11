@@ -491,16 +491,16 @@ export const PreviewItem = (props) => {
 
 
   return (
-    <div>
-      <Box display="flex" flexDirection="row" justifyContent="flex-end" overflow="visible" zIndex="1000" >
+    <div style={{marginTop:0,paddingTop:0}}>
+      <Box sx={{pt: 0,mt:0}} display="flex" flexDirection="row" justifyContent="flex-end" overflow="visible" zIndex="1000" >
         {props.nowloading ? null : (
           <NewBadge display={newIcon} nowLoading={props.nowLoading}/>
         )}
       </Box>
-      <Card sx={{ MaxWidth: 345 }} >
-        <CardActionArea onClick={() => (handleReviewOpen(filter), setExpanded(false))} sx={{ filter: filter }}>
+      <Card sx={{ MaxWidth: 345, pt: 0 }} >
+        <CardActionArea onClick={() => (handleReviewOpen(filter), setExpanded(false))} sx={{ mt:0,filter: filter }}>
           {props.nowloading ? (
-            <Skeleton sx={{ height: 140 }} animation="wave" variant="rectangular" />
+            <Skeleton sx={{ mt:0,height: 140 }} animation="wave" variant="rectangular" />
           ) : (
             <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
               <CardMedia
@@ -560,7 +560,7 @@ export const PreviewItem = (props) => {
             </React.Fragment>
           ) : (
             <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-              <CardContent>
+              <CardContent sx={{pt:0,mt:0}}>
                 <Box 
                   display="flex"
                   flexDirection="column"

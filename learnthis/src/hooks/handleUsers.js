@@ -29,6 +29,9 @@ import { FilterContext } from "../helpers/filter";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  
+  const [viewTitle, setViewTitle] = useState("");
+
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState("nouser");
   const [userid, setUserid] = useState(null);
@@ -86,6 +89,9 @@ export const AuthProvider = ({ children }) => {
         userid,
         login,
         logout,
+
+        viewTitle,
+        setViewTitle,
       }}
     >
       {children}

@@ -47,6 +47,7 @@ export const IconProvider = ({ children }) => {
   }
 
   const [iconState, setIconState] = useState(iconObject)
+  
 
 // TODO -- change when backend data avaialble - less parameters needed
   const iconData = (values) => {
@@ -156,7 +157,7 @@ export const IconProvider = ({ children }) => {
     <IconContext.Provider
       value={{
         iconState,
-        iconData
+        iconData,
       }}
     >
       {children}

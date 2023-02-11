@@ -20,9 +20,11 @@ import SignUp from '../SignUp.jsx';
 import PersistentDrawerLeft from "./LeftMenu.jsx";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import ClearIcon from '@mui/icons-material/Clear';
 import Divider from '@mui/material/Divider';
 import RandomAvatar from './RandomAvatar';
-import { Paper, Toolbar, Box, Grid } from "@mui/material";
+import { Paper, Toolbar, Box, Grid, InputAdornment } from "@mui/material";
+import TextField from '@mui/material/TextField';
 
 import {  modalSignUp,
           modalSignIn
@@ -34,6 +36,7 @@ import { FilterContext } from "../../helpers/filter";
 
 import AboutDialog from "../Modal/about.jsx"
 import { useEffect } from 'react';
+import { ClassNames } from '@emotion/react';
 
 
 //
@@ -124,7 +127,7 @@ export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const { myFilteredData } = useContext(FilterContext);
-
+  const { viewTitle, setViewTitle, } = useContext(AuthContext);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -148,10 +151,24 @@ export default function PrimarySearchAppBar(props) {
 
   const [textInput, setTextInput] = useState('');
 
-  const handleTextInputChange = event => {
+  
+  const handleTextInputChange = (event,value) => {
       setTextInput(event.target.value);
       zlog('info',"SEARCH BAR:",event.target.value)
   };
+  const handleClear = () => {
+    //setTimeout(() => setTextInput(""), 10);
+    setTextInput("")
+    zlog('debug',"CLEAR SEARCH")
+    //zlog('debug','event.target:',event.target.value)
+    zlog('debug','textinput',textInput)
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    zlog('debug','textInput',textInput);
+    setTimeout(() => setTextInput(""), 10);
+    setViewTitle('Search Results for: '+ textInput)
+  }
 
 
   // setup avatar
@@ -343,16 +360,24 @@ const toggleDrawer = (anchor, open) => (event) => {
           >
             LearnThis!
           </Typography>
-          <Search value= {textInput}
-            onChange= {handleTextInputChange}>
+
+
+          <form onSubmit={handleSubmit}>
+          <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
+              value= {textInput}
+              onChange= {(e)=>setTextInput(e.target.value)}
             />
+            <IconButton disableRipple={true} onClick={()=>handleClear()}>
+              <ClearIcon ></ClearIcon>
+            </IconButton>
           </Search>
+          </form>
+
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ alignItems:"center", display: { xs: 'none', md: 'flex' } }}>
             

@@ -17,6 +17,8 @@ import { Container, Grid, Typography,Button } from "@mui/material";
 import Box from '@mui/material/Box';
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import { green, red } from "@mui/material/colors";
+
+
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -36,6 +38,7 @@ import { ChipProvider } from "./Hero/ChipsList";
 
 // Import Handle for Icon Status
 import { IconProvider } from "../hooks/handleIcons";
+
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -56,6 +59,9 @@ import { DeletedModal } from "./ItemDetail/deleted";
 import { FavouriteStaleStats } from "./Icons/favourite";
 import { LessonIndex } from "./Previews/lessonindex";
 import { getdata } from "../helpers/helpers";
+import StateStatus from "../hooks/state";
+import { ViewProvider } from "../hooks/handleViewTitle";
+import ViewTitle from "./ViewTitle.jsx";
 // --------------------------------------------------------
 
 
@@ -66,7 +72,7 @@ const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 // TODO This element needs to lazy load with 'shimmer' effect
 
 export default function Application(props) {
-
+  
 // --------------------------------------------------------
   // Sample Date - to be removed with backend
   const [sampleresourcedata, setsampleresourcedata] = useState([
@@ -850,6 +856,10 @@ export default function Application(props) {
                       />
                     </header>
 
+
+  
+    <ViewTitle/>
+
                     <AddResourceFlow 
                       complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} combinedData={combinedData}
                       newResource={newResource} setNewResource={setNewResource}
@@ -863,10 +873,10 @@ export default function Application(props) {
                     />
 
                     {!lessonTrue &&
-                      <Box display="flex">
-                        <Grid container justifyContent="center">
+                      <Box display="flex" sx={{pt: 0}}>
+                        <Grid container justifyContent="center" sx={{pt: 0}}>
                           <Box sx={{ width: 1400, minHeight: 377 }} display="flex" justifyContent="center" alignItems="center">
-                            <Masonry columns={4} spacing={2}>
+                            <Masonry columns={4} spacing={2} sx={{mt: 0}}>
                               {sampledata.map((item, index) => (
                                 <PreviewItem 
                                   key={item.id} nowloading={nowloading} typeCategory={typeCategory}
@@ -900,7 +910,7 @@ export default function Application(props) {
                     <SiteFooter/>
                   </div>
 
-                  <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
+                  <AboutDialog title={"Cookies!"} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
 
                 </ThemeProvider>
               </ColorModeContext.Provider>

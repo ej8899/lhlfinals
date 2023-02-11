@@ -4,6 +4,8 @@ import zlog from "../helpers/zlog";
 
 export default function StateStatus() {
 
+  const [viewTitle, setViewTitle] = useState('');
+
 // -------------------------------------------------------------
 // State for video data
   const [title, setTitle] = useState('');
@@ -299,6 +301,9 @@ const handleErrorFetchingNewResourceClose = () => {
 // -------------------------------------------------------------
 
   return {
+    viewTitle,
+    setViewTitle,
+
     title,
     setTitle,
     thumbnail,

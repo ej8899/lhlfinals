@@ -81,6 +81,29 @@ export const DetailModal = (props) => {
     },
   };
 
+  const [pausedAt, setPausedAt] = useState(0);
+  const [timestamps, setTimestamps] = useState("");
+  const [errorCode, setErrorCode] = useState(null);
+
+  const onPause = (event) => {
+    const currentTime = event.target.getCurrentTime();
+    console.log("VIDEO PAUSED at:",convertSecondsToMinutes(currentTime))
+    setPausedAt(currentTime);
+    setTimestamps(timestamps + currentTime + "\n");
+  };
+  const handleError = (event) => {
+    setErrorCode(event.data);
+    console.log(event.data);
+    // TODO - handle errors -101 or 150 is denied embedded playback - just show thumb and treat like it is NOT a youtube Link
+    // TODO - handle errors 101 -- this is "not found" (ie removed or otherwise unavailable)
+  };
+
+  function convertSecondsToMinutes(seconds) {
+    let minutes = Math.floor(seconds / 60);
+    let remainingSeconds = Math.trunc(seconds % 60);
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  }
+
   return (
     <Modal
       aria-labelledby="detail-modal-title"
@@ -106,7 +129,7 @@ export const DetailModal = (props) => {
           </Box>
           <Box display="flex" width="100%" justifyContent="space-around">
             <Box>
-              {isYoutubeUrl(props.videoURL) && <YouTube videoId={getYoutubeVideoId(props.videoURL)} opts={videoPlayerOpts} />}
+              {isYoutubeUrl(props.videoURL) && <YouTube videoId={getYoutubeVideoId(props.videoURL)} opts={videoPlayerOpts} onPause={onPause} onError={handleError}/>}
               {!isYoutubeUrl(props.videoURL) && 
                 <Box display="flex" alignItems="center" flexDirection="column">
                   <CardMedia
@@ -142,7 +165,7 @@ export const DetailModal = (props) => {
               </Box>
             </Box>
             <Box display={props.show} flexDirection="column">
-              <MultilineTextFields display={props.show} myComments={props.myComments} addMyComments={props.addMyComments} rows={19} width={"40ch"} label={'My Comments'} placeholder={"Make your notes here."} marginLeft={1}/>
+              <MultilineTextFields timestamps={timestamps} display={props.show} myComments={props.myComments} addMyComments={props.addMyComments} rows={19} width={"40ch"} label={'My Notes'} placeholder={"Make your notes here."} marginLeft={1}/>
               <Box display="flex" justifyContent="flex-end" sx={{mt:1, mb: 1, gap: 5}}>
                 <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleCancel()}>
                   Cancel

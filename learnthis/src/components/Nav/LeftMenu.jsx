@@ -42,6 +42,9 @@ import { FilterContext } from "../../helpers/filter";
 import FlashOn from '@mui/icons-material/FlashOn';
 //---------------------------------------------------------
 
+// AuthContext also handles "breadcrumbs"
+import { AuthContext } from '../../hooks/handleUsers.js';
+
 const drawerWidth = 240;
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -57,6 +60,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 export default function PersistentDrawerLeft(props) {
+  const { viewTitle, setViewTitle, } = useContext(AuthContext);
+
   const { filterData } = useContext(FilterContext);
   const theme = useTheme();
   // const [open, setOpen] = React.useState(props.open);
@@ -76,7 +81,7 @@ export default function PersistentDrawerLeft(props) {
   const handleClick = (event, index) => {
     zlog('action','Button title clicked:',event);
     zlog('action','Button index clicked:', index);
-  
+    setViewTitle(event)
     if(index === 0) {
       props.setSelectedIndex(false)
       props.handleNewResourceOpen()
