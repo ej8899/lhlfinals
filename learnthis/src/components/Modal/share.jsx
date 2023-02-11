@@ -39,6 +39,11 @@ import { isYoutubeUrl, getYoutubeVideoId } from '../../helpers/helpers';
 import { CloseModal } from '../Icons/close';
 //-------------------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -69,7 +74,7 @@ export const ShareModal= (props) => {
       }}
       disableScrollLock={true}
     >
-      <Box sx={style}>
+      <Box sx={style} variant="outlined" severity="info">
         <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
           <Typography variant='h6' textAlign="center">
             Share Resource
@@ -89,7 +94,7 @@ export const ShareModal= (props) => {
                 height="140"
                 width="345"
                 image={props.thumbnail}
-                alt={props.title}
+                src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
                 sx={{marginBottom : 2}}
               />
             </Box>

@@ -17,6 +17,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
+import Alert from '@mui/material/Alert';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -35,6 +36,11 @@ import CardMedia from '@mui/material/CardMedia';
 // Import Icons Functions
 import { CloseModal } from '../Icons/close';
 // --------------------------------------------------------
+
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
 
 const style = {
   position: 'absolute',
@@ -86,16 +92,16 @@ export const ResultModal= (props) => {
                 height="140"
                 width="345"
                 image={props.thumbnail}
-                alt={props.title}
+                src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
                 sx={{marginBottom : 2}}
               />
             </Box>
           </Box>
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-            <Typography variant="h6" textAlign="center">
+            <Alert variant="outlined" severity="success">
               {props.message}
-            </Typography>
-            <Typography variant="body2" textAlign="center">
+            </Alert>
+            <Typography variant="body2" textAlign="center" sx={{marginTop: 1.5}}>
               Checkout &nbsp; <b>
                 <a onClick={() => props.handleClose(filterData("mine", userid, props.setsampledata, props.sampledata, props.combinedData), props.handleReviewClose())} style={{color: "purple", cursor: "pointer", "&:hover" : {color: "green"}}}>'My Resources'</a> 
                 </b> &nbsp; for resources you've added.

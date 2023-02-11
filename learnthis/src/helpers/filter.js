@@ -21,6 +21,7 @@ import axios from 'axios';
 
 // --------------------------------------------------------
 // Import Helper Functions
+import { getdata } from './helpers';
 // --------------------------------------------------------
 
 
@@ -35,55 +36,82 @@ export const FilterContext = createContext();
 
 export const FilterProvider = ({ children }) => {
 
+  // --------------------------------------------------------
 
+  const [filterError, setFilterError] = useState(false) 
+  const handlefilterError = () => {
+    setFilterError(false)
+  }
 
-  // Resource Related
-  const [minComplexity, setMinComplexity] = useState(null);
-  const [maxComplexity, setMaxComplexity] = useState(null);
-  const [minRating, setMinRating] = useState(null);
-  const [minLikes, setMinLikes] = useState(null);
-  const [hasCategory, setHasCategory] = useState([]);
+  const [parsedBsampledata, setparsedBsampledata] = useState([])
+  const [parsedIsampledata, setparsedIsampledata] = useState([])
+  const [parsedAsampledata, setparsedAsampledata] = useState([])
 
-  // User Profile Related
-  const [isMyResource, setIsMyResource] = useState(false);
-  const [isFavourite, setIsFavourites] = useState(false);
-  const [isReported, setIsReported] = useState(false);
-  const [isPlaylist, setIsPlaylist] = useState(false);
-  const [isLike, setIsLike] = useState(false);
-  const [isBookmark, setIsBookmark] = useState(false);
-  const [isRecommended, setIsRecommended] = useState(false)
+  const [pageB, setPageB] = useState(1)
+  const [pageI, setPageI] = useState(1)
+  const [pageA, setPageA] = useState(1)
 
-  const [minMyRating, setMinMyRating] = useState(null);
-  const [minMyComplexity, setMinMyComplexity] = useState(null);
-  const [maxMyComplexity, setMaxMyComplexity] = useState(null);
+// --------------------------------------------------------
 
-  const [sinceCreated, setSinceCreated] = useState(false)
-  const [isDeleted, setIsDeleted] = useState(false)
+const setData = (sampledata) => {
+  let tmpArray = []
+  let maxCount = Math.ceil(sampledata.length/5)
+  
+  for (let x = 0; x < maxCount; x++) {
 
-  // const filteredObject = {}
+    let tmpInner = []
+    if (x < maxCount -1) {
+      for (let y = ((x)*5); y < ((x)*5+5); y++) {
+        tmpInner.push(sampledata[y])
+      }
+    } else {
+      for (let y = ((x)*5); y < sampledata.length; y ++) {
+        tmpInner.push(sampledata[y])
+      }
+    }
+    tmpArray.push(tmpInner)
+  }
 
-  // const [myFilteredData, setMyFilteredData] = useState(filteredObject)
+  // console.log(tmpArray)
+  return tmpArray
+}
+
+const beginnerChange = (event, value) => {
+  event.stopPropagation()
+  setPageB(value)
+}
+
+const intermediateChange = (event, value) => {
+  setPageI(value)
+}
+
+const advancedChange = (event, value) => {
+  setPageA(value)
+}
+
+// --------------------------------------------------------
+
   const [myFilteredData, setMyFilteredData] = useState({resource: {}, user: {profile_id: null}})
   const [totalkeys, settotalkeys] = useState(1)
 
 // TODO -- change when backend data avaialble - less parameters needed
-  const filterData = (type, values, updateDatabase, tmpUserData, helperfunc) => {
-
+  const filterData = (type, values, updateDatabase, tmpUserData, helperfunc, icon = false, setLoading) => {
+  
     const reference = {
       resource : {
-        // "minimum_average_rating": 3,
+        "minimum_average_rating": 3,
         "minimum_likes": 8,
         "minimum_is_recommended": 5,
-        // "minimum_average_ranking" : 34,
-        // "maximum_average_ranking" : 66,
-        // "excluded_minimum_average_ranking" : 45,
-        // "excluded_maximum_average_ranking" : 56,
-        // "created_last_num_hours" : 36,
-        // "is_deleted" : false, 
-        // "categories" : ["Ruby", "JavaScript", "CSS"], 
-        // "created_by" : 1, 
+        "minimum_average_ranking" : 34,
+        "maximum_average_ranking" : 66,
+        "excluded_minimum_average_ranking" : 45,
+        "excluded_maximum_average_ranking" : 56,
+        "created_last_num_hours" : 36,
+        "is_deleted" : false, 
+        "categories" : ["Ruby", "JavaScript", "CSS"], 
+        "created_by" : 1, 
         "limit" : 35,
-        // "order_by" : "most_liked"
+        "order_by" : "most_liked"
       },
       user: {
         // "profile_id" : 5, 
@@ -139,7 +167,7 @@ export const FilterProvider = ({ children }) => {
             case 2 : {
               if (tmpObject["2"]) {
                 filteredObject.resource["order_by"] = "most_liked"
-              } else if (filteredObject.resource.hasOwnProperty('order_by')) {
+              } else if (filteredObject.resource['order_by'] === "most_liked") {
                 delete filteredObject.resource.order_by
               }
             }
@@ -161,54 +189,65 @@ export const FilterProvider = ({ children }) => {
             if (filteredObject.resource.hasOwnProperty("maximum_average_ranking")) {
               delete filteredObject.resource["maximum_average_ranking"]
             }
-            if (filteredObject.resource.hasOwnProperty("minimum_excluded_average_ranking")) {
-              delete filteredObject.resource["minimum_excluded_average_ranking"]
+            if (filteredObject.resource.hasOwnProperty("excluded_minimum_average_ranking")) {
+              delete filteredObject.resource["excluded_minimum_average_ranking"]
             }
-            if (filteredObject.resource.hasOwnProperty("maximum_excluded_average_ranking")) {
-              delete filteredObject.resource["maximum_excluded_average_ranking"]
+            if (filteredObject.resource.hasOwnProperty("excluded_maximum_average_ranking")) {
+              delete filteredObject.resource["excluded_maximum_average_ranking"]
             }
             break;
           }
           case 10: {
-            filteredObject.resource["minimum_average_ranking"] = 1
+            filteredObject.resource["minimum_average_ranking"] = 0
             filteredObject.resource["maximum_average_ranking"] = 33
-            filteredObject.resource["minimum_excluded_average_ranking"] = null
-            filteredObject.resource["maximum_excluded_average_ranking"] = null
+            filteredObject.resource["excluded_minimum_average_ranking"] = null
+            filteredObject.resource["excluded_maximum_average_ranking"] = null
             break;
           }
           case 11: {
             filteredObject.resource["minimum_average_ranking"] = 34
             filteredObject.resource["maximum_average_ranking"] = 67
-            filteredObject.resource["minimum_excluded_average_ranking"] = null
-            filteredObject.resource["maximum_excluded_average_ranking"] = null
+            filteredObject.resource["excluded_minimum_average_ranking"] = null
+            filteredObject.resource["excluded_maximum_average_ranking"] = null
             break;
           }
           case 12: {
             filteredObject.resource["minimum_average_ranking"] = 68
             filteredObject.resource["maximum_average_ranking"] = 100
-            filteredObject.resource["minimum_excluded_average_ranking"] = null
-            filteredObject.resource["maximum_excluded_average_ranking"] = null
+            filteredObject.resource["excluded_minimum_average_ranking"] = null
+            filteredObject.resource["excluded_maximum_average_ranking"] = null
             break;
           }
           case 21: {
-            filteredObject.resource["minimum_average_ranking"] = 1
+            filteredObject.resource["minimum_average_ranking"] = 0
             filteredObject.resource["maximum_average_ranking"] = 67
-            filteredObject.resource["minimum_excluded_average_ranking"] = null
-            filteredObject.resource["maximum_excluded_average_ranking"] = null
+            filteredObject.resource["excluded_minimum_average_ranking"] = null
+            filteredObject.resource["excluded_maximum_average_ranking"] = null
             break;
           }
           case 22: {
-            filteredObject.resource["minimum_excluded_average_ranking"] = 34
-            filteredObject.resource["maximum_excluded_average_ranking"] = 67
-            filteredObject.resource["minimum_average_ranking"] = 1
-            filteredObject.resource["maximum_average_ranking"] = 100
+            filteredObject.resource["excluded_minimum_average_ranking"] = 34
+            filteredObject.resource["excluded_maximum_average_ranking"] = 67
+            if (filteredObject.resource.hasOwnProperty("minimum_average_ranking")) {
+              delete filteredObject.resource["minimum_average_ranking"]
+            }
+            if (filteredObject.resource.hasOwnProperty("maximum_average_ranking")) {
+              delete filteredObject.resource["maximum_average_ranking"]
+            }
             break; 
           }
           case 23: {
             filteredObject.resource["minimum_average_ranking"] = 34
             filteredObject.resource["maximum_average_ranking"] = 100
-            filteredObject.resource["minimum_excluded_average_ranking"] = null
-            filteredObject.resource["maximum_excluded_average_ranking"] = null
+            filteredObject.resource["excluded_minimum_average_ranking"] = null
+            filteredObject.resource["excluded_maximum_average_ranking"] = null
+            break; 
+          }
+          case 33: {
+            filteredObject.resource["minimum_average_ranking"] = 0
+            filteredObject.resource["maximum_average_ranking"] = 100
+            filteredObject.resource["excluded_minimum_average_ranking"] = null
+            filteredObject.resource["excluded_maximum_average_ranking"] = null
             break; 
           }
 
@@ -239,6 +278,31 @@ export const FilterProvider = ({ children }) => {
         for (let i = 0; i < 17; i++) {
 
           switch(i) {
+            case 2 : {
+              if (values ===2) {
+                filteredObject.resource["minimum_likes"] = 0
+                filteredObject.resource["minimum_is_recommended"] = 0
+                filteredObject.resource["minimum_average_rating"] = 0
+                filteredObject.resource["limit"] = 35
+                filteredObject.resource["order_by"] = "lowest_ranked"
+              } else if (filteredObject.resource.hasOwnProperty('minimum_likes') ||  filteredObject.resource.hasOwnProperty('minimum_is_recommended') || filteredObject.resource.hasOwnProperty('limit')) {
+                if (filteredObject.resource.hasOwnProperty('minimum_likes')) {
+                  delete filteredObject.resource.minimum_likes
+                }
+                if (filteredObject.resource.hasOwnProperty('minimum_is_recommended')) {
+                  delete filteredObject.resource.minimum_is_recommended
+                }
+                if (filteredObject.resource.hasOwnProperty('limit')) {
+                  delete filteredObject.resource.limit
+                }
+                if (filteredObject.resource.hasOwnProperty('minimum_average_rating')) {
+                  delete filteredObject.resource.minimum_average_rating
+                }
+                if (filteredObject.resource["order_by"] === "lowest_ranked") {
+                  delete filteredObject.resource["order_by"]
+                }
+              }
+            }
             case 4 : {
               if (values === 4) {
                 filteredObject.resource["created_by"] = filteredObject.user.profile_id
@@ -272,6 +336,7 @@ export const FilterProvider = ({ children }) => {
                 filteredObject.user["minimum_myRating"] = 3
               } else if (filteredObject.user.hasOwnProperty('minimum_myRating')) {
                 delete filteredObject.user.minimum_myRating
+                
               }
             }
             case 16 : {
@@ -300,7 +365,7 @@ export const FilterProvider = ({ children }) => {
                 filteredObject.user["minimum_myRanking"] = 34
                 filteredObject.user["maximum_myRanking"] = 67
                 break
-              } 
+              }
             }
             case 13 : {
               if (values === 13) {
@@ -308,7 +373,6 @@ export const FilterProvider = ({ children }) => {
                 filteredObject.user["maximum_myRanking"] = 100
               } else if (filteredObject.user.hasOwnProperty('minimum_myRanking') ||  filteredObject.user.hasOwnProperty('maximum_myRanking')) {
                 if (filteredObject.user.hasOwnProperty('minimum_myRanking')) {
-                  delete filteredObject.user.minimum_myRanking
                 }
                 if (filteredObject.user.hasOwnProperty('maximum_myRanking')) {
                   delete filteredObject.user.maximum_myRanking
@@ -332,44 +396,59 @@ export const FilterProvider = ({ children }) => {
     setMyFilteredData(filteredObject)
     console.log(filteredObject)
 
+    if (icon) {
+      updateDatabase([])
+      setLoading(true)
+    }
     // TODO-- Link Server Code
-    axios.get(`http://localhost:8080/api/resources`)
+    return axios.post(`http://localhost:8080/api/resources/options`, filteredObject)
     .then(response => {
+      // console.log(response.data)
+      
+      updateDatabase([])
+      updateDatabase(helperfunc(response.data)) 
+      
+      setparsedBsampledata(setData(getdata(helperfunc(response.data), "beginner")))
+      setparsedIsampledata(setData(getdata(helperfunc(response.data), "intermediate")))
+      setparsedAsampledata(setData(getdata(helperfunc(response.data), "advanced")))
 
-      // updateDatabase(helperfunc(response.data, tmpUserData))
-      // setsampledata(combinedData(response.data, tmpUserData))
-      // console.log(combinedData(response.data, sampleuserdata))
-
-      // This should be the only line needed
-      // updateDatabase(helperfunc(response.data))
+      setTimeout(() => {
+        if (icon) {
+          setLoading(false)
+        }
+      }, 1000)
     })
     .catch(error => {
       console.error(error);
+      setFilterError(true)
+      setTimeout(() => {
+        setFilterError(false)
+      }, 1200)
     });
   }
 
   return (
     <FilterContext.Provider
       value={{
-        minComplexity,
-        maxComplexity,
-        minRating,
-        minLikes,
-        isMyResource,
-        isFavourite,
-        isReported,
-        isPlaylist,
-        isLike,
-        isBookmark,
-        isRecommended,
-        minMyRating,
-        minMyComplexity,
-        maxMyComplexity,
-        sinceCreated,
-        isDeleted,
         filterData,
         myFilteredData,
-        totalkeys
+        totalkeys,
+        parsedBsampledata,
+        parsedAsampledata,
+        parsedIsampledata,
+        setparsedAsampledata,
+        setparsedBsampledata,
+        setparsedIsampledata,
+        pageA,
+        pageB,
+        pageI,
+        setPageA,
+        setPageB,
+        setPageI,
+        setData,
+        filterError, 
+        setFilterError,
+        handlefilterError
       }}
     >
       {children}

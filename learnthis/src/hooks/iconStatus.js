@@ -13,7 +13,7 @@ export default function IconStatus(props) {
   const addFavourites = (filter) => {
     if (filter === 'blur(0px)') {
       favourite === "pink"? setFavourite('default') : setFavourite('pink')
-      iconData( [!favourite, like, lesson, playlist, bookmark, report, resourceKey, userid])
+      iconData( [!favourite, like, lesson, playlist, bookmark, report, resourceKey, userid], [setFavourite, setLike, setLesson, setPlaylist,setBookmark, setReport])
     }
     return
   }
@@ -116,6 +116,9 @@ export default function IconStatus(props) {
       filter === 'blur(3px)'? setFilter('blur(0px)') : setFilter('blur(3px)')
       iconData( [favourite, like, lesson, playlist, bookmark, !report, resourceKey, userid])
   }
+  const onLoadReport = () => {
+    report === 'red'? setFilter('blur(3px)') : setFilter('blur(0px)')
+  }
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
@@ -190,7 +193,23 @@ const addDeleteIcon = (tmp = false) => {
   }
 // -------------------------------------------------------------
 
+// -------------------------------------------------------------
+// Set All Icons
+const allIcon = (favourite, lesson, report, bookmark, playlist, like, star) => {
+  setFavourite(favourite)
+  setLesson(lesson)
+  onLoadReport(report)
+  setBookmark(bookmark)
+  setPlaylist(playlist)
+  setLike(like)
+  setStar(star)
+}
+// -------------------------------------------------------------
+
   return {
+    allIcon,
+    onLoadReport,
+
     resourceKey,
     setResourceKey,
 

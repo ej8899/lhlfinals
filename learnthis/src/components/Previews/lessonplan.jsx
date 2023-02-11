@@ -70,6 +70,7 @@ import { ShareModal } from "../Modal/share";
 import { StatusModal } from "../NewResource/status";
 import { SharedModal } from "../Modal/shared";
 import { ViewDetailModal } from "../ItemDetail/view";
+import { ErrorModal } from "../NewResource/error";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -83,14 +84,40 @@ import IconStatus from '../../hooks/iconStatus'
 //---------------------------------------------------------
 // Import user authentication
 import { AuthContext } from '../../hooks/handleUsers.js';
+
+// Import Handle Filter State
+import { FilterContext, FilterProvider } from "../../helpers/filter";
 //---------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
 
 
 // TODO - any benefit to removing react-youtube and rolling our own variant?
 export const LessonItem = (props) => {
 
   // window.location.reload(true);
+
+  const {
+    filterData,
+    myFilteredData,
+    totalkeys,
+    parsedBsampledata,
+    parsedAsampledata,
+    parsedIsampledata,
+    setparsedAsampledata,
+    setparsedBsampledata,
+    setparsedIsampledata,
+    pageA,
+    pageB,
+    pageI,
+    setPageA,
+    setPageB,
+    setPageI,
+    setData
+  } = useContext(FilterContext)
 
 // --------------------------------------------------------
   // Import Hooks
@@ -106,6 +133,8 @@ export const LessonItem = (props) => {
     handleOpenDeleting,
     handleDeletedClose,
     handleDeletedOpen,
+    openErrorDeleting, 
+    setOpenErrorDeleting,
 
     handleEditedClose,
     openEdited,
@@ -222,6 +251,8 @@ export const LessonItem = (props) => {
 // --------------------------------------------------------
 // Import Icon Status
   const {
+    onLoadReport,
+
     resourceKey,
     setResourceKey,
 
@@ -294,27 +325,26 @@ export const LessonItem = (props) => {
 // Use effect - initial load from database
   useEffect(() => {
     setOpen(false)
-
     setVideoURL(props.videoURL)
-    setTitle(truncateText(props.title, 38))
+    setTitle(props.title)
     setDescriptionExpanded(props.description)
     setThumbnail(props.thumbnail);
     addNewIcon(props.created_at)
-
     addSetStage(props.stage)
     setLikes(props.likes)
-    
     setDomain(extractDomain(props.videoURL))
     
     if (props.category.length === 0) {
-      setCategory(`Category: TBD`)
+      setDisplayCategory(`Category: TBD`)
+      setCategory(props.category)
     } else {
       let displayCategories = "Category: "
       props.category.forEach((element, index) => {
         index === 0 ? displayCategories += element : displayCategories += `, ${element}`
       });
-      setCategoryExpanded(displayCategories)
-      setCategory(truncateText(displayCategories, 24))
+      setDisplayCategoryExpanded(displayCategories)
+      setDisplayCategory(truncateText(displayCategories, 28))
+      setCategory(props.category)
     }
 
     setMyCategory(props.myCategory)
@@ -332,6 +362,13 @@ export const LessonItem = (props) => {
 
     setResourceKey(props.id)
 
+    setFavourite(props.favourite)
+    setLike(props.like)
+    setBookmark(props.bookmark)
+    setPlaylist(props.playlist)
+    onLoadReport(props.report)
+    setLesson(props.lesson)
+
   }, [videoId]);
 // --------------------------------------------------------
 
@@ -345,15 +382,30 @@ export const LessonItem = (props) => {
     const deleteURLResource = props.sampledata.filter(
       resource => resource.id !== props.id
     )
+    setparsedBsampledata([])
+    setparsedIsampledata([])
+    setparsedAsampledata([])
   // TODO -- setting the state is included in the timeout until database update happens with backendcode
-    setTimeout(() => {
-      setOpenDeleting(false)
-      props.setOpenDeleted(true)
-      props.setsampledata(deleteURLResource);
-      props.setsampleBdata(getdata(deleteURLResource, "beginner"))
-      props.setsampleIdata(getdata(deleteURLResource, "intermediate"))
-      props.setsampleAdata(getdata(deleteURLResource, "advanced"))
-    }, 2000)
+  return axios.delete(`http://localhost:8080/api/resources/${props.id}`)
+  .then(response => {
+    // console.log(JSON.parse(JSON.stringify(response.data)))
+      setTimeout(() => {
+        setOpenDeleting(false)
+        props.setOpenDeleted(true)
+        props.setsampledata(deleteURLResource);
+
+        setparsedBsampledata(setData(getdata(deleteURLResource, "beginner")))
+        setparsedIsampledata(setData(getdata(deleteURLResource, "intermediate")))
+        setparsedAsampledata(setData(getdata(deleteURLResource, "advanced")))
+      }, 2000)
+    })
+    .catch(error => {
+      console.error(error);
+      setTimeout(() => {
+        setOpenDeleting(false)
+        setOpenErrorDeleting(true)
+      }, 1200)
+    });
   }
 // --------------------------------------------------------
 
@@ -371,32 +423,6 @@ export const LessonItem = (props) => {
       const updateURLResource = []
       props.sampledata.forEach(resource => {
       if (resource.id === props.id) {
-        // updateURLResource.push({
-        //   resource: {
-        //     "id" : props.id,
-        //     "profile_id": props.profile_id,
-  
-        //     "resource_id" : props.resource_id,
-        //     "url": videoURL,
-        //     "title": tmptitle,
-        //     "description": tmpdescriptionExpanded,
-        //     "thumbnail": thumbnail,
-        //   },
-        //   user: {
-        //     "profile_id": userid,
-        //     "myComments_public" : tmpmyComments,
-        //     "myComments_private" : '',
-        //     "myRating": tmpstar,
-        //     "myRanking": tmpmyStage,
-        //     "myCategories": tmpmyCategory,
-        //     "is_liked" : like === "default" ? false : true,
-        //     "is_favourite" : favourite === "default" ? false : true,
-        //     "is_bookmarked" : bookmark === "default" ? false : true, 
-        //     "is_playlist" : playlist === "default" ? false : true,
-        //     "is_reported" : report === "default" ? false : true,
-        //     "is_recommended" : lesson === "default" ? false : true
-        //   }
-        // })
 
         updateURLResource.push({
           "id" : props.id,
@@ -428,8 +454,11 @@ export const LessonItem = (props) => {
       setTimeout(() => {
         setOpenEditing(false)
         setOpenEdited(true)
-        props.setsampledata(updateURLResource);
-        console.log(updateURLResource)
+        // props.setsampledata(updateURLResource);
+        setparsedBsampledata(setData(getdata(updateURLResource, "beginner")))
+        setparsedIsampledata(setData(getdata(updateURLResource, "intermediate")))
+        setparsedAsampledata(setData(getdata(updateURLResource, "advanced")))
+
         setErrorBlank(true)
 
         setMyCategory(tmpmyCategory)
@@ -439,7 +468,6 @@ export const LessonItem = (props) => {
 
         setTitle(tmptitle)
         setDescriptionExpanded(tmpdescriptionExpanded)
-
         tmpReset()
       }, 2000)
     }
@@ -454,6 +482,8 @@ export const LessonItem = (props) => {
   // Resource Info
   const [tmptitle, tmpsetTitle] = useState(title);
   const [tmpdescriptionExpanded, tmpsetDescriptionExpanded] = useState(descriptionExpanded);
+  const [displayCategory, setDisplayCategory] = useState("");
+  const [displayCategoryExpanded, setDisplayCategoryExpanded] = useState("")
 
   // User info
   const [tmpmyComments, tmpsetMyComments] = useState(myComments);
@@ -489,7 +519,7 @@ export const LessonItem = (props) => {
   }
 // --------------------------------------------------------
 
-  const skeletonTimer = randomNumber(100,3000);
+  const skeletonTimer = randomNumber(100,1500);
   const { isAuth, user, userid, logout } = useContext(AuthContext);
 
 
@@ -510,7 +540,7 @@ export const LessonItem = (props) => {
                 component="img"
                 height="140"
                 image={thumbnail}
-                alt={title}
+                src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
                 width="345"
               />
             </Fade>
@@ -536,9 +566,9 @@ export const LessonItem = (props) => {
                   style={{ marginBottom: 6 }}
                 />) : (
                 <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-                  <Tooltip title={categoryExpanded}>
+                  <Tooltip title={displayCategoryExpanded}>
                     <Typography fontSize="13px">
-                      {category}
+                      {displayCategory}
                     </Typography>
                   </Tooltip>
                 </Fade>
@@ -740,6 +770,13 @@ export const LessonItem = (props) => {
             open={openEditing} message={"Updating Resource"}
           />
         </div>
+        <ErrorModal 
+            open={openErrorDeleting} 
+            message={"An error was encountered deleting your resource."} submessage={"Would you like to Try Again?"} 
+            setNewResource={setOpenDelete} setNewURL={setOpenErrorDeleting}
+            handleErrorFetchingNewResourceClose={() => setOpenErrorDeleting(false)}
+            handleErrorFetchingNewResourceAbort={() =>setOpenErrorDeleting(false)}
+          />
         <div>
           <SharedModal
             open={emailSent} setEmailSent={setEmailSent} 

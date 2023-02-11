@@ -49,6 +49,11 @@ import { CloseModal } from '../Icons/close';
 import { StarStaleRating } from '../Icons/stars';
 // --------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -129,7 +134,7 @@ export const NewResourceModal = (props) => {
                     height="360"
                     width="635"
                     image={props.thumbnail}
-                    alt={props.title}
+                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
                     sx={{marginBottom : 2}}
                   />
                   <Typography variant='body2' sx={{marginBottom : "2"}}> 

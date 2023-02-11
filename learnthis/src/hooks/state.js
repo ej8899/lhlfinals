@@ -4,8 +4,6 @@ import zlog from "../helpers/zlog";
 
 export default function StateStatus() {
 
-  const [viewTitle, setViewTitle] = useState('');
-
 // -------------------------------------------------------------
 // State for video data
   const [title, setTitle] = useState('');
@@ -109,6 +107,7 @@ const handleEditedClose = () => {
 // handle open and close of item delete detail modal
 const [openDelete, setOpenDelete] = useState(false);
 const [openDeleting, setOpenDeleting] = useState(false)
+const [openErrorDeleting, setOpenErrorDeleting] = useState(false)
 
 
 const handleOpenDelete = () => {
@@ -193,7 +192,7 @@ const addNewIcon = (created_at) => {
   // console.log(diffTime + " milliseconds");
   // console.log(diffDays + " days");
 
-  if (diffDays <= 3) {
+  if (diffDays <= 36/24) {
     setNewIcon("flex") 
   }
 }
@@ -265,6 +264,9 @@ const [errorSavingNewResource, setSavingErrorNewResource] = useState(false)
   //Status Screen for error fecthing youtube url
 const [errorFetchingNewResource, setFetchingErrorNewResource] = useState(false)
 
+  //Status Screen for error fecthing non-youtube url
+  const [errorFetchingNewResource1, setFetchingErrorNewResource1] = useState(false)
+
 const handleAddNewResourceClose =() => {
   setAddNewResource(false);
 }
@@ -298,12 +300,17 @@ const handleErrorFetchingNewResourceClose = () => {
   setFetchingErrorNewResource(false);
 };
 
+const handleErrorFetchingNewResourceClose1 = () => {
+  setFetchingErrorNewResource1(false);
+};
+
+const handleErrorSavingNewResourceClose = () => {
+  setSavingErrorNewResource(false);
+};
+
 // -------------------------------------------------------------
 
   return {
-    viewTitle,
-    setViewTitle,
-
     title,
     setTitle,
     thumbnail,
@@ -367,7 +374,8 @@ const handleErrorFetchingNewResourceClose = () => {
     setOpenDeleting,
     handleDeletingClose,
     handleOpenDeleting,
-
+    openErrorDeleting, 
+    setOpenErrorDeleting,
 
     myComments,
     setMyComments,
@@ -425,6 +433,10 @@ const handleErrorFetchingNewResourceClose = () => {
     handleAddNewResourceAbort,
     errorFetchingNewResource, 
     setFetchingErrorNewResource,
-    handleErrorFetchingNewResourceClose
+    handleErrorFetchingNewResourceClose,
+    errorFetchingNewResource1, 
+    setFetchingErrorNewResource1,
+    handleErrorFetchingNewResourceClose1,
+    handleErrorSavingNewResourceClose
   };
 };

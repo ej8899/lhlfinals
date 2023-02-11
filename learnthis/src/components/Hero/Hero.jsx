@@ -31,18 +31,6 @@ const heroContent =  {
     border: "0px solid red"
   };
 
-//   <Chip
-//   key={index}
-//   label={chip}
-//   color="success"
-//   variant={filled[index] ? "default" : "outlined"}
-//   onClick={()=> {handleClick(index)}}
-//   sx={{ textTransform: "none",
-//           fontWeight: "normal",
-//           borderRadius: "5px"
-//       }}
-// />
-
 function DoDivider(props) {
   if(props.type === 'spacer') {
   return (
@@ -51,25 +39,24 @@ function DoDivider(props) {
   }
   else return ( 
     <Chip
-            key={props.index}
-            label={props.type}
-            color="success"
-            variant={props.variant}
-            onClick={props.onClick}
-            sx={{ textTransform: "none",
-                    fontWeight: "normal",
-                    borderRadius: "5px",
-                }}
-            disabled={props.disabled}
-          />
+      key={props.index}
+      label={props.type}
+      color="success"
+      variant={props.variant}
+      onClick={props.onClick}
+      sx={{ textTransform: "none",
+              fontWeight: "normal",
+              borderRadius: "5px",
+          }}
+      disabled={props.disabled}
+    />
   );
 }
 
 export default function Hero(props) {
 
 
-  const [filled, setFilled] = React.useState(false);
-  const [chipfilled, setChipFilled] = React.useState(false);
+
   const { filterData, totalkeys } = useContext(FilterContext);
   const { isAuth, user, userid, logout } = useContext(AuthContext);
   const {chipReset} = useContext(ChipContext)
@@ -78,14 +65,14 @@ export default function Hero(props) {
     zlog('info','rating chip:',index);
 
     if (index === 200 ) {
-      setFilled(false)
+      props.setFilled(false)
       props.setClearFilter(true)
       filterData("clear", userid, props.setsampledata, props.sampledata, props.combinedData)
-      chipReset(props.catList, setChipFilled)
+      chipReset(props.catList, props.setChipFilled)
     } else {
-      setFilled({...filled, [index]: !filled[index]});
+      props.setFilled({...props.filled, [index]: !props.filled[index]});
       // console.log({...filled, [index]: !filled[index]})
-      filterData("complexity", {...filled, [index]: !filled[index]}, props.setsampledata, props.sampledata, props.combinedData)
+      filterData("complexity", {...props.filled, [index]: !props.filled[index]}, props.setsampledata, props.sampledata, props.combinedData)
       props.setClearFilter(false)
     }
   };
@@ -115,7 +102,7 @@ export default function Hero(props) {
 
           <ChipsArray catList={props.catList}
             setsampledata={props.setsampledata} sampledata={props.sampledata}
-            combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} filled={chipfilled} setFilled={setChipFilled}
+            combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} filled={props.chipfilled} setFilled={props.setChipFilled}
           ></ChipsArray>
           <Grid container spacing={3}>
         <Grid item xs={6} sx={{my: 1}}>
@@ -150,8 +137,10 @@ export default function Hero(props) {
             (<div key={index}><DoDivider type={chip} key={index} label={chip} variant="outlined" disabled={true}
             ></DoDivider>
             </div>
-            ) : (        
-            <div key={index}><DoDivider type={chip} key={index} label={chip} color="success" variant={filled[index] ? "default" : "outlined"}
+            ) : (chip === "Rated 3+" && props.lessonTrue) ? 
+            (<div key={index}></div>
+            ):(       
+            <div key={index}><DoDivider type={chip} key={index} label={chip} color="success" variant={props.filled[index] ? "default" : "outlined"}
             onClick={()=> {handleClick(index)}}
             ></DoDivider>
             </div>)
@@ -161,14 +150,25 @@ export default function Hero(props) {
         </Grid>
         <Grid item xs={6} sx={{my: 1}}>
           <div >
-          <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{alignItems: "flex-end", marginRight : "3em"}}>
-          {chipDataComplexity.map((chip, index) => (
-            <div key={index+10}><DoDivider type={chip} key={index+10} label={chip} color="success" variant={filled[index+10] ? "default" : "outlined"}
-            onClick={()=> {handleClick(index+10)}}
-            ></DoDivider>
-            </div>
-          ))}
-          </Stack>
+          {!props.lessonTrue && 
+            <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{alignItems: "flex-end", marginRight : "3em"}}>
+            {chipDataComplexity.map((chip, index) => (
+              <div key={index+10}><DoDivider type={chip} key={index+10} label={chip} color="success" variant={props.filled[index+10] ? "default" : "outlined"}
+              onClick={()=> {handleClick(index+10)}}
+              ></DoDivider>
+              </div>
+            ))}
+            </Stack>
+          }
+          {props.lessonTrue && 
+            <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{alignItems: "flex-end", marginRight : "3em"}}>
+            {chipDataComplexity.map((chip, index) => (
+              <div key={index+10}><DoDivider type={chip} key={index+10} label={chip} variant="outlined" disabled={true}
+              ></DoDivider>
+              </div>
+            ))}
+            </Stack>
+          }
           </div>
         </Grid>
       </Grid>

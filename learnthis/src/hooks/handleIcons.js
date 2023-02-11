@@ -47,7 +47,6 @@ export const IconProvider = ({ children }) => {
   }
 
   const [iconState, setIconState] = useState(iconObject)
-  
 
 // TODO -- change when backend data avaialble - less parameters needed
   const iconData = (values) => {
@@ -142,7 +141,7 @@ export const IconProvider = ({ children }) => {
       }
     }
 
-    console.log(iconStatusObject)
+    // console.log(iconStatusObject)
     setIconState(iconStatusObject)
 
     // TODO -- update with API AXIOS GET ROUTE && Confirm nothing needed in the response
@@ -159,7 +158,7 @@ export const IconProvider = ({ children }) => {
     <IconContext.Provider
       value={{
         iconState,
-        iconData,
+        iconData
       }}
     >
       {children}

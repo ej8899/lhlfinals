@@ -35,6 +35,11 @@ import DiscreteSliderMarks from '../ItemDetail/slider';
 import { isYoutubeUrl, getYoutubeVideoId, extractDomain } from '../../helpers/helpers';
 // --------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
+
 // --------------------------------------------------------
 // Import Icons Functions
 import { FavouriteStaleStats} from '../Icons/favourite.jsx'
@@ -129,7 +134,7 @@ export const EditResourceModal = (props) => {
                     height="360"
                     width="635"
                     image={props.thumbnail}
-                    alt={props.title}
+                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
                     sx={{marginBottom : 2}}
                   />
                   <Typography variant='body2' sx={{marginBottom : "2"}}> 

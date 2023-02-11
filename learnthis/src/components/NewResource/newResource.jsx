@@ -86,6 +86,7 @@ export const AddNewResource= (props) => {
               fullWidth 
               label="New Resource URL" 
               id="fullWidth" 
+              autoFocus
               value={props.newURL} 
               onChange={(event) => props.setNewURL(event.target.value)}
               sx={{marginBottom: "1.5em"}}
@@ -95,10 +96,11 @@ export const AddNewResource= (props) => {
             <TextField
               error
               fullWidth
+              autoFocus
               id="outlined-error-helper-text"
               label="New Resource URL" 
               value={props.newURL} 
-              onChange={(event) => props.setNewURL(event.target.value)}
+              onChange={(event) => (props.setNewURL(event.target.value), props.setErrorBlank(false))}
               helperText="URL cannot be blank."
             />
           }

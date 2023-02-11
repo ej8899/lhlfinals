@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -64,9 +65,9 @@ export const DeletedModal= (props) => {
     >
       <Box sx={style}>
         <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" sx={{gap: 3}}>
-          <Typography variant="h6" textAlign="center">
+          <Alert variant="outlined" severity="success">
             {props.message}
-          </Typography>
+          </Alert>
           <CloseModal handleClose={props.handleClose}/>
         </Box>
 

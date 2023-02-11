@@ -33,11 +33,13 @@ import {  modalSignUp,
 // userauth
 import { AuthContext } from '../../hooks/handleUsers.js';
 import { FilterContext } from "../../helpers/filter";
+import { ChipContext } from '../Hero/ChipsList';
+import { FilterModal } from "../Previews/filtererror";
 
 import AboutDialog from "../Modal/about.jsx"
 import { useEffect } from 'react';
 import { ClassNames } from '@emotion/react';
-
+import HouseIcon from '@mui/icons-material/House';
 
 //
 // profile modal
@@ -183,6 +185,8 @@ export default function PrimarySearchAppBar(props) {
 
   // userauth
   const { isAuth, user, userid, logout } = useContext(AuthContext);
+  const { filterData, totalkeys, filterError } = useContext(FilterContext);
+  const {chipReset} = useContext(ChipContext)
   // zlog("debug","user:",user)
   // zlog("debug","userid:",userid)
   // zlog("debug","isAuth:",isAuth)
@@ -198,7 +202,7 @@ export default function PrimarySearchAppBar(props) {
 
     switch (modal) {
       case 'logout':
-        logout(props.setsampledata, props.sampledata, props.combinedData, props.clearFilter, props.setClearFilter, props.setLessonTrue, setSelectedIndex);
+        logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex, reset, props.setLoading);
         break;
       case 'profile':
         setTitle("Profile...")
@@ -216,7 +220,7 @@ export default function PrimarySearchAppBar(props) {
   function handlelogout() {
     setAnchorEl(null);
     handleMenuClose();
-    logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex);
+    logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex, reset, props.setLoading);
   }
 
   // SIGN IN
@@ -287,7 +291,9 @@ const anchor = "left"
 
 const toggleDrawer = (anchor, open) => (event) => {
   if (props.clearFilter) {
+    if(!props.lessonTrue) { 
     setSelectedIndex(null)
+    }
     props.setClearFilter(false)
   }
 
@@ -306,6 +312,14 @@ const toggleDrawer = (anchor, open) => (event) => {
   setState({ ...state, [anchor]: open });
 };
 
+const reset = () =>{
+  props.setLessonTrue(false)
+  setSelectedIndex(false)
+  filterData("clear", userid, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading)
+  chipReset(props.catList, props.setChipFilled)
+  props.setFilled(false)
+}
+
 // -----------------------------------------------------
 
 
@@ -318,14 +332,14 @@ const toggleDrawer = (anchor, open) => (event) => {
       <Login 
         open={loginopen} close={handleLoginClose}
         setsampledata={props.setsampledata} sampledata={props.sampledata}
-        combinedData={props.combinedData}
-        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter}
+        combinedData={props.combinedData} setSOpen={setSOpen}
+        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} setLoading={props.setLoading} 
       ></Login>
       <SignUp 
         open={signupopen} close={handleSignUpClose}
         setsampledata={props.setsampledata} sampledata={props.sampledata}
-        combinedData={props.combinedData}
-        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter}
+        combinedData={props.combinedData} setLOpen={setLOpen}
+        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} setLoading={props.setLoading}
       ></SignUp>
       <AppBar position="static">
         <Toolbar>
@@ -352,14 +366,13 @@ const toggleDrawer = (anchor, open) => (event) => {
             <MenuIcon />
           </IconButton>}
           
-          <Typography
+          <IconButton
             variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            sx={{ textAlign:"center" }}
+            onClick={() => reset()}
           >
-            LearnThis!
-          </Typography>
+            <HouseIcon/>&nbsp;&nbsp;LearnThis!
+          </IconButton>
 
 
           <form onSubmit={handleSubmit}>
@@ -442,7 +455,11 @@ const toggleDrawer = (anchor, open) => (event) => {
       <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
       <PersistentDrawerLeft
         state={state} setState={setState} toggleDrawer={toggleDrawer} anchor={anchor}
-        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} setLessonTrue={props.setLessonTrue}
+        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} setLessonTrue={props.setLessonTrue} setLoading={props.setLoading} reset={reset}
+      />
+      <FilterModal 
+        open={filterError} 
+        message={"There was an error retrieving resources."}
       />
     </Box>
   );

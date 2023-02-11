@@ -13,13 +13,16 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Dialog from '@mui/material/Dialog';
 import axios from "axios";
-
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 
 // userauth
 import { useContext } from 'react';
 import { AuthContext } from '../hooks/handleUsers.js';
 import { login,logout } from '../hooks/handleUsers.js';
+import IconStatus from '../hooks/iconStatus'
 
 import zlog from '../helpers/zlog.js';
 
@@ -52,9 +55,17 @@ function Copyright(props) {
 // TODO - sign UP link needs to work
 
 const Login=(props)=>{
+  const {allIcon} = IconStatus;
   const [emaildata, setEmailData] = React.useState(localStorage.getItem("defaultemail") || "");
+  const [passworddata, setPasswordData] = React.useState("");
   const handleEmailChange = (event) => {
     setEmailData(event.target.value);
+    setErrorLogin(false)
+  };
+
+  const handlePasswordChange = (event) => {
+    setPasswordData(event.target.value);
+    setErrorLogin(false)
   };
 
   // rememberMe
@@ -75,10 +86,11 @@ const Login=(props)=>{
       storeduser = localStorage.getItem("defaultemail");
     }
     setRememberMeEmail(storeduser)
+    setEmailData(localStorage.getItem("defaultemail") || "")
   }, []);
 
     // userauth
-    const { login } = useContext(AuthContext);
+    const { login, errorBlankEmail, setErrorBlankEmail, errorBlankPassword, setErrorBlankPassword, errorLogin, setErrorLogin } = useContext(AuthContext);
     // zlog('info',"authLOGIN:",login)
 
     const handleSubmit = (event) => {
@@ -96,13 +108,21 @@ const Login=(props)=>{
         localStorage.removeItem("defaultemail");
       }
 
-      login({"email": email, "password": password}, props.close, props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter)
+      login({"email": email, "password": password}, close, props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLoading)
     };
 
+    const close = () => {
+      props.close()
+      setErrorBlankEmail(false)
+      setErrorBlankPassword(false)
+      setPasswordData("")
+      setErrorLogin(false)
+      setEmailData(localStorage.getItem("defaultemail") || "")
+    }
 
   return(
     <BootstrapDialog
-        onClose={props.close}
+        onClose={() => close()}
         aria-labelledby="customized-dialog-title"
         open={props.open}
       >
@@ -128,28 +148,77 @@ const Login=(props)=>{
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={handleEmailChange}
-              value={emaildata}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
+            {!errorBlankEmail &&
+              <TextField
+                margin="normal"
+                autoFocus
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                onChange={handleEmailChange}
+                value={emaildata}
+                sx={{marginBottom: "2em"}}
+              />
+            }
+            {errorBlankEmail &&
+              <TextField
+                margin="normal"
+                required
+                error
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                onChange={(event) => (setEmailData(event.target.value), setErrorBlankEmail(false), setErrorLogin(false))}
+                value={emaildata}
+                helperText="Email Cannot Be Blank."
+              />
+            }
+            {!errorBlankPassword &&
+              <TextField
+                margin="normal"
+                autoFocus
+                required
+                fullWidth
+                label="Password"
+                type="password"
+                id="password"
+                name="password"
+                onChange={handlePasswordChange}
+                value={passworddata}
+                autoComplete="current-password"
+                sx={{marginBottom: "2em"}}
+              />
+            }
+            {errorBlankPassword &&
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                error
+                label="Password"
+                type="password"
+                id="password"
+                value={passworddata}
+                name="password"
+                autoComplete="current-password"
+                onChange={(event) => (handlePasswordChange(event), setErrorBlankPassword(false), setErrorLogin(false))}
+                helperText="Password Cannot Be Blank"
+              />
+            }
+            {errorLogin &&
+              <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert severity="error" variant="filled">
+                  <AlertTitle>Login Failed</AlertTitle>
+                  The email and/or password entered is not recognized. 
+                  Please try again or reset your password.
+                </Alert>
+              </Stack>
+            }
             <FormControlLabel
               control={<Checkbox checked={rememberMe} value="remember" color="primary"/>}
               label="Remember me"
@@ -170,7 +239,7 @@ const Login=(props)=>{
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link sx={{"&:hover" : {cursor : "pointer"}}} variant="body2" onClick={() => close(props.setSOpen(true))}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

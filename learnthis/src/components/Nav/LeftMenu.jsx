@@ -86,13 +86,18 @@ export default function PersistentDrawerLeft(props) {
       props.setSelectedIndex(false)
       props.handleNewResourceOpen()
       props.setLessonTrue(false)
+      filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData)
     } else if (index === 2) {
-      props.setLessonTrue(true)
+      props.reset()
+      setTimeout(() => {
+        filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading)
+        props.setLessonTrue(true)
+      }, 100)  
     } else {
       props.setLessonTrue(false)
+      filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData)
     }
 
-    filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData)
   };
   
   // TODO - this needs a better system - use main list, but when divider, use something like divider|texthere & split it out

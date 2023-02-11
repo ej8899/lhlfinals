@@ -44,6 +44,11 @@ import zlog from "../../helpers/zlog";
 import { randomNumber, randomColor, truncateText, colorGenerator, extractDomain } from "../../helpers/helpers";
 // --------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
+
 // --------------------------------------------------------
 // Import Icons Functions
 import { FavouriteStats } from '../Icons/favourite.jsx'
@@ -70,6 +75,7 @@ import { ShareModal } from "../Modal/share";
 import { StatusModal } from "../NewResource/status";
 import { SharedModal } from "../Modal/shared";
 import { ViewDetailModal } from "../ItemDetail/view";
+import { ErrorModal } from "../NewResource/error";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -106,6 +112,8 @@ export const PreviewItem = (props) => {
     handleOpenDeleting,
     handleDeletedClose,
     handleDeletedOpen,
+    openErrorDeleting, 
+    setOpenErrorDeleting,
 
     handleEditedClose,
     openEdited,
@@ -222,6 +230,9 @@ export const PreviewItem = (props) => {
 // --------------------------------------------------------
 // Import Icon Status
   const {
+    allIcon,
+    onLoadReport,
+
     resourceKey,
     setResourceKey,
 
@@ -294,27 +305,26 @@ export const PreviewItem = (props) => {
 // Use effect - initial load from database
   useEffect(() => {
     setOpen(false)
-
     setVideoURL(props.videoURL)
     setTitle(props.title)
     setDescriptionExpanded(props.description)
     setThumbnail(props.thumbnail);
     addNewIcon(props.created_at)
-
     addSetStage(props.stage)
     setLikes(props.likes)
-    
     setDomain(extractDomain(props.videoURL))
     
     if (props.category.length === 0) {
-      setCategory(`Category: TBD`)
+      setDisplayCategory(`Category: TBD`)
+      setCategory(props.category)
     } else {
       let displayCategories = "Category: "
       props.category.forEach((element, index) => {
         index === 0 ? displayCategories += element : displayCategories += `, ${element}`
       });
-      setCategoryExpanded(displayCategories)
-      setCategory(truncateText(displayCategories, 28))
+      setDisplayCategoryExpanded(displayCategories)
+      setDisplayCategory(truncateText(displayCategories, 28))
+      setCategory(props.category)
     }
 
     setMyCategory(props.myCategory)
@@ -332,6 +342,12 @@ export const PreviewItem = (props) => {
 
     setResourceKey(props.id)
 
+    setFavourite(props.favourite)
+    setLike(props.like)
+    setBookmark(props.bookmark)
+    setPlaylist(props.playlist)
+    onLoadReport(props.report)
+    setLesson(props.lesson)
   }, [videoId]);
 // --------------------------------------------------------
 
@@ -346,11 +362,23 @@ export const PreviewItem = (props) => {
       resource => resource.id !== props.id
     )
   // TODO -- setting the state is included in the timeout until database update happens with backendcode
-    setTimeout(() => {
-      setOpenDeleting(false)
-      props.setOpenDeleted(true)
-      props.setsampledata(deleteURLResource);
-    }, 2000)
+    return axios.delete(`http://localhost:8080/api/resources/${props.id}`)
+    .then(response => {
+      // console.log(JSON.parse(JSON.stringify(response.data)))
+
+      setTimeout(() => {
+        setOpenDeleting(false)
+        props.setOpenDeleted(true)
+        props.setsampledata(deleteURLResource);
+      }, 2000)
+    })
+    .catch(error => {
+      console.error(error);
+      setTimeout(() => {
+        setOpenDeleting(false)
+        setOpenErrorDeleting(true)
+      }, 1200)
+    });
   }
 // --------------------------------------------------------
 
@@ -426,7 +454,6 @@ export const PreviewItem = (props) => {
         setOpenEditing(false)
         setOpenEdited(true)
         props.setsampledata(updateURLResource);
-        console.log(updateURLResource)
         setErrorBlank(true)
 
         setMyCategory(tmpmyCategory)
@@ -451,6 +478,8 @@ export const PreviewItem = (props) => {
   // Resource Info
   const [tmptitle, tmpsetTitle] = useState(title);
   const [tmpdescriptionExpanded, tmpsetDescriptionExpanded] = useState(descriptionExpanded);
+  const [displayCategory, setDisplayCategory] = useState("");
+  const [displayCategoryExpanded, setDisplayCategoryExpanded] = useState("")
 
   // User info
   const [tmpmyComments, tmpsetMyComments] = useState(myComments);
@@ -486,28 +515,28 @@ export const PreviewItem = (props) => {
   }
 // --------------------------------------------------------
 
-  const skeletonTimer = randomNumber(100,3000);
+  const skeletonTimer = randomNumber(100,1500);
   const { isAuth, user, userid, logout } = useContext(AuthContext);
 
 
   return (
-    <div style={{marginTop:0,paddingTop:0}}>
-      <Box sx={{pt: 0,mt:0}} display="flex" flexDirection="row" justifyContent="flex-end" overflow="visible" zIndex="1000" >
+    <div>
+      <Box display="flex" flexDirection="row" justifyContent="flex-end" overflow="visible" zIndex="1000" >
         {props.nowloading ? null : (
           <NewBadge display={newIcon} nowLoading={props.nowLoading}/>
         )}
       </Box>
-      <Card sx={{ MaxWidth: 345, pt: 0 }} >
-        <CardActionArea onClick={() => (handleReviewOpen(filter), setExpanded(false))} sx={{ mt:0,filter: filter }}>
+      <Card sx={{ MaxWidth: 345 }} >
+        <CardActionArea onClick={() => (handleReviewOpen(filter), setExpanded(false))} sx={{ filter: filter }}>
           {props.nowloading ? (
-            <Skeleton sx={{ mt:0,height: 140 }} animation="wave" variant="rectangular" />
+            <Skeleton sx={{ height: 140 }} animation="wave" variant="rectangular" />
           ) : (
             <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
               <CardMedia
                 component="img"
                 height="140"
                 image={thumbnail}
-                alt={title}
+                src={ 'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available '}
                 width="345"
               />
             </Fade>
@@ -533,9 +562,9 @@ export const PreviewItem = (props) => {
                   style={{ marginBottom: 6 }}
                 />) : (
                 <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-                  <Tooltip title={categoryExpanded}>
+                  <Tooltip title={displayCategoryExpanded}>
                     <Typography>
-                      {category}
+                      {displayCategory}
                     </Typography>
                   </Tooltip>
                 </Fade>
@@ -560,7 +589,7 @@ export const PreviewItem = (props) => {
             </React.Fragment>
           ) : (
             <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-              <CardContent sx={{pt:0,mt:0}}>
+              <CardContent>
                 <Box 
                   display="flex"
                   flexDirection="column"
@@ -601,15 +630,15 @@ export const PreviewItem = (props) => {
           <DetailModal 
             open={openReview} setOpen={setOpenReview} setExpanded={setExpanded}
             handleClose={() => handleReviewClose(tmpReset(), rateReview("close"))} 
-            handleCancel={() => tmpReset(rateReview())}
-            addingNewResourceSQL={updatingResourceSQL}
+            handleCancel={() => tmpReset(rateReview(setShow("none")))}
+            addingNewResourceSQL={() => updatingResourceSQL(setShow("none"))}
             videoURL={videoURL} domain={domain}
             title={tmptitle} id={props.id} thumbnail={thumbnail}
             typeCategory={props.typeCategory} 
             favourite={favourite} addFavourites={() => addFavourites(filter)}
             lesson={lesson} addLesson={addLesson}
             rate={rate} rateReview={rateReview}
-            show={show}
+            show={show} setShow={setShow}
             bookmark={bookmark} addBookmark={addBookmark}
             playlist={playlist} addPlaylist={addPlaylist}
             share={share} handleShareOpen={handleShareOpen}
@@ -692,11 +721,11 @@ export const PreviewItem = (props) => {
         <div>
           <EditResourceModal 
             open={openEdit} setOpen={setOpenEdit} 
-            handleClose={() => handleEditClose(tmpReset())} 
-            handleAbort={() => handleEditClose(tmpReset())}
-            handleCancel={() => handleEditClose(setOpenReview(true), tmpReset())}
+            handleClose={() => handleEditClose(tmpReset(setShow("none")))} 
+            handleAbort={() => handleEditClose(tmpReset(setShow("none")))}
+            handleCancel={() => handleEditClose(setOpenReview(true), tmpReset(),setShow("none"))}
             setNewURL={setNewURL} errorBlank={errorBlank}
-            addingNewResourceSQL={updatingResourceSQL}
+            addingNewResourceSQL={() => updatingResourceSQL(setShow("none"))}
             videoURL={videoURL} thumbnail={thumbnail}
             title={tmptitle} setTitle={tmpsetTitle} domain={domain}
             descriptionExpanded={tmpdescriptionExpanded} setDescriptionExpanded={tmpsetDescriptionExpanded}
@@ -737,6 +766,13 @@ export const PreviewItem = (props) => {
             open={openEditing} message={"Updating Resource"}
           />
         </div>
+        <ErrorModal 
+            open={openErrorDeleting} 
+            message={"An error was encountered deleting your resource."} submessage={"Would you like to Try Again?"} 
+            setNewResource={setOpenDelete} setNewURL={setOpenErrorDeleting}
+            handleErrorFetchingNewResourceClose={() => setOpenErrorDeleting(false)}
+            handleErrorFetchingNewResourceAbort={() =>setOpenErrorDeleting(false)}
+          />
         <div>
           <SharedModal
             open={emailSent} setEmailSent={setEmailSent} 
@@ -841,4 +877,4 @@ export const PreviewItem = (props) => {
 };
 // --------------------------------------------------------
 
-export default PreviewItem
+export default PreviewItem;

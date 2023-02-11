@@ -51,6 +51,11 @@ import { DeleteStaleStats } from '../Icons/delete';
 import { isYoutubeUrl, getYoutubeVideoId, extractDomain } from '../../helpers/helpers';
 //-------------------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -132,17 +137,17 @@ export const DetailModal = (props) => {
               {isYoutubeUrl(props.videoURL) && <YouTube videoId={getYoutubeVideoId(props.videoURL)} opts={videoPlayerOpts} onPause={onPause} onError={handleError}/>}
               {!isYoutubeUrl(props.videoURL) && 
                 <Box display="flex" alignItems="center" flexDirection="column">
-                  <CardMedia
+               <CardMedia
                     component="img"
                     height="360"
                     width="640"
                     image={props.thumbnail}
-                    alt={props.title}
+                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
                     sx={{marginBottom : 2}}
                   />
                   <Typography variant='body2' sx={{marginBottom : "2"}}> 
                     View Source Resource Here:  &nbsp;
-                    <a href={props.videoURL} target="_blank">
+                    <a href={props.videoURL} target="_blank" rel="noreferrer">
                       {props.domain}                      
                     </a>
                   </Typography>

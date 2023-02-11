@@ -446,11 +446,60 @@ returned:
   ]
 // --------------------------------------------------------
 
+
+// --------------------------------------------------------
+GET api/resources/search
+description: get all resources and all user information associated with search criteria
+
+/*All items maked with an * are optional for the GET request*/
+
+body: 
+{
+  "search": program /*with wildcard search*/ 
+}
+
+
+returned:
+
+  [
+    {
+      resource: {
+        "resource_id" : 1,
+        "profile_id" : 2, /*resource creator */
+        "url": "https://www.youtube.com/watch?v=t_ispmWmdjY",
+        "title": "Ruby Programming Language - Full Course",
+        "description": "Learn the Ruby programming language in this full course / tutorial. The course is designed for new programmers, and will introduce common programming topics using the ruby language.\nWant more from Mike? He ISs starting a coding RPG/Bootcamp",
+        "thumbnail": "https://i0.wp.com/www.alphr.com/wp-content/uploads/2021/11/How-to-Make-YouTube-Thumbnails-1.png?resize=738%2C320&ssl=1",
+        "created_at": "2023-02-06T08:54:46.365Z",
+        "updated_at": null,
+        "deleted_at": null,
+        /*Next items are based on overall user data*/
+        "category" : ["Ruby"], /*All categories assigned by all users*/
+        "avg_rating" : 3, /* Average of all users that have rated the resource - null or underfined should not be counted */
+        "avg_ranking" : 34, /* Average of all users that have ranked the resource - null or underfined should not be counted */
+        "total_likes" : "23" /*Sum of all users that have liked the resource */
+      },
+      user: {
+        "profile_id": 5,
+        "resource_id": 1,
+        "myComments_public" : "Check out this video",
+        "myComments_private" : "Neat resource",
+        "myRating": 5,
+        "myRanking": 67,
+        "myCategories": ["React", "CSS"],
+        "is_liked" : true,
+        "is_favourite" : true,
+        "is_bookmarked" : false,
+        "is_playlist" : false,
+        "is_reported" : false,
+        "is_playlist" : true,
+        "is_recommended" : false,
+      }
+    },
+  ]
 // --------------------------------------------------------
 
 
-
-// --------------------------------------------------------
 
 // --------------------------------------------------------
 // Profile Routes

@@ -8,9 +8,12 @@ import React, {useState} from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import CircularProgress from '@mui/material/CircularProgress';
+import CardMedia from '@mui/material/CardMedia';
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -27,6 +30,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 // --------------------------------------------------------
 // Import Icons Functions
+import { CloseModal } from '../Icons/close';
 // --------------------------------------------------------
 
 const style = {
@@ -42,17 +46,17 @@ const style = {
   borderTopRightRadius: 5,
   boxShadow: 24,
   p: 4,
-  borderColor: "info.main"
+  borderColor: "error.main"
 };
 
-export const StatusModal= (props) => {
+// TODO - bottom where my resource - add anchor to link?
+export const FilterModal= (props) => {
 
   return (
     <Modal
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
-      closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500,
@@ -60,23 +64,12 @@ export const StatusModal= (props) => {
       disableScrollLock={true}
     >
       <Box sx={style}>
-        <Box display="flex" width="100%" justifyContent="space-between" gap="2rem">
-          {!props.wheel && 
-            <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
-              <CircularProgress color="primary" />
-            </Stack>
-          } 
-          <Box display="flex" flexDirection="column">
-            <Typography variant='h6' textAlign="center">
-              {props.message}
-            </Typography>
-            {props.submessage &&
-              <Typography variant='body1' textAlign="center">
-                {props.submessage}
-              </Typography>
-            } 
-          </Box>
+        <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" sx={{gap: 3}}>
+          <Typography variant="h6">
+            {props.message}
+          </Typography>
         </Box>
+
       </Box>
     </Modal>
   );

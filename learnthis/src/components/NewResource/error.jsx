@@ -45,6 +45,7 @@ const style = {
   borderTopRightRadius: 5,
   boxShadow: 24,
   p: 4,
+  borderColor: "error.main"
 };
 
 // TODO - bottom where my resource - add anchor to link?
@@ -55,7 +56,7 @@ export const ErrorModal= (props) => {
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
-      onClose={() => props.handleErrorFecthingNewResourceClose(props.setNewURL(""))}
+      onClose={() => props.handleErrorFetchingNewResourceAbort(props.setNewURL(""))}
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500,
@@ -78,7 +79,7 @@ export const ErrorModal= (props) => {
             </Button>
           </Tooltip>
           <Tooltip title="Cancel">
-            <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleErrorFetchingNewResourceClose(props.setNewURL(""))}>
+            <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleErrorFetchingNewResourceAbort(props.setNewURL(""))}>
               Cancel
             </Button>
           </Tooltip>
