@@ -1,5 +1,6 @@
 const db = require("../connection");
-const { postResourcesQueryHelper } = require("../../helper/query");
+const { postResourceQueryHelper } = require("../../helper/query/postResourceWithAddition");
+const { updateResourceQueryHelper } = require("../../helper/query/updateResourceWithAddition");
 /**
  * Get all resources comming from all users that are still active from db
  * @return {Promise<{}>} A promise of all resources in db that are not deleted limit by 20.
@@ -441,13 +442,13 @@ const postResourceWithAddition = async (data) => {
     await db.query('BEGIN');
     const resource = await db.query(resourceQuery, resourceParams).then((data) => data.rows[0]);
     if (data.user) {
-      const postHelper = postResourcesQueryHelper(data, resource.id);
+      const postHelper = postResourceQueryHelper(data, resource.id);
       for (helper of postHelper) {
         await db.query(helper.query, helper.params).then((data) => data.rows[0]);
       }
     }
-    await db.query('COMMIT');
     const resourceWithAddition = await getAllResourcesWithAddition(resource.id);
+    await db.query('COMMIT');
     return {
       resource: resourceWithAddition,
       user: data.user,
@@ -487,6 +488,48 @@ const updateResource = (data) => {
 };
 
 /**
+ * Update a resource with addition
+ * @param {json} resource data
+ * @return {Promise<{}>} A promise of the resource updated.
+ */
+const updateResourceWithAddition = async (data) => {
+  let resourceQuery = `
+  UPDATE
+    resources
+  SET
+    (profile_id, url, title, description, thumbnail, updated_at) = ($1, $2, $3, $4, $5, NOW())
+  WHERE id = $6 RETURNING *;`;
+  const resourceParams = [
+    data.resource.profile_id,
+    data.resource.url,
+    data.resource.title,
+    data.resource.description,
+    data.resource.thumbnail,
+    data.resource.resource_id,
+  ];
+
+  try {
+    await db.query('BEGIN');
+    const resource = await db.query(resourceQuery, resourceParams).then((data) => data.rows[0]);
+    if (data.user) {
+      const updateHelper = updateResourceQueryHelper(data, resource.id);
+      for (helper of updateHelper) {
+        await db.query(helper.query, helper.params).then((data) => data.rows[0]);
+      }
+    }
+    const resourceWithAddition = await getAllResourcesWithAddition(resource.id);
+    await db.query('COMMIT');
+    return {
+      resource: resourceWithAddition,
+      user: data.user,
+    };
+  } catch (err) {
+    await db.query('ROLLBACK')
+    throw err;
+  }
+};
+
+/**
  * Delete exisiting resource
  * @param {json} resource data
  * @return {Promise<{}>} A promise of the resource deleted
@@ -511,5 +554,6 @@ module.exports = {
   postResource,
   postResourceWithAddition,
   updateResource,
+  updateResourceWithAddition,
   deleteResource,
 };
