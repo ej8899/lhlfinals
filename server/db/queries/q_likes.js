@@ -16,7 +16,7 @@ exports.getLikesWithResouceId = getLikesWithResouceId;
 /**
 * Add a new like.
 * @param {{resourceId: string, profileId: string, commentId: string, isLiked: boolean}} like
-* @return {Promise<{}>} A ranking of the like.
+* @return {Promise<{}>} A promise of the like.
 */
 const addLike = function(like) {
 const queryValue = [like.resourceId, like.profileId, like.commentId, like.isLiked];

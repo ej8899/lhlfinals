@@ -16,7 +16,7 @@ Want more from Mike? He ISs starting a coding RPG/Bootcamp',
     'https://i0.wp.com/www.alphr.com/wp-content/uploads/2021/11/How-to-Make-YouTube-Thumbnails-1.png?resize=738%2C320&ssl=1'
   ),
   (
-    1,
+    2,
     'https://www.youtube.com/watch?v=_y9oxzTGERs',
     'Introduction to JavaScript',
     'This course introduces you to JavaScript, the most popular programming language for web development. You can also try the interactive version of the course here: https://scrimba.com/g/gintrotojavascript

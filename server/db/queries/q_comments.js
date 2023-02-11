@@ -20,6 +20,31 @@ const getCommentsByResourceId = (id) => {
   return db.query(query, params).then((data) => data.rows);
 };
 
+/**
+ * Get all comments by resource id and profile_id that are still active from db
+ * @param {number} resourceId resource id
+ * @param {number} profileId profile id
+ * @param {boolean} isPrivate private comment
+ * @return {Promise<{}>} A promise of all comments in db that are not deleted limit by 20.
+ */
+const getCommentsByResourceIdAndProfileId = (
+  resourceId,
+  profileId,
+  isPrivate = false
+) => {
+  let query = `
+  select
+  *
+  from
+    comments
+  where
+    resource_id = $1 AND profile_id = $2 AND is_private= $3 AND deleted_at IS NULL
+  ORDER BY
+    created_at DESC;`;
+
+  const params = [resourceId, profileId, isPrivate];
+  return db.query(query, params).then((data) => data.rows[0]);
+};
 
 /**
  * Insert new comment
@@ -44,7 +69,7 @@ const postComment = (data) => {
     data.profile_id,
     data.comment_id,
     data.comment,
-    data.is_private
+    data.is_private,
   ];
 
   return db.query(query, params).then((data) => data.rows[0]);
@@ -64,10 +89,7 @@ const updateComment = (data) => {
     updated_at = NOW()
   WHERE
     id = $2 RETURNING *;`;
-  const params = [
-    data.comment,
-    data.id
-  ];
+  const params = [data.comment, data.id];
 
   return db.query(query, params).then((data) => data.rows[0]);
 };
@@ -92,7 +114,8 @@ const deleteComment = (data) => {
 
 module.exports = {
   getCommentsByResourceId,
+  getCommentsByResourceIdAndProfileId,
   postComment,
   updateComment,
-  deleteComment
-}
+  deleteComment,
+};
