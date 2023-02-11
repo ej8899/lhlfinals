@@ -137,6 +137,8 @@ export const IconProvider = ({ children }) => {
         case 7 : 
           iconStatusObject.profile_id = values[i]
           break;
+        default:
+          break;
       }
     }
 

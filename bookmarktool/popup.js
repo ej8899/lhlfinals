@@ -21,34 +21,38 @@ const postData = (data) => {
     }).then((data) => {
       console.log(data);
       
-      // TODO clear the form and post a 'success' display here instead w link to open LearnThis!
-      // delay for the spinner
-      // turn off spinner
-      document.getElementById("spinner").style.display = "none";
-      var div = document.getElementById("contentbody");
-      div.innerHTML = ` 
       
-      <div class="success-container" style="
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      ">
+      // TODO delay for the spinner
+      setTimeout(function() {
+        console.log("1 second has passed");
+        document.getElementById("spinner").style.display = "none";
+        var div = document.getElementById("contentbody");
+        div.innerHTML = ` 
+        
+        <div class="success-container" style="
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        ">
+        
+        <div class="checkmark-container" style="
+        display: flex;
+        flex-align: row;
+        ">
+        <!--<span class="checkmark-icon">&#10003;</span>-->
+        <p class="checkmark-text">Saved!</p>
+        </div>
+  
+        <div class="foot" style="text-align:center">
+        <div class="footer-link"><a href="http://localhost:3000/#" target_new class="footer-link">See on LearnThis!</a></div>
+        </div>
+  
+        </div>
+        `
+  
+      }, 1000);
       
-      <div class="checkmark-container" style="
-      display: flex;
-      flex-align: row;
-      ">
-      <!--<span class="checkmark-icon">&#10003;</span>-->
-      <p class="checkmark-text">Saved!</p>
-      </div>
-
-      <div class="foot" style="text-align:center">
-      <div class="footer-link"><a href="http://localhost:3000/#" target_new class="footer-link">See on LearnThis!</a></div>
-      </div>
-
-      </div>
-      `
 
       // window.close();
     })
