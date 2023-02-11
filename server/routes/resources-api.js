@@ -63,7 +63,7 @@ router.post("/options", (req, res) => {
               element.id,
               options.user.profile_id
             );
-          
+
             if (element.my_comments_private) {
               element.my_comments_private=element.my_comments_private.comment;
             }else {
@@ -181,6 +181,26 @@ router.post("/withAddition", (req, res) => {
         return res.status(500).json({ error: err.message });
       });
   }
+});
+
+/**
+ * Update existing resource with addition
+ * @return {json} resource that is updated
+ */
+router.put("/withAddition", (req, res) => {
+  //const userId = req.session.userID;
+  const resourceData = req.body;
+  console.log('resourceData', resourceData);
+  q_resources
+    .updateResourceWithAddition(resourceData)
+    .then((data) => {
+      console.log("Resource updated returned obj with addition: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error updating new resource", err);
+      return res.status(500).json({ error: err.message });
+    });
 });
 
 /**
