@@ -72,8 +72,9 @@ const updateResourceQueryHelper = (data, resourceId) => {
 
   if (data.user.myCategories !== undefined){
     const deleteCategoriesQuery = `
-    DELETE FROM
+    UPDATE
       categories
+    SET deleted_at = NOW()
     WHERE resource_id=$1 AND profile_id=$2 RETURNING *;`;
     const deleteCategoriesParams = [
       resourceId,

@@ -24,7 +24,7 @@ const getAllResources = () => {
  * @return {Promise<{}>} A promise of all resources in db that are not deleted limit by 20.
  */
 const getAllResourcesWithAddition = (id = undefined) => {
-  const whereClause = id === undefined ? 'WHERE res.deleted_at IS NULL' : `WHERE res.id=${id} AND res.deleted_at IS NULL`;
+  const idCondition = id === undefined ? ' ' : ` res.id=${id} AND `;
   const query = `
     SELECT res.*, COUNT(DISTINCT l.id) AS total_likes, array[c.name] AS categories, AVG(ran.SCALE) AS avg_ranking, AVG(rat.rate) AS avg_rating
     FROM resources AS res
@@ -32,7 +32,7 @@ const getAllResourcesWithAddition = (id = undefined) => {
     LEFT JOIN categories AS c on res.id=c.resource_id
     LEFT JOIN rankings AS ran on res.id=ran.resource_id
     LEFT JOIN ratings AS rat on res.id=rat.resource_id
-    ${whereClause}
+    WHERE${idCondition}res.deleted_at IS NULL AND c.deleted_at IS NULL
     GROUP BY res.id, c.name
     ORDER BY res.id LIMIT 20;`;
 
