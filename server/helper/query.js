@@ -77,13 +77,14 @@ const postResourcesQueryHelper = (data, resourceId) => {
   const categoriesQuery = `
   INSERT INTO
     categories
-      (resource_id, name, index)
+      (resource_id, profile_id, name, index)
     VALUES
-      ($1, $2, $3) RETURNING *;`;
+      ($1, $2, $3, $4) RETURNING *;`;
   if (data.user.myCategories !== undefined){
     for (const [index, category] of data.user.myCategories.entries()) {
       const categoriesParams = [
         resourceId,
+        data.user.profile_id,
         category,
         index + 1
       ];

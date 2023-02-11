@@ -438,7 +438,6 @@ const postResourceWithAddition = async (data) => {
   ];
 
   try {
-    const savedData = {};
     await db.query('BEGIN');
     const resource = await db.query(resourceQuery, resourceParams).then((data) => data.rows[0]);
     if (data.user) {
