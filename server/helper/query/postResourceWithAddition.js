@@ -1,5 +1,5 @@
-// this herlper makes queries for POST /api/resouces/withAddition
-const postResourcesQueryHelper = (data, resourceId) => {
+// helper for POST /api/resouces/withAddition
+const postResourceQueryHelper = (data, resourceId) => {
   const queries = [];
 
   const commentsQuery = `
@@ -74,13 +74,13 @@ const postResourcesQueryHelper = (data, resourceId) => {
     })
   }
 
-  const categoriesQuery = `
-  INSERT INTO
-    categories
-      (resource_id, profile_id, name, index)
-    VALUES
-      ($1, $2, $3, $4) RETURNING *;`;
-  if (data.user.myCategories !== undefined){
+  if (data.user.myCategories !== undefined && data.user.myCategories.length > 0){
+    const categoriesQuery = `
+    INSERT INTO
+      categories
+        (resource_id, profile_id, name, index)
+      VALUES
+        ($1, $2, $3, $4) RETURNING *;`;
     for (const [index, category] of data.user.myCategories.entries()) {
       const categoriesParams = [
         resourceId,
@@ -188,4 +188,4 @@ const postResourcesQueryHelper = (data, resourceId) => {
   return queries;
 };
 
-module.exports = { postResourcesQueryHelper };
+module.exports = { postResourceQueryHelper };
