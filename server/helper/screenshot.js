@@ -77,9 +77,13 @@ const avatar = async (gender) => {
     const ZeroOrOne = Math.random();
     ZeroOrOne ? (gender = "male") : (gender = "female");
   }
-  const avatarURL = await fetch(
-    `https://xsgames.co/randomusers/avatar.php?g=${gender}`
-  );
-  return avatarURL;
+ // console.log("gender", gender);
+
+  const url = `https://xsgames.co/randomusers/avatar.php?g=${gender}`;
+  //console.log("url",url);
+
+  const avatarURL = await fetch(url);
+  //console.log("avatarURL", avatarURL.url);
+  return {url: avatarURL.url};
 };
-module.exports = { screenshot, extract };
+module.exports = { screenshot, extract, avatar };

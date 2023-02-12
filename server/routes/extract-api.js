@@ -4,7 +4,7 @@
 
 const express = require("express");
 const router = express.Router();
-const {extract} = require("../helper/screenshot");
+const { extract, avatar } = require("../helper/screenshot");
 
 /**
  * Get title, description, thumbnail for a url
@@ -12,7 +12,7 @@ const {extract} = require("../helper/screenshot");
  */
 router.post("/", (req, res) => {
   const url = req.body.url;
-  console.log('url',url);
+  console.log("url", url);
   extract(url)
     .then((data) => res.json(data))
     .catch((err) => {
@@ -21,5 +21,11 @@ router.post("/", (req, res) => {
     });
 });
 
+router.get("/avatar/:gender", (req, res) => {
+  const gender = req.params.gender;
+  avatar(gender)
+    .then((data) => res.status(200).json(data))
+    .catch((error) => res.status(500).json({ error: message }));
+});
 
 module.exports = router;
