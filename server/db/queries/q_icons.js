@@ -1,4 +1,5 @@
 const query = require('./common');
+const { postStatusesQueryHelper } = require("../../helper/query/postStatuses");
 
 /**
 * Get icons status from the profile id.
@@ -30,3 +31,31 @@ const getIconsStatusWithProfileId = function(id) {
   );
 };
 exports.getIconsStatusWithProfileId = getIconsStatusWithProfileId;
+
+/**
+* Post icons statuses from the profile id.
+* @param {data{}} The statuses data.
+* @return {Promise<{}>} A promise of the statuses.
+*/
+const postIconsStatuses = async function(data) {
+  try {
+    const statuses = {};
+    await query('BEGIN', undefined, undefined);
+    const postHelper = postStatusesQueryHelper(data);
+    for (const helper of postHelper) {
+      const savedData = await query(helper.query, helper.params, result => result.rows[0]);
+      statuses[helper.status] = savedData[helper.status];
+    }
+    await query('COMMIT', undefined, undefined);
+    return {
+      profile_id: data.profile_id,
+      resource_id: data.resource_id,
+      ...statuses,
+    };
+  } catch (err) {
+    await query('ROLLBACK', undefined, undefined);
+    throw err;
+  }
+
+};
+exports.postIconsStatuses = postIconsStatuses;
