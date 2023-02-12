@@ -32,26 +32,33 @@ const bookmarksRoutes = require('./routes/bookmarks-api');
 const recommendsRoutes = require('./routes/recommends-api');
 const reportsRoutes = require('./routes/reports-api');
 const extractRoutes = require('./routes/extract-api');
+const iconsDatabase = require('./db/queries/q_icons');
+const iconsRoutes = require('./routes/icons-api');
 
-// /user/endpoints
+// user endpoints
 const usersRouter = express.Router();
 usersRoutes(usersRouter, usersDatabase);
 app.use('/api/user', usersRouter);
 
-// /profiles/endpoints
+// profiles endpoints
 const profilesRouter = express.Router();
 profilesRoutes(profilesRouter, profilesDatabase);
 app.use('/api/profiles', profilesRouter);
 
-// /rankings/endpoints
+// rankings endpoints
 const rankingsRouter = express.Router();
 rankingsRoutes(rankingsRouter, rankingsDatabase);
 app.use('/api/rankings', rankingsRouter);
 
-// /likes/endpoints
+// likes endpoints
 const likesRouter = express.Router();
 likesRoutes(likesRouter, likesDatabase);
 app.use('/api/likes', likesRouter);
+
+// icons endpoints
+const iconsRouter = express.Router();
+iconsRoutes(iconsRouter, iconsDatabase);
+app.use('/api/icons', iconsRouter);
 
 app.use('/api/resources',resourcesRoutes);
 app.use('/api/categories',categoriesRoutes);
@@ -62,13 +69,13 @@ app.use('/api/playlists',playlistsRoutes);
 app.use('/api/bookmarks',bookmarksRoutes);
 app.use('/api/recommends',recommendsRoutes);
 app.use('/api/reports',reportsRoutes);
-app.use('/api/extract',extractRoutes)
+app.use('/api/extract',extractRoutes);
 
 app.use(express.static(publicPath));
-app.get("/*", function (req, res) {
-res.sendFile(path.join(publicPath, "index.html"));
+app.get("/*", function(req, res) {
+  res.sendFile(path.join(publicPath, "index.html"));
 });
 
 app.listen(process.env.PORT || 8080,()=>{
-  console.log ("Server running");
+  console.log("Server running");
 });
