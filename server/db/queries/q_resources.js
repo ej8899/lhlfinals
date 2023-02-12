@@ -330,7 +330,7 @@ const getAllResourcesByOptions = (options) => {
         : `HAVING \nAVG(rankings.scale) <= $${q.counter}`;
       q.params.push(options.user.maximum_myRanking);
     }
-  }else {
+  } else {
     /*NO USER PROFILE*/
     q.select += `, \nNULL AS user_profile_id,
     NULL AS is_liked,
@@ -418,7 +418,7 @@ const postResource = (data) => {
  * @param {json} resource data
  * @return {Promise<{}>} A promise of the resource inserted.
  */
-const postResourceWithAddition = async (data) => {
+const postResourceWithAddition = async(data) => {
   let resourceQuery = `
   INSERT INTO
     resources (
@@ -443,7 +443,7 @@ const postResourceWithAddition = async (data) => {
     const resource = await db.query(resourceQuery, resourceParams).then((data) => data.rows[0]);
     if (data.user) {
       const postHelper = postResourceQueryHelper(data, resource.id);
-      for (helper of postHelper) {
+      for (const helper of postHelper) {
         await db.query(helper.query, helper.params).then((data) => data.rows[0]);
       }
     }
@@ -454,7 +454,7 @@ const postResourceWithAddition = async (data) => {
       user: data.user,
     };
   } catch (err) {
-    await db.query('ROLLBACK')
+    await db.query('ROLLBACK');
     throw err;
   }
 };
@@ -492,7 +492,7 @@ const updateResource = (data) => {
  * @param {json} resource data
  * @return {Promise<{}>} A promise of the resource updated.
  */
-const updateResourceWithAddition = async (data) => {
+const updateResourceWithAddition = async(data) => {
   let resourceQuery = `
   UPDATE
     resources
@@ -513,7 +513,7 @@ const updateResourceWithAddition = async (data) => {
     const resource = await db.query(resourceQuery, resourceParams).then((data) => data.rows[0]);
     if (data.user) {
       const updateHelper = updateResourceQueryHelper(data, resource.id);
-      for (helper of updateHelper) {
+      for (const helper of updateHelper) {
         await db.query(helper.query, helper.params).then((data) => data.rows[0]);
       }
     }
@@ -524,7 +524,7 @@ const updateResourceWithAddition = async (data) => {
       user: data.user,
     };
   } catch (err) {
-    await db.query('ROLLBACK')
+    await db.query('ROLLBACK');
     throw err;
   }
 };
