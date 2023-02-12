@@ -16,6 +16,18 @@ returned:
 }
 ```
 
+## GET api/extract/avatar/[gender]
+description: retrieve a url image, randomly created based on the gender that is passed.
+
+```json
+body: N/A
+
+returned:
+{
+    "url": "https://xsgames.co/randomusers/assets/avatars/male/47.jpg"
+}
+```
+
 ## POST api/user
 description: create/save a new user
 

@@ -61,10 +61,29 @@ Get Title, Description, Thumbnail of a url
 const extract = async (url) => {
   info = await retrieveTitleDescription(url);
   info.thumbnail = await screenshot(url);
-  info.thumbnail = info.thumbnail ? JSON.parse(info.thumbnail)["screenshot"] : "";
+  info.thumbnail = info.thumbnail
+    ? JSON.parse(info.thumbnail)["screenshot"]
+    : "";
   info.url = url;
   console.log("Info extracted: ", info);
   return info;
 };
 
-module.exports = { screenshot, extract };
+/*
+Get a randomize avatar
+*/
+const avatar = async (gender) => {
+  if (!gender) {
+    const ZeroOrOne = Math.random();
+    ZeroOrOne ? (gender = "male") : (gender = "female");
+  }
+ // console.log("gender", gender);
+
+  const url = `https://xsgames.co/randomusers/avatar.php?g=${gender}`;
+  //console.log("url",url);
+
+  const avatarURL = await fetch(url);
+  //console.log("avatarURL", avatarURL.url);
+  return {url: avatarURL.url};
+};
+module.exports = { screenshot, extract, avatar };
