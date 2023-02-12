@@ -1,5 +1,6 @@
 const db = require("../connection");
-const { postResourcesQueryHelper } = require("../../helper/query");
+const { postResourceQueryHelper } = require("../../helper/query/postResourceWithAddition");
+const { updateResourceQueryHelper } = require("../../helper/query/updateResourceWithAddition");
 
 // ----------------------------------------------------------
 /**
@@ -27,24 +28,25 @@ const getAllResources = () => {
  * @return {Promise<{}>} A promise of all resources in db that are not deleted limit by 20.
  */
 const getAllResourcesWithAddition = (id = undefined) => {
-  const whereClause = id === undefined ? 'WHERE res.deleted_at IS NULL' : `WHERE res.id=${id} AND res.deleted_at IS NULL`;
+  const idCondition = id === undefined ? ' ' : ` res.id=${id} AND `;
   const query = `
     SELECT res.*, COUNT(DISTINCT l.id) AS total_likes, array[c.name] AS categories, AVG(ran.SCALE) AS avg_ranking, AVG(rat.rate) AS avg_rating
     FROM resources AS res
     LEFT JOIN (SELECT * FROM likes WHERE likes.is_liked IS TRUE) AS l on res.id=l.resource_id
-    LEFT JOIN categories AS c on res.id=c.resource_id
+    LEFT JOIN (SELECT * FROM categories WHERE categories.deleted_at IS NULL) AS c on res.id=c.resource_id
     LEFT JOIN rankings AS ran on res.id=ran.resource_id
     LEFT JOIN ratings AS rat on res.id=rat.resource_id
-    ${whereClause}
+    WHERE${idCondition}res.deleted_at IS NULL AND c.deleted_at IS NULL
     GROUP BY res.id, c.name
     ORDER BY res.id LIMIT 20;`;
-
   return db
     .query(query).then((data) => {
+      console.log("DATA IS:", data.rows)
       if (data.rows.length === 0) {
         return [];
       }
       const resources = [];
+      console.log("Data ROWS", data.rows)
       data.rows.forEach(resource => {
         if (resources.map(r => r.id).includes(resource.id)) {
           const index = resources.findIndex(r => r.id === resource.id);
@@ -53,8 +55,7 @@ const getAllResourcesWithAddition = (id = undefined) => {
             categories: resources[index].categories.concat(resource.categories) };
         } else {
           if (resource.categories[0] === null) {
-            console.log("THIS WORKED")
-            resource.categories = null;
+            resource.categories = [];
           }
           resources.push(resource);
         }
@@ -143,7 +144,7 @@ const getAllResourcesByOptions = (options) => {
           FROM
             categories
           WHERE
-            NAME in (${names})
+            NAME in (${names}) AND categories.deleted_at IS NULL
         )`;
       } else {
         q.where = `${q.where} \nAND resources.id NOT IN (
@@ -151,6 +152,7 @@ const getAllResourcesByOptions = (options) => {
             DISTINCT resource_id
           FROM
             categories
+          WHERE categories.deleted_at IS NULL
         )`;
       }
   }
@@ -363,7 +365,7 @@ const getAllResourcesByOptions = (options) => {
   } else {
     q.counter++;
     q.limit = `LIMIT $${q.counter}`;
-    q.params.push(20);
+    q.params.push(40);
   }
 
   switch (options.resource.order_by) {
@@ -475,19 +477,19 @@ const postResourceWithAddition = async (data) => {
     await db.query('BEGIN');
     const resource = await db.query(resourceQuery, resourceParams).then((data) => data.rows[0]);
     if (data.user) {
-      const postHelper = postResourcesQueryHelper(data, resource.id);
-      for (helper of postHelper) {
+      const postHelper = postResourceQueryHelper(data, resource.id);
+      for (const helper of postHelper) {
         await db.query(helper.query, helper.params).then((data) => data.rows[0]);
       }
     }
-    await db.query('COMMIT');
     const resourceWithAddition = await getAllResourcesWithAddition(resource.id);
+    await db.query('COMMIT');
     return {
       resource: resourceWithAddition[0],
       user: data.user,
     };
   } catch (err) {
-    await db.query('ROLLBACK')
+    await db.query('ROLLBACK');
     throw err;
   }
 };
@@ -525,6 +527,50 @@ const updateResource = (data) => {
 
 // ----------------------------------------------------------
 /**
+ * Update a resource with addition
+ * @param {json} resource data
+ * @return {Promise<{}>} A promise of the resource updated.
+ */
+const updateResourceWithAddition = async (data) => {
+  let resourceQuery = `
+  UPDATE
+    resources
+  SET
+    (profile_id, url, title, description, thumbnail, updated_at) = ($1, $2, $3, $4, $5, NOW())
+  WHERE id = $6 RETURNING *;`;
+  const resourceParams = [
+    data.resource.profile_id,
+    data.resource.url,
+    data.resource.title,
+    data.resource.description,
+    data.resource.thumbnail,
+    data.resource.resource_id,
+  ];
+
+  try {
+    await db.query('BEGIN');
+    const resource = await db.query(resourceQuery, resourceParams).then((data) => data.rows[0]);
+    if (data.user) {
+      const updateHelper = updateResourceQueryHelper(data, resource.id);
+      for (const helper of updateHelper) {
+        await db.query(helper.query, helper.params).then((data) => data.rows[0]);
+      }
+    }
+    const resourceWithAddition = await getAllResourcesWithAddition(resource.id);
+    await db.query('COMMIT');
+    return {
+      resource: resourceWithAddition[0],
+      user: data.user,
+    };
+  } catch (err) {
+    await db.query('ROLLBACK');
+    throw err;
+  }
+};
+// ----------------------------------------------------------
+
+// ----------------------------------------------------------
+/**
  * Delete exisiting resource
  * @param {json} resource data
  * @return {Promise<{}>} A promise of the resource deleted
@@ -549,6 +595,7 @@ module.exports = {
   getAllResourcesByOptions,
   postResource,
   postResourceWithAddition,
+  updateResourceWithAddition,
   updateResource,
   deleteResource,
 };

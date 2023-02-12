@@ -37,6 +37,8 @@ const bookmarksRoutes = require('./routes/bookmarks-api');
 const recommendsRoutes = require('./routes/recommends-api');
 const reportsRoutes = require('./routes/reports-api');
 const extractRoutes = require('./routes/extract-api');
+const iconsDatabase = require('./db/queries/q_icons');
+const iconsRoutes = require('./routes/icons-api');
 
 // /user/endpoints
 const usersRouter = express.Router();
@@ -58,6 +60,11 @@ const likesRouter = express.Router();
 likesRoutes(likesRouter, likesDatabase);
 app.use('/api/likes', likesRouter);
 
+// icons endpoints
+const iconsRouter = express.Router();
+iconsRoutes(iconsRouter, iconsDatabase);
+app.use('/api/icons', iconsRouter);
+
 app.use('/api/resources',resourcesRoutes);
 app.use('/api/categories',categoriesRoutes);
 app.use('/api/ratings',ratingsRoutes);
@@ -70,10 +77,10 @@ app.use('/api/reports',reportsRoutes);
 app.use('/api/extract',extractRoutes)
 
 app.use(express.static(publicPath));
-app.get("/*", function (req, res) {
-res.sendFile(path.join(publicPath, "index.html"));
+app.get("/*", function(req, res) {
+  res.sendFile(path.join(publicPath, "index.html"));
 });
 
 app.listen(process.env.PORT || 8080,()=>{
-  console.log ("Server running");
+  console.log("Server running");
 });

@@ -320,7 +320,7 @@ export const AddResourceFlow = (props) => {
         axios.post('http://localhost:8080/api/extract', {url: URL})
         .then(response => {
 
-          console.log(response.data)
+          // console.log(response.data)
           zlog('API',"Non-YouTube API Called:", URL)
 
           setTitle(response.data.title)
@@ -371,8 +371,8 @@ export const AddResourceFlow = (props) => {
           "profile_id": userid,
           "myComments_public" : undefined,
           "myComments_private" : myComments? myComments : undefined,
-          "myRating": star? Math.ceil(star) : undefined,
-          "myRanking": myStage ? myStage : undefined,
+          "myRating": star ? Math.ceil(star) : undefined,
+          "myRanking": myStage >= 0 && myStage !== null ? myStage : undefined,
           "myCategories": myCategory ? myCategory : [],
           "is_liked" : like === "default" ? false : true,
           "is_favourite" : favourite === "default" ? false : true,
@@ -382,6 +382,8 @@ export const AddResourceFlow = (props) => {
           "is_recommended" : lesson === "default" ? false : true
         }
       }
+
+      // console.log(newURLResource)
 
     //   const newURLResource = {
     //     "id" : props.sampledata.length + 1, //delete when tie in backend
@@ -417,7 +419,7 @@ export const AddResourceFlow = (props) => {
     return axios.post('http://localhost:8080/api/resources/withAddition', newURLResource)
     .then(response => {
       // console.log(JSON.parse(JSON.stringify(response.data)))
-
+      // console.log(response.data)
       const data = {
         id: response.data.resource.id,
         profile_id: response.data.resource.profile_id,
@@ -516,6 +518,8 @@ export const AddResourceFlow = (props) => {
             thumbnail={thumbnail} title={title}
             setsampledata={props.setsampledata} sampledata={props.sampledata}
             combinedData={props.combinedData} handleReviewClose={handleReviewClose}
+            setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
+            setLoading={props.setLoading}
           />
           <NewResourceModal 
             open={addNewResource} setOpen={setAddNewResource} 

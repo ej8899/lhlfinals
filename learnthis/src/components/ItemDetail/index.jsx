@@ -137,7 +137,7 @@ export const DetailModal = (props) => {
               {isYoutubeUrl(props.videoURL) && <YouTube videoId={getYoutubeVideoId(props.videoURL)} opts={videoPlayerOpts} onPause={onPause} onError={handleError}/>}
               {!isYoutubeUrl(props.videoURL) && 
                 <Box display="flex" alignItems="center" flexDirection="column">
-               <CardMedia
+              <CardMedia
                     component="img"
                     height="360"
                     width="640"
@@ -175,7 +175,7 @@ export const DetailModal = (props) => {
                 <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleCancel()}>
                   Cancel
                 </Button>
-                <Button variant="contained" sx={{width: "5em"}} href="" onClick={() => props.handleClose(props.addingNewResourceSQL())} >
+                <Button variant="contained" sx={{width: "5em"}} href="" onClick={() => props.addingNewResourceSQL()} >
                   Save
                 </Button>
               </Box>

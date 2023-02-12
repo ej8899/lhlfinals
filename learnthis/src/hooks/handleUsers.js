@@ -30,7 +30,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   
-  const [viewTitle, setViewTitle] = useState("");
+  const [viewTitle, setViewTitle] = useState("just placeholder text for a null - change in viewtitle.jsx");
 
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState("nouser");
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     const [errorCreateUser, setErrorCreateUser] = useState(false)
 
 
-  const login = ({email, password}, close, setsampledata, sampledata, combinedData, setClearFilter, setLoading) => {
+  const login = ({email, password}, close, setsampledata, sampledata, combinedData, setClearFilter, setLoading, setResourceCount, setShowMoreCards) => {
 
     if (!email || !password) {
     !email ? setErrorBlankEmail(true) : setErrorBlankEmail(false)
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
           setIsAuth(true);
           setUserid(response.data.profiles[0].id);
 
-          filterData("signin", response.data.profiles[0].id, setsampledata, sampledata, combinedData, true, setLoading)
+          filterData("signin", response.data.profiles[0].id, setsampledata, sampledata, combinedData, true, setLoading, true, setResourceCount, setShowMoreCards)
           
           setClearFilter(false)
         })
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const createUser = ({email, password, firstname, lastname}, close, setsampledata, sampledata, combinedData, setClearFilter, setLoading) => {
+  const createUser = ({email, password, firstname, lastname}, close, setsampledata, sampledata, combinedData, setClearFilter, setLoading, setResourceCount, setShowMoreCards) => {
 
     if (!email || !password || !firstname || !lastname) {
     !email ? setErrorBlankEmail(true) : setErrorBlankEmail(false)
@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
           setIsAuth(true);
           setUserid(response.data.createdProfile.user_id);
 
-          filterData("signin", response.data.createdProfile.id, setsampledata, sampledata, combinedData, true, setLoading)
+          filterData("signin", response.data.createdProfile.id, setsampledata, sampledata, combinedData, true, setLoading, true, setResourceCount, setShowMoreCards)
           
           setClearFilter(false)
         })
@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = (setsampledata, sampledata, combinedData, setClearFilter, setLessonTrue, setSelectedIndex, reset, setLoading) => {
+  const logout = (setsampledata, sampledata, combinedData, setClearFilter, setLessonTrue, setSelectedIndex, reset, setLoading, setResourceCount, setShowMoreCards) => {
 
     return axios.post('http://localhost:8080/api/user/logout')
     .then(response => {
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
       setUserid(null)
       setIsAuth(false);
       setClearFilter(false)
-      filterData("signin", null, setsampledata, sampledata, combinedData, true, setLoading)
+      filterData("signin", null, setsampledata, sampledata, combinedData, true, setLoading, true, setResourceCount, setShowMoreCards)
       setLessonTrue(false)
       setSelectedIndex(false)
       reset()

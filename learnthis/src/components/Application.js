@@ -51,6 +51,7 @@ import PreviewItem from "./Previews";
 import LessonItem from "./Previews/lessonplan"
 import SiteFooter from "./Footer";
 import Hero from "./Hero/Hero.jsx";
+import LessonsHero from "./Hero/LessonsHero.jsx";
 import AddResourceFlow from "./NewResource/AddResource";
 import { DeletedModal } from "./ItemDetail/deleted";
 import { FavouriteStaleStats } from "./Icons/favourite";
@@ -646,7 +647,7 @@ const combinedData = (initialdata) => {
       recommends : element.resource.total_recommends ? Number(element.resource.total_recommends) : 0,
 
 
-      myCategory : element.user.my_Categories ? element.user.my_Categories : [],
+      myCategory : element.user.my_categories ? element.user.my_categories : [],
       myStage : element.user.my_ranking ? Number(element.user.my_ranking) : null,
       star : element.user.my_rating ? Number(element.user.my_rating) : null,
       myComments : element.user.my_comments_private ? element.user.my_comments_private : "",
@@ -672,6 +673,8 @@ const handleDeletedClose = () => {
 };
 
 const [sampledata, setsampledata] = useState([])
+const [resourceCount, setResourceCount] = useState(0)
+const [showMoreCards, setShowMoreCards] = useState(8)
 // const [sampledata, setsampledata] = useState(combinedData(sampleresourcedata, sampleuserdata))
 
 // console.log(combinedData(sampleresourcedata, sampleuserdata))
@@ -811,11 +814,7 @@ const [lessonTrue, setLessonTrue] = useState(false)
       .then(response => {
         // console.log(response.data)
         setsampledata(combinedData(response.data))
-
-        // setparsedBsampledata(setData(response.data))
-        // setparsedIsampledata(setData(response.data))
-        // setparsedAsampledata(setData(response.data))
-
+        setResourceCount(response.data.length)
       })
       .catch(error => {
         console.error(error);
@@ -824,6 +823,18 @@ const [lessonTrue, setLessonTrue] = useState(false)
           setErrorOpen(false)
         }, 2500)
       });
+
+      // axios.get(`http://localhost:8080/api/icons-api/2`)
+      // .then(response => {
+      //   console.log(response.data)
+      // })
+      // .catch(error => {
+      //   console.error(error);
+      //   setErrorOpen(true)
+      //   setTimeout(() => {
+      //     setErrorOpen(false)
+      //   }, 2500)
+      // });
 
   }, []);
 // --------------------------------------------------------
@@ -882,28 +893,29 @@ const [lessonTrue, setLessonTrue] = useState(false)
               
                   <div className="maincontainer">
                   <NavBar 
-                      darkMode={theme.palette.mode} handleDarkMode={colorMode.toggleColorMode} handleNewResourceOpen={handleNewResourceOpen} setNewResource={setNewResource}
+                      darkMode={theme.palette.mode} handleDarkMode={colorMode.toggleColorMode} handleNewResourceOpen={handleNewResourceOpen} setNewResource={setNewResource} setShowMoreCards={setShowMoreCards}
                       setsampledata={setsampledata} sampledata={sampledata}
                       combinedData={combinedData} clearFilter={clearFilter} setClearFilter={setClearFilter} lessonTrue={lessonTrue} setLessonTrue={setLessonTrue}
-                      filled={filled} setFilled={setFilled} chipfilled={chipfilled} setChipFilled={setChipFilled} catList={typeCategory} setLoading={setLoading}
+                      filled={filled} setFilled={setFilled} chipfilled={chipfilled} setChipFilled={setChipFilled} catList={typeCategory} setLoading={setLoading} setResourceCount={setResourceCount}
                     ></NavBar>
 
                     <header>
-                      <Hero 
+                       {!lessonTrue && <Hero 
                         catList={typeCategory} setsampledata={setsampledata} sampledata={sampledata} lessonTrue={lessonTrue}
-                        combinedData={combinedData} clearFilter={clearFilter} setClearFilter={setClearFilter} 
-                        filled={filled} setFilled={setFilled} chipfilled={chipfilled} setChipFilled={setChipFilled}
-                      />
+                        combinedData={combinedData} clearFilter={clearFilter} setClearFilter={setClearFilter} setShowMoreCards={setShowMoreCards}
+                        filled={filled} setFilled={setFilled} chipfilled={chipfilled} setChipFilled={setChipFilled} setResourceCount={setResourceCount}
+                      /> }
+                      {lessonTrue && <LessonsHero/> }
                     </header>
-
-
   
-    <ViewTitle/>
+                     {!lessonTrue && <ViewTitle/>}
 
-    <AddResourceFlow 
+                    <AddResourceFlow 
                       complexity={sampleComplexity} typeCategory={typeCategory} sampledata={sampledata} setsampledata={setsampledata} combinedData={combinedData}
                       newResource={newResource} setNewResource={setNewResource}
                       handleNewResourceOpen={handleNewResourceOpen} handleNewResourceClose={handleNewResourceClose} clearFilter={clearFilter} setClearFilter={setClearFilter} sampleuserdata={sampleuserdata} 
+                      setResourceCount={setResourceCount} setShowMoreCards={setShowMoreCards}
+                      setLoading={setLoading}
                     />
                     
                     <DeletedModal 
@@ -920,8 +932,9 @@ const [lessonTrue, setLessonTrue] = useState(false)
                           <Box sx={{ width: 1400, minHeight: 377 }} display="flex" justifyContent="center" alignItems="center">
                             <Masonry columns={4} spacing={2}>
                               {sampledata.map((item, index) => (
-                                <PreviewItem 
-                                  key={item.id} nowloading={nowloading} typeCategory={typeCategory}
+                                (index < showMoreCards) ?
+                                (<PreviewItem 
+                                  key={item.id} nowloading={nowloading} typeCategory={typeCategory} setLoading={setLoading}
                                   id={item.id} resource_id={item.resource_id} profile_id={item.profile_id}
                                   videoURL={ item.videoURL } created_at={item.created_at}
                                   title={item.title} thumbnail={item.thumbnail} description={item.description} 
@@ -930,10 +943,11 @@ const [lessonTrue, setLessonTrue] = useState(false)
                                   myCategory={item.myCategory} myStage={item.myStage} 
                                   star={item.star} myComments={item.myComments}
                                   setOpenDeleted={setOpenDeleted} combinedData={combinedData}
-                                  bookmark={item.bookmark} like={item.like} favourite={item.favourite} playlist={item.playlist} lesson={item.lesson} report={item.report} 
+                                  bookmark={item.bookmark} like={item.like} favourite={item.favourite} playlist={item.playlist} lesson={item.lesson} report={item.report} setShowMoreCards={setShowMoreCards} setResourceCount={setResourceCount}
                                 >
                                   {item.id}
-                                </PreviewItem>
+                                </PreviewItem>)
+                                : ""
                               ))}
                             </Masonry>
                           </Box>
@@ -945,14 +959,17 @@ const [lessonTrue, setLessonTrue] = useState(false)
                         <LessonIndex
                           sampledata={sampledata} nowloading={nowloading} typeCategory={typeCategory} setsampledata={setsampledata}
                           setOpenDeleted={setOpenDeleted} combinedData={combinedData}
-                          
                         >
                         </LessonIndex>
-
                       </Box>
                     }
-                    <SiteFooter/>
-                  </div>
+                    { (resourceCount > 10 && showMoreCards < resourceCount && !lessonTrue) &&
+                      <Box display="flex" justifyContent="center">
+                          <Button variant="contained" color="success" onClick={() => setShowMoreCards(resourceCount)}>Show More</Button>
+                      </Box>
+                    }
+                      <SiteFooter/>
+                    </div>
 
                   <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
 

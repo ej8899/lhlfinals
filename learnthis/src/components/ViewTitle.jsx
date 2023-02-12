@@ -24,9 +24,6 @@ setViewTitle("new breadcrumb");
 
 function ViewTitle(props) {
   const { viewTitle, setViewTitle, } = useContext(AuthContext);
-  
-// TODO remove next line (debug)
-if(!viewTitle) setViewTitle("just placeholder text for a null - change in viewtitle.jsx")
 
   return (
 

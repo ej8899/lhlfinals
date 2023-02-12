@@ -116,16 +116,17 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     }
   );
 
-  // alert("found desc:" + description)
-  // if(description) {
-  //   document.getElementById("page-description").value = description;
+  console.log("found desc:" + JSON.stringify(zdescription))
+  if(zdescription) {
+    document.getElementById("page-description").value = zdescription;
     
-  // }
+  }
 });
 
 
 // Listen for messages from the injected script
 chrome.runtime.onMessage.addListener((request, sender) => {
+  //alert(request.zdescription)
   document.getElementById("page-description").value = request.zdescription;
 });
 
@@ -170,7 +171,7 @@ function getCurrentTabUrl(event) {
   let selectedOption = select.options[select.selectedIndex].value;
 
   // grab any supplied note information
-  let note = document.getElementById("note");
+  let note = document.getElementById("page-description");
   let noteText = note.value;
 
   // grab any supplied page title information

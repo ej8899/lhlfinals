@@ -1,0 +1,18 @@
+.lessonheroicon {
+  color: #3586ff;
+  font-size: 124px;
+  transition: all 0.4s ease-in-out;
+  transform: scale(1)
+}
+
+.lessonheroicon:hover {
+  transform: scale(1.2);
+  color: #1c73f6;
+  transition: all 0.4s ease-in-out;
+}
+
+.vcenter {
+  display: 'flex';
+  align-items: 'center';
+  height: '100vh';
+}

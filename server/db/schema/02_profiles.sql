@@ -8,5 +8,6 @@ CREATE TABLE profiles (
   avatar VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP,
-  deleted_at TIMESTAMP
+  deleted_at TIMESTAMP,
+  unique(user_id)
 );

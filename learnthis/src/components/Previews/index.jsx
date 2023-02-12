@@ -89,6 +89,7 @@ import IconStatus from '../../hooks/iconStatus'
 //---------------------------------------------------------
 // Import user authentication
 import { AuthContext } from '../../hooks/handleUsers.js';
+import { FilterContext } from "../../helpers/filter";
 //---------------------------------------------------------
 
 
@@ -124,6 +125,11 @@ export const PreviewItem = (props) => {
     setOpenEdit,
     handleOpenEdit,
     handleEditClose,
+    openErrorEditing, 
+    setOpenErrorEditing,
+    
+    openErrorReview,
+    setOpenErrorReview,
 
     openDelete,
     setOpenDelete,
@@ -385,92 +391,145 @@ export const PreviewItem = (props) => {
 // --------------------------------------------------------
 // Updating Resource SQL database
 // TODO -- need to tie to database call
-  const updatingResourceSQL = () => {
+  const updatingResourceSQL = (type) => {
     if (!tmptitle) {
       setErrorBlank(true)
     } else {
       setOpenEdit(false)
       setOpenEditing(true)
-      setOpen(false)
+      setErrorBlank(false)
 
-      const updateURLResource = []
-      props.sampledata.forEach(resource => {
-      if (resource.id === props.id) {
-        // updateURLResource.push({
-        //   resource: {
-        //     "id" : props.id,
-        //     "profile_id": props.profile_id,
-  
-        //     "resource_id" : props.resource_id,
-        //     "url": videoURL,
-        //     "title": tmptitle,
-        //     "description": tmpdescriptionExpanded,
-        //     "thumbnail": thumbnail,
-        //   },
-        //   user: {
-        //     "profile_id": userid,
-        //     "myComments_public" : tmpmyComments,
-        //     "myComments_private" : '',
-        //     "myRating": tmpstar,
-        //     "myRanking": tmpmyStage,
-        //     "myCategories": tmpmyCategory,
-        //     "is_liked" : like === "default" ? false : true,
-        //     "is_favourite" : favourite === "default" ? false : true,
-        //     "is_bookmarked" : bookmark === "default" ? false : true, 
-        //     "is_playlist" : playlist === "default" ? false : true,
-        //     "is_reported" : report === "default" ? false : true,
-        //     "is_recommended" : lesson === "default" ? false : true
-        //   }
-        // })
-
-        updateURLResource.push({
+      const updateURLResource = {
+        resource: {
           "id" : props.id,
           "profile_id": props.profile_id,
 
           "resource_id" : props.resource_id,
-          "videoURL" : videoURL,
-          "title" : tmptitle,
-          "thumbnail" : thumbnail,
-          "description" : tmpdescriptionExpanded,
-          "created_at" : props.created_at,
-          "updated_at" : new Date().toISOString(),
-          
-          "category" : category,
-          "stage" : stage,
-          "rating" : props.rating,
-          "likes" : likes,
-
-          "myCategory" : tmpmyCategory,
-          "myStage" : tmpmyStage,
-          "star" : tmpstar,
-          "myComments" : tmpmyComments
-        })
-      } else {
-        updateURLResource.push(resource)
+          "url": videoURL,
+          "title": tmptitle,
+          "description": tmpdescriptionExpanded,
+          "thumbnail": thumbnail,
+        },
+        user: {
+          "profile_id": userid,
+          "myComments_public" : undefined,
+          "myComments_private" : tmpmyComments? tmpmyComments : "",
+          "myRating": tmpstar ? Math.ceil(tmpstar) : undefined,
+          "myRanking": tmpmyStage >= 0 && tmpmyStage !== null ? tmpmyStage : undefined,
+          "myCategories": tmpmyCategory ? tmpmyCategory : [],
+          "is_liked" : like === "default" ? false : true,
+          "is_favourite" : favourite === "default" ? false : true,
+          "is_bookmarked" : bookmark === "default" ? false : true, 
+          "is_playlist" : playlist === "default" ? false : true,
+          "is_reported" : report === "default" ? false : true,
+          "is_recommended" : lesson === "default" ? false : true
+        }
       }
-    })
+
+      // console.log(updateURLResource)
+
+      axios.put(`http://localhost:8080/api/resources/withAddition`, updateURLResource)
+      .then(response => {
+        // console.log(response.data)
+
+        const updateResources = []
+
+        props.sampledata.forEach(resource => {
+          if (resource.id === response.data.resource.id) {
+            updateResources.push({
+              id: response.data.resource.id,
+              profile_id: response.data.resource.profile_id,
+              resource_id: response.data.resource.id,
+              videoURL : response.data.resource.url,
+              title: response.data.resource.title,
+              thumbnail : response.data.resource.thumbnail,
+              description: response.data.resource.description,
+              created_at : response.data.resource.created_at,
+              deleted_at : response.data.resource.deleted_at ? response.data.resource.deleted_at : null,
+
+              category : response.data.resource.categories? response.data.resource.categories : [],
+              stage: response.data.resource.avg_ranking ? Number(response.data.resource.avg_ranking) : null,
+              rating : response.data.resource.avg_rating ? Number(response.data.resource.avg_rating) : null,
+              likes : response.data.resource.total_likes ? Number(response.data.resource.total_likes) : 0,
+
+              myCategory : response.data.user.myCategories ? response.data.user.myCategories : [],
+              myStage : response.data.user.myRanking ? Number(response.data.user.myRanking) : null,
+              star : response.data.user.myRating ? Number(response.data.user.myRating) : null,
+              myComments : response.data.user.myComments_private ? response.data.user.myComments_private : "",
+
+              favourite : response.data.user.is_favourite === true ? "pink" : "default",
+              bookmark : response.data.user.is_bookmarked === true ? "green" : "default",
+              playlist : response.data.user.is_playlist === true  ? "maroon" : "default",
+              lesson : response.data.user.is_recommended === true ? "blue" : "default",
+              report : response.data.user.is_reported === true ? "default" : "red",
+              like : response.data.user.is_liked === true ? "purple" : "default"
+            })
+          } else {
+            updateResources.push(resource)
+          }
+        })
     // TODO -- setting the state is included in the timeout until database update happens with backendcode
-      setTimeout(() => {
-        setOpenEditing(false)
-        setOpenEdited(true)
-        props.setsampledata(updateURLResource);
-        setErrorBlank(true)
+        setTimeout(() => {
+          
+          setOpenEditing(false)
+          setOpenEdited(true)
+          props.setsampledata(updateResources);
 
-        setMyCategory(tmpmyCategory)
-        setMyStage(tmpmyStage)
-        setMyComments(tmpmyComments)
-        setStar(tmpstar)
+          addNewIcon(response.data.resource.created_at)
+          setCategory(response.data.resource.categories? response.data.resource.categories : [])
+          setTitle(tmptitle)
+          setDescriptionExpanded(tmpdescriptionExpanded)
+          addSetStage(response.data.resource.avg_ranking ? Number(response.data.resource.avg_ranking) : null)
+          setLikes(response.data.resource.total_likes ? Number(response.data.resource.total_likes) : 0)
+          setDomain(extractDomain(response.data.resource.url))
 
-        setTitle(tmptitle)
-        setDescriptionExpanded(tmpdescriptionExpanded)
+          setMyCategory(response.data.user.myCategories ? response.data.user.myCategories : [])
+          setMyStage(response.data.user.myRanking ? Number(response.data.user.myRanking) : null)
+          setMyComments(response.data.user.myComments_private ? response.data.user.myComments_private : "")
+          setStar(response.data.user.myRating ? Number(response.data.user.myRating) : null)
+          
+          if (response.data.resource.categories.length === 0 || response.data.resource.categories) {
+            setDisplayCategory(`Category: TBD`)
+          } else {
+            let displayCategories = "Category: "
+            response.data.resource.categories.forEach((element, index) => {
+              index === 0 ? displayCategories += element : displayCategories += `, ${element}`
+            });
+            setDisplayCategoryExpanded(displayCategories)
+            setDisplayCategory(truncateText(displayCategories, 28))
+          }
 
-        tmpReset()
-      }, 2000)
+          setResourceKey(response.data.resource.id)
+
+          setFavourite(response.data.user.is_favourite === true ? "pink" : "default",)
+          setLike(response.data.user.is_liked === true ? "purple" : "default")
+          setBookmark(response.data.user.is_bookmarked === true ? "green" : "default")
+          setPlaylist(response.data.user.is_playlist === true  ? "maroon" : "default")
+          onLoadReport(response.data.user.is_reported === true ? "default" : "red")
+          setLesson(response.data.is_recommended === true ? "blue" : "default")
+
+          tmpReset()
+        }, 2000)
+      })
+      .catch(error => {
+        console.error(error);
+        if (type === "edit")  {
+          setTimeout(() => {
+            setOpenEditing(false)
+            setErrorBlank(false)
+            setOpenErrorEditing(true)
+          }, 500)
+        } else if (type === "review") {
+          setTimeout(() => {
+            setOpenEditing(false)
+            setErrorBlank(false)
+            setOpenErrorReview(true)
+          }, 500)
+        }
+      })
     }
   }
 // --------------------------------------------------------
-
-
 
 // --------------------------------------------------------
   // TMP set state for Rate & Review & Edit
@@ -517,10 +576,11 @@ export const PreviewItem = (props) => {
 
   const skeletonTimer = randomNumber(100,1500);
   const { isAuth, user, userid, logout } = useContext(AuthContext);
+  const { filterData } = useContext(FilterContext);
 
 
   return (
-    <div>
+    <div style={{marginTop: "-1rem"}}>
       <Box display="flex" flexDirection="row" justifyContent="flex-end" overflow="visible" zIndex="1000" >
         {props.nowloading ? null : (
           <NewBadge display={newIcon} nowLoading={props.nowLoading}/>
@@ -631,7 +691,7 @@ export const PreviewItem = (props) => {
             open={openReview} setOpen={setOpenReview} setExpanded={setExpanded}
             handleClose={() => handleReviewClose(tmpReset(), rateReview("close"))} 
             handleCancel={() => tmpReset(rateReview(setShow("none")))}
-            addingNewResourceSQL={() => updatingResourceSQL(setShow("none"))}
+            addingNewResourceSQL={() => updatingResourceSQL("review",setShow("none"))}
             videoURL={videoURL} domain={domain}
             title={tmptitle} id={props.id} thumbnail={thumbnail}
             typeCategory={props.typeCategory} 
@@ -723,9 +783,9 @@ export const PreviewItem = (props) => {
             open={openEdit} setOpen={setOpenEdit} 
             handleClose={() => handleEditClose(tmpReset(setShow("none")))} 
             handleAbort={() => handleEditClose(tmpReset(setShow("none")))}
-            handleCancel={() => handleEditClose(setOpenReview(true), tmpReset(),setShow("none"))}
+            handleCancel={() => handleEditClose(setOpenReview(true), tmpReset(),rateReview("close"))}
             setNewURL={setNewURL} errorBlank={errorBlank}
-            addingNewResourceSQL={() => updatingResourceSQL(setShow("none"))}
+            addingNewResourceSQL={() => updatingResourceSQL("edit",setShow("none"))}
             videoURL={videoURL} thumbnail={thumbnail}
             title={tmptitle} setTitle={tmpsetTitle} domain={domain}
             descriptionExpanded={tmpdescriptionExpanded} setDescriptionExpanded={tmpsetDescriptionExpanded}
@@ -767,12 +827,26 @@ export const PreviewItem = (props) => {
           />
         </div>
         <ErrorModal 
-            open={openErrorDeleting} 
-            message={"An error was encountered deleting your resource."} submessage={"Would you like to Try Again?"} 
-            setNewResource={setOpenDelete} setNewURL={setOpenErrorDeleting}
-            handleErrorFetchingNewResourceClose={() => setOpenErrorDeleting(false)}
-            handleErrorFetchingNewResourceAbort={() =>setOpenErrorDeleting(false)}
-          />
+          open={openErrorDeleting} 
+          message={"An error was encountered deleting your resource."} submessage={"Would you like to Try Again?"} 
+          setNewResource={setOpenDelete} setNewURL={setOpenErrorDeleting}
+          handleErrorFetchingNewResourceClose={() => setOpenErrorDeleting(false)}
+          handleErrorFetchingNewResourceAbort={() =>setOpenErrorDeleting(false)}
+        />
+        <ErrorModal 
+          open={openErrorEditing} 
+          message={"An error was encountered updating your resource."} submessage={"Would you like to Try Again?"} 
+          setNewResource={setOpenEdit} setNewURL={setOpenErrorEditing}
+          handleErrorFetchingNewResourceClose={() => setOpenErrorEditing(false)}
+          handleErrorFetchingNewResourceAbort={() => (tmpReset(), rateReview("close"), setOpenErrorEditing(false))}
+        />
+        <ErrorModal 
+          open={openErrorReview} 
+          message={"An error was encountered updating your resource."} submessage={"Would you like to Try Again?"} 
+          setNewResource={setOpenReview} setNewURL={setOpenErrorReview}
+          handleErrorFetchingNewResourceClose={() => (setOpenErrorReview(false), rateReview("show"))}
+          handleErrorFetchingNewResourceAbort={() => (tmpReset(), rateReview("close"), setOpenErrorReview(false))}
+        />
         <div>
           <SharedModal
             open={emailSent} setEmailSent={setEmailSent} 
@@ -784,7 +858,7 @@ export const PreviewItem = (props) => {
         <div>
           <ResultModal 
             open={openEdited} setStatusOpen={setOpenEdited} 
-            handleClose={() => handleEditedClose(tmpReset())} 
+            handleClose={() => (handleEditedClose(tmpReset(), rateReview("close"), filterData("refresh", true, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, false, props.setResourceCount, props.setShowMoreCards)))} 
             message={"Success! Resource has been updated."} 
             thumbnail={thumbnail} title={title}
             setsampledata={props.setsampledata} sampledata={props.sampledata}

@@ -82,20 +82,19 @@ export default function PersistentDrawerLeft(props) {
     zlog('action','Button title clicked:',event);
     zlog('action','Button index clicked:', index);
     setViewTitle(event)
+    props.reset()
     if(index === 0) {
       props.setSelectedIndex(false)
       props.handleNewResourceOpen()
       props.setLessonTrue(false)
-      filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData)
     } else if (index === 2) {
-      props.reset()
       setTimeout(() => {
-        filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading)
+        filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
         props.setLessonTrue(true)
       }, 100)  
     } else {
       props.setLessonTrue(false)
-      filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData)
+      filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData, false, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
     }
 
   };

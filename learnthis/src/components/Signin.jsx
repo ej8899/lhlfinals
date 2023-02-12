@@ -108,7 +108,7 @@ const Login=(props)=>{
         localStorage.removeItem("defaultemail");
       }
 
-      login({"email": email, "password": password}, close, props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLoading)
+      login({"email": email, "password": password}, close, props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLoading, props.setResourceCount, props.setShowMoreCards)
     };
 
     const close = () => {

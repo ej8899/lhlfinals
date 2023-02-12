@@ -73,23 +73,6 @@ import { FavouriteStaleStats } from "../Icons/favourite";
 
 export const LessonIndex = (props) => {
   
-    const {
-      filterData,
-      myFilteredData,
-      totalkeys,
-      parsedBsampledata,
-      parsedAsampledata,
-      parsedIsampledata,
-      setparsedAsampledata,
-      setparsedBsampledata,
-      setparsedIsampledata,
-      pageA,
-      pageB,
-      pageI,
-      setPageA,
-      setPageB,
-      setPageI
-    } = useContext(FilterContext)
 // --------------------------------------------------------
 
   const Accordion = styled((props) => (
@@ -146,27 +129,121 @@ export const LessonIndex = (props) => {
   }
 // --------------------------------------------------------
 
-const propsArray = [
-  ["Beginner", parsedBsampledata, pageB, beginnerChange],
-  ["Intermediate", parsedIsampledata, pageI, intermediateChange],
-  ["Advanced", parsedAsampledata, pageA, advancedChange]
-]
+const beginnerArray = []
+const intermediateArray = []
+const advancedArray = []
+
+props.sampledata.forEach(resource => {
+  if(resource.stage >= 0 && resource.stage < 34 && resource.stage !== null) {
+    beginnerArray.push(resource)
+  } else if (resource.stage >= 34 && resource.stage < 68) {
+    intermediateArray.push(resource)
+  } else if (resource.stage >= 68 && resource.stage <= 100) {
+    advancedArray.push(resource)
+  }
+})
+
+// const propsArray = [
+//   ["Beginner", parsedBsampledata, pageB, beginnerChange],
+//   ["Intermediate", parsedIsampledata, pageI, intermediateChange],
+//   ["Advanced", parsedAsampledata, pageA, advancedChange]
+// ]
+
+// const [parsedBsampledata, setparsedBsampledata] = useState([])
+// const [parsedIsampledata, setparsedIsampledata] = useState([])
+// const [parsedAsampledata, setparsedAsampledata] = useState([])
+
+const [pageB, setPageB] = useState(1)
+const [pageI, setPageI] = useState(1)
+const [pageA, setPageA] = useState(1)
+
+// // --------------------------------------------------------
+
+const setData = (sampledata) => {
+  let tmpArray = []
+  let maxCount = Math.ceil(sampledata.length/5)
+  
+  for (let x = 0; x < maxCount; x++) {
+
+    let tmpInner = []
+    if (x < maxCount -1) {
+      for (let y = ((x)*5); y < ((x)*5+5); y++) {
+        tmpInner.push(sampledata[y])
+      }
+    } else {
+      for (let y = ((x)*5); y < sampledata.length; y ++) {
+        tmpInner.push(sampledata[y])
+      }
+    }
+    tmpArray.push(tmpInner)
+  }
+
+  // console.log(tmpArray)
+  return tmpArray
+}
+
+const parsedBsampledata = setData(beginnerArray)
+const parsedIsampledata = setData(intermediateArray)
+const parsedAsampledata = setData(advancedArray)
 
   return (
     <React.Fragment>
-      {propsArray.map((element, indice) => (
-      <Accordion key={indice} defaultExpanded={true}>
-      <AccordionSummary
-          expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>{element[0]}</Typography>
-        </AccordionSummary>
+      <Accordion defaultExpanded={true}>
+        <AccordionSummary
+            expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography>Beginner</Typography>
+          </AccordionSummary>
+        <AccordionDetails>
+        {(parsedBsampledata !== undefined && parsedBsampledata[pageB-1] !== undefined && parsedBsampledata.length > 0) &&
+          <Box sx={{ flexGrow: 1 }}>
+
+          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 20 }}>
+              {parsedBsampledata[pageB-1].map((item, index) => (
+                <Grid item xs={2} sm={4} md={4} key={index}>
+                  <LessonItem
+                    key={item.id} nowloading={props.nowloading} typeCategory={props.typeCategory}
+                    id={item.id} resource_id={item.resource_id} profile_id={item.profile_id}
+                    videoURL={ item.videoURL } created_at={item.created_at}
+                    title={item.title} thumbnail={item.thumbnail} description={item.description} 
+                    stage={item.stage} category={item.category} rating={item.rating} likes={item.likes} 
+                    sampledata={props.sampledata} setsampledata={props.setsampledata} 
+                    myCategory={item.myCategory} myStage={item.myStage} 
+                    star={item.star} myComments={item.myComments}
+                    setOpenDeleted={props.setOpenDeleted} combinedData={props.combinedData}
+                    bookmark={item.bookmark} like={item.like} favourite={item.favourite} playlist={item.playlist} lesson={item.lesson} report={item.report}
+                    setPage={setPageB} 
+                  >
+                    {item.id}
+                  </LessonItem>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+          }
+
+          <Box display="flex" justifyContent="center" sx={{marginTop : 2}}>
+            <Stack spacing={2}>
+              <Pagination count={parsedBsampledata.length} page={pageB} onChange={(event,value) => beginnerChange(event, value)} />
+            </Stack>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion defaultExpanded={true}>
+        <AccordionSummary
+            expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography>Intermediate</Typography>
+          </AccordionSummary>
         <AccordionDetails>
           <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 20 }}>
-              {element[1].length > 0 && element[1][element[2]-1].map((item, index) => (
+          {(parsedIsampledata !== undefined && parsedIsampledata[pageI-1] !== undefined && parsedIsampledata.length > 0) && parsedIsampledata[pageI-1].map((item, index) => (
                 <Grid item xs={2} sm={4} md={4} key={index}>
                   <LessonItem
                     key={item.id} nowloading={props.nowloading} typeCategory={props.typeCategory}
@@ -179,6 +256,7 @@ const propsArray = [
                     star={item.star} myComments={item.myComments}
                     setOpenDeleted={props.setOpenDeleted} combinedData={props.combinedData}
                     bookmark={item.bookmark} like={item.like} favourite={item.favourite} playlist={item.playlist} lesson={item.lesson} report={item.report} 
+                    setPage={setPageI} 
                   >
                     {item.id}
                   </LessonItem>
@@ -189,12 +267,52 @@ const propsArray = [
 
           <Box display="flex" justifyContent="center" sx={{marginTop : 2}}>
             <Stack spacing={2}>
-              <Pagination count={element[1].length} page={element[2]} onChange={(event,value) => element[3](event, value)} />
+              <Pagination count={parsedIsampledata.length} page={pageI} onChange={(event,value) => intermediateChange(event, value)} />
             </Stack>
           </Box>
         </AccordionDetails>
       </Accordion>
-    ))}
+
+      <Accordion defaultExpanded={true}>
+        <AccordionSummary
+            expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography>Advanced</Typography>
+          </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 20 }}>
+          {(parsedAsampledata !== undefined && parsedAsampledata[pageA-1] !== undefined && parsedAsampledata.length > 0) && parsedAsampledata[pageA-1].map((item, index) => (
+                <Grid item xs={2} sm={4} md={4} key={index}>
+                  <LessonItem
+                    key={item.id} nowloading={props.nowloading} typeCategory={props.typeCategory}
+                    id={item.id} resource_id={item.resource_id} profile_id={item.profile_id}
+                    videoURL={ item.videoURL } created_at={item.created_at}
+                    title={item.title} thumbnail={item.thumbnail} description={item.description} 
+                    stage={item.stage} category={item.category} rating={item.rating} likes={item.likes} 
+                    sampledata={props.sampledata} setsampledata={props.setsampledata} 
+                    myCategory={item.myCategory} myStage={item.myStage} 
+                    star={item.star} myComments={item.myComments}
+                    setOpenDeleted={props.setOpenDeleted} combinedData={props.combinedData}
+                    bookmark={item.bookmark} like={item.like} favourite={item.favourite} playlist={item.playlist} lesson={item.lesson} report={item.report} 
+                    setPage={setPageA} 
+                  >
+                    {item.id}
+                  </LessonItem>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+
+          <Box display="flex" justifyContent="center" sx={{marginTop : 2}}>
+            <Stack spacing={2}>
+              <Pagination count={parsedAsampledata.length} page={pageA} onChange={(event,value) => advancedChange(event, value)} />
+            </Stack>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
     </React.Fragment>
   )

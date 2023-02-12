@@ -67,12 +67,12 @@ export default function Hero(props) {
     if (index === 200 ) {
       props.setFilled(false)
       props.setClearFilter(true)
-      filterData("clear", userid, props.setsampledata, props.sampledata, props.combinedData)
+      filterData("clear", userid, props.setsampledata, props.sampledata, props.combinedData, false, false, true, props.setResourceCount, props.setShowMoreCards)
       chipReset(props.catList, props.setChipFilled)
     } else {
       props.setFilled({...props.filled, [index]: !props.filled[index]});
       // console.log({...filled, [index]: !filled[index]})
-      filterData("complexity", {...props.filled, [index]: !props.filled[index]}, props.setsampledata, props.sampledata, props.combinedData)
+      filterData("complexity", {...props.filled, [index]: !props.filled[index]}, props.setsampledata, props.sampledata, props.combinedData, false, false, false, props.setResourceCount, props.setShowMoreCards)
       props.setClearFilter(false)
     }
   };
@@ -103,6 +103,7 @@ export default function Hero(props) {
           <ChipsArray catList={props.catList}
             setsampledata={props.setsampledata} sampledata={props.sampledata}
             combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} filled={props.chipfilled} setFilled={props.setChipFilled}
+            setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
           ></ChipsArray>
           <Grid container spacing={3}>
         <Grid item xs={6} sx={{my: 1}}>

@@ -5,14 +5,13 @@ import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
+
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+
 import MoreIcon from '@mui/icons-material/MoreVert';
 import zlog from '../../helpers/zlog';
 import Login from '../Signin.jsx';
@@ -25,6 +24,10 @@ import Divider from '@mui/material/Divider';
 import RandomAvatar from './RandomAvatar';
 import { Paper, Toolbar, Box, Grid, InputAdornment } from "@mui/material";
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+
+
+
 
 import {  modalSignUp,
           modalSignIn
@@ -40,6 +43,12 @@ import AboutDialog from "../Modal/about.jsx"
 import { useEffect } from 'react';
 import { ClassNames } from '@emotion/react';
 import HouseIcon from '@mui/icons-material/House';
+
+import UserNotifications from './Notifications';
+
+
+
+
 
 //
 // profile modal
@@ -170,6 +179,9 @@ export default function PrimarySearchAppBar(props) {
     zlog('debug','textInput',textInput);
     setTimeout(() => setTextInput(""), 10);
     setViewTitle('Search Results for: '+ textInput)
+
+    filterData("search", [userid, textInput], props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
+    chipReset(props.catList, props.setChipFilled)
   }
 
 
@@ -202,7 +214,7 @@ export default function PrimarySearchAppBar(props) {
 
     switch (modal) {
       case 'logout':
-        logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex, reset, props.setLoading);
+        logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex, reset, props.setLoading, props.setResourceCount, props.setShowMoreCards);
         break;
       case 'profile':
         setTitle("Profile...")
@@ -220,7 +232,7 @@ export default function PrimarySearchAppBar(props) {
   function handlelogout() {
     setAnchorEl(null);
     handleMenuClose();
-    logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex, reset, props.setLoading);
+    logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex, reset, props.setLoading, props.setResourceCount, props.setShowMoreCards);
   }
 
   // SIGN IN
@@ -315,7 +327,7 @@ const toggleDrawer = (anchor, open) => (event) => {
 const reset = () =>{
   props.setLessonTrue(false)
   setSelectedIndex(false)
-  filterData("clear", userid, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading)
+  filterData("clear", userid, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
   chipReset(props.catList, props.setChipFilled)
   props.setFilled(false)
 }
@@ -324,22 +336,23 @@ const reset = () =>{
 
 
 
+
   // TODO - get rid of &nbsp; by user logged in name - how to pad the vertical divider?
 
   
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Login 
+     <Login 
         open={loginopen} close={handleLoginClose}
         setsampledata={props.setsampledata} sampledata={props.sampledata}
         combinedData={props.combinedData} setSOpen={setSOpen}
-        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} setLoading={props.setLoading} 
+        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} setLoading={props.setLoading} setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
       ></Login>
       <SignUp 
         open={signupopen} close={handleSignUpClose}
         setsampledata={props.setsampledata} sampledata={props.sampledata}
         combinedData={props.combinedData} setLOpen={setLOpen}
-        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} setLoading={props.setLoading}
+        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} setLoading={props.setLoading} setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
       ></SignUp>
       <AppBar position="static">
         <Toolbar>
@@ -366,13 +379,19 @@ const reset = () =>{
             <MenuIcon />
           </IconButton>}
           
-          <IconButton
-            variant="h6"
+          <Button
+            size="large"
             sx={{ textAlign:"center" }}
             onClick={() => reset()}
+            variant="text"
           >
-            <HouseIcon/>&nbsp;&nbsp;LearnThis!
-          </IconButton>
+            <HouseIcon style={{ color:'white', width:30, height:30 }}/>
+            
+            <Typography variant='h6'  style={{ color:'white', }}>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="./images/learnthis.png" alt="LearnThis!" style={{width: 180}}/>
+            </Typography>
+          </Button>
 
 
           <form onSubmit={handleSubmit}>
@@ -393,16 +412,9 @@ const reset = () =>{
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ alignItems:"center", display: { xs: 'none', md: 'flex' } }}>
-            
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+          {isAuth && 
+            <UserNotifications></UserNotifications>
+          }
             
             <IconButton 
               size="large" 
@@ -455,7 +467,7 @@ const reset = () =>{
       <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
       <PersistentDrawerLeft
         state={state} setState={setState} toggleDrawer={toggleDrawer} anchor={anchor}
-        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} setLessonTrue={props.setLessonTrue} setLoading={props.setLoading} reset={reset}
+        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} setLessonTrue={props.setLessonTrue} setLoading={props.setLoading} reset={reset} setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
       />
       <FilterModal 
         open={filterError} 

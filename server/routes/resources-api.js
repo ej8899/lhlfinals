@@ -65,7 +65,8 @@ router.post("/options", (req, res) => {
           element.my_comments_private =
             await q_comments.getCommentsByResourceIdAndProfileId(
               element.id,
-              options.user.profile_id
+              options.user.profile_id,
+              true
             );
           
             if (element.my_comments_private) {
@@ -77,7 +78,6 @@ router.post("/options", (req, res) => {
             await q_comments.getCommentsByResourceIdAndProfileId(
               element.id,
               options.user.profile_id,
-              true
             );
 
             if (element.my_comments_public) {
@@ -116,7 +116,7 @@ router.post("/", (req, res) => {
     if (isYoutubeUrl(resourceData.url)) {
       const videoId =  getYoutubeVideoId(resourceData.url)
       resourceData.thumbnail = `https://i.ytimg.com/vi/${videoId}/sddefault.jpg`
-      q_resources.postResourceWithAddition(resourceData)
+      q_resources.postResource(resourceData)
       .then((savedData) => {
         console.log("Resource save returned obj: ", savedData);
         return res.status(200).json(savedData);
@@ -220,6 +220,28 @@ router.post("/withAddition", (req, res) => {
         return res.status(500).json({ error: err.message });
       });
   }
+});
+// --------------------------------------------------
+
+// --------------------------------------------------
+/**
+ * Update existing resource with addition
+ * @return {json} resource that is updated
+ */
+router.put("/withAddition", (req, res) => {
+  //const userId = req.session.userID;
+  const resourceData = req.body;
+  console.log('resourceData', resourceData);
+  q_resources
+    .updateResourceWithAddition(resourceData)
+    .then((data) => {
+      console.log("Resource updated returned obj with addition: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error updating new resource", err);
+      return res.status(500).json({ error: err.message });
+    });
 });
 // --------------------------------------------------
 

@@ -9,6 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Fade from '@mui/material/Fade';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -53,9 +54,9 @@ export const StarRating = (props) => {
   return (
     <Stack spacing={1}>
       <Tooltip title={props.ratingScore} >
-      <IconButton sx={{ "&:hover": { cursor: "auto"} }}>
+      <Button sx={{ "&:hover": { cursor: "auto"} }}>
         <Rating name="half-rating-read" defaultValue={props.rating} precision={0.5} readOnly />
-        </IconButton>
+      </Button>
       </Tooltip>
     </Stack>
   );
@@ -151,8 +152,9 @@ export const StarStaleRating = (props) => {
   // }
 //All above in this function is not needed or used
 
+// IconButton
   return (
-    <IconButton aria-label="share">
+    <Button aria-label="share">
       <Rating 
         name="simple-controlled"
         value={props.star}
@@ -162,6 +164,6 @@ export const StarStaleRating = (props) => {
         precision={0.5} 
         disabled={props.disabled}
       />
-    </IconButton>
+    </Button>
   )  
 }

@@ -102,7 +102,7 @@ export default function SignUp(props) {
       const email = data.get('email')
       const password = data.get('password')
 
-    createUser({"email": email, "password": password, 'firstname': firstname, 'lastname': lastname}, close, props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLoading)
+    createUser({"email": email, "password": password, 'firstname': firstname, 'lastname': lastname}, close, props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLoading, props.setResourceCount, props.setShowMoreCards)
   };
 
   const close = () => {

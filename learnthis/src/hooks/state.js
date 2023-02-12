@@ -85,7 +85,8 @@ const handleReviewClose = () => {
 const [openEdit, setOpenEdit] = useState(false);
 const [openEditing, setOpenEditing] = useState(false)
 const [openEdited, setOpenEdited] = useState(false);
-
+const [openErrorEditing, setOpenErrorEditing] = useState(false);
+const [openErrorReview, setOpenErrorReview] = useState(false);
 
 const handleOpenEdit = () => {
     setOpenEdit(true);
@@ -169,7 +170,7 @@ const [myStage, setMyStage] = useState(null)
 
 const addMyStage = (stage) => {
   setMyStage(stage)
-  setSliderActive(false)
+  setSliderActive(null)
 }
 // -------------------------------------------------------------
 
@@ -278,6 +279,7 @@ const handleAddNewResourceAbort =() => {
   setThumbnail('')
   setMyCategory([])
   setMyStage(null)
+  setSliderActive("grey")
   setVideoURL('')
   setDomain('')
   setErrorBlank(false)
@@ -291,6 +293,7 @@ const handleSavedClose =() => {
   setThumbnail('')
   setMyCategory([])
   setMyStage(null)
+  setSliderActive("grey")
   setVideoURL('')
   setDomain('')
   setErrorBlank(false)
@@ -364,6 +367,10 @@ const handleErrorSavingNewResourceClose = () => {
     setOpenEdit,
     handleOpenEdit,
     handleEditClose,
+    openErrorEditing, 
+    setOpenErrorEditing,
+    openErrorReview,
+    setOpenErrorReview,
 
     openDelete,
     setOpenDelete,

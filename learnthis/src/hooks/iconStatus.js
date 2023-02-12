@@ -184,7 +184,7 @@ const addDeleteIcon = (tmp = false) => {
 // Handle Icon Reset
   const handleIconReset = () => {
     setFavourite('default')
-    setLesson('dafault')
+    setLesson('default')
     setRate('default')
     setBookmark('default')
     setPlaylist('default')

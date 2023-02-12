@@ -95,7 +95,7 @@ const advancedChange = (event, value) => {
   const [totalkeys, settotalkeys] = useState(1)
 
 // TODO -- change when backend data avaialble - less parameters needed
-  const filterData = (type, values, updateDatabase, tmpUserData, helperfunc, icon = false, setLoading) => {
+  const filterData = (type, values, updateDatabase, tmpUserData, helperfunc, icon = false, setLoading, counter, setResourceCount, setShowMoreCards) => {
   
     const reference = {
       resource : {
@@ -272,6 +272,9 @@ const advancedChange = (event, value) => {
       }
       case "signin": {
           filteredObject.user["profile_id"] = values
+          if (filteredObject.resource.hasOwnProperty("search")) {
+            delete filteredObject.resource.search
+          }
         break;
       }
       case "nav" : {
@@ -283,7 +286,7 @@ const advancedChange = (event, value) => {
                 filteredObject.resource["minimum_likes"] = 0
                 filteredObject.resource["minimum_is_recommended"] = 0
                 filteredObject.resource["minimum_average_rating"] = 0
-                filteredObject.resource["limit"] = 35
+                filteredObject.resource["limit"] = 45
                 filteredObject.resource["order_by"] = "lowest_ranked"
               } else if (filteredObject.resource.hasOwnProperty('minimum_likes') ||  filteredObject.resource.hasOwnProperty('minimum_is_recommended') || filteredObject.resource.hasOwnProperty('limit')) {
                 if (filteredObject.resource.hasOwnProperty('minimum_likes')) {
@@ -383,6 +386,16 @@ const advancedChange = (event, value) => {
           }
         }
       }
+      case "search": {
+        if (type === "search") {
+          filteredObject = {resource: {search: values[1]}, user: {profile_id: values[0]}};
+        } else if (filteredObject.resource.hasOwnProperty("search")) {
+          delete filteredObject.resource.search
+        }
+        break;
+      }
+      case "refresh" : 
+        break;
     }
 
     let count = 0;
@@ -399,18 +412,25 @@ const advancedChange = (event, value) => {
     if (icon) {
       updateDatabase([])
       setLoading(true)
+    } 
+
+    if (type === "refresh") {
+      updateDatabase([])
     }
     // TODO-- Link Server Code
     return axios.post(`http://localhost:8080/api/resources/options`, filteredObject)
     .then(response => {
       // console.log(response.data)
       
-      updateDatabase([])
       updateDatabase(helperfunc(response.data)) 
-      
-      setparsedBsampledata(setData(getdata(helperfunc(response.data), "beginner")))
-      setparsedIsampledata(setData(getdata(helperfunc(response.data), "intermediate")))
-      setparsedAsampledata(setData(getdata(helperfunc(response.data), "advanced")))
+
+      if(counter) {
+        setResourceCount(response.data.length)
+        setShowMoreCards(8)
+        console.log("TRIGGERED")
+      } else {
+        setResourceCount(response.data.length)
+      }
 
       setTimeout(() => {
         if (icon) {

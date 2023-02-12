@@ -103,7 +103,7 @@ export const ResultModal= (props) => {
             </Alert>
             <Typography variant="body2" textAlign="center" sx={{marginTop: 1.5}}>
               Checkout &nbsp; <b>
-                <a onClick={() => props.handleClose(filterData("mine", userid, props.setsampledata, props.sampledata, props.combinedData), props.handleReviewClose())} style={{color: "purple", cursor: "pointer", "&:hover" : {color: "green"}}}>'My Resources'</a> 
+                <a onClick={() => props.handleClose(filterData("mine", userid, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards), props.handleReviewClose())} style={{color: "purple", cursor: "pointer", "&:hover" : {color: "green"}}}>'My Resources'</a> 
                 </b> &nbsp; for resources you've added.
             </Typography>
           </Box>

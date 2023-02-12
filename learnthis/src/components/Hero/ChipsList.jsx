@@ -144,7 +144,7 @@ export default function ChipsArray(props) {
       }
     }
 
-    filterData("category", categoryArray, props.setsampledata, props.sampledata, props.combinedData)
+    filterData("category", categoryArray, props.setsampledata, props.sampledata, props.combinedData, false, false, false, props.setResourceCount, props.setShowMoreCards)
   };
 
   
