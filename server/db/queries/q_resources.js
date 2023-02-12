@@ -57,6 +57,47 @@ const getAllResourcesWithAddition = (id = undefined) => {
     });
 };
 
+/**
+ * Get all resources with addition of likes, categories, rankings and ratings
+ * @param {String} keyword to search in the title or description
+ * @return {Promise<{}>} A promise of all resources in db that are not deleted limit by 20.
+ */
+const getAllResourcesByKeyword = (keyword = undefined) => {
+  const whereClause =
+    keyword === undefined
+      ? "WHERE res.deleted_at IS NULL AND c.profile_id IS NULL"
+      : `WHERE res.deleted_at IS NULL AND c.profile_id IS NULL AND (res.title like CONCAT('%', $1::VARCHAR ,'%') OR res.description like CONCAT('%', $2::VARCHAR ,'%'))`;
+  const query = `
+    SELECT res.*, COUNT(DISTINCT l.id) AS total_likes, array[c.name] AS categories, AVG(ran.SCALE) AS avg_ranking, AVG(rat.rate) AS avg_rating
+    FROM resources AS res
+    LEFT JOIN likes AS l on res.id=l.resource_id
+    LEFT JOIN categories AS c on res.id=c.resource_id
+    LEFT JOIN rankings AS ran on res.id=ran.resource_id
+    LEFT JOIN ratings AS rat on res.id=rat.resource_id
+    ${whereClause}
+    GROUP BY res.id, c.name
+    ORDER BY res.id LIMIT 20;`;
+
+  return db.query(query,[keyword,keyword]).then((data) => {
+    if (data.rows.length === 0) {
+      return [];
+    }
+
+    const resources = [];
+    data.rows.forEach((resource) => {
+      if (resources.map((r) => r.id).includes(resource.id)) {
+        const index = resources.findIndex((r) => r.id === resource.id);
+        resources[index] = {
+          ...resources[index],
+          categories: resources[index].categories.concat(resource.categories),
+        };
+      } else {
+        resources.push(resource);
+      }
+    });
+    return resources;
+  });
+};
 
 const getAllResourcesByOptions = (options) => {
   const q = {};
@@ -550,6 +591,7 @@ const deleteResource = (data) => {
 module.exports = {
   getAllResources,
   getAllResourcesWithAddition,
+  getAllResourcesByKeyword,
   getAllResourcesByOptions,
   postResource,
   postResourceWithAddition,

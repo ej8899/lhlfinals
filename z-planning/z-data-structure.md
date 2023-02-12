@@ -216,13 +216,14 @@ returned:
         "created_at": "2023-02-09T04:55:52.720Z",
         "updated_at": null,
         "deleted_at": null,
-        "likes": "2",
+        "total_likes": "2",
         "categories": [
+            "Node.js",
             "Ruby",
             "VS Code"
         ],
-        "ranking": "7.0000000000000000",
-        "rating": "4.0000000000000000"
+        "avg_ranking": "7.0000000000000000",
+        "avg_rating": "4.0000000000000000"
     },
     {
         "id": 2,
@@ -234,12 +235,38 @@ returned:
         "created_at": "2023-02-09T04:55:52.720Z",
         "updated_at": null,
         "deleted_at": null,
-        "likes": "1",
+        "total_likes": "1",
         "categories": [
             "JavaScript"
         ],
-        "ranking": "3.0000000000000000",
-        "rating": "1.5000000000000000"
+        "avg_ranking": "3.0000000000000000",
+        "avg_rating": "1.5000000000000000"
+    }
+]
+```
+
+## GET api/resources/keyword/[keyword_to_search]
+description: retrieve all resources from all Users with details that title or description has the keyword being searched
+
+```json
+returned:
+[
+    {
+        "id": 2,
+        "profile_id": 1,
+        "url": "https://www.youtube.com/watch?v=_y9oxzTGERs",
+        "title": "Introduction to JavaScript",
+        "description": "This course introduces you to JavaScript, the most popular programming language for web development. You can also try the interactive version of the course here: https://scrimba.com/g/gintrotojavascript\n\n  The course contains 14 lessons and 7 challenges. In the challenges, you will be encourage to jump into the code and get your hands dirty. This is both fun and great for making the knowledge stick.",
+        "thumbnail": "",
+        "created_at": "2023-02-09T04:55:52.720Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "total_likes": "1",
+        "categories": [
+            "JavaScript"
+        ],
+        "avg_ranking": "3.0000000000000000",
+        "avg_rating": "1.5000000000000000"
     }
 ]
 ```
