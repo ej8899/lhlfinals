@@ -1,6 +1,5 @@
 // helper for update /api/resouces/withAddition
 const updateResourceQueryHelper = (data, resourceId) => {
-  console.log('data', data);
   const queries = [];
 
   const commentsQuery = `
