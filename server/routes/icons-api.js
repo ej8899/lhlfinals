@@ -29,5 +29,22 @@ module.exports = function(router, database) {
       });
   });
 
+  router.post('/', async(req, res) => {
+    const data = req.body;
+    const statuses = await database.postIconsStatuses(data)
+      .catch(err => res.status(500).json({ error: err.message }));
+
+    if (!statuses) {
+      res
+        .status(500)
+        .json({ error: "The status not saved" });
+      return;
+    }
+
+    res
+      .status(200)
+      .json({ ...statuses });
+  });
+
   return router;
 };
