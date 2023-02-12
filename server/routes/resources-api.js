@@ -24,6 +24,20 @@ router.get("/", (req, res) => {
 });
 
 /**
+ * Get all resources comming from all users that are still active from db
+ * @return {json} All resources in db that are not deleted limit by 20.
+ */
+router.get("/keyword/:keyword", (req, res) => {
+  const keyword = req.params.keyword
+  q_resources
+    .getAllResourcesByKeyword(keyword)
+    .then((data) => res.json(data))
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+/**
  * Get all resources with addition of likes, categories, rankings and ratings
  * @return {json} All resources in db that are not deleted limit by 20.
  */
