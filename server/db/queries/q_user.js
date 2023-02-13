@@ -6,7 +6,11 @@ const query = require('./common');
 * @return {Promise<{}>} A promise of the user.
 */
 const getUserWithEmail = function(email) {
-  return query(`SELECT * FROM users WHERE email=$1 AND deleted_at IS NULL;`, [email], result => result.rows[0]);
+  return query(`
+    SELECT u.*, p.id AS profile_id, p.* FROM
+      users AS u
+    LEFT JOIN profiles AS p ON u.id=p.user_id
+    WHERE email=$1 AND u.deleted_at IS NULL AND p.deleted_at IS NULL;`, [email], result => result.rows);
 };
 exports.getUserWithEmail = getUserWithEmail;
 
