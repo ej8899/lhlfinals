@@ -144,7 +144,7 @@ module.exports = function(router, database) {
   router.post('/login', async (req, res) => {
     const user = req.body;
     const authenticatedUser = await authenticateUser(user.email, user.password, database);
-    if (authenticatedUser.length === 0) {
+    if (!authenticatedUser) {
       res
         .status(500)
         .json({ error: "Login error" });
