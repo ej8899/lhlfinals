@@ -130,7 +130,7 @@ export const ViewDetailModal = (props) => {
                     height="360"
                     width="640"
                     image={props.thumbnail}
-                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
+                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available'}
                     sx={{marginBottom : 2}}
                   />
                   <Typography variant='body2' sx={{marginBottom : "2"}}> 

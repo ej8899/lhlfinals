@@ -82,7 +82,7 @@ export const DeleteModal= (props) => {
                 height="140"
                 width="345"
                 image={props.thumbnail}
-                src={ 'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available '}
+                src={ 'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available '}
                 sx={{marginBottom : 2}}
               />
             </Box>

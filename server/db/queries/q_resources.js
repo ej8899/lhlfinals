@@ -14,7 +14,7 @@ const getAllResources = () => {
       `SELECT *
     FROM resources
     WHERE deleted_at IS NULL
-    ORDER BY id LIMIT 20;`
+    ORDER BY id LIMIT 40;`
     )
     .then((data) => {
       return data.rows;
@@ -38,15 +38,13 @@ const getAllResourcesWithAddition = (id = undefined) => {
     LEFT JOIN ratings AS rat on res.id=rat.resource_id
     WHERE${idCondition}res.deleted_at IS NULL AND c.deleted_at IS NULL
     GROUP BY res.id, c.name
-    ORDER BY res.id LIMIT 20;`;
+    ORDER BY res.id LIMIT 40;`;
   return db
     .query(query).then((data) => {
-      console.log("DATA IS:", data.rows)
       if (data.rows.length === 0) {
         return [];
       }
       const resources = [];
-      console.log("Data ROWS", data.rows)
       data.rows.forEach(resource => {
         if (resources.map(r => r.id).includes(resource.id)) {
           const index = resources.findIndex(r => r.id === resource.id);
@@ -65,6 +63,188 @@ const getAllResourcesWithAddition = (id = undefined) => {
 };
 // ----------------------------------------------------------
 
+// ----------------------------------------------------------
+/**
+ * Get all resources with addition of likes, categories, rankings and ratings
+ * @param {String} keyword to search in the title or description
+ * @return {Promise<{}>} A promise of all resources in db that are not deleted limit by 20.
+ */
+const getAllResourcesByKeyword = (options) => {
+
+  const q = {};
+  
+  q.select = `
+    SELECT 
+    res.*, 
+    COUNT(DISTINCT l.id) AS total_likes, 
+    array[c.name] AS categories, 
+    AVG(ran.SCALE) AS avg_ranking, 
+    AVG(rat.rate) AS avg_rating,
+    COUNT(DISTINCT true_recommends.is_recommended) as total_recommends
+  `;
+
+  q.from =`
+    FROM resources AS res
+    LEFT JOIN (SELECT * FROM likes WHERE likes.is_liked IS TRUE) AS l on res.id=l.resource_id
+    LEFT JOIN (SELECT * FROM categories WHERE categories.deleted_at IS NULL) AS c on res.id=c.resource_id
+    LEFT JOIN rankings AS ran on res.id=ran.resource_id
+    LEFT JOIN ratings AS rat on res.id=rat.resource_id
+    LEFT JOIN (SELECT * FROM recommends WHERE recommends.is_recommended IS TRUE) as true_recommends ON res.id = true_recommends.resource_id
+  `;
+
+  q.where =`
+    WHERE res.deleted_at IS NULL AND c.deleted_at IS NULL
+  `;
+
+  q.group = `
+    GROUP BY res.id, c.name
+  `;
+
+  q.having = "";
+  q.order = "";
+  q.limit = "";
+  q.counter = 0; //params counter
+  q.query = "";
+  q.params = [];
+
+  if (options.resource.search && options.resource.search !== undefined) {
+    q.counter++;
+    
+    q.where = `${q.where} \n AND (res.title iLIKE CONCAT('%', $1::VARCHAR ,'%') OR res.description iLIKE CONCAT('%', $1::VARCHAR ,'%') OR c.name iLIKE CONCAT('%', $1::VARCHAR ,'%'))`
+
+    q.params.push(options.resource.search)
+  }
+
+  /*USER FILTER*/
+  if (options.user.profile_id) {
+    q.select += `, \n${options.user.profile_id} AS user_profile_id, 
+    myfavourites.is_favourite,
+    mylikes.is_liked,
+    mybookmarks.is_bookmarked,
+    myplaylists.is_playlist,
+    myreports.is_reported,
+    myrecommends.is_recommended,
+    myratings.rate AS my_Rating,
+    myrankings.scale AS my_ranking`;
+
+    q.from += `
+    \nLEFT JOIN (SELECT * FROM favourites WHERE favourites.profile_id = ${options.user.profile_id}) as myfavourites ON myfavourites.resource_id = res.id
+    LEFT JOIN (SELECT * FROM likes WHERE likes.profile_id = ${options.user.profile_id}) as mylikes ON mylikes.resource_id = res.id
+    LEFT JOIN (SELECT * FROM bookmarks WHERE bookmarks.profile_id = ${options.user.profile_id}) as mybookmarks ON mybookmarks.resource_id = res.id
+    LEFT JOIN (SELECT * FROM playlists WHERE playlists.profile_id = ${options.user.profile_id}) as myplaylists ON myplaylists.resource_id = res.id
+    LEFT JOIN (SELECT * FROM reports WHERE reports.profile_id = ${options.user.profile_id}) as myreports ON myreports.resource_id = res.id
+    LEFT JOIN (SELECT * FROM recommends WHERE recommends.profile_id = ${options.user.profile_id}) as myrecommends ON myrecommends.resource_id = res.id
+    LEFT JOIN (SELECT * FROM ratings WHERE ratings.profile_id = ${options.user.profile_id}) as myratings ON myratings.resource_id = res.id
+    LEFT JOIN (SELECT * FROM rankings WHERE rankings.profile_id = ${options.user.profile_id}) as myrankings ON myrankings.resource_id = res.id`;
+
+    q.group += `
+    \n, myfavourites.is_favourite,
+    mylikes.is_liked,
+    mybookmarks.is_bookmarked,
+    myplaylists.is_playlist,
+    myreports.is_reported,
+    myrecommends.is_recommended,
+    myratings.rate,
+    myrankings.scale`
+
+  } else {
+    /*NO USER PROFILE*/
+    q.select += `, \nNULL AS user_profile_id,
+    NULL AS is_liked,
+    NULL AS is_favourite,
+    NULL AS is_bookmarked,
+    NULL AS is_playlist,
+    NULL AS is_reported,
+    NULL AS is_recommended,
+    NULL AS my_rating,
+    NULL AS my_ranking
+    `;
+  }
+
+  if (options.resource.limit) {
+    q.counter++;
+    q.limit = `LIMIT $${q.counter}`;
+    q.params.push(options.resource.limit);
+  } else {
+    q.counter++;
+    q.limit = `LIMIT $${q.counter}`;
+    q.params.push(40);
+  }
+
+  switch (options.resource.order_by) {
+    case "alpha_a-z":
+      q.order = `ORDER BY res.title ASC`;
+      break;
+    case "alpha_z-a":
+      q.order = `ORDER BY res.title DESC`;
+      break;
+    case "newest":
+      q.order = `ORDER BY res.created_at DESC`;
+      break;
+    case "oldest":
+      q.order = `ORDER BY res.created_at ASC`;
+      break;
+    case "my_top_rated":
+      q.order = `ORDER BY myratings.rate DESC`;
+      break;
+    case "my_lowest_rated":
+      q.order = `ORDER BY myratings.rate ASC`;
+      break;
+    case "my_top_ranked":
+      q.order = `ORDER BY myrankings.scale DESC`;
+      break;
+    case "my_lowest_ranked":
+      q.order = `ORDER BY myrankings.scale ASC`;
+      break;
+    case "most_liked":
+      q.order = `ORDER BY total_likes DESC`;
+      break;
+    case "top_rated":
+      q.order = `ORDER BY avg_rating DESC`;
+      break;
+    case "lowest_rated":
+      q.order = `ORDER BY avg_rating ASC`;
+      break;
+    case "top_ranked":
+      q.order = `ORDER BY avg_ranking DESC`;
+      break;
+    case "lowest_ranked":
+      q.order = `ORDER BY avg_ranking ASC`;
+      break;
+    default:
+      q.order =  `ORDER BY res.created_at DESC`;
+  }
+
+  //Build Query
+  q.query = `${q.select} \n${q.from} \n${q.where} \n${q.group} \n${q.having} \n${q.order} \n${q.limit};`;
+
+  console.log("query: ", q.query);
+  console.log("params: ", q.params);
+  return db
+  .query(q.query, q.params).then((data) => {
+    if (data.rows.length === 0) {
+      return [];
+    }
+
+    const resources = [];
+    data.rows.forEach((resource) => {
+      if (resources.map((r) => r.id).includes(resource.id)) {
+        const index = resources.findIndex((r) => r.id === resource.id);
+        resources[index] = {
+          ...resources[index],
+          categories: resources[index].categories.concat(resource.categories),
+        };
+      } else {
+        if (resource.categories[0] === null) {
+          resource.categories = [];
+        }
+        resources.push(resource);
+      }
+    });
+    return resources;
+  });
+};
+// ----------------------------------------------------------
 
 // ----------------------------------------------------------
 const getAllResourcesByOptions = (options) => {
@@ -85,21 +265,19 @@ const getAllResourcesByOptions = (options) => {
   LEFT JOIN likes ON resources.id = likes.resource_id 
   LEFT JOIN (SELECT * FROM recommends WHERE recommends.is_recommended IS TRUE) as true_recommends ON resources.id = true_recommends.resource_id
   LEFT JOIN rankings ON resources.id = rankings.resource_id
-
-
   `;
+
   q.where = `
   WHERE
   true_like.deleted_at IS NULL
   AND true_recommends.deleted_at IS NULL
-  
   `;
+
   q.group = `
   GROUP BY
   resources.id
-
-
   `;
+
   q.having = "";
   q.order = "";
   q.limit = "";
@@ -378,6 +556,9 @@ const getAllResourcesByOptions = (options) => {
     case "newest":
       q.order = `ORDER BY resources.created_at DESC`;
       break;
+    case "oldest":
+      q.order = `ORDER BY resources.created_at ASC`;
+      break;
     case "my_top_rated":
       q.order = `ORDER BY myratings.rate DESC`;
       break;
@@ -394,7 +575,16 @@ const getAllResourcesByOptions = (options) => {
       q.order = `ORDER BY total_likes DESC`;
       break;
     case "top_rated":
+      q.having = q.having
+        ? `${q.having} \nAND AVG(ratings.rate) IS NOT NULL`
+        : `HAVING \nAVG(ratings.rate) IS NOT NULL`;
       q.order = `ORDER BY avg_rating DESC`;
+      break;
+    case "lowest_rated":
+      q.having = q.having
+        ? `${q.having} \nAND AVG(ratings.rate) IS NOT NULL`
+        : `HAVING \nAVG(ratings.rate) IS NOT NULL`;
+      q.order = `ORDER BY avg_rating ASC`;
       break;
     case "top_ranked":
       q.order = `ORDER BY avg_ranking DESC`;
@@ -403,7 +593,7 @@ const getAllResourcesByOptions = (options) => {
       q.order = `ORDER BY avg_ranking ASC`;
       break;
     default:
-      q.order =  `ORDER BY resources.created_at ASC`;
+      q.order =  `ORDER BY resources.created_at DESC`;
   }
 
   //Build Query
@@ -596,6 +786,7 @@ module.exports = {
   postResource,
   postResourceWithAddition,
   updateResourceWithAddition,
+  getAllResourcesByKeyword,
   updateResource,
   deleteResource,
 };

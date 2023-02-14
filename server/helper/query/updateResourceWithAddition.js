@@ -83,7 +83,6 @@ const updateResourceQueryHelper = (data, resourceId) => {
   }
 
   if (data.user.myCategories !== undefined){
-    console.log("TRIGGERED")
     const deleteCategoriesQuery = `
     UPDATE
       categories

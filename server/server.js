@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const app = express();
-const publicPath = path.join(__dirname, "..", "learnthis/build");
+const publicPath = path.join(__dirname, "..", "learnthis/public");
 
 const cookieSession = require('cookie-session');
 app.use(cookieSession({
@@ -78,7 +78,7 @@ app.use('/api/extract',extractRoutes)
 
 app.use(express.static(publicPath));
 app.get("/*", function(req, res) {
-  res.sendFile(path.join(publicPath, "index.html"));
+  res.sendFile(path.join(publicPath));
 });
 
 app.listen(process.env.PORT || 8080,()=>{

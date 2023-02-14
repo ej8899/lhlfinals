@@ -60,7 +60,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 export default function PersistentDrawerLeft(props) {
-  const { viewTitle, setViewTitle, } = useContext(AuthContext);
+  const { viewTitle, setViewTitle, userid } = useContext(AuthContext);
 
   const { filterData } = useContext(FilterContext);
   const theme = useTheme();
@@ -82,19 +82,17 @@ export default function PersistentDrawerLeft(props) {
     zlog('action','Button title clicked:',event);
     zlog('action','Button index clicked:', index);
     setViewTitle(event)
-    props.reset()
+    props.update()
     if(index === 0) {
       props.setSelectedIndex(false)
       props.handleNewResourceOpen()
       props.setLessonTrue(false)
     } else if (index === 2) {
-      setTimeout(() => {
-        filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
+        filterData("nav", [index, userid], props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
         props.setLessonTrue(true)
-      }, 100)  
     } else {
       props.setLessonTrue(false)
-      filterData("nav", index, props.setsampledata, props.sampledata, props.combinedData, false, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
+      filterData("nav", [index, userid], props.setsampledata, props.sampledata, props.combinedData, false, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
     }
 
   };

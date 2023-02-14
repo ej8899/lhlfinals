@@ -501,11 +501,11 @@ export const PreviewItem = (props) => {
 
           setResourceKey(response.data.resource.id)
 
-          setFavourite(response.data.user.is_favourite === true ? "pink" : "default",)
+          setFavourite(response.data.user.is_favourite === true ? "pink" : "default")
           setLike(response.data.user.is_liked === true ? "purple" : "default")
           setBookmark(response.data.user.is_bookmarked === true ? "green" : "default")
           setPlaylist(response.data.user.is_playlist === true  ? "maroon" : "default")
-          onLoadReport(response.data.user.is_reported === true ? "default" : "red")
+          onLoadReport(response.data.user.is_reported === true ? "red" : "default")
           setLesson(response.data.is_recommended === true ? "blue" : "default")
 
           tmpReset()
@@ -596,7 +596,7 @@ export const PreviewItem = (props) => {
                 component="img"
                 height="140"
                 image={thumbnail}
-                src={ 'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available '}
+                src={ 'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available '}
                 width="345"
               />
             </Fade>
@@ -657,7 +657,7 @@ export const PreviewItem = (props) => {
                   alignItems="center" 
                 >
                   <Typography variant='h6' textAlign="center" marginBottom={'-25px'} lineHeight="105%" marginTop={"-15px"}>
-                    {title}
+                    {truncateText(title, 45)}
                   </Typography>
                 </Box>
               </CardContent>              
@@ -698,7 +698,7 @@ export const PreviewItem = (props) => {
             favourite={favourite} addFavourites={() => addFavourites(filter)}
             lesson={lesson} addLesson={addLesson}
             rate={rate} rateReview={rateReview}
-            show={show} setShow={setShow}
+            show={show} setShow={setShow} lessonTrue={props.lessonTrue}
             bookmark={bookmark} addBookmark={addBookmark}
             playlist={playlist} addPlaylist={addPlaylist}
             share={share} handleShareOpen={handleShareOpen}

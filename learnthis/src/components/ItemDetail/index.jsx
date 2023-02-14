@@ -92,9 +92,11 @@ export const DetailModal = (props) => {
 
   const onPause = (event) => {
     const currentTime = event.target.getCurrentTime();
-    console.log("VIDEO PAUSED at:",convertSecondsToMinutes(currentTime))
+    // console.log("VIDEO PAUSED at:",convertSecondsToMinutes(currentTime))
     setPausedAt(currentTime);
     setTimestamps(timestamps + currentTime + "\n");
+    props.addMyComments(props.myComments === "" ? `${props.myComments} (TIME ${convertSecondsToMinutes(currentTime)}): ` : `${props.myComments} \n (TIME ${convertSecondsToMinutes(currentTime)}): `)
+    props.setShow("flex")
   };
   const handleError = (event) => {
     setErrorCode(event.data);
@@ -142,7 +144,7 @@ export const DetailModal = (props) => {
                     height="360"
                     width="640"
                     image={props.thumbnail}
-                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
+                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available'}
                     sx={{marginBottom : 2}}
                   />
                   <Typography variant='body2' sx={{marginBottom : "2"}}> 
@@ -154,7 +156,7 @@ export const DetailModal = (props) => {
                 </Box>
               }
               <Box display={props.show} alignItems="center" marginTop="1rem">
-                <DiscreteSliderMarks label={"Rate Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage} sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
+                <DiscreteSliderMarks label={"Rank Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage} sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
                 {/* <Box style={{paddingTop:20, paddingLeft:15}}>
                   <ComboBox listData={props.complexity} message={'Select the lesson complexity...'} mySelection={props.myComplexity} addMySelection={props.addMyComplexity}/>
                 </Box> */}
@@ -172,6 +174,16 @@ export const DetailModal = (props) => {
             <Box display={props.show} flexDirection="column">
               <MultilineTextFields timestamps={timestamps} display={props.show} myComments={props.myComments} addMyComments={props.addMyComments} rows={19} width={"40ch"} label={'My Notes'} placeholder={"Make your notes here."} marginLeft={1}/>
               <Box display="flex" justifyContent="flex-end" sx={{mt:1, mb: 1, gap: 5}}>
+                {props.lessonTrue && !props.complete &&
+                  <Button variant="contained" color="success" onClick={() => props.setComplete(true)}>
+                    Mark Complete
+                  </Button>
+                }
+                {props.lessonTrue && props.complete &&
+                  <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.setComplete(false)}>
+                    Undo Complete
+                  </Button>
+                }
                 <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleCancel()}>
                   Cancel
                 </Button>

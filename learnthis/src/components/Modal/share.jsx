@@ -15,6 +15,11 @@ import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Paper from '@mui/material/Paper';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -44,6 +49,9 @@ import { CloseModal } from '../Icons/close';
 import missingimage from "../../missingimage.png"
 //-------------------------------------------------------------------
 
+import ShareTwitterButton from './ShareTwitterButton';
+import { truncateText } from '../../helpers/helpers';
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -60,6 +68,11 @@ const style = {
 };
 
 export const ShareModal= (props) => {
+  // handle accordion view
+  const [expanded, setExpanded] = React.useState(false);
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   return (
     <Modal
@@ -83,10 +96,13 @@ export const ShareModal= (props) => {
             <CloseModal handleClose={props.handleShareClose}/>
           </Box>
         </Box>
-        <Typography style={{ marginLeft : 8, marginBottom : 10}}>
-          {props.title}
-        </Typography>
+        <br/>
         <Box display="flex" width="100%" justifyContent="space-around" flexDirection="column" >
+        <Paper sx={{ p:1}}>
+        <Typography style={{ marginLeft : 8, marginBottom : 10}} textAlign="center">
+          {truncateText(props.title,40)}
+        </Typography>
+        
           <Box display="flex" width="100%" justifyContent="center" >
             <Box display="flex" width="55%" justifyContent="center">
               <CardMedia
@@ -94,12 +110,23 @@ export const ShareModal= (props) => {
                 height="140"
                 width="345"
                 image={props.thumbnail}
-                src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
+                src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available'}
                 sx={{marginBottom : 2}}
               />
             </Box>
           </Box>
+          </Paper><br/>
           <Divider/>
+
+          <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+          <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+          >
+          <Typography sx={{ flexShrink: 0 }}>Share by email...</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
             <InputWithIcon label={"Email Address"} width={"38ch"} margin={0} botMargin={2} emailTo={props.emailTo} emailMyTo={props.emailMyTo} errorBlank={props.errorBlank} errorEmail={props.errorEmail} />
             <MultilineTextFields myComments={props.emailMessage} rows={3} width={"41ch"} label={'Message...'} placeholder={"Type Your Message Here"} margin={0} addMyComments={props.emailMyMessage} botMargin={0}/>
@@ -109,10 +136,39 @@ export const ShareModal= (props) => {
               Share
             </Button>
           </Box>
+          </AccordionDetails>
+          </Accordion>
+
+          <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2bh-content"
+          id="panel2bh-header"
+        >
+          <Typography sx={{ flexShrink: 0 }}>Share by posting to twitter...</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+        <Box textAlign="center" justifyContent="center" alignContent="middle" display="flex">
+        <Typography variant='p' textAlign="center">
+        <ShareTwitterButton style={{marginBottom:15}}/>
+        (opens a new window)
+        </Typography>
         </Box>
-        <Divider/>
-        <Box sx={{ m: 2 }}>
-          <Typography variant='h6' textAlign="center">
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel3bh-content"
+          id="panel3bh-header"
+        >
+          <Typography sx={{ flexShrink: 0 }}>Share a direct link to resource...</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+        <Typography variant='h6' textAlign="center">
+          
+          <Divider/>
             Share Link: 
           </Typography>
           <Box textAlign="center" justifyContent="center" alignContent="middle" display="flex">
@@ -121,6 +177,17 @@ export const ShareModal= (props) => {
               <CopyToClipboardButton id={props.id} style={{verticalAlign:"middle"}}/>
             </Typography>
           </Box>
+          <Divider/>
+        </AccordionDetails>
+      </Accordion>
+
+      </Box>
+        
+        <Divider/>
+        
+        
+        <Box sx={{ m: 2 }}>
+          
         </Box>
       </Box>
     </Modal>

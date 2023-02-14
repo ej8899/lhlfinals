@@ -174,8 +174,12 @@ const advancedChange = (event, value) => {
             case 3 : {
               if (tmpObject["3"]) {
                 filteredObject.resource["minimum_average_rating"] = 3
+                filteredObject.resource["order_by"] = "top_rated"
               } else if (filteredObject.resource.hasOwnProperty('minimum_average_rating')) {
                 delete filteredObject.resource.minimum_average_rating
+                if(filteredObject.resource.order_by === "top_rated"){
+                  delete filteredObject.resource.order_by
+                }
               }
             }
           }
@@ -278,112 +282,138 @@ const advancedChange = (event, value) => {
         break;
       }
       case "nav" : {
-        for (let i = 0; i < 17; i++) {
-
-          switch(i) {
-            case 2 : {
-              if (values ===2) {
-                filteredObject.resource["minimum_likes"] = 0
-                filteredObject.resource["minimum_is_recommended"] = 0
-                filteredObject.resource["minimum_average_rating"] = 0
-                filteredObject.resource["limit"] = 45
-                filteredObject.resource["order_by"] = "lowest_ranked"
-              } else if (filteredObject.resource.hasOwnProperty('minimum_likes') ||  filteredObject.resource.hasOwnProperty('minimum_is_recommended') || filteredObject.resource.hasOwnProperty('limit')) {
-                if (filteredObject.resource.hasOwnProperty('minimum_likes')) {
-                  delete filteredObject.resource.minimum_likes
-                }
-                if (filteredObject.resource.hasOwnProperty('minimum_is_recommended')) {
-                  delete filteredObject.resource.minimum_is_recommended
-                }
-                if (filteredObject.resource.hasOwnProperty('limit')) {
-                  delete filteredObject.resource.limit
-                }
-                if (filteredObject.resource.hasOwnProperty('minimum_average_rating')) {
-                  delete filteredObject.resource.minimum_average_rating
-                }
-                if (filteredObject.resource["order_by"] === "lowest_ranked") {
-                  delete filteredObject.resource["order_by"]
+        switch(values[0]) {
+          case 2 : 
+              filteredObject = {
+                resource: {
+                  "minimum_likes" : 0,
+                  "minimum_is_recommended" : 0,
+                  "minimum_average_rating": 3,
+                  "limit" : 100,
+                  "order_by" : "lowest_ranked"
+                },
+                user: {
+                  profile_id : values[1]
                 }
               }
-            }
-            case 4 : {
-              if (values === 4) {
-                filteredObject.resource["created_by"] = filteredObject.user.profile_id
-              } else if (filteredObject.resource.hasOwnProperty('created_by')) {
-                delete filteredObject.resource.created_by
-              }
-            }
-            case 5 : {
-              if (values === 5) {
-                filteredObject.user["is_favourite"] = true
-              } else if (filteredObject.user.hasOwnProperty('is_favourite')) {
-                delete filteredObject.user.is_favourite
-              }
-            }
-            case 6 : {
-              if (values === 6) {
-                filteredObject.user["is_playlist"] = true
-              } else if (filteredObject.user.hasOwnProperty('is_playlist')) {
-                delete filteredObject.user.is_playlist
-              }
-            }
-            case 8 : {
-              if (values === 8) {
-                filteredObject.user["maximum_myRating"] = 2.5
-              } else if (filteredObject.user.hasOwnProperty('maximum_myRating')) {
-                delete filteredObject.user.maximum_myRating
-              }
-            }
-            case 9 : {
-              if (values === 9) {
-                filteredObject.user["minimum_myRating"] = 3
-              } else if (filteredObject.user.hasOwnProperty('minimum_myRating')) {
-                delete filteredObject.user.minimum_myRating
-                
-              }
-            }
-            case 16 : {
-              if (values === 16) {
-                filteredObject.resource["is_deleted"] = true
-              } else if (filteredObject.resource.hasOwnProperty('is_deleted')) {
-                delete filteredObject.resource.is_deleted
-              }
-            }
-            case 15 : {
-              if (values === 15) {
-                filteredObject.user["is_reported"] = true
-              } else if (filteredObject.user.hasOwnProperty('is_reported')) {
-                delete filteredObject.user.is_reported
-              }
-            }
-            case 11 : {
-              if (values === 11) {
-                filteredObject.user["minimum_myRanking"] = 0
-                filteredObject.user["maximum_myRanking"] = 33
-                break
-              } 
-            }
-            case 12 : {
-              if (values === 12) {
-                filteredObject.user["minimum_myRanking"] = 34
-                filteredObject.user["maximum_myRanking"] = 67
-                break
-              }
-            }
-            case 13 : {
-              if (values === 13) {
-                filteredObject.user["minimum_myRanking"] = 68
-                filteredObject.user["maximum_myRanking"] = 100
-              } else if (filteredObject.user.hasOwnProperty('minimum_myRanking') ||  filteredObject.user.hasOwnProperty('maximum_myRanking')) {
-                if (filteredObject.user.hasOwnProperty('minimum_myRanking')) {
+              break;
+          case 4 : 
+              filteredObject = {
+                resource: {
+                  created_by : values[1],
+                  order_by : "newest"
+                },
+                user: {
+                  profile_id : values[1]
                 }
-                if (filteredObject.user.hasOwnProperty('maximum_myRanking')) {
-                  delete filteredObject.user.maximum_myRanking
+            }
+            break;
+          case 5 : 
+              filteredObject = {
+                resource: {
+                },
+                user: {
+                  is_favourite : true,
+                  profile_id : values[1]
                 }
               }
-              break
-            }
-          }
+            break;
+          case 6 : 
+              filteredObject = {
+                resource: {
+                },
+                user: {
+                  is_playlist : true,
+                  profile_id : values[1]
+                }
+              }
+            break;
+          case 8 : 
+              filteredObject = {
+                resource: {
+                  order_by : "my_top_rated"
+                },
+                user: {
+                  maximum_myRating : 2.5,
+                  profile_id : values[1]
+                }
+              }
+            break;
+          case 9 : 
+              filteredObject = {
+                resource: {
+                  order_by : "my_lowest_rated"
+                },
+                user: {
+                  minimum_myRating : 3,
+                  profile_id : values[1]
+                }
+              }
+            break;
+          case 16 : 
+              filteredObject = {
+                resource: {
+                  is_deleted : true
+                },
+                user: {
+                  profile_id : values[1]
+                }
+              }
+            break;
+          case 15 : 
+              filteredObject = {
+                resource: {
+                },
+                user: {
+                  profile_id : values[1],
+                  is_reported : true
+                }
+              }
+            break;
+          case 11 : 
+              filteredObject = {
+                resource: {
+                  order_by : "my_lowest_ranked"
+                },
+                user: {
+                  profile_id : values[1],
+                  minimum_myRanking : 0,
+                  maximum_myRanking : 33
+                }
+              }
+            break;
+          case 12 : 
+              filteredObject = {
+                resource: {
+                  order_by : "my_lowest_ranked"
+                },
+                user: {
+                  profile_id : values[1],
+                  minimum_myRanking : 34,
+                  maximum_myRanking : 67
+                }
+              }
+            break;
+          case 13 : 
+              filteredObject = {
+                resource: {
+                  order_by : "my_lowest_ranked"
+                },
+                user: {
+                  profile_id : values[1],
+                  minimum_myRanking : 68,
+                  maximum_myRanking : 100
+                }
+              }
+            break;
+        }
+      }
+      case "sort" : 
+        filteredObject.resource.order_by = values
+        break
+      case "lesson" : {
+        if (type === "lesson") {
+        filteredObject.resource["categories"] = [values]
         }
       }
       case "search": {
@@ -407,7 +437,7 @@ const advancedChange = (event, value) => {
     }
     settotalkeys(count)
     setMyFilteredData(filteredObject)
-    console.log(filteredObject)
+    // console.log(filteredObject)
 
     if (icon) {
       updateDatabase([])
@@ -417,34 +447,65 @@ const advancedChange = (event, value) => {
     if (type === "refresh") {
       updateDatabase([])
     }
-    // TODO-- Link Server Code
-    return axios.post(`http://localhost:8080/api/resources/options`, filteredObject)
-    .then(response => {
-      // console.log(response.data)
-      
-      updateDatabase(helperfunc(response.data)) 
 
-      if(counter) {
-        setResourceCount(response.data.length)
-        setShowMoreCards(8)
-        console.log("TRIGGERED")
-      } else {
-        setResourceCount(response.data.length)
-      }
+    if (type === "search") {
 
-      setTimeout(() => {
-        if (icon) {
-          setLoading(false)
+      return axios.post(`http://localhost:8080/api/resources/keyword`, filteredObject)
+      .then(response => {
+        // console.log(response.data)
+        
+        updateDatabase(helperfunc(response.data)) 
+
+        if(counter) {
+          setResourceCount(response.data.length)
+          setShowMoreCards(20)
+        } else {
+          setResourceCount(response.data.length)
         }
-      }, 1000)
-    })
-    .catch(error => {
-      console.error(error);
-      setFilterError(true)
-      setTimeout(() => {
-        setFilterError(false)
-      }, 1200)
-    });
+
+        setTimeout(() => {
+          if (icon) {
+            setLoading(false)
+          }
+        }, 1000)
+      })
+      .catch(error => {
+        console.error(error);
+        setFilterError(true)
+        setTimeout(() => {
+          setFilterError(false)
+        }, 1200)
+      });
+
+    } else {
+      
+      return axios.post(`http://localhost:8080/api/resources/options`, filteredObject)
+      .then(response => {
+        console.log(response.data)
+        
+        updateDatabase(helperfunc(response.data)) 
+
+        if(counter) {
+          setResourceCount(response.data.length)
+          setShowMoreCards(20)
+        } else {
+          setResourceCount(response.data.length)
+        }
+
+        setTimeout(() => {
+          if (icon) {
+            setLoading(false)
+          }
+        }, 1000)
+      })
+      .catch(error => {
+        console.error(error);
+        setFilterError(true)
+        setTimeout(() => {
+          setFilterError(false)
+        }, 1200)
+      });
+    }
   }
 
   return (

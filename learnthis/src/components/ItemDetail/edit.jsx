@@ -134,7 +134,7 @@ export const EditResourceModal = (props) => {
                     height="360"
                     width="635"
                     image={props.thumbnail}
-                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available'}
+                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available'}
                     sx={{marginBottom : 2}}
                   />
                   <Typography variant='body2' sx={{marginBottom : "2"}}> 
@@ -146,7 +146,7 @@ export const EditResourceModal = (props) => {
                 </Box>
               }
               <Box display={props.show} alignItems="center" marginTop="1rem">
-                <DiscreteSliderMarks label={"Rate Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage} sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
+                <DiscreteSliderMarks label={"Rank Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage} sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
                 <Tags listData={props.typeCategory} message={'Select the lesson category...'} mySelection={props.myCategory} addMySelection={props.addMyCategory}/>
               </Box>
               <Box display={props.show}>

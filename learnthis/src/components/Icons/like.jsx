@@ -38,16 +38,16 @@ export const LikeStats = (props) => {
     if (count === 0) {
       return 'error';
     }
-    if (count >= 1 && count <= 20 ) {
+    if (count >= 1 && count <= 10 ) {
       return 'warning';
     }
-    if (count > 20 && count <= 60 ) {
+    if (count > 10 && count <= 20 ) {
       return 'primary';
     }
-    if (count > 60 && count <= 100 ) {
+    if (count > 20 && count <= 30 ) {
       return 'secondary';
     }
-    if (count > 100) {
+    if (count > 30) {
       return 'success';
     }
     return `${count} notifications`;

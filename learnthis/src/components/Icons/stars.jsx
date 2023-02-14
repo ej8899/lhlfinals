@@ -54,7 +54,7 @@ export const StarRating = (props) => {
   return (
     <Stack spacing={1}>
       <Tooltip title={props.ratingScore} >
-      <Button sx={{ "&:hover": { cursor: "auto"} }}>
+      <Button sx={{ "&:hover": { cursor: "auto", backgroundColor : "transparent"} }} disableRipple>
         <Rating name="half-rating-read" defaultValue={props.rating} precision={0.5} readOnly />
       </Button>
       </Tooltip>
@@ -154,12 +154,12 @@ export const StarStaleRating = (props) => {
 
 // IconButton
   return (
-    <Button aria-label="share">
+    <Button aria-label="share" sx={{"&:hover" : {backgroundColor : "transparent"}}} disableRipple>
       <Rating 
         name="simple-controlled"
         value={props.star}
         onChange={(event, newValue) => {
-        props.addStar(newValue);
+          props.addStar(newValue);
         }}
         precision={0.5} 
         disabled={props.disabled}

@@ -350,7 +350,7 @@ export const AddResourceFlow = (props) => {
   // TODO - sample data - need to tie difference between user and overall && need axios put
 
   const { isAuth, user, userid, logout } = useContext(AuthContext);
-  const {filterError, setFilterError, handlefilterError} = useContext(FilterContext);
+  const {filterError, filterData, setFilterError, handlefilterError} = useContext(FilterContext);
 
   const addingNewResourceSQL = () => {
     if (!title) {
@@ -513,7 +513,7 @@ export const AddResourceFlow = (props) => {
           />
           <ResultModal 
             open={savedNewResource} setStatusOpen={setSavedNewResource} 
-            handleClose={() => handleSavedClose()} 
+            handleClose={() => handleSavedClose(filterData("refresh", true, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, false, props.setResourceCount, props.setShowMoreCards))} 
             message={"Success! Resource has been added."} 
             thumbnail={thumbnail} title={title}
             setsampledata={props.setsampledata} sampledata={props.sampledata}

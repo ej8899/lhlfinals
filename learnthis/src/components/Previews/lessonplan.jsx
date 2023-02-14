@@ -76,6 +76,7 @@ import { StatusModal } from "../NewResource/status";
 import { SharedModal } from "../Modal/shared";
 import { ViewDetailModal } from "../ItemDetail/view";
 import { ErrorModal } from "../NewResource/error";
+import { Complete } from "../Icons/complete";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -305,13 +306,12 @@ export const LessonItem = (props) => {
   } = IconStatus();
 // --------------------------------------------------------
 
-
 // --------------------------------------------------------
 // Use effect - initial load from database
   useEffect(() => {
     setOpen(false)
     setVideoURL(props.videoURL)
-    setTitle(props.title)
+    setTitle(truncateText(props.title,40))
     setDescriptionExpanded(props.description)
     setThumbnail(props.thumbnail);
     addNewIcon(props.created_at)
@@ -328,7 +328,7 @@ export const LessonItem = (props) => {
         index === 0 ? displayCategories += element : displayCategories += `, ${element}`
       });
       setDisplayCategoryExpanded(displayCategories)
-      setDisplayCategory(truncateText(displayCategories, 28))
+      setDisplayCategory(truncateText(displayCategories, 20))
       setCategory(props.category)
     }
 
@@ -346,6 +346,10 @@ export const LessonItem = (props) => {
     tmpsetDescriptionExpanded(props.description)
 
     setResourceKey(props.id)
+
+    if (props.id > 5 && props.id < 15 ) {
+      setComplete(true)
+    }
 
     setFavourite(props.favourite)
     setLike(props.like)
@@ -461,7 +465,7 @@ export const LessonItem = (props) => {
               bookmark : response.data.user.is_bookmarked === true ? "green" : "default",
               playlist : response.data.user.is_playlist === true  ? "maroon" : "default",
               lesson : response.data.user.is_recommended === true ? "blue" : "default",
-              report : response.data.user.is_reported === true ? "default" : "red",
+              report : response.data.user.is_reported === true ? "red" : "default",
               like : response.data.user.is_liked === true ? "purple" : "default"
             })
           } else {
@@ -477,7 +481,7 @@ export const LessonItem = (props) => {
 
           addNewIcon(response.data.resource.created_at)
           setCategory(response.data.resource.categories? response.data.resource.categories : [])
-          setTitle(tmptitle)
+          setTitle(truncateText(tmptitle,40))
           setDescriptionExpanded(tmpdescriptionExpanded)
           addSetStage(response.data.resource.avg_ranking ? Number(response.data.resource.avg_ranking) : null)
           setLikes(response.data.resource.total_likes ? Number(response.data.resource.total_likes) : 0)
@@ -501,7 +505,7 @@ export const LessonItem = (props) => {
 
           setResourceKey(response.data.resource.id)
 
-          setFavourite(response.data.user.is_favourite === true ? "pink" : "default",)
+          setFavourite(response.data.user.is_favourite === true ? "pink" : "default")
           setLike(response.data.user.is_liked === true ? "purple" : "default")
           setBookmark(response.data.user.is_bookmarked === true ? "green" : "default")
           setPlaylist(response.data.user.is_playlist === true  ? "maroon" : "default")
@@ -572,6 +576,8 @@ export const LessonItem = (props) => {
     tmpsetTitle(title)
     tmpsetDescriptionExpanded(descriptionExpanded)
   }
+
+  const [complete, setComplete] = useState(false)
 // --------------------------------------------------------
 
   const skeletonTimer = randomNumber(100,1500);
@@ -582,7 +588,9 @@ export const LessonItem = (props) => {
   return (
     <div style={{marginTop: "-1rem"}}>
       <Box display="flex" flexDirection="row" justifyContent="flex-end" overflow="visible" zIndex="1000" >
-        {props.nowloading ? null : (
+        {props.nowloading ? null : complete ? (
+          <Complete display={newIcon} nowLoading={props.nowLoading}/>
+        ) : (
           <NewBadge display={newIcon} nowLoading={props.nowLoading}/>
         )}
       </Box>
@@ -596,7 +604,7 @@ export const LessonItem = (props) => {
                 component="img"
                 height="140"
                 image={thumbnail}
-                src={ 'https://via.placeholder.com/345x140.png/F2D2BD?text=Sorry+Not+Available '}
+                src={ 'https://via.placeholder.com/345x140.png/F2D2BD?text=SImage+Not+Yet+Available '}
                 width="345"
               />
             </Fade>
@@ -623,7 +631,7 @@ export const LessonItem = (props) => {
                 />) : (
                 <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
                   <Tooltip title={displayCategoryExpanded}>
-                    <Typography>
+                    <Typography fontSize="13px">
                       {displayCategory}
                     </Typography>
                   </Tooltip>
@@ -635,7 +643,7 @@ export const LessonItem = (props) => {
                 <Skeleton animation="wave" height={10} width="40%" />
               ) : (
                 <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
-                  <Typography variant="body2">
+                  <Typography fontSize="13px">
                     {stage}
                   </Typography>
                 </Fade>
@@ -656,7 +664,7 @@ export const LessonItem = (props) => {
                   justifyContent="center"
                   alignItems="center" 
                 >
-                  <Typography variant='h6' textAlign="center" marginBottom={'-25px'} lineHeight="105%" marginTop={"-15px"}>
+                  <Typography fontSize="18px" textAlign="center" marginBottom={'-25px'} lineHeight="105%" marginTop={"-15px"}>
                     {title}
                   </Typography>
                 </Box>
@@ -697,9 +705,9 @@ export const LessonItem = (props) => {
             typeCategory={props.typeCategory} 
             favourite={favourite} addFavourites={() => addFavourites(filter)}
             lesson={lesson} addLesson={addLesson}
-            rate={rate} rateReview={rateReview}
-            show={show} setShow={setShow}
-            bookmark={bookmark} addBookmark={addBookmark}
+            rate={rate} rateReview={rateReview} setComplete={setComplete}
+            show={show} setShow={setShow} lessonTrue={props.lessonTrue}
+            bookmark={bookmark} addBookmark={addBookmark} complete={complete}
             playlist={playlist} addPlaylist={addPlaylist}
             share={share} handleShareOpen={handleShareOpen}
             report={report} addReport={addReport}
@@ -901,11 +909,6 @@ export const LessonItem = (props) => {
               )}
             </Box>
             <Box display="flex" paddingRight="1rem" sx={{ filter: filter }}>
-              {props.nowloading ? (
-                <Skeleton animation="wave" variant="circular" width={30} height={30} />
-              ) : (
-                <FavouriteStats nowloading={props.nowLoading} skeletonTimer={skeletonTimer} favourite={favourite} addFavourites={() => addFavourites(filter)}/>
-              )}
               {props.nowloading ? (
                 <Skeleton animation="wave" variant="circular" width={30} height={30} />
               ) : (

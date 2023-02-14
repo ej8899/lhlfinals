@@ -89,6 +89,7 @@ export const IconProvider = ({ children }) => {
     for (let i = 0; i < 8; i++) {
       switch(i) {
         case 0 : 
+          // console.log(values[i])
           if(values[i] === "default") {
             iconStatusObject.is_favourite = false
           } else {
@@ -145,13 +146,14 @@ export const IconProvider = ({ children }) => {
     setIconState(iconStatusObject)
 
     // TODO -- update with API AXIOS GET ROUTE && Confirm nothing needed in the response
-    // axios.post(`http://localhost:8080/api/resources`, {iconStatusObject}) 
-    // .then(response => {
-
-    // })
-    // .catch(error => {
-    //   console.error(error);
-    // });
+    return axios.post(`http://localhost:8080/api/icons`, iconStatusObject)
+    .then(response => {
+      // console.log(response.data)
+      
+    })
+    .catch(error => {
+      console.error(error);
+    });
   }
 
   return (

@@ -61,7 +61,7 @@ export const ChipProvider = ({ children }) => {
     }
     const tagInit= {};
     for (let i = 0; i < objectArray.length+1; i++) {
-      tagInit[i] = true;
+      tagInit[i] = false;
     }  
     setFilled({...tagInit})
     return
@@ -98,7 +98,7 @@ export default function ChipsArray(props) {
   useEffect(() => {
     const tagInit= {};
     for (let i = 0; i < objectArray.length+1; i++) {
-      tagInit[i] = true;
+      tagInit[i] = false;
     }  
     setFilled({...tagInit})
     // console.log("filled",filled)
@@ -111,19 +111,21 @@ export default function ChipsArray(props) {
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
   };
 
+  const [categoryArray, setCategoryArray] = useState(null)
+  
   const handleClick = (chipID) => {
     zlog('action',"chip clicked:",chipID)
-    let categoryArray = []
 
+    let tmpArray1 = []
     if(chipID === 100) {
         console.log('is on, turn off')
         const tagInit= {};
         for (let i = 0; i < objectArray.length; i++) {
-          tagInit[i] = true;
+          tagInit[i] = false;
         }  
         setFilled({...tagInit})
         // chipData.map(chip => categoryArray.push(chip.label))
-        categoryArray = null;
+        tmpArray1 = null;
     } 
     else if(chipID === 200) {
         console.log('is off, turn on')
@@ -132,19 +134,21 @@ export default function ChipsArray(props) {
           tagInit[i] = false;
         }  
         setFilled({...tagInit})  
+        tmpArray1 = []
       }
     else {
       setFilled({...filled, [chipID]: !filled[chipID]});
-      
       let tmpArray = {...filled, [chipID]: !filled[chipID]}
       for (let x = 0; x < chipData.length; x++) {
         if (tmpArray[x]) {
-          categoryArray.push(chipData[x].label)
+          tmpArray1.push(chipData[x].label)
         }
       }
     }
 
-    filterData("category", categoryArray, props.setsampledata, props.sampledata, props.combinedData, false, false, false, props.setResourceCount, props.setShowMoreCards)
+
+    filterData("category", tmpArray1, props.setsampledata, props.sampledata, props.combinedData, false, false, false, props.setResourceCount, props.setShowMoreCards)
+    setCategoryArray(tmpArray1)
   };
 
   
@@ -167,7 +171,30 @@ export default function ChipsArray(props) {
           scrollButtons="auto"
           aria-label="select a search filter"
           >
-            <Tab    
+          {categoryArray !== null &&
+            (<Tab    
+              disableRipple
+              key="100"
+              sx={{
+                    minWidth: "0px",
+                    margin: "2px",
+                    padding: "1px"
+                  }}
+              label={
+            <Chip
+              color="warning"
+              label="All"
+              icon={<CheckCircleIcon />}
+              variant="outlined"
+              sx={{ textTransform: "none",
+                    fontWeight: "normal",
+                    borderRadius: "5px"
+                  }}
+              onClick={()=> {handleClick(100)}}
+            />}/>
+            )}
+            {categoryArray === null &&
+            (<Tab    
               disableRipple
               key="100"
               sx={{
@@ -187,6 +214,29 @@ export default function ChipsArray(props) {
                   }}
               onClick={()=> {handleClick(100)}}
             />}/>
+            )}
+          {(categoryArray === null || categoryArray.length) > 0 &&
+            <Tab
+              disableRipple
+              key="200"
+              sx={{
+                    margin: "2px",
+                    padding: "1px",
+                    minWidth: "0px",
+                  }}
+              label={
+            <Chip
+              color="warning"
+              label="None"
+              icon={<UnpublishedIcon />}
+              variant="outlined"
+              sx={{ textTransform: "none",
+                    fontWeight: "normal",
+                    borderRadius: "5px"
+                  }}
+              onClick={()=> {handleClick(200)}}
+            />}/>}
+          {categoryArray !== null && categoryArray.length === 0 &&
             <Tab
               disableRipple
               key="200"
@@ -206,7 +256,8 @@ export default function ChipsArray(props) {
                     borderRadius: "5px"
                   }}
               onClick={()=> {handleClick(200)}}
-            />}/>
+            />}/>}
+
       {chipData.map((data) => {
 
         return (

@@ -177,11 +177,20 @@ export default function PrimarySearchAppBar(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     zlog('debug','textInput',textInput);
-    setTimeout(() => setTextInput(""), 10);
-    setViewTitle('Search Results for: '+ textInput)
 
-    filterData("search", [userid, textInput], props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
-    chipReset(props.catList, props.setChipFilled)
+    if (textInput. length > 0) {
+      setViewTitle('Search Results for: '+ textInput)
+
+      filterData("search", [userid, textInput], props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
+
+      chipReset(props.catList, props.setChipFilled)
+      props.setSort("Sort by...")
+      setTimeout(() => setTextInput(""), 10);
+    
+    } else {
+      console.log("EMPTY SEARCH")
+      setTimeout(() => setTextInput(""), 10);
+    }
   }
 
 
@@ -326,10 +335,17 @@ const toggleDrawer = (anchor, open) => (event) => {
 
 const reset = () =>{
   props.setLessonTrue(false)
-  setSelectedIndex(false)
+  setSelectedIndex(null)
   filterData("clear", userid, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
   chipReset(props.catList, props.setChipFilled)
   props.setFilled(false)
+  props.setSort("Sort by...")
+}
+
+const update = () => {
+  chipReset(props.catList, props.setChipFilled)
+  props.setFilled(false)
+  props.setSort("Sort by...")
 }
 
 // -----------------------------------------------------
@@ -385,10 +401,10 @@ const reset = () =>{
             onClick={() => reset()}
             variant="text"
           >
-            <HouseIcon style={{ color:'white', width:30, height:30 }}/>
+
             
             <Typography variant='h6'  style={{ color:'white', }}>
-            &nbsp;&nbsp;&nbsp;&nbsp;
+
             <img src="./images/learnthis.png" alt="LearnThis!" style={{width: 180}}/>
             </Typography>
           </Button>
@@ -467,7 +483,7 @@ const reset = () =>{
       <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
       <PersistentDrawerLeft
         state={state} setState={setState} toggleDrawer={toggleDrawer} anchor={anchor}
-        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} setLessonTrue={props.setLessonTrue} setLoading={props.setLoading} reset={reset} setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
+        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} setLessonTrue={props.setLessonTrue} setLoading={props.setLoading} update={update} setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
       />
       <FilterModal 
         open={filterError} 

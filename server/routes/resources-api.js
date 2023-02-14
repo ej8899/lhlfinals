@@ -24,6 +24,58 @@ router.get("/", (req, res) => {
     });
 });
 
+// --------------------------------------------------
+/**
+ * Get all resources comming from all users that are still active from db
+ * @return {json} All resources in db that are not deleted limit by 20.
+ */
+router.post("/keyword", (req, res) => {
+  const options = {...req.body};
+  console.log("in options", options);
+  q_resources
+    .getAllResourcesByKeyword(options)
+    .then(async(data) => {
+      const dataWithCategories = await Promise.all(
+        data.map(async (element) => {
+          element.my_comments_private =
+            await q_comments.getCommentsByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id,
+              true
+            );
+          
+            if (element.my_comments_private) {
+              element.my_comments_private=element.my_comments_private.comment;
+            }else {
+              element.my_comments_private=null;
+            }
+          element.my_comments_public =
+            await q_comments.getCommentsByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id,
+            );
+
+            if (element.my_comments_public) {
+              element.my_comments_public=element.my_comments_public.comment;
+            }else {
+              element.my_comments_public=null;
+            }
+
+          return element;
+        })
+      );
+
+      return dataWithCategories;
+    })
+    .then((dataWithCategories) => {
+      res.status(200).json(toFormat(dataWithCategories));
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+// --------------------------------------------------
+
 /**
  * Get all resources with addition of likes, categories, rankings and ratings
  * @return {json} All resources in db that are not deleted limit by 20.

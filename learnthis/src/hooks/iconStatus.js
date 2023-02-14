@@ -13,8 +13,8 @@ export default function IconStatus(props) {
   const addFavourites = (filter) => {
     if (filter === 'blur(0px)') {
       favourite === "pink"? setFavourite('default') : setFavourite('pink')
-      iconData( [!favourite, like, lesson, playlist, bookmark, report, resourceKey, userid], [setFavourite, setLike, setLesson, setPlaylist,setBookmark, setReport])
     }
+    iconData([favourite === "pink"? 'default' : 'pink', like, lesson, playlist, bookmark, report, resourceKey, userid])
     return
   }
 // -------------------------------------------------------------
@@ -25,7 +25,7 @@ export default function IconStatus(props) {
   const [lesson, setLesson] = useState('default')
   const addLesson = () => {
       lesson === 'blue'? setLesson('default') : setLesson('blue')
-      iconData( [favourite, like, !lesson, playlist, bookmark, report, resourceKey, userid])
+      iconData( [favourite, like, lesson === 'blue'? 'default' : 'blue', playlist, bookmark, report, resourceKey, userid])
   }
 // -------------------------------------------------------------
 
@@ -64,7 +64,7 @@ export default function IconStatus(props) {
   const [bookmark, setBookmark] = useState('default')
   const addBookmark = () => {
       bookmark === 'green'? setBookmark('default') : setBookmark('green')
-      iconData( [favourite, like, lesson, playlist, !bookmark, report, resourceKey, userid])
+      iconData( [favourite, like, lesson, playlist, bookmark === "green" ? "default" : "green", report, resourceKey, userid])
   }
 // -------------------------------------------------------------
 
@@ -74,7 +74,7 @@ export default function IconStatus(props) {
   const [playlist, setPlaylist] = useState('default')
   const addPlaylist = () => {
       playlist === 'maroon'? setPlaylist('default') : setPlaylist('maroon')
-      iconData( [favourite, like, lesson, !playlist, bookmark, report, resourceKey, userid])
+      iconData( [favourite, like, lesson, playlist === "maroon" ? "default" : "maroon", bookmark, report, resourceKey, userid])
   }
 // -------------------------------------------------------------
 
@@ -114,10 +114,11 @@ export default function IconStatus(props) {
   const addReport = () => {
       report === 'red'? setReport('default') : setReport('red')
       filter === 'blur(3px)'? setFilter('blur(0px)') : setFilter('blur(3px)')
-      iconData( [favourite, like, lesson, playlist, bookmark, !report, resourceKey, userid])
+      iconData( [favourite, like, lesson, playlist, bookmark, report === "red" ? "default" : "red", resourceKey, userid])
   }
-  const onLoadReport = () => {
+  const onLoadReport = (report) => {
     report === 'red'? setFilter('blur(3px)') : setFilter('blur(0px)')
+    report === "red"? setReport("red") : setReport ("default")
   }
 // -------------------------------------------------------------
 
@@ -128,7 +129,7 @@ export default function IconStatus(props) {
   const [likes, setLikes] = useState(0)
   const addLike = (filter) => {
     if (filter === 'blur(0px)') {
-      iconData( [favourite, !like, lesson, playlist, bookmark, report, resourceKey, userid])
+      iconData( [favourite, like === "purple" ? "default" : "purple", lesson, playlist, bookmark, report, resourceKey, userid])
       if (like === 'purple') {
         setLike('default')
         setLikes(likes - 1)

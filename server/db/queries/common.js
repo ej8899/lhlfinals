@@ -6,7 +6,7 @@ const query = (text, params, callback) => {
   .then(result => {
     const duration = Date.now() - start;
     console.log('executed query', { text, duration, params, rows: result.rowCount });
-    return callback(result);
+    return callback ? callback(result) : undefined;
   })
   .catch(err => console.log(err.message));
 };

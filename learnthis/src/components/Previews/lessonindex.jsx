@@ -212,7 +212,7 @@ const parsedAsampledata = setData(advancedArray)
                     sampledata={props.sampledata} setsampledata={props.setsampledata} 
                     myCategory={item.myCategory} myStage={item.myStage} 
                     star={item.star} myComments={item.myComments}
-                    setOpenDeleted={props.setOpenDeleted} combinedData={props.combinedData}
+                    setOpenDeleted={props.setOpenDeleted} combinedData={props.combinedData} lessonTrue={props.lessonTrue}
                     bookmark={item.bookmark} like={item.like} favourite={item.favourite} playlist={item.playlist} lesson={item.lesson} report={item.report}
                     setPage={setPageB} 
                   >
@@ -255,7 +255,7 @@ const parsedAsampledata = setData(advancedArray)
                     myCategory={item.myCategory} myStage={item.myStage} 
                     star={item.star} myComments={item.myComments}
                     setOpenDeleted={props.setOpenDeleted} combinedData={props.combinedData}
-                    bookmark={item.bookmark} like={item.like} favourite={item.favourite} playlist={item.playlist} lesson={item.lesson} report={item.report} 
+                    bookmark={item.bookmark} like={item.like} favourite={item.favourite} playlist={item.playlist} lesson={item.lesson} report={item.report} lessonTrue={props.lessonTrue}
                     setPage={setPageI} 
                   >
                     {item.id}
@@ -297,7 +297,7 @@ const parsedAsampledata = setData(advancedArray)
                     star={item.star} myComments={item.myComments}
                     setOpenDeleted={props.setOpenDeleted} combinedData={props.combinedData}
                     bookmark={item.bookmark} like={item.like} favourite={item.favourite} playlist={item.playlist} lesson={item.lesson} report={item.report} 
-                    setPage={setPageA} 
+                    setPage={setPageA} lessonTrue={props.lessonTrue}
                   >
                     {item.id}
                   </LessonItem>
