@@ -153,6 +153,7 @@ export default function ChipsArray(props) {
 
   
   return (
+    <center>
     <Paper
       sx={{
         display: 'flex',
@@ -162,6 +163,7 @@ export default function ChipsArray(props) {
         p: 0.5,
         m: 0,
         overflow: "auto",
+        width: 1400,
       }}
       component="ul">
       
@@ -285,5 +287,6 @@ export default function ChipsArray(props) {
       })}
       </Tabs>
     </Paper>
+    </center>
   );
 }

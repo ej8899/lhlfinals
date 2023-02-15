@@ -105,7 +105,7 @@ const itemData = [
     <ImageList sx={{ width: 1400, height: 305, p:0,m:0, justify:'flex-start', alignItems:'center', alignContent:'flex-start',}} cols={6}>
       {itemData.map((item,key) => (
         
-        <Paper sx={{ display:'flex',alignItems:'center',justifyContent:'center',height:'150px',border:'0px', m:0,p:0, borderColor:'red', borderStyle:'solid'}}>
+        <Paper key={key} sx={{ display:'flex',alignItems:'center',justifyContent:'center',height:'150px',border:'0px', m:0,p:0, borderColor:'red', borderStyle:'solid'}}>
         
         <ImageListItem key={item.img}  sx={{ display:'flex',alignItems:'center',justifyContent:'center', border:'0px', m:0,p:0, borderColor:'orange', height:'150px', borderStyle:'solid',}} onClick={()=>handleClick(item.title,key)}>
         

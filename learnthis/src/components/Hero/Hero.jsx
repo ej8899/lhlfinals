@@ -26,16 +26,15 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
 import InputBase from '@mui/material/InputBase';
-
+import Paper from '@mui/material/Paper';
 
 import PropTypes from 'prop-types';
 import { useSelect } from '@mui/base';
 import { styled } from '@mui/system';
 import UnfoldMoreRoundedIcon from '@mui/icons-material/UnfoldMoreRounded';
 
-
-
 import zlog from "../../helpers/zlog.js";
+import Heroslider from "./Slider";
 
 
 
@@ -375,11 +374,8 @@ export default function Hero(props) {
       <Grid item xs={12}>
         <div style={heroContent}>
           {!props.lessonTrue &&
-          <div>
-            <Typography variant="h2">Welcome to our site!</Typography>
-            <Typography variant="subtitle1">
-            hero component<br/>
-            </Typography>
+            <div>
+            <Heroslider/>
             </div>
           } 
           {props.lessonTrue &&
@@ -391,9 +387,26 @@ export default function Hero(props) {
             combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} filled={props.chipfilled} setFilled={props.setChipFilled}
             setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
           ></ChipsArray>
+
+      <center>
+      <Paper
+      sx={{
+        display: 'flex',
+        justifyContent: 'left',
+        flexWrap: 'nowrap',
+        listStyle: 'none',
+        p: 0.5,
+        m: 0,
+        mt: 0.2,
+        width: 1400,
+      }}>
           <Grid container spacing={3}>
+
+       
+
         <Grid item xs={6} sx={{my: 1}}>
-          <div>
+          
+       
           <Stack direction="row" spacing={2} sx={{alignItems: "flex-start", marginLeft : "3em"}}>
           {totalkeys <= 1 &&
           <Chip
@@ -443,8 +456,10 @@ export default function Hero(props) {
 
 
           </Stack>
-          </div>
+          
+
         </Grid>
+        
         <Grid item xs={6} sx={{my: 1}}>
           <div >
           {!props.lessonTrue && 
@@ -468,8 +483,9 @@ export default function Hero(props) {
           }
           </div>
         </Grid>
+        
       </Grid>
-          
+      </Paper>  </center>
         </div>
       </Grid>
     </Grid>

@@ -286,7 +286,7 @@ const advancedChange = (event, value) => {
           case 2 : 
               filteredObject = {
                 resource: {
-                  "minimum_likes" : 0,
+                  "minimum_likes" : 1,
                   "minimum_is_recommended" : 0,
                   "minimum_average_rating": 3,
                   "limit" : 100,

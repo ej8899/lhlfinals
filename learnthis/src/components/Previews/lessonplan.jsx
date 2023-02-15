@@ -32,6 +32,7 @@ import Tooltip from '@mui/material/Tooltip';
 // --------------------------------------------------------
 // Material UI Icon Imports
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import ScreenshotMonitorIcon from '@mui/icons-material/ScreenshotMonitor';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -41,7 +42,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 // --------------------------------------------------------
 // Import Helper Functions
 import zlog from "../../helpers/zlog";
-import { randomNumber, randomColor, truncateText, colorGenerator, extractDomain } from "../../helpers/helpers";
+import { randomNumber, randomColor, truncateText, colorGenerator, extractDomain, isYoutubeUrl } from "../../helpers/helpers";
 // --------------------------------------------------------
 
 //-------------------------------------------------------------------
@@ -351,6 +352,7 @@ export const LessonItem = (props) => {
       setComplete(true)
     }
 
+    
     setFavourite(props.favourite)
     setLike(props.like)
     setBookmark(props.bookmark)
@@ -391,6 +393,7 @@ export const LessonItem = (props) => {
   }
 // --------------------------------------------------------
 
+const markComplete = true
 // --------------------------------------------------------
 // Updating Resource SQL database
 // TODO -- need to tie to database call
@@ -589,7 +592,7 @@ export const LessonItem = (props) => {
     <div style={{marginTop: "-1rem"}}>
       <Box display="flex" flexDirection="row" justifyContent="flex-end" overflow="visible" zIndex="1000" >
         {props.nowloading ? null : complete ? (
-          <Complete display={newIcon} nowLoading={props.nowLoading}/>
+          <Complete display={markComplete} nowLoading={props.nowLoading}/>
         ) : (
           <NewBadge display={newIcon} nowLoading={props.nowLoading}/>
         )}
@@ -616,7 +619,7 @@ export const LessonItem = (props) => {
               ) : (
                 <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
                   <Avatar style={{ backgroundColor: colorGenerator(props.stage)}} aria-label="recipe">
-                    <YouTubeIcon />
+                    {isYoutubeUrl(videoURL) ? <YouTubeIcon /> : <ScreenshotMonitorIcon/>}
                   </Avatar>
                 </Fade>
               )

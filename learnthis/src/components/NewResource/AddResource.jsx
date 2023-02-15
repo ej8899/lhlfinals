@@ -349,7 +349,7 @@ export const AddResourceFlow = (props) => {
 // Adding new resource to SQL database
   // TODO - sample data - need to tie difference between user and overall && need axios put
 
-  const { isAuth, user, userid, logout } = useContext(AuthContext);
+  const { isAuth, user, userid, logout,viewTitle, setViewTitle } = useContext(AuthContext);
   const {filterError, filterData, setFilterError, handlefilterError} = useContext(FilterContext);
 
   const addingNewResourceSQL = () => {
@@ -481,7 +481,7 @@ export const AddResourceFlow = (props) => {
         <React.Fragment>
           {/* <NewResource handleNewResourceOpen={() => handleNewResourceOpen(console.log(props.sampledata))}/> */}
           <AddNewResource 
-            open={props.newResource} handleNewResourceClose={() => props.handleNewResourceClose(setErrorBlank(false), setNewURL(""))}
+            open={props.newResource} handleNewResourceClose={() => props.handleNewResourceClose(setErrorBlank(false), setNewURL(""), setViewTitle('Home'))}
             newURL={newURL} setNewURL={setNewURL} errorBlank={errorBlank}
             fetchNewResource={fetchNewResource}  setErrorBlank={setErrorBlank}
             isYoutubeUrl={isYoutubeUrl} getYoutubeVideoId={getYoutubeVideoId}

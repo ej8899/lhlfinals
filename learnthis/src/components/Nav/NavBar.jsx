@@ -398,7 +398,7 @@ const update = () => {
           <Button
             size="large"
             sx={{ textAlign:"center" }}
-            onClick={() => reset()}
+            onClick={() => {setViewTitle('Home');reset();}}
             variant="text"
           >
 

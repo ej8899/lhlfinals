@@ -30,7 +30,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   
-  const [viewTitle, setViewTitle] = useState("just placeholder text for a null - change in viewtitle.jsx");
+  const [viewTitle, setViewTitle] = useState("Home");
 
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState("nouser");

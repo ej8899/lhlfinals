@@ -196,6 +196,49 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 export function modalAboutTeam() {
   return (
     <div style= {{width:"500px", display:"table-cell"}}>
+
+<StyledPaper sx={{width:'100%'}}>
+        <Grid container wrap="nowrap" spacing={2}>
+          <Grid item><IconButton aria-label="github">
+          <GitHubIcon/></IconButton><br/>
+          <IconButton aria-label="linkedIn">
+          <LinkedInIcon/></IconButton>
+          </Grid>
+          <Grid item xs>
+          
+          <Typography>
+            <Divider flexItem textAlign="left">
+            Ernie Johnson
+            </Divider>
+            <Typography sx={{mb:1}}>Front End: Javascript, CSS, ReactJS, MaterialUI</Typography>
+            What you see has been created in Javascript using React and MaterialUI. As the front end developer, I also worked on interfacing to our back end engine.<br/>I’m taking the leap to web app development from a history in construction mega-project management. 
+            
+            </Typography>
+          </Grid>
+          </Grid>
+      </StyledPaper>
+
+     
+      
+      <StyledPaper sx={{width:'100%'}}>
+        <Grid container wrap="nowrap" spacing={2}>
+        <Grid item><IconButton aria-label="github">
+          <GitHubIcon/></IconButton><br/>
+          <IconButton aria-label="linkedIn">
+          <LinkedInIcon/></IconButton>
+          </Grid>
+          <Grid item xs>
+          <Typography>
+            <Divider flexItem textAlign="left">
+            Gene Tenorlas
+            </Divider>
+            <Typography sx={{mb:1}}>Back end: SQL, NodeJS, Express</Typography>
+            My name is Gene, one of the back-end developers to this app. I created the ERD diagram, database schema, and some of the back-end API. Prior to this, I was a software tester in a financial company and graduated as System Analyst at Sheridan College.
+            </Typography>
+          </Grid>
+          </Grid>
+      </StyledPaper>      
+
       <StyledPaper sx={{width:'100%'}}>
         <Grid container wrap="nowrap" spacing={2} sx={{width:'100%'}}>
           <Grid item>
@@ -206,55 +249,21 @@ export function modalAboutTeam() {
           <LinkedInIcon/></IconButton>
           </Grid>
           <Grid item xs>
-            <Typography sx={{mt:3.2}}>
+            <Typography >
             <Divider flexItem textAlign="left" alignItems="flex-end">
             Atsuyuki Yoshimatsu
             </Divider>
-            &nbsp;&nbsp;Back end: SQL, NodeJS, Express
+            <Typography sx={{mb:1}}>Back end: SQL, NodeJS, Express</Typography>
+            My name is Atsu and am from Japan. I have implemented some of the backend API including user sign-up. Currently, I am working for a Japanese company as a web developer.
             </Typography>
           </Grid>
           </Grid>
       </StyledPaper>
       <Divider variant="middle" />
-      
-      <StyledPaper sx={{width:'100%'}}>
-        <Grid container wrap="nowrap" spacing={2}>
-        <Grid item><IconButton aria-label="github">
-          <GitHubIcon/></IconButton><br/>
-          <IconButton aria-label="linkedIn">
-          <LinkedInIcon/></IconButton>
-          </Grid>
-          <Grid item xs>
-          <Typography sx={{mt:3.2}}>
-            <Divider flexItem textAlign="left">
-            Gene Tenorlas
-            </Divider>
-            &nbsp;&nbsp;Back end: SQL, NodeJS, Express
-            </Typography>
-          </Grid>
-          </Grid>
-      </StyledPaper>      
 
       <Divider variant="middle" />
 
-      <StyledPaper sx={{width:'100%'}}>
-        <Grid container wrap="nowrap" spacing={2}>
-          <Grid item><IconButton aria-label="github">
-          <GitHubIcon/></IconButton><br/>
-          <IconButton aria-label="linkedIn">
-          <LinkedInIcon/></IconButton>
-          </Grid>
-          <Grid item xs>
-          
-          <Typography sx={{mt:3.2}}>
-            <Divider flexItem textAlign="left">
-            Ernie Johnson
-            </Divider>
-            &nbsp;&nbsp;Front End: Javascript, CSS, ReactJS, MaterialUI
-            </Typography>
-          </Grid>
-          </Grid>
-      </StyledPaper>
+
     </div>
     );
 }

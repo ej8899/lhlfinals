@@ -11,7 +11,7 @@ const testdata = '{"title":"testfromfakeclipper", "description":"empty desc", "u
 const postData = (data) => {
   console.log("data inside async:",data)
   try {
-    fetch("http://localhost:8080/api/resources", {
+    fetch("http://localhost:8080/api/resources/withAddition", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -189,13 +189,20 @@ function getCurrentTabUrl(event) {
 
   // TODO - default any blank items to prevent breaking
   
+  
   // save to the server:
   const formdataobject = {
+    resource :{
+      profile_id: 2,
     title: pageTitleText,
     url: pageUrlData,
     description: noteText,
-    category: selectedOption,
-    profile_id: 2, 
+
+    },
+    user :{
+    profile_id: 2,
+    myCategories:  [document.getElementById("options").options[select.selectedIndex].value],
+    } 
   };
 
   

@@ -32,6 +32,7 @@ import Tooltip from '@mui/material/Tooltip';
 // --------------------------------------------------------
 // Material UI Icon Imports
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import ScreenshotMonitorIcon from '@mui/icons-material/ScreenshotMonitor';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -41,7 +42,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 // --------------------------------------------------------
 // Import Helper Functions
 import zlog from "../../helpers/zlog";
-import { randomNumber, randomColor, truncateText, colorGenerator, extractDomain } from "../../helpers/helpers";
+import { randomNumber, randomColor, truncateText, colorGenerator, extractDomain, isYoutubeUrl } from "../../helpers/helpers";
 // --------------------------------------------------------
 
 //-------------------------------------------------------------------
@@ -608,7 +609,7 @@ export const PreviewItem = (props) => {
               ) : (
                 <Fade in={!props.nowloading} timeout={{ enter: skeletonTimer }}>
                   <Avatar style={{ backgroundColor: colorGenerator(props.stage)}} aria-label="recipe">
-                    <YouTubeIcon />
+                    {isYoutubeUrl(videoURL) ? <YouTubeIcon /> : <ScreenshotMonitorIcon/>}
                   </Avatar>
                 </Fade>
               )
