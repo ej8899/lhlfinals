@@ -2,7 +2,7 @@
 description: retrieve title, description, thumbnail of a url
 
 ```json
-body: 
+body:
 {
    "url": "https://www.youtube.com/watch?v=t_ispmWmdjY"
 }
@@ -32,7 +32,7 @@ returned:
 description: create/save a new user
 
 ```json
-body: 
+body:
 {
 	"email":"123456@test.com",
 	"password":"1234"
@@ -52,7 +52,7 @@ returned:
 description: login a user
 
 ```json
-body: 
+body:
 {
 	"email":"123456@test.com",
 	"password":"1234"
@@ -61,10 +61,15 @@ body:
 returned:
 {
     "success": "Logged in",
-    "user": {
-        "id": 5,
-        "email": "123456@test.com"
-    }
+    "user": [
+      {
+          "profile_id": 5,
+          "email": "123456@test.com",
+          "first_name" : "John",
+          "last_name" : "Doe",
+          "avatar" : 'https://cdn.pixabay.com/photo/2014/04/03/10/32/businessman-310819__340.png'
+      }
+    ]
 }
 ```
 
@@ -84,7 +89,7 @@ returned:
 description: create/save a new profile
 
 ```json
-body: 
+body:
 {
 	"user_id": 3,
 	"first_name": "George",
@@ -152,11 +157,11 @@ returned:
 }
 ```
 
-## UPDATE api/profiles/6
+## UPDATE api/profiles/[profile_id]
 description: create/save a new profile
 
 ```json
-body: 
+body:
 {
     "id": 6,
     "user_id": 3,
@@ -335,7 +340,7 @@ body:
 description: create/save a resource
 
 ```json
-body: 
+body:
 {
     "profile_id": 1,
     "url": "https://www.youtube.com/watch?v=_y9oxzTGERs",
@@ -370,7 +375,7 @@ order_by values:
 "alpha_z-a" -> order descending by title
 
 ```json
-body: 
+body:
 {
   "resource" : {
 		"is_deleted":false,
@@ -476,7 +481,7 @@ returned:
 ```
 
 ## GET api/categories/profiles/[profile_id]
-description: retrieve all categories that user created for all the resources that they added. 
+description: retrieve all categories that user created for all the resources that they added.
 
 ```json
 returned:
@@ -556,7 +561,7 @@ returned:
 description: create/save a category
 
 ```json
-body: 
+body:
   {
     "resource_id": 2,
     "name":"Java",
@@ -580,7 +585,7 @@ returned:
 description: update a category
 
 ```json
-body: 
+body:
     {
         "id": 6,
         "name":"Rails",
@@ -661,7 +666,7 @@ returned:
 description: create/save a rating
 
 ```json
-body: 
+body:
     {
         "resource_id": 1,
         "profile_id": 2,
@@ -684,7 +689,7 @@ returned:
 description: update a rating
 
 ```json
-body: 
+body:
     {
     	"id": 4,
         "resource_id": 1,
@@ -768,7 +773,7 @@ returned:
 description: create/save a comment
 
 ```json
-body: 
+body:
 {
     "resource_id": 2,
     "profile_id": 1,
@@ -795,7 +800,7 @@ returned:
 description: update a comment
 
 ```json
-body: 
+body:
 {
 	"id": 4,
     "resource_id": 2,
@@ -870,7 +875,7 @@ returned:
 description: create/save a favourite
 
 ```json
-body: 
+body:
 {
     "resource_id": 2,
     "profile_id": 6,
@@ -893,7 +898,7 @@ returned:
 description: update a favourite
 
 ```json
-body: 
+body:
 {
     "id": 5,
     "resource_id": 2,
@@ -962,7 +967,7 @@ returned:
 description: create/save a playlist
 
 ```json
-body: 
+body:
 {
     "resource_id": 1,
     "profile_id": 2,
@@ -985,7 +990,7 @@ returned:
 description: update a playlist
 
 ```json
-body: 
+body:
 {
     "id": 3,
     "resource_id": 1,
@@ -1054,7 +1059,7 @@ returned:
 description: create/save a recommend
 
 ```json
-body: 
+body:
 {
     "resource_id": 2,
     "profile_id": 2,
@@ -1077,7 +1082,7 @@ returned:
 description: update a recommend
 
 ```json
-body: 
+body:
 {
     "id": 3,
     "resource_id": 2,
@@ -1146,7 +1151,7 @@ returned:
 description: create/save a bookmark
 
 ```json
-body: 
+body:
 {
     "resource_id": 1,
     "profile_id": 2,
@@ -1169,7 +1174,7 @@ returned:
 description: update a bookmark
 
 ```json
-body: 
+body:
 {
     "id": 3,
     "resource_id": 1,
@@ -1238,7 +1243,7 @@ returned:
 description: create/save a report
 
 ```json
-body: 
+body:
 {
     "resource_id": 1,
     "profile_id": 2,
@@ -1261,7 +1266,7 @@ returned:
 description: update a report
 
 ```json
-body: 
+body:
 {
     "id": 3,
     "resource_id": 1,
@@ -1297,4 +1302,76 @@ returned:
     "updated_at": "2023-02-08T14:57:41.877Z",
     "deleted_at": "2023-02-08T14:58:29.160Z"
 }
+```
+
+
+## GET api/icons/[profile_id]
+description: get icons status
+body: N/A
+
+```json
+returned:
+[
+  {
+    "profile_id": 1,
+    "resource_id": 1,
+    "is_liked" : true,
+    "is_favourite" : true,
+    "is_bookmarked" : false,
+    "is_playlist" : false,
+    "is_reported" : false,
+    "is_recommended" : false,
+  },
+  {
+    "profile_id": 1,
+    "resource_id": 2,
+    "is_liked" : true,
+    "is_favourite" : true,
+    "is_bookmarked" : false,
+    "is_playlist" : false,
+    "is_reported" : false,
+    "is_recommended" : false,
+  },
+  {
+    /* Sample of a return when there's no status for any icon */
+    "profile_id": 1,
+    "resource_id": 3,
+    "is_liked" : false,
+    "is_favourite" : false,
+    "is_bookmarked" : false,
+    "is_playlist" : false,
+    "is_reported" : false,
+    "is_recommended" : false,
+  }
+]
+```
+
+## POST api/icons
+description: post icons status
+
+```json
+body:
+{
+  "profile_id" : 1,
+  "resource_id": 2,
+  "is_liked" : true,
+  "is_favourite" : true,
+  "is_bookmarked" : false,
+  "is_playlist" : false,
+  "is_reported" : false,
+  "is_recommended" : false,
+}
+
+returned:
+  {
+    "profile_id": 1,
+    "resource_id": 2,
+    "is_liked" : true,
+    "is_favourite" : true,
+    "is_bookmarked" : false,
+    "is_playlist" : false,
+    "is_reported" : false,
+    "is_recommended" : false,
+  }
+
 ```
