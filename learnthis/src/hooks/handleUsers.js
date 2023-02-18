@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         setErrorBlankPassword(false)
 
         // TODO -- right now receiving only email address - want to update to first and last name
-        return axios.get(`http://localhost:8080/api/profiles/user/${response.data.authenticatedUser.id}`)
+        return axios.get(`http://localhost:8080/api/profiles/user/${response.data.user[0].profile_id}`)
         .then(response => {
           setUser(`${response.data.profiles[0].first_name} ${response.data.profiles[0].last_name}`)
           close();
