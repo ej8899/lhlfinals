@@ -2,19 +2,16 @@ import * as React from 'react';
 import {useState, useContext} from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
+
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+
 import MoreIcon from '@mui/icons-material/MoreVert';
 import zlog from '../../helpers/zlog';
 import Login from '../Signin.jsx';
@@ -22,8 +19,15 @@ import SignUp from '../SignUp.jsx';
 import PersistentDrawerLeft from "./LeftMenu.jsx";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import ClearIcon from '@mui/icons-material/Clear';
 import Divider from '@mui/material/Divider';
 import RandomAvatar from './RandomAvatar';
+import { Paper, Toolbar, Box, Grid, InputAdornment } from "@mui/material";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+
+
+
 
 import {  modalSignUp,
           modalSignIn
@@ -31,9 +35,63 @@ import {  modalSignUp,
 
 // userauth
 import { AuthContext } from '../../hooks/handleUsers.js';
-
+import { FilterContext } from "../../helpers/filter";
+import { ChipContext } from '../Hero/ChipsList';
+import { FilterModal } from "../Previews/filtererror";
 
 import AboutDialog from "../Modal/about.jsx"
+import { useEffect } from 'react';
+import { ClassNames } from '@emotion/react';
+import HouseIcon from '@mui/icons-material/House';
+
+import UserNotifications from './Notifications';
+
+
+
+
+
+//
+// profile modal
+//
+function ProfilePageData(url,user) {
+  
+  
+  return (
+  <div>
+  <Grid sx={{ border: "0px solid red" }} container spacing={2} justifyContent="center" >
+  <Grid item 
+            align="left"
+            
+            alignItems="flex-end"
+            justify="center" 
+            >
+    <img
+      className="fashadow "
+      src={url}
+      alt="user avatar"
+      width="150"
+      height="150"
+    />
+  </Grid>
+  <Grid item xs={8} 
+            container
+            align="left"
+            
+            alignItems="flex-end"
+            justify="center"
+            >
+    
+  
+  <Typography variant="body1">
+    This is the user profile modal for {user}<br/>
+  </Typography>
+
+  </Grid>
+  </Grid>
+  </div>
+  );
+}
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -76,10 +134,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
-
+  const { myFilteredData } = useContext(FilterContext);
+  const { viewTitle, setViewTitle, } = useContext(AuthContext);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -103,17 +162,55 @@ export default function PrimarySearchAppBar(props) {
 
   const [textInput, setTextInput] = useState('');
 
-  const handleTextInputChange = event => {
+  
+  const handleTextInputChange = (event,value) => {
       setTextInput(event.target.value);
       zlog('info',"SEARCH BAR:",event.target.value)
   };
+  const handleClear = () => {
+    //setTimeout(() => setTextInput(""), 10);
+    setTextInput("")
+    zlog('debug',"CLEAR SEARCH")
+    //zlog('debug','event.target:',event.target.value)
+    zlog('debug','textinput',textInput)
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    zlog('debug','textInput',textInput);
+
+    if (textInput. length > 0) {
+      setViewTitle('Search Results for: '+ textInput)
+
+      filterData("search", [userid, textInput], props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
+
+      chipReset(props.catList, props.setChipFilled)
+      props.setSort("Sort by...")
+      setTimeout(() => setTextInput(""), 10);
+    
+    } else {
+      console.log("EMPTY SEARCH")
+      setTimeout(() => setTextInput(""), 10);
+    }
+  }
+
+
+  // setup avatar
+  const [avatarUrl, setAvatarUrl] = React.useState(null);
+  React.useEffect(() => {
+    let x = (Math.random())
+    let url = "https://api.dicebear.com/5.x/bottts-neutral/svg?radius=50&seed=" + x;
+    setAvatarUrl(url);
+    // console.log(avatarUrl)
+  }, []);
 
 
   // userauth
   const { isAuth, user, userid, logout } = useContext(AuthContext);
-  zlog("debug","user:",user)
-  zlog("debug","userid:",userid)
-  zlog("debug","isAuth:",isAuth)
+  const { filterData, totalkeys, filterError } = useContext(FilterContext);
+  const {chipReset} = useContext(ChipContext)
+  // zlog("debug","user:",user)
+  // zlog("debug","userid:",userid)
+  // zlog("debug","isAuth:",isAuth)
 
   // LOGIN
   const [open, setOpen] = React.useState(false);
@@ -123,29 +220,14 @@ export default function PrimarySearchAppBar(props) {
     setAnchorEl(null);
     handleMenuClose();
     zlog('info',"user MODAL:",modal);
+
     switch (modal) {
-      case 'about':
-        setTitle("About...");
-        //setContent(modalAboutMessage());
-        break;
-      case 'team':
-        setTitle("The Dev Team...");
-        //setContent(modalAboutTeam());
-        break;
-      case 'contact':
-        setTitle("Contact Us...");
-        //setContent("content for contact");
-        break;
-      case 'cpolicy':
-        setTitle("Cookies Policy...");
-        //setContent("content for cookies plicy");
-        break;
-      case 'ppolicy':
-        setTitle("Privacy Policy...");
-        //setContent(modalPrivacyPolicy());
-        break;
       case 'logout':
-        logout();
+        logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex, reset, props.setLoading, props.setResourceCount, props.setShowMoreCards);
+        break;
+      case 'profile':
+        setTitle("Profile...")
+        setContent(ProfilePageData(avatarUrl,user));
         break;
       default:
         setTitle("oops.. not found");
@@ -159,7 +241,7 @@ export default function PrimarySearchAppBar(props) {
   function handlelogout() {
     setAnchorEl(null);
     handleMenuClose();
-    logout();
+    logout(props.setsampledata, props.sampledata, props.combinedData, props.setClearFilter, props.setLessonTrue, setSelectedIndex, reset, props.setLoading, props.setResourceCount, props.setShowMoreCards);
   }
 
   // SIGN IN
@@ -197,7 +279,7 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {isAuth ? <MenuItem onClick={() => handleUserModals('profile')}>Profile</MenuItem> : null}
+      {isAuth ? <MenuItem avatar={avatarUrl} onClick={() => handleUserModals('profile')}>Profile</MenuItem> : null}
       {isAuth ? null : <MenuItem onClick={handleLoginForm}>Sign In</MenuItem>}
       {isAuth ? null : <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>}
       {isAuth ? <Divider variant="middle"  /> : null}
@@ -212,66 +294,143 @@ export default function PrimarySearchAppBar(props) {
   // menu drawer
   //
   const [dopen, setDOpen] = React.useState(false);
+  const [selectedIndex, setSelectedIndex] = React.useState(null);
   const handleDrawerOpen = () => {
     setDOpen(true);
+
   };
   const handleDrawerClose = () => {
     setDOpen(false);
   };
 
+// -----------------------------------------------------
+const [state, setState] = React.useState({
+  left: false,
+});
+
+const anchor = "left"
+
+const toggleDrawer = (anchor, open) => (event) => {
+  if (props.clearFilter) {
+    if(!props.lessonTrue) { 
+    setSelectedIndex(null)
+    }
+    props.setClearFilter(false)
+  }
+
+  if (myFilteredData.resource.created_by) {
+    setSelectedIndex(4)
+  }
+
+  if (
+    event &&
+    event.type === 'keydown' &&
+    (event.key === 'Tab' || event.key === 'Shift')
+  ) {
+    return;
+  }
+
+  setState({ ...state, [anchor]: open });
+};
+
+const reset = () =>{
+  props.setLessonTrue(false)
+  setSelectedIndex(null)
+  filterData("clear", userid, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards)
+  chipReset(props.catList, props.setChipFilled)
+  props.setFilled(false)
+  props.setSort("Sort by...")
+}
+
+const update = () => {
+  chipReset(props.catList, props.setChipFilled)
+  props.setFilled(false)
+  props.setSort("Sort by...")
+}
+
+// -----------------------------------------------------
+
+
+
+
   // TODO - get rid of &nbsp; by user logged in name - how to pad the vertical divider?
 
-  let condition;
-  if(!isAuth) condition = "disabled";
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Login open={loginopen} close={handleLoginClose}></Login>
-      <SignUp open={signupopen} close={handleSignUpClose}></SignUp>
+     <Login 
+        open={loginopen} close={handleLoginClose}
+        setsampledata={props.setsampledata} sampledata={props.sampledata}
+        combinedData={props.combinedData} setSOpen={setSOpen}
+        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} setLoading={props.setLoading} setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
+      ></Login>
+      <SignUp 
+        open={signupopen} close={handleSignUpClose}
+        setsampledata={props.setsampledata} sampledata={props.sampledata}
+        combinedData={props.combinedData} setLOpen={setLOpen}
+        clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} setLoading={props.setLoading} setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
+      ></SignUp>
       <AppBar position="static">
         <Toolbar>
-          
+          {!isAuth && 
           <IconButton
-            disabled = {condition}
+            disabled
             size="large"
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
             sx={{ mr: 2, ...(dopen && { display: 'none' }) }}
           >
             <MenuIcon />
-          </IconButton>
-          
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+          </IconButton>}
+          {isAuth && 
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer(anchor, true)}
+            sx={{ mr: 2, ...(dopen && { display: 'none' }) }}
           >
-            LearnThis!
-          </Typography>
-          <Search value= {textInput}
-            onChange= {handleTextInputChange}>
+            <MenuIcon />
+          </IconButton>}
+          
+          <Button
+            size="large"
+            sx={{ textAlign:"center" }}
+            onClick={() => {setViewTitle('Home');reset();}}
+            variant="text"
+          >
+
+            
+            <Typography variant='h6'  style={{ color:'white', }}>
+
+            <img src="./images/learnthis.png" alt="LearnThis!" style={{width: 180}}/>
+            </Typography>
+          </Button>
+
+
+          <form onSubmit={handleSubmit}>
+          <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
+              value= {textInput}
+              onChange= {(e)=>setTextInput(e.target.value)}
             />
+            <IconButton disableRipple={true} onClick={()=>handleClear()}>
+              <ClearIcon ></ClearIcon>
+            </IconButton>
           </Search>
+          </form>
+
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ alignItems:"center", display: { xs: 'none', md: 'flex' } }}>
-            
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+          {isAuth && 
+            <UserNotifications></UserNotifications>
+          }
             
             <IconButton 
               size="large" 
@@ -302,7 +461,7 @@ export default function PrimarySearchAppBar(props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              {isAuth ? <RandomAvatar/> : <AccountCircle />}
+              {isAuth ? <RandomAvatar url={avatarUrl}/> : <AccountCircle />}
             </IconButton>
             
           </Box>
@@ -323,7 +482,13 @@ export default function PrimarySearchAppBar(props) {
       {renderMenu}
       <AboutDialog title={dialogTitle} description={dialogContent} open={open} handleClose={handleClose}></AboutDialog>
       <PersistentDrawerLeft
-        open={dopen} close= {handleDrawerClose}></PersistentDrawerLeft>
+        state={state} setState={setState} toggleDrawer={toggleDrawer} anchor={anchor}
+        handleNewResourceOpen={props.handleNewResourceOpen} setNewResource={props.setNewResource} setsampledata={props.setsampledata} sampledata={props.sampledata} combinedData={props.combinedData} clearFilter={props.clearFilter} setClearFilter={props.setClearFilter} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} setLessonTrue={props.setLessonTrue} setLoading={props.setLoading} update={update} setResourceCount={props.setResourceCount} setShowMoreCards={props.setShowMoreCards}
+      />
+      <FilterModal 
+        open={filterError} 
+        message={"There was an error retrieving resources."}
+      />
     </Box>
   );
 }

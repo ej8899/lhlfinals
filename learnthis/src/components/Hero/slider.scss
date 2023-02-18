@@ -1,0 +1,12 @@
+.slideritem {
+  transition: all 0.4s ease-in-out;
+  transform: scale(1);
+  margin-top:10px;
+}
+
+.slideritem:hover {
+  box-shadow: 0 0 20px 4px orange;
+  cursor: pointer;
+  transform: scale(0.8);
+  transition: all 0.2s ease-in-out;
+}

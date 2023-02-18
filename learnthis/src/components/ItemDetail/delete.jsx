@@ -23,6 +23,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { CloseModal } from '../Icons/close';
 //-------------------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
+
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -36,6 +42,7 @@ const style = {
   borderTopRightRadius: 5,
   boxShadow: 24,
   p: 4,
+  borderColor: "error.main"
 };
 
 //-------------------------------------------------------------------
@@ -75,7 +82,7 @@ export const DeleteModal= (props) => {
                 height="140"
                 width="345"
                 image={props.thumbnail}
-                alt={props.title}
+                src={ 'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available '}
                 sx={{marginBottom : 2}}
               />
             </Box>

@@ -11,6 +11,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
+import Alert from '@mui/material/Alert';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -35,7 +36,7 @@ const style = {
   borderTopRightRadius: 5,
   boxShadow: 24,
   p: 4,
-  minWidth: "450px"
+  minWidth: "450px",
 };
 
 export const SharedModal= (props) => {
@@ -52,8 +53,9 @@ export const SharedModal= (props) => {
         timeout: 500,
       }}
       disableScrollLock={true}
+      
     >
-      <Box sx={style}>
+      <Box sx={style} variant="outlined" severity="info">
         <Box display="flex" width="100%"  justifyContent="space-between" gap="2rem">
           <Typography variant="h5" style={{ marginLeft : 8, marginBottom : 10}}>
             {props.title}
@@ -70,15 +72,15 @@ export const SharedModal= (props) => {
                 height="140"
                 width="345"
                 image={props.thumbnail}
-                alt={props.title}
+                src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available'}
                 sx={{marginBottom : 2}}
               />
             </Box>
           </Box>
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-            <Typography variant="body2" textAlign="center">
+            <Alert variant="outlined" severity="success">
               Resource was shared with: {props.emailTo}
-            </Typography>
+            </Alert>
           </Box>
         </Box>
       </Box>

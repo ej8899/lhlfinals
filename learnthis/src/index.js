@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from "react-router-dom";
 import "./index.scss";
 
-import Application from "./components/Application";
+import Application from "./components/Application.js";
 
 import './config.js'; // for global configuration variables
 import './helpers/zlog.js';   // console log replacement

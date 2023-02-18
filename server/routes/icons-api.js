@@ -1,3 +1,4 @@
+
 module.exports = function(router, database) {
   // Get icons status with profile id
   router.get('/:id', async(req, res) => {
@@ -31,6 +32,7 @@ module.exports = function(router, database) {
 
   router.post('/', async(req, res) => {
     const data = req.body;
+    console.log(data);
     const statuses = await database.postIconsStatuses(data)
       .catch(err => res.status(500).json({ error: err.message }));
 

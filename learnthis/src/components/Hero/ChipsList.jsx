@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useRef, useState, useContext, createContext } from "react";
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
@@ -15,8 +15,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
 import zlog from "../../helpers/zlog.js";
-import { useEffect } from 'react';
 
+//---------------------------------------------------------
+// Import user filter
+import { FilterContext } from "../../helpers/filter";
+//---------------------------------------------------------
 
 const useStyles = {
   boundary: {
@@ -42,6 +45,39 @@ const ListItem = styled('li')(({ theme }) => ({
 }));
 
 
+export const ChipContext = createContext();
+
+export const ChipProvider = ({ children }) => {
+  const chipReset = (categories, setFilled) => {
+    let object = {};
+    let objectArray = [
+    ];
+    for (let i = 0; i < categories.length; i++) {
+      object = {
+        key: i,
+        label: categories[i]
+      };
+      objectArray.push(object);
+    }
+    const tagInit= {};
+    for (let i = 0; i < objectArray.length+1; i++) {
+      tagInit[i] = false;
+    }  
+    setFilled({...tagInit})
+    return
+  }
+
+  return (
+    <ChipContext.Provider
+      value={{
+        chipReset
+      }}
+    >
+      {children}
+    </ChipContext.Provider>
+  )
+}
+
 export default function ChipsArray(props) {
 
   let object = {};
@@ -55,15 +91,18 @@ export default function ChipsArray(props) {
     objectArray.push(object);
   }
   const [chipData, setChipData] = React.useState(objectArray);
-  const [filled, setFilled] = React.useState(false);
+  const { filterData } = useContext(FilterContext);
+  const filled = props.filled
+  const setFilled = props.setFilled
 
   useEffect(() => {
     const tagInit= {};
     for (let i = 0; i < objectArray.length+1; i++) {
-      tagInit[i] = true;
+      tagInit[i] = false;
     }  
     setFilled({...tagInit})
-    console.log("filled",filled)
+    // console.log("filled",filled)
+    
   }, []);
   
   
@@ -72,15 +111,21 @@ export default function ChipsArray(props) {
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
   };
 
+  const [categoryArray, setCategoryArray] = useState(null)
+  
   const handleClick = (chipID) => {
     zlog('action',"chip clicked:",chipID)
+
+    let tmpArray1 = []
     if(chipID === 100) {
         console.log('is on, turn off')
         const tagInit= {};
         for (let i = 0; i < objectArray.length; i++) {
-          tagInit[i] = true;
+          tagInit[i] = false;
         }  
         setFilled({...tagInit})
+        // chipData.map(chip => categoryArray.push(chip.label))
+        tmpArray1 = null;
     } 
     else if(chipID === 200) {
         console.log('is off, turn on')
@@ -89,14 +134,26 @@ export default function ChipsArray(props) {
           tagInit[i] = false;
         }  
         setFilled({...tagInit})  
+        tmpArray1 = []
       }
     else {
       setFilled({...filled, [chipID]: !filled[chipID]});
+      let tmpArray = {...filled, [chipID]: !filled[chipID]}
+      for (let x = 0; x < chipData.length; x++) {
+        if (tmpArray[x]) {
+          tmpArray1.push(chipData[x].label)
+        }
+      }
     }
+
+
+    filterData("category", tmpArray1, props.setsampledata, props.sampledata, props.combinedData, false, false, false, props.setResourceCount, props.setShowMoreCards)
+    setCategoryArray(tmpArray1)
   };
 
   
   return (
+    <center>
     <Paper
       sx={{
         display: 'flex',
@@ -106,6 +163,7 @@ export default function ChipsArray(props) {
         p: 0.5,
         m: 0,
         overflow: "auto",
+        width: 1400,
       }}
       component="ul">
       
@@ -115,7 +173,8 @@ export default function ChipsArray(props) {
           scrollButtons="auto"
           aria-label="select a search filter"
           >
-            <Tab    
+          {categoryArray !== null &&
+            (<Tab    
               disableRipple
               key="100"
               sx={{
@@ -126,7 +185,29 @@ export default function ChipsArray(props) {
               label={
             <Chip
               color="warning"
-              label="all"
+              label="All"
+              icon={<CheckCircleIcon />}
+              variant="outlined"
+              sx={{ textTransform: "none",
+                    fontWeight: "normal",
+                    borderRadius: "5px"
+                  }}
+              onClick={()=> {handleClick(100)}}
+            />}/>
+            )}
+            {categoryArray === null &&
+            (<Tab    
+              disableRipple
+              key="100"
+              sx={{
+                    minWidth: "0px",
+                    margin: "2px",
+                    padding: "1px"
+                  }}
+              label={
+            <Chip
+              color="warning"
+              label="All"
               icon={<CheckCircleIcon />}
               variant="default"
               sx={{ textTransform: "none",
@@ -135,6 +216,8 @@ export default function ChipsArray(props) {
                   }}
               onClick={()=> {handleClick(100)}}
             />}/>
+            )}
+          {(categoryArray === null || categoryArray.length) > 0 &&
             <Tab
               disableRipple
               key="200"
@@ -146,7 +229,28 @@ export default function ChipsArray(props) {
               label={
             <Chip
               color="warning"
-              label="none"
+              label="None"
+              icon={<UnpublishedIcon />}
+              variant="outlined"
+              sx={{ textTransform: "none",
+                    fontWeight: "normal",
+                    borderRadius: "5px"
+                  }}
+              onClick={()=> {handleClick(200)}}
+            />}/>}
+          {categoryArray !== null && categoryArray.length === 0 &&
+            <Tab
+              disableRipple
+              key="200"
+              sx={{
+                    margin: "2px",
+                    padding: "1px",
+                    minWidth: "0px",
+                  }}
+              label={
+            <Chip
+              color="warning"
+              label="None"
               icon={<UnpublishedIcon />}
               variant="default"
               sx={{ textTransform: "none",
@@ -154,7 +258,8 @@ export default function ChipsArray(props) {
                     borderRadius: "5px"
                   }}
               onClick={()=> {handleClick(200)}}
-            />}/>
+            />}/>}
+
       {chipData.map((data) => {
 
         return (
@@ -182,5 +287,6 @@ export default function ChipsArray(props) {
       })}
       </Tabs>
     </Paper>
+    </center>
   );
 }

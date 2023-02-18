@@ -49,6 +49,11 @@ import { CloseModal } from '../Icons/close';
 import { StarStaleRating } from '../Icons/stars';
 // --------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -64,7 +69,7 @@ const style = {
   p: 4,
 };
 
-export const EditResourceModal = (props) => {
+export const NewResourceModal = (props) => {
 
   // reference: https://www.npmjs.com/package/react-youtube
   const videoPlayerOpts = {
@@ -93,14 +98,28 @@ export const EditResourceModal = (props) => {
       <Fade in={props.open}>
         <Box sx={style}>
           <Box display="flex" width="100%" justifyContent="space-between" alignItems="center" sx={{marginBottom : 2}}>
-            <TextField
-              required
-              id="outlined-required"
-              sx={{width:"95%"}}
-              label="Choose Title"
-              value={props.title}
-              onChange={(event) => props.setTitle(event.target.value)}
-            />
+            { !props.errorBlank &&
+              <TextField
+                required
+                id="outlined-required"
+                sx={{width:"95%", marginBottom: "1.5em"}}
+                label="Choose Title"
+                value={props.title}
+                onChange={(event) => props.setTitle(event.target.value)}
+              />
+            }
+            { props.errorBlank &&
+              <TextField
+                error
+                required
+                id="outlined-required"
+                sx={{width:"95%"}}
+                label="Choose Title"
+                value={props.title}
+                onChange={(event) => props.setTitle(event.target.value)}
+                helperText="Title cannot be blank."
+              />
+            }
             <Box>
               <CloseModal handleClose={props.handleAbort}/>
             </Box>
@@ -115,7 +134,7 @@ export const EditResourceModal = (props) => {
                     height="360"
                     width="635"
                     image={props.thumbnail}
-                    alt={props.title}
+                    src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available'}
                     sx={{marginBottom : 2}}
                   />
                   <Typography variant='body2' sx={{marginBottom : "2"}}> 
@@ -127,7 +146,7 @@ export const EditResourceModal = (props) => {
                 </Box>
               }
               <Box display={props.show} alignItems="center" marginTop="1rem">
-                <DiscreteSliderMarks label={"Rate Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage} sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
+                <DiscreteSliderMarks label={"Rank Resource Complexity"} myStage={props.myStage} addMyStage={props.addMyStage} sliderActive={props.sliderActive} setSliderActive={props.setSliderActive} />
                 <Tags listData={props.typeCategory} message={'Select the lesson category...'} mySelection={props.myCategory} addMySelection={props.addMyCategory}/>
               </Box>
               <Box display={props.show}>
@@ -142,7 +161,7 @@ export const EditResourceModal = (props) => {
                 <Button variant="outlined" sx={{color: "red", borderColor : "red", "&:hover" : {backgroundColor : "lightpink", borderColor : "red"}}} onClick={() => props.handleCancel(props.setNewURL(""))}>
                   Cancel
                 </Button>
-                <Button variant="contained" sx={{width: "5em"}} href="" onClick={() => props.handleClose(props.addingNewResourceSQL())} >
+                <Button variant="contained" sx={{width: "5em"}} href="" onClick={() => props.addingNewResourceSQL()} >
                   Save
                 </Button>
               </Box>

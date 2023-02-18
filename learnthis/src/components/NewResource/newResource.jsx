@@ -57,7 +57,7 @@ export const AddNewResource= (props) => {
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
-      onClose={() => props.handleNewResourceClose(props.setNewURL(""))}
+      onClose={() => props.handleNewResourceClose()}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
@@ -71,7 +71,7 @@ export const AddNewResource= (props) => {
             Add New Resource
           </Typography>
           <Box>
-            <CloseModal handleClose={() => props.handleNewResourceClose(props.setNewURL(""))}/>
+            <CloseModal handleClose={() => props.handleNewResourceClose()}/>
           </Box>
         </Box>
         <Box
@@ -81,16 +81,32 @@ export const AddNewResource= (props) => {
             m: 2
           }}
         >
-          <TextField 
-            fullWidth 
-            label="New Resource URL" 
-            id="fullWidth" 
-            value={props.newURL} 
-            onChange={(event) => props.setNewURL(event.target.value)}
-          />
+          {!props.errorBlank &&
+            <TextField 
+              fullWidth 
+              label="New Resource URL" 
+              id="fullWidth" 
+              autoFocus
+              value={props.newURL} 
+              onChange={(event) => props.setNewURL(event.target.value)}
+              sx={{marginBottom: "1.5em"}}
+            />
+          }
+          { props.errorBlank &&
+            <TextField
+              error
+              fullWidth
+              autoFocus
+              id="outlined-error-helper-text"
+              label="New Resource URL" 
+              value={props.newURL} 
+              onChange={(event) => (props.setNewURL(event.target.value), props.setErrorBlank(false))}
+              helperText="URL cannot be blank."
+            />
+          }
         </Box>
         <Box display="flex" justifyContent="flex-end">
-          <Button variant="contained" href="" onClick={() => props.handleNewResourceClose(props.fetchNewResource(props.newURL, props.isYoutubeUrl, props.getYoutubeVideoId ))} >
+          <Button variant="contained" href="" onClick={() =>props.fetchNewResource(props.newURL, props.isYoutubeUrl, props.getYoutubeVideoId)} >
             Add
           </Button>
         </Box>

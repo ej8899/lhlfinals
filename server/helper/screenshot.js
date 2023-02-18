@@ -61,13 +61,14 @@ Get Title, Description, Thumbnail of a url
 const extract = async (url) => {
   info = await retrieveTitleDescription(url);
   info.thumbnail = await screenshot(url);
-  info.thumbnail = info.thumbnail
-    ? JSON.parse(info.thumbnail)["screenshot"]
-    : "";
+
+  info.thumbnail = info.thumbnail ? JSON.parse(info.thumbnail)["screenshot"] : "";
+
   info.url = url;
   console.log("Info extracted: ", info);
   return info;
 };
+
 
 /*
 Get a randomize avatar
@@ -86,4 +87,6 @@ const avatar = async (gender) => {
   //console.log("avatarURL", avatarURL.url);
   return {url: avatarURL.url};
 };
+
 module.exports = { screenshot, extract, avatar };
+

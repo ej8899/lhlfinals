@@ -1,5 +1,5 @@
+//--------------------------------------------
 // returns true or false
-//
 export const isYoutubeUrl = (url) => {
   return (url.indexOf("youtube.com") !== -1 || url.indexOf("youtu.be") !== -1);
 }
@@ -10,10 +10,9 @@ console.log(isYoutubeUrl(youtubeUrl)); // Outputs true
 const nonYoutubeUrl = "https://www.google.com";
 console.log(isYoutubeUrl(nonYoutubeUrl)); // Outputs false
 */
+//--------------------------------------------
 
-//
-//
-//
+//--------------------------------------------
 export const getYoutubeVideoId = (url) => {
   let videoId;
   try {
@@ -27,11 +26,11 @@ export const getYoutubeVideoId = (url) => {
 // sample usage:
 // const youtubeUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 // const videoId = getYoutubeVideoId(youtubeUrl);
+//--------------------------------------------
 
 
-  //
+//--------------------------------------------
   // truncate long text
-  //
 export const truncateText = (text, limit) => {
   if (text.length > limit) {
       return text.substring(0, limit) + '...';
@@ -39,12 +38,16 @@ export const truncateText = (text, limit) => {
       return text;
   }
 }
+//--------------------------------------------
 
+//--------------------------------------------
 // Random Number Generator
 export const randomNumber = (min,max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+//--------------------------------------------
 
+//--------------------------------------------
 // Random Colour for icon thumbnail
 export function randomColor() {
   let hex = Math.floor(Math.random() * 0xFFFFFF);
@@ -52,7 +55,9 @@ export function randomColor() {
 
   return color;
 }
+//--------------------------------------------
 
+//--------------------------------------------
 // Assign Color Based on Stage
 export const colorGenerator = (stage) => {
   const beginner = "#00e676"
@@ -73,8 +78,11 @@ export const colorGenerator = (stage) => {
 
   return 'default'
 }
+//--------------------------------------------
 
 
+
+//--------------------------------------------
 // extractTLD
 // ** UNTESTED **
 export const extractDomain = (url) => {
@@ -87,8 +95,10 @@ export const extractDomain = (url) => {
 // const fullURL = "https://www.example.com/path/to/page";
 // console.log(extractDomain(fullURL));
 // output: example.com
+//--------------------------------------------
 
 
+//--------------------------------------------
 // isURLValid('http://www.example.com')
 // verify a URL by actually fetching it..needs to get a 2xx response
 export const isURLValid = async (url) => {
@@ -107,3 +117,47 @@ export const isURLValid = async (url) => {
 // isURLValid(url).then(result => {
 //   console.log(result); // Output: true or false
 // });
+//--------------------------------------------
+
+//--------------------------------------------
+export const getdata = (data, stage) => {
+  let tmpArray = []
+  data.forEach( element => {
+    // if (stage === "beginner") {
+    //   if (element.stage > 0 && element.stage <= 33 ) {
+        tmpArray.push(element)
+    //   }
+    // } else if (stage === "intermediate") {
+    //   if (element.stage > 33  && element.stage < 68 ) {
+    //     tmpArray.push(element)
+    //   }
+    // } else if (stage === "advanced") {
+    //   if (element.stage >= 68  && element.stage <= 100 ) {
+    //     tmpArray.push(element)
+    //   }
+    // }
+  })
+
+  // let sortedArray = []
+  // // for (let x = 0; x < data.length; x++) {
+  // //   if (x === 0) {
+  // //     push.sortedArray(data[x])
+  // //   } else {
+  // //     for (let y = 0; y < sortedArray.length; y++) {
+  // //       if (sortedArray.length === 1) {
+  // //         return data[x] > sortedArray[0] ? sortedArray.push(data[x]) : sortedArray.splice(0, 0, data[x])
+  // //       } else if (y === sortedArray.length -1) {
+  // //         return data[x] > sortedArray[y] ? sortedArray.push(data[x]) : sortedArray.splice( y, 0, data[x])
+  // //       } else {
+
+  // //       }
+  // //     }
+  // //   }
+  // data.forEach (element => {
+  //   sortedArray.push
+  // })
+
+  // }
+  return tmpArray
+}
+//--------------------------------------------

@@ -2,13 +2,18 @@ require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const app = express();
-const publicPath = path.join(__dirname, "..", "learnthis/build");
+const publicPath = path.join(__dirname, "..", "learnthis/public");
 
 const cookieSession = require('cookie-session');
 app.use(cookieSession({
   name: 'session',
   keys: [process.env.SESSION_SECRET_KEY]
 }));
+
+//------------------------------------
+const cors = require("cors");
+app.use(cors());
+//------------------------------------
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -69,11 +74,13 @@ app.use('/api/playlists',playlistsRoutes);
 app.use('/api/bookmarks',bookmarksRoutes);
 app.use('/api/recommends',recommendsRoutes);
 app.use('/api/reports',reportsRoutes);
-app.use('/api/extract',extractRoutes);
+
+app.use('/api/extract',extractRoutes)
 
 app.use(express.static(publicPath));
 app.get("/*", function(req, res) {
-  res.sendFile(path.join(publicPath, "index.html"));
+  res.sendFile(path.join(publicPath));
+
 });
 
 app.listen(process.env.PORT || 8080,()=>{

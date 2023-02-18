@@ -61,7 +61,6 @@ const OutlinedBox = (props) => {
           marginTop: "-0.71em",
           paddingLeft: "0.44em",
           paddingRight: '2em',
-
           position: "absolute",
           fontSize: "0.75em",
           width: 'auto',
@@ -113,7 +112,7 @@ const OutlinedBox = (props) => {
           borderWidth: '1px',
           overflow: 'hidden',
           minWidth: '0%',
-          borderColor: color
+          borderColor: color,
         }}
         >
           <legend style={{

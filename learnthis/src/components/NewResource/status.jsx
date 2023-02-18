@@ -42,6 +42,7 @@ const style = {
   borderTopRightRadius: 5,
   boxShadow: 24,
   p: 4,
+  borderColor: "info.main"
 };
 
 export const StatusModal= (props) => {

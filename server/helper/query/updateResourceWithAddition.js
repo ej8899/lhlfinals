@@ -1,19 +1,25 @@
+
 // helper for update /api/resouces/withAddition
 const updateResourceQueryHelper = (data, resourceId) => {
+  console.log('data', data);
   const queries = [];
 
   const commentsQuery = `
-  UPDATE
-    comments
-  SET
-    (comment, is_private, updated_at) = ($1, $2, NOW())
-  WHERE resource_id=$3 AND profile_id=$4 RETURNING *;`;
+    INSERT INTO comments 
+      (resource_id, profile_id, comment, is_private)
+    VALUES
+      ($1, $2, $3, $4)
+    ON CONFLICT
+      (resource_id, profile_id, is_private)
+    DO UPDATE SET
+      comment = EXCLUDED.comment
+    RETURNING *;`;
   if (data.user.myComments_private !== undefined) {
     const privateCommentsParams = [
-      data.user.myComments_private,
-      true,
       resourceId,
       data.user.profile_id,
+      data.user.myComments_private,
+      true,
     ];
     queries.push({
       query: commentsQuery,
@@ -22,10 +28,10 @@ const updateResourceQueryHelper = (data, resourceId) => {
   }
   if (data.user.myComments_public !== undefined) {
     const publicCommentsParams = [
-      data.user.myComments_public,
-      false,
       resourceId,
       data.user.profile_id,
+      data.user.myComments_public,
+      false,
     ];
     queries.push({
       query: commentsQuery,
@@ -35,15 +41,19 @@ const updateResourceQueryHelper = (data, resourceId) => {
 
   if (data.user.myRating !== undefined) {
     const raitingQuery = `
-    UPDATE
-      ratings
-    SET
-      (rate, updated_at) = ($1, NOW())
-    WHERE resource_id=$2 AND profile_id=$3 RETURNING *;`;
+      INSERT INTO ratings 
+        (resource_id, profile_id, rate)
+      VALUES
+        ($1, $2, $3)
+      ON CONFLICT
+        (resource_id, profile_id)
+      DO UPDATE SET
+        rate = EXCLUDED.rate
+      RETURNING *;`;
     const ratingParams = [
-      data.user.myRating,
       resourceId,
       data.user.profile_id,
+      data.user.myRating,
     ];
     queries.push({
       query: raitingQuery,
@@ -53,15 +63,19 @@ const updateResourceQueryHelper = (data, resourceId) => {
 
   if (data.user.myRanking !== undefined) {
     const rankingQuery = `
-    UPDATE
-      rankings
-    SET
-      (scale, updated_at) = ($1, NOW())
-    WHERE resource_id=$2 AND profile_id=$3 RETURNING *;`;
+    INSERT INTO rankings 
+        (resource_id, profile_id, scale)
+      VALUES
+        ($1, $2, $3)
+      ON CONFLICT
+        (resource_id, profile_id)
+      DO UPDATE SET
+        scale = EXCLUDED.scale
+      RETURNING *;`;
     const rankingParams = [
-      data.user.myRanking,
       resourceId,
       data.user.profile_id,
+      data.user.myRanking,
     ];
     queries.push({
       query: rankingQuery,
@@ -73,7 +87,7 @@ const updateResourceQueryHelper = (data, resourceId) => {
     const deleteCategoriesQuery = `
     UPDATE
       categories
-    SET deleted_at = NOW()
+      SET deleted_at = NOW()
     WHERE resource_id=$1 AND profile_id=$2 RETURNING *;`;
     const deleteCategoriesParams = [
       resourceId,
@@ -84,13 +98,13 @@ const updateResourceQueryHelper = (data, resourceId) => {
       params: deleteCategoriesParams,
     });
 
-    if (data.user.myCategories.length !== 0) {
+    if (data.user.myCategories.length > 0) {
       const categoriesQuery = `
       INSERT INTO
         categories
-          (resource_id, profile_id, name, index, updated_at)
+          (resource_id, profile_id, name, index)
         VALUES
-          ($1, $2, $3, $4, NOW()) RETURNING *;`;
+          ($1, $2, $3, $4) RETURNING *;`;
       for (const [index, category] of data.user.myCategories.entries()) {
         const categoriesParams = [
           resourceId,
@@ -108,15 +122,19 @@ const updateResourceQueryHelper = (data, resourceId) => {
 
   if (data.user.is_liked !== undefined) {
     const likesQuery = `
-    UPDATE
-      likes
-    SET
-      (is_liked, updated_at) = ($1, NOW())
-    WHERE resource_id=$2 AND profile_id=$3 RETURNING *;`;
+    INSERT INTO likes 
+        (resource_id, profile_id, is_liked)
+      VALUES
+        ($1, $2, $3)
+      ON CONFLICT
+        (resource_id, profile_id)
+      DO UPDATE SET
+        is_liked = EXCLUDED.is_liked
+      RETURNING *;`;
     const likesParams = [
-      data.user.is_liked,
       resourceId,
       data.user.profile_id,
+      data.user.is_liked,
     ];
     queries.push({
       query:likesQuery,
@@ -126,15 +144,19 @@ const updateResourceQueryHelper = (data, resourceId) => {
 
   if (data.user.is_favourite !== undefined) {
     const favouritesQuery = `
-    UPDATE
-      favourites
-    SET
-      (is_favourite, updated_at) = ($1, NOW())
-    WHERE resource_id=$2 AND profile_id=$3 RETURNING *;`;
+    INSERT INTO favourites
+      (resource_id, profile_id, is_favourite)
+    VALUES
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_favourite = EXCLUDED.is_favourite
+    RETURNING *;`;
     const favouritesParams = [
-      data.user.is_favourite,
       resourceId,
       data.user.profile_id,
+      data.user.is_favourite,
     ];
     queries.push({
       query: favouritesQuery,
@@ -144,15 +166,19 @@ const updateResourceQueryHelper = (data, resourceId) => {
 
   if (data.user.is_bookmarked !== undefined) {
     const bookmarksQuery = `
-    UPDATE
-      bookmarks
-    SET
-    (is_bookmarked, updated_at) = ($1, NOW())
-    WHERE resource_id=$2 AND profile_id=$3 RETURNING *;`;
+    INSERT INTO bookmarks
+      (resource_id, profile_id, is_bookmarked)
+    VALUES
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_bookmarked = EXCLUDED.is_bookmarked
+    RETURNING *;`;
     const bookmarksParams = [
-      data.user.is_bookmarked,
       resourceId,
       data.user.profile_id,
+      data.user.is_bookmarked,
     ];
     queries.push({
       query: bookmarksQuery,
@@ -162,15 +188,19 @@ const updateResourceQueryHelper = (data, resourceId) => {
 
   if (data.user.is_playlist !== undefined) {
     const playlistsQuery = `
-    UPDATE
-      playlists
-    SET
-    (is_playlist, updated_at) = ($1, NOW())
-    WHERE resource_id=$2 AND profile_id=$3 RETURNING *;`;
+    INSERT INTO playlists
+      (resource_id, profile_id, is_playlist)
+    VALUES
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_playlist = EXCLUDED.is_playlist
+    RETURNING *;`;
     const playlistsParams = [
-      data.user.is_playlist,
       resourceId,
       data.user.profile_id,
+      data.user.is_playlist,
     ];
     queries.push({
       query: playlistsQuery,
@@ -180,15 +210,19 @@ const updateResourceQueryHelper = (data, resourceId) => {
 
   if (data.user.is_recommended !== undefined) {
     const recommendsQuery = `
-    UPDATE
-      recommends
-    SET
-    (is_recommended, updated_at) = ($1, NOW())
-    WHERE resource_id=$2 AND profile_id=$3 RETURNING *;`;
+    INSERT INTO recommends
+      (resource_id, profile_id, is_recommended)
+    VALUES
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_recommended = EXCLUDED.is_recommended
+    RETURNING *;`;
     const recommendsParams = [
-      data.user.is_recommended,
       resourceId,
       data.user.profile_id,
+      data.user.is_recommended,
     ];
     queries.push({
       query: recommendsQuery,
@@ -196,7 +230,30 @@ const updateResourceQueryHelper = (data, resourceId) => {
     })
   }
 
+  if (data.user.is_reported !== undefined) {
+    const reportsQuery = `
+    INSERT INTO reports
+      (resource_id, profile_id, is_reported)
+    VALUES
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_reported = EXCLUDED.is_reported
+    RETURNING *;`;
+    const reportsParams = [
+      resourceId,
+      data.user.profile_id,
+      data.user.is_reported,
+    ];
+    queries.push({
+      query: reportsQuery,
+      params: reportsParams,
+    })
+  }
+
   return queries;
 };
 
 module.exports = { updateResourceQueryHelper };
+

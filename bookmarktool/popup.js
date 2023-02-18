@@ -4,6 +4,75 @@
 
 const serverUrl = "http://localhost:7070";
 
+const testdata = '{"title":"testfromfakeclipper", "description":"empty desc", "url":"https://github.com/remix-run/react-router/blob/dev/examples/modal/src/App.tsx", "profile_id":2}'
+
+
+
+const postData = (data) => {
+  console.log("data inside async:",data)
+  try {
+    fetch("http://localhost:8080/api/resources/withAddition", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+      //body: testdata,
+    }).then((data) => {
+      console.log(data);
+      
+      
+      // TODO delay for the spinner
+      setTimeout(function() {
+        console.log("1 second has passed");
+        document.getElementById("spinner").style.display = "none";
+        var div = document.getElementById("contentbody");
+        div.innerHTML = ` 
+        
+        <div class="success-container" style="
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        ">
+        
+        <div class="checkmark-container" style="
+        display: flex;
+        flex-align: row;
+        ">
+        <!--<span class="checkmark-icon">&#10003;</span>-->
+        <p class="checkmark-text">Saved!</p>
+        </div>
+  
+        <div class="foot" style="text-align:center">
+        <div class="footer-link"><a href="http://localhost:3000/#" target_new class="footer-link">See on LearnThis!</a></div>
+        </div>
+  
+        </div>
+        `
+  
+      }, 1000);
+      
+
+      // window.close();
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    // if (!response.ok) {
+    //   throw new Error("Network response was not ok");
+    // }
+    // // console.log("RESPONSE JSON: ", response.json());
+    // const data_1 = await response.json();
+    // console.log("data sent success:", data_1);
+    // window.close();
+    // alert('success');
+  } catch (error) {
+    console.error("problem in fetch POST:");
+    console.log('error:' + error + '|');
+    alert('error in fetch post 1 catch');
+  }
+}
 
 //
 // MAIN script flow:
@@ -47,16 +116,17 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     }
   );
 
-  // alert("found desc:" + description)
-  // if(description) {
-  //   document.getElementById("page-description").value = description;
+  console.log("found desc:" + JSON.stringify(zdescription))
+  if(zdescription) {
+    document.getElementById("page-description").value = zdescription;
     
-  // }
+  }
 });
 
 
 // Listen for messages from the injected script
 chrome.runtime.onMessage.addListener((request, sender) => {
+  //alert(request.zdescription)
   document.getElementById("page-description").value = request.zdescription;
 });
 
@@ -89,7 +159,8 @@ function sortArrayAlphabetically(array)  {
 
 
 // process submit
-function getCurrentTabUrl() {
+function getCurrentTabUrl(event) {
+  event.preventDefault();
   let queryInfo = {
     active: true,
     currentWindow: true,
@@ -100,7 +171,7 @@ function getCurrentTabUrl() {
   let selectedOption = select.options[select.selectedIndex].value;
 
   // grab any supplied note information
-  let note = document.getElementById("note");
+  let note = document.getElementById("page-description");
   let noteText = note.value;
 
   // grab any supplied page title information
@@ -116,41 +187,33 @@ function getCurrentTabUrl() {
   // show spinner
   document.getElementById("spinner").style.display = "flex";
 
+  // TODO - default any blank items to prevent breaking
   
-  // TODO -format the data for the JSON body
+  
   // save to the server:
-  fetch("http://localhost:7070/data", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ 
+  const formdataobject = {
+    resource :{
+      profile_id: 2,
     title: pageTitleText,
-    siteURL: pageUrlData,
-    note: noteText,
-    category: selectedOption,
-})
-})
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then(data => {
-    alert("Data was sent successfully:", data);
-    window.close();
-  })
-  .catch(error => {
-    alert("There was a problem with the fetch operation:", error);
-  });
-  alert(pageUrlData + " - category: " + selectedOption + " - notes: " + noteText + " - page title: " + pageTitleText + " - description: " + pageDescription);  
+    url: pageUrlData,
+    description: noteText,
+
+    },
+    user :{
+    profile_id: 2,
+    myCategories:  [document.getElementById("options").options[select.selectedIndex].value],
+    } 
+  };
+
+  
+  postData(formdataobject)
+
 }
 
 // check login state to server
 const checkLoginStatus = async () => {
   try {
-    const response = await fetch("http://localhost:7070/is-logged-in");
+    const response = await fetch("http://localhost:8080/is-logged-in");
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }

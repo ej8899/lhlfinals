@@ -1,3 +1,4 @@
+
 // helper for POST /api/resouces/withAddition
 const postResourceQueryHelper = (data, resourceId) => {
   const queries = [];
@@ -185,7 +186,26 @@ const postResourceQueryHelper = (data, resourceId) => {
     })
   }
 
+  if (data.user.is_reported !== undefined) {
+    const reportsQuery = `
+    INSERT INTO 
+    reports
+      (resource_id, profile_id, is_reported)
+    VALUES
+      ($1, $2, $3) RETURNING *;`;
+    const reportsParams = [
+      resourceId,
+      data.user.profile_id,
+      data.user.is_reported,
+    ];
+    queries.push({
+      query: reportsQuery,
+      params: reportsParams,
+    })
+  }
+
   return queries;
 };
 
 module.exports = { postResourceQueryHelper };
+

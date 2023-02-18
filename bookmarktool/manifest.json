@@ -5,6 +5,10 @@
   "description": "This extension saves the URL of the current tab in a variable",
   "version": "1.0",
 
+  "icons": {
+    "48": "icon.png"
+  },
+
   "background": {
     "service_worker": "background.js"
   },
@@ -30,7 +34,7 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "css": ["spinner.css"]  
+      "css": ["spinner.css","check.css","popup.css"]  
     }
   ]
 }

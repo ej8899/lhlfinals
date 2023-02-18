@@ -68,8 +68,10 @@ const addSetStage = (rating) => {
 // handle open and close of item review detail modal
 const [openReview, setOpenReview] = useState(false);
 
-const handleReviewOpen = () => {
+const handleReviewOpen = (filter) => {
+  if (filter === 'blur(0px)') {
     setOpenReview(true);
+  }
   return
 }
 
@@ -83,7 +85,8 @@ const handleReviewClose = () => {
 const [openEdit, setOpenEdit] = useState(false);
 const [openEditing, setOpenEditing] = useState(false)
 const [openEdited, setOpenEdited] = useState(false);
-
+const [openErrorEditing, setOpenErrorEditing] = useState(false);
+const [openErrorReview, setOpenErrorReview] = useState(false);
 
 const handleOpenEdit = () => {
     setOpenEdit(true);
@@ -92,10 +95,12 @@ const handleOpenEdit = () => {
 
 const handleEditClose = () => {
   setOpenEdit(false);
+  setErrorBlank(false)
 };
 
 const handleEditedClose = () => {
   setOpenEdited(false);
+  setErrorBlank(false)
 };
 // -------------------------------------------------------------
 
@@ -103,7 +108,8 @@ const handleEditedClose = () => {
 // handle open and close of item delete detail modal
 const [openDelete, setOpenDelete] = useState(false);
 const [openDeleting, setOpenDeleting] = useState(false)
-const [openDeleted, setOpenDeleted] = useState(false)
+const [openErrorDeleting, setOpenErrorDeleting] = useState(false)
+
 
 const handleOpenDelete = () => {
     setOpenDelete(true);
@@ -129,7 +135,7 @@ const handleDeletingClose = () => {
 // -------------------------------------------------------------
 // State for my comments data
 // TODO - add comments to database
-  const [myComments, setMyComments] = useState('');
+  const [myComments, setMyComments] = useState(undefined);
   const addMyComments = (comments) => {
     setMyComments(comments)
     // console.log(comments)
@@ -164,7 +170,7 @@ const [myStage, setMyStage] = useState(null)
 
 const addMyStage = (stage) => {
   setMyStage(stage)
-  setSliderActive(false)
+  setSliderActive(null)
 }
 // -------------------------------------------------------------
 
@@ -187,7 +193,7 @@ const addNewIcon = (created_at) => {
   // console.log(diffTime + " milliseconds");
   // console.log(diffDays + " days");
 
-  if (diffDays <= 1) {
+  if (diffDays <= 36/24) {
     setNewIcon("flex") 
   }
 }
@@ -199,32 +205,47 @@ const [sendingEmail, setSendingEmail] = useState(false)
 const [emailMessage, emailMyMessage] = useState('')
 const [emailTo, emailMyTo] = useState('')
 const [emailSent, setEmailSent] = useState(false)
+const [errorEmail, setErrorEmail] = useState(false)
 
 // TODO -- This will become a PUT statement or other API for email
-const sendEmail = (email, message) => {
-  setSendingEmail(true)
-  setTimeout(() => {
-    setSendingEmail(false)
-    setEmailSent(true)
-    zlog('Info',"Email sent to:", email) 
-    zlog('Info',"Email was sent With message:", message) 
-  }, 2000)
+const sendEmail = (email, message, close) => {
+  if (!email) {
+    setErrorBlank(true)
+  } else if (!email.includes("@")) {
+    setErrorEmail(true)
+  } else {
+    close()
+    setEmailSent(false)
+    setSendingEmail(true)
+    setErrorBlank(false)
+    setErrorEmail(false)
+    setTimeout(() => {
+      setSendingEmail(false)
+      setEmailSent(true)
+      zlog('Info',"Email sent to:", email) 
+      zlog('Info',"Email was sent With message:", message) 
+    }, 2000)
+  }
 } 
 
 const handleSharedClose = () => {
   setEmailSent(false)
   emailMyMessage("")
   emailMyTo("") 
+  setErrorBlank(false)
+  setErrorEmail(false)
 }
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
 // handle open and close of new resource modal
-  // Screen to add website link under add new resource
-const [newResource, setNewResource] = useState(false);
+
 
   // State for new url added after hit save
 const [newURL, setNewURL] = useState('')
+
+  // Validation - blank url
+const [errorBlank, setErrorBlank] = useState(false)
 
   // Edit screen for new resource
 const [addNewResource, setAddNewResource] = useState(false);
@@ -244,13 +265,8 @@ const [errorSavingNewResource, setSavingErrorNewResource] = useState(false)
   //Status Screen for error fecthing youtube url
 const [errorFetchingNewResource, setFetchingErrorNewResource] = useState(false)
 
-const handleNewResourceOpen = () => {
-  setNewResource(true);
-}
-
-const handleNewResourceClose = () => {
-  setNewResource(false);
-};
+  //Status Screen for error fecthing non-youtube url
+  const [errorFetchingNewResource1, setFetchingErrorNewResource1] = useState(false)
 
 const handleAddNewResourceClose =() => {
   setAddNewResource(false);
@@ -263,8 +279,10 @@ const handleAddNewResourceAbort =() => {
   setThumbnail('')
   setMyCategory([])
   setMyStage(null)
+  setSliderActive("grey")
   setVideoURL('')
   setDomain('')
+  setErrorBlank(false)
 }
 
 const handleSavedClose =() => {
@@ -275,12 +293,22 @@ const handleSavedClose =() => {
   setThumbnail('')
   setMyCategory([])
   setMyStage(null)
+  setSliderActive("grey")
   setVideoURL('')
   setDomain('')
+  setErrorBlank(false)
 }
 
 const handleErrorFetchingNewResourceClose = () => {
   setFetchingErrorNewResource(false);
+};
+
+const handleErrorFetchingNewResourceClose1 = () => {
+  setFetchingErrorNewResource1(false);
+};
+
+const handleErrorSavingNewResourceClose = () => {
+  setSavingErrorNewResource(false);
 };
 
 // -------------------------------------------------------------
@@ -339,17 +367,22 @@ const handleErrorFetchingNewResourceClose = () => {
     setOpenEdit,
     handleOpenEdit,
     handleEditClose,
+    openErrorEditing, 
+    setOpenErrorEditing,
+    openErrorReview,
+    setOpenErrorReview,
 
     openDelete,
     setOpenDelete,
     handleDeleteClose,
     handleOpenDelete,
-    openDeleted, 
-    setOpenDeleted,
+
     openDeleting,
     setOpenDeleting,
     handleDeletingClose,
     handleOpenDeleting,
+    openErrorDeleting, 
+    setOpenErrorDeleting,
 
     myComments,
     setMyComments,
@@ -374,6 +407,8 @@ const handleErrorFetchingNewResourceClose = () => {
     setNewIcon,
     addNewIcon,
 
+    errorEmail, 
+    setErrorEmail,
     sendingEmail,
     setSendingEmail,
     sendEmail,
@@ -393,10 +428,8 @@ const handleErrorFetchingNewResourceClose = () => {
     setSavingErrorNewResource,
     handleSavedClose,
 
-    newResource,
-    setNewResource,
-    handleNewResourceClose,
-    handleNewResourceOpen,
+    errorBlank, 
+    setErrorBlank,
     newURL,
     setNewURL,
     addNewResource,
@@ -407,6 +440,10 @@ const handleErrorFetchingNewResourceClose = () => {
     handleAddNewResourceAbort,
     errorFetchingNewResource, 
     setFetchingErrorNewResource,
-    handleErrorFetchingNewResourceClose
+    handleErrorFetchingNewResourceClose,
+    errorFetchingNewResource1, 
+    setFetchingErrorNewResource1,
+    handleErrorFetchingNewResourceClose1,
+    handleErrorSavingNewResourceClose
   };
 };

@@ -1,7 +1,13 @@
 // --------------------------------------------------------
 // React Imports
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 // --------------------------------------------------------
+
+//---------------------------------------------------------
+// Import user filter
+import { FilterContext } from "../../helpers/filter";
+import { AuthContext } from "../../hooks/handleUsers.js";
+//---------------------------------------------------------
 
 // --------------------------------------------------------
 // Material UI Imports
@@ -11,6 +17,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
+import Alert from '@mui/material/Alert';
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -30,6 +37,11 @@ import CardMedia from '@mui/material/CardMedia';
 import { CloseModal } from '../Icons/close';
 // --------------------------------------------------------
 
+//-------------------------------------------------------------------
+// Import missing image
+import missingimage from "../../missingimage.png"
+//-------------------------------------------------------------------
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -48,12 +60,15 @@ const style = {
 // TODO - bottom where my resource - add anchor to link?
 export const ResultModal= (props) => {
 
+  const { filterData } = useContext(FilterContext);
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+
   return (
     <Modal
       aria-labelledby="detail-modal-title"
       aria-describedby="detail-modal-description"
       open={props.open}
-      onClose={props.handleSharedClose}
+      onClose={props.handleClose}
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500,
@@ -77,17 +92,19 @@ export const ResultModal= (props) => {
                 height="140"
                 width="345"
                 image={props.thumbnail}
-                alt={props.title}
+                src={'https://via.placeholder.com/345x140.png/F2D2BD?text=Image+Not+Yet+Available'}
                 sx={{marginBottom : 2}}
               />
             </Box>
           </Box>
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-            <Typography variant="h6" textAlign="center">
+            <Alert variant="outlined" severity="success">
               {props.message}
-            </Typography>
-            <Typography variant="body2" textAlign="center">
-              {props.submessage}
+            </Alert>
+            <Typography variant="body2" textAlign="center" sx={{marginTop: 1.5}}>
+              Checkout &nbsp; <b>
+                <a onClick={() => props.handleClose(filterData("mine", userid, props.setsampledata, props.sampledata, props.combinedData, true, props.setLoading, true, props.setResourceCount, props.setShowMoreCards), props.handleReviewClose())} style={{color: "purple", cursor: "pointer", "&:hover" : {color: "green"}}}>'My Resources'</a> 
+                </b> &nbsp; for resources you've added.
             </Typography>
           </Box>
         </Box>

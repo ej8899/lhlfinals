@@ -1,14 +1,19 @@
+
 // helper for POST /api/icons
 const postStatusesQueryHelper = (data) => {
   const queries = [];
 
   if (data.is_liked !== undefined) {
     const likesQuery = `
-    INSERT INTO
-      likes
+    INSERT INTO likes 
         (resource_id, profile_id, is_liked)
       VALUES
-        ($1, $2, $3) RETURNING *;`;
+        ($1, $2, $3)
+      ON CONFLICT
+        (resource_id, profile_id)
+      DO UPDATE SET
+        is_liked = EXCLUDED.is_liked
+      RETURNING *;`;
     const likesParams = [
       data.resource_id,
       data.profile_id,
@@ -23,11 +28,15 @@ const postStatusesQueryHelper = (data) => {
 
   if (data.is_favourite !== undefined) {
     const favouritesQuery = `
-    INSERT INTO
-    favourites
+    INSERT INTO favourites
       (resource_id, profile_id, is_favourite)
     VALUES
-      ($1, $2, $3) RETURNING *;`
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_favourite = EXCLUDED.is_favourite
+    RETURNING *;`;
     const favouritesParams = [
       data.resource_id,
       data.profile_id,
@@ -42,11 +51,15 @@ const postStatusesQueryHelper = (data) => {
 
   if (data.is_bookmarked !== undefined) {
     const bookmarksQuery = `
-    INSERT INTO
-    bookmarks
+    INSERT INTO bookmarks
       (resource_id, profile_id, is_bookmarked)
     VALUES
-      ($1, $2, $3) RETURNING *;`
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_bookmarked = EXCLUDED.is_bookmarked
+    RETURNING *;`;
     const bookmarksParams = [
       data.resource_id,
       data.profile_id,
@@ -61,11 +74,15 @@ const postStatusesQueryHelper = (data) => {
 
   if (data.is_playlist !== undefined) {
     const playlistsQuery = `
-    INSERT INTO
-    playlists
+    INSERT INTO playlists
       (resource_id, profile_id, is_playlist)
     VALUES
-      ($1, $2, $3) RETURNING *;`
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_playlist = EXCLUDED.is_playlist
+    RETURNING *;`;
     const playlistsParams = [
       data.resource_id,
       data.profile_id,
@@ -80,11 +97,15 @@ const postStatusesQueryHelper = (data) => {
 
   if (data.is_reported !== undefined) {
     const reportsQuery = `
-    INSERT INTO
-    reports
+    INSERT INTO reports
       (resource_id, profile_id, is_reported)
     VALUES
-      ($1, $2, $3) RETURNING *;`
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_reported = EXCLUDED.is_reported
+    RETURNING *;`;
     const reportsParams = [
       data.resource_id,
       data.profile_id,
@@ -99,11 +120,15 @@ const postStatusesQueryHelper = (data) => {
 
   if (data.is_recommended !== undefined) {
     const recommendsQuery = `
-    INSERT INTO
-    recommends
+    INSERT INTO recommends
       (resource_id, profile_id, is_recommended)
     VALUES
-      ($1, $2, $3) RETURNING *;`
+      ($1, $2, $3)
+    ON CONFLICT
+      (resource_id, profile_id)
+    DO UPDATE SET
+      is_recommended = EXCLUDED.is_recommended
+    RETURNING *;`;
     const recommendsParams = [
       data.resource_id,
       data.profile_id,
@@ -120,3 +145,4 @@ const postStatusesQueryHelper = (data) => {
 };
 
 module.exports = { postStatusesQueryHelper };
+

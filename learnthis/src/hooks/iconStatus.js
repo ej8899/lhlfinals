@@ -1,7 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
+import { IconContext } from "./handleIcons"
+import { AuthContext } from '../hooks/handleUsers.js';
 
 export default function IconStatus(props) {
-
+  const { isAuth, user, userid, logout } = useContext(AuthContext);
+  const { iconData } = useContext(IconContext);
+  const [ resourceKey, setResourceKey ] = useState(null);
 // -------------------------------------------------------------
   // Toggle Favourite Status
   // TODO pass favourite status to database
@@ -10,6 +14,7 @@ export default function IconStatus(props) {
     if (filter === 'blur(0px)') {
       favourite === "pink"? setFavourite('default') : setFavourite('pink')
     }
+    iconData([favourite === "pink"? 'default' : 'pink', like, lesson, playlist, bookmark, report, resourceKey, userid])
     return
   }
 // -------------------------------------------------------------
@@ -20,6 +25,7 @@ export default function IconStatus(props) {
   const [lesson, setLesson] = useState('default')
   const addLesson = () => {
       lesson === 'blue'? setLesson('default') : setLesson('blue')
+      iconData( [favourite, like, lesson === 'blue'? 'default' : 'blue', playlist, bookmark, report, resourceKey, userid])
   }
 // -------------------------------------------------------------
 
@@ -38,6 +44,9 @@ export default function IconStatus(props) {
     if (tmp === true) {
       setRate('teal')
       setShow('flex')
+    } else if (tmp === "close") {
+      setRate("default")
+      setShow("none")
     } else {
       addRate()
       if(show === "none") {
@@ -55,6 +64,7 @@ export default function IconStatus(props) {
   const [bookmark, setBookmark] = useState('default')
   const addBookmark = () => {
       bookmark === 'green'? setBookmark('default') : setBookmark('green')
+      iconData( [favourite, like, lesson, playlist, bookmark === "green" ? "default" : "green", report, resourceKey, userid])
   }
 // -------------------------------------------------------------
 
@@ -64,6 +74,7 @@ export default function IconStatus(props) {
   const [playlist, setPlaylist] = useState('default')
   const addPlaylist = () => {
       playlist === 'maroon'? setPlaylist('default') : setPlaylist('maroon')
+      iconData( [favourite, like, lesson, playlist === "maroon" ? "default" : "maroon", bookmark, report, resourceKey, userid])
   }
 // -------------------------------------------------------------
 
@@ -103,6 +114,11 @@ export default function IconStatus(props) {
   const addReport = () => {
       report === 'red'? setReport('default') : setReport('red')
       filter === 'blur(3px)'? setFilter('blur(0px)') : setFilter('blur(3px)')
+      iconData( [favourite, like, lesson, playlist, bookmark, report === "red" ? "default" : "red", resourceKey, userid])
+  }
+  const onLoadReport = (report) => {
+    report === 'red'? setFilter('blur(3px)') : setFilter('blur(0px)')
+    report === "red"? setReport("red") : setReport ("default")
   }
 // -------------------------------------------------------------
 
@@ -113,6 +129,7 @@ export default function IconStatus(props) {
   const [likes, setLikes] = useState(0)
   const addLike = (filter) => {
     if (filter === 'blur(0px)') {
+      iconData( [favourite, like === "purple" ? "default" : "purple", lesson, playlist, bookmark, report, resourceKey, userid])
       if (like === 'purple') {
         setLike('default')
         setLikes(likes - 1)
@@ -134,7 +151,7 @@ export default function IconStatus(props) {
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
-  // Toggle star rating status
+  // Toggle star rating status (user rating - not overall rating)
   // TODO pass star rating status to database
   const [star, setStar] = useState(null)
   const addStar = (num) => {
@@ -156,21 +173,52 @@ export default function IconStatus(props) {
 // -------------------------------------------------------------
 
 // -------------------------------------------------------------
+// Toggle Delete
+const [deleteIcon, setDeleteIcon] = useState('default')
+const addDeleteIcon = (tmp = false) => {
+  tmp === true ? setDeleteIcon("red") : setDeleteIcon("default")
+}
+
+// -------------------------------------------------------------
+
+// -------------------------------------------------------------
 // Handle Icon Reset
   const handleIconReset = () => {
     setFavourite('default')
-    setLesson('dafault')
+    setLesson('default')
     setRate('default')
     setBookmark('default')
     setPlaylist('default')
     setLike('default')
     setStar(null)
   }
+// -------------------------------------------------------------
 
+// -------------------------------------------------------------
+// Set All Icons
+const allIcon = (favourite, lesson, report, bookmark, playlist, like, star) => {
+  setFavourite(favourite)
+  setLesson(lesson)
+  onLoadReport(report)
+  setBookmark(bookmark)
+  setPlaylist(playlist)
+  setLike(like)
+  setStar(star)
+}
 // -------------------------------------------------------------
 
   return {
-  handleIconReset,
+    allIcon,
+    onLoadReport,
+
+    resourceKey,
+    setResourceKey,
+
+    handleIconReset,
+
+    deleteIcon,
+    setDeleteIcon,
+    addDeleteIcon,
 
     favourite,
     setFavourite,
