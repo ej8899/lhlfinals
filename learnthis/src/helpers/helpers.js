@@ -161,3 +161,72 @@ export const getdata = (data, stage) => {
   return tmpArray
 }
 //--------------------------------------------
+
+
+export function getKeywordScores(searchText) {
+  const lowercaseText = searchText.toLowerCase().replace(/[^\w\s]/gi, ''); // Remove non-alphanumeric characters
+  const industryKeywords = [
+    // 'developer',
+    // 'coding',
+    // 'programming',
+    // 'web development',
+    // 'software engineering',
+    // 'tech industry',
+    // 'IT industry',
+    "JavaScript",
+    "HTML",
+    "CSS",
+    "React",
+    "Angular",
+    "Vue",
+    "Node.js",
+    "Express",
+    "Next.js",
+    "Ember",
+    "Meteor",
+    "jQuery",
+    "MongoDB",
+    "MySQL",
+    "PostgreSQL",
+    "GraphQL",
+    "Sass",
+    "Less",
+    "TypeScript",
+    "Ruby on Rails",
+    "Django",
+    "Flask",
+    "Spring",
+    "Express.js",
+    "Nest.js",
+    "Adonis.js",
+    "PHP",
+    "ASP.NET",
+    "Java",
+    "Python",
+    //"C++",
+    //"C#",
+    "Ruby",
+    "Go",
+    "Swift",
+    "Kotlin",
+    "Rust",
+    "Scala",
+    "SQL"
+  ];
+  
+  const scores = [];
+  
+  for (const keyword of industryKeywords) {
+    // Remove non-alphanumeric characters at beginning and end
+    //const strippedKeyword = keyword.replace(/(^\W+|\W+$)/g, ''); 
+    const strippedKeyword = keyword;
+    const keywordCount = (lowercaseText.match(new RegExp(strippedKeyword, 'gi')) || []).length;
+    
+    if (keywordCount > 0) {
+      scores.push({ keyword: strippedKeyword, score: keywordCount });
+    }
+  }
+
+  // order these high to low and return
+  return scores.sort((a, b) => b.score - a.score);
+}

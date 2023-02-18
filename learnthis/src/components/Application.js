@@ -935,7 +935,7 @@ const [lessonTrue, setLessonTrue] = useState(false)
                       <SiteFooter/>
                     </div>
 
-                  <AboutDialog title={"cookies..."} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
+                  <AboutDialog title={"Yes, we've got cookies!"} open={copen} handleClose={handleCClose} description={cookiesMessage}></AboutDialog>
 
                 </ThemeProvider>
               </ColorModeContext.Provider>

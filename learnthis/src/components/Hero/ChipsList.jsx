@@ -48,6 +48,9 @@ const ListItem = styled('li')(({ theme }) => ({
 export const ChipContext = createContext();
 
 export const ChipProvider = ({ children }) => {
+
+  const [categoryArray, setCategoryArray] = useState(null)
+
   const chipReset = (categories, setFilled) => {
     let object = {};
     let objectArray = [
@@ -64,13 +67,16 @@ export const ChipProvider = ({ children }) => {
       tagInit[i] = false;
     }  
     setFilled({...tagInit})
+    setCategoryArray(null);
     return
   }
 
   return (
     <ChipContext.Provider
       value={{
-        chipReset
+        chipReset,
+        setCategoryArray,
+        categoryArray,
       }}
     >
       {children}
@@ -92,6 +98,7 @@ export default function ChipsArray(props) {
   }
   const [chipData, setChipData] = React.useState(objectArray);
   const { filterData } = useContext(FilterContext);
+  const {categoryArray, setCategoryArray} = useContext(ChipContext);
   const filled = props.filled
   const setFilled = props.setFilled
 
@@ -111,7 +118,7 @@ export default function ChipsArray(props) {
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
   };
 
-  const [categoryArray, setCategoryArray] = useState(null)
+  
   
   const handleClick = (chipID) => {
     zlog('action',"chip clicked:",chipID)
