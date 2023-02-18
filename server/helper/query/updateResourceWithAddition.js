@@ -1,3 +1,4 @@
+
 // helper for update /api/resouces/withAddition
 const updateResourceQueryHelper = (data, resourceId) => {
   console.log('data', data);
@@ -255,3 +256,4 @@ const updateResourceQueryHelper = (data, resourceId) => {
 };
 
 module.exports = { updateResourceQueryHelper };
+

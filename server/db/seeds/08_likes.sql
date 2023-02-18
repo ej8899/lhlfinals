@@ -6,6 +6,7 @@ INSERT INTO
     is_liked
   )
 VALUES
+
   (1, 1, NULL, false),
   (2, 1, NULL, false),
 
@@ -14,3 +15,4 @@ VALUES
 
   (1, 3, NULL, true),
   (2, 3, NULL, true);
+

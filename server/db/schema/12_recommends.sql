@@ -7,6 +7,8 @@ CREATE TABLE recommends (
   is_recommended BOOLEAN,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP,
+
   deleted_at TIMESTAMP,
   unique(resource_id, profile_id)
+
 );

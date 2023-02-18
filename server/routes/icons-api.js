@@ -1,3 +1,4 @@
+
 module.exports = function(router, database) {
   // Get icons status with profile id
   router.get('/:id', async(req, res) => {

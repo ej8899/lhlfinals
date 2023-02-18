@@ -1,3 +1,4 @@
+
 // helper for POST /api/icons
 const postStatusesQueryHelper = (data) => {
   const queries = [];
@@ -144,3 +145,4 @@ const postStatusesQueryHelper = (data) => {
 };
 
 module.exports = { postStatusesQueryHelper };
+

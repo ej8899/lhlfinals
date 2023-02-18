@@ -1,3 +1,4 @@
+
 // helper for POST /api/resouces/withAddition
 const postResourceQueryHelper = (data, resourceId) => {
   const queries = [];
@@ -207,3 +208,4 @@ const postResourceQueryHelper = (data, resourceId) => {
 };
 
 module.exports = { postResourceQueryHelper };
+

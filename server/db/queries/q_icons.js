@@ -1,3 +1,4 @@
+
 const query = require('./common');
 const { postStatusesQueryHelper } = require("../../helper/query/postStatuses");
 
@@ -59,3 +60,4 @@ const postIconsStatuses = async function(data) {
 
 };
 exports.postIconsStatuses = postIconsStatuses;
+
