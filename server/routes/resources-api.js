@@ -156,6 +156,93 @@ router.post("/options", (req, res) => {
 // --------------------------------------------------
 
 /**
+ * Get all resources comming from all users that are still active from db
+ * @return {json} All resources in db that are not deleted limit by 20.
+ */
+router.get("/keyword/:keyword", (req, res) => {
+  const keyword = req.params.keyword
+  q_resources
+    .getAllResourcesByKeyword(keyword)
+    .then((data) => res.json(data))
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+/**
+ * Get all resources with addition of likes, categories, rankings and ratings
+ * @return {json} All resources in db that are not deleted limit by 20.
+ */
+router.get("/withAddition", (req, res) => {
+  q_resources
+    .getAllResourcesWithAddition()
+    .then((data) => res.json(data))
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+/**
+ * Get all resources filtered using options
+ * @return {json} All resources that fits the filter.
+ */
+router.post("/options", (req, res) => {
+  const options = { ...req.body };
+  console.log("in options", options);
+  q_resources
+    .getAllResourcesByOptions(options)
+    .then(async (data) => {
+      const dataWithCategories = await Promise.all(
+        data.map(async (element) => {
+          element.categories = await q_categories.getCategoriesNameByResourceId(
+            element.id
+          );
+          element.categories = toArray(element.categories, "name");
+          element.my_categories =
+            await q_categories.getCategoriesNameByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id
+            );
+          element.my_categories = toArray(element.my_categories, "name");
+          element.my_comments_private =
+            await q_comments.getCommentsByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id
+            );
+
+            if (element.my_comments_private) {
+              element.my_comments_private=element.my_comments_private.comment;
+            }else {
+              element.my_comments_private=null;
+            }
+          element.my_comments_public =
+            await q_comments.getCommentsByResourceIdAndProfileId(
+              element.id,
+              options.user.profile_id,
+              true
+            );
+
+            if (element.my_comments_public) {
+              element.my_comments_public=element.my_comments_public.comment;
+            }else {
+              element.my_comments_public=null;
+            }
+
+          return element;
+        })
+      );
+
+      return dataWithCategories;
+    })
+    .then((dataWithCategories) => {
+      res.status(200).json(toFormat(dataWithCategories));
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+/**
  * Save new resource
  * @return {json} resource that is saved
  *
@@ -165,10 +252,12 @@ router.post("/", (req, res) => {
   const resourceData = { ...req.body };
 
   if (!resourceData.thumbnail) {
+
     if (isYoutubeUrl(resourceData.url)) {
       const videoId =  getYoutubeVideoId(resourceData.url)
       resourceData.thumbnail = `https://i.ytimg.com/vi/${videoId}/sddefault.jpg`
       q_resources.postResource(resourceData)
+
       .then((savedData) => {
         console.log("Resource save returned obj: ", savedData);
         return res.status(200).json(savedData);
@@ -211,6 +300,7 @@ router.post("/", (req, res) => {
         console.log("Error saving new resource", err);
         return res.status(500).json({ error: err.message });
       });
+
   }
 });
 // --------------------------------------------------
@@ -260,6 +350,7 @@ router.post("/withAddition", (req, res) => {
         res.status(400).send(error)
       });
     }
+
   } else {
     q_resources
       .postResourceWithAddition(resourceData)
@@ -297,6 +388,26 @@ router.put("/withAddition", (req, res) => {
 });
 // --------------------------------------------------
 
+
+/**
+ * Update existing resource with addition
+ * @return {json} resource that is updated
+ */
+router.put("/withAddition", (req, res) => {
+  //const userId = req.session.userID;
+  const resourceData = req.body;
+  console.log('resourceData', resourceData);
+  q_resources
+    .updateResourceWithAddition(resourceData)
+    .then((data) => {
+      console.log("Resource updated returned obj with addition: ", data);
+      return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log("Error updating new resource", err);
+      return res.status(500).json({ error: err.message });
+    });
+});
 
 /**
  * Update existing resource

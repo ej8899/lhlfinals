@@ -1,8 +1,38 @@
+## POST api/extract
+description: retrieve title, description, thumbnail of a url
+
+```json
+body:
+{
+   "url": "https://www.youtube.com/watch?v=t_ispmWmdjY"
+}
+
+returned:
+{
+    "title": "Ruby Programming Language - Full Course - YouTube",
+    "description": "Learn the Ruby programming language in this full course / tutorial. The course is designed for new programmers, and will introduce common programming topics ...",
+    "thumbnail": "https://storage.screenshotapi.net/www_youtube_com_watch_v_t_ispmwmdjy_983a438ee7b2.png",
+    "url": "https://www.youtube.com/watch?v=t_ispmWmdjY"
+}
+```
+
+## GET api/extract/avatar/[gender]
+description: retrieve a url image, randomly created based on the gender that is passed.
+
+```json
+body: N/A
+
+returned:
+{
+    "url": "https://xsgames.co/randomusers/assets/avatars/male/47.jpg"
+}
+```
+
 ## POST api/user
 description: create/save a new user
 
 ```json
-body: 
+body:
 {
 	"email":"123456@test.com",
 	"password":"1234"
@@ -22,7 +52,7 @@ returned:
 description: login a user
 
 ```json
-body: 
+body:
 {
 	"email":"123456@test.com",
 	"password":"1234"
@@ -31,10 +61,15 @@ body:
 returned:
 {
     "success": "Logged in",
-    "user": {
-        "id": 5,
-        "email": "123456@test.com"
-    }
+    "user": [
+      {
+          "profile_id": 5,
+          "email": "123456@test.com",
+          "first_name" : "John",
+          "last_name" : "Doe",
+          "avatar" : 'https://cdn.pixabay.com/photo/2014/04/03/10/32/businessman-310819__340.png'
+      }
+    ]
 }
 ```
 
@@ -47,6 +82,107 @@ body: N/A
 returned:
 {
     "success": "Logged out"
+}
+```
+
+## POST api/profiles
+description: create/save a new profile
+
+```json
+body:
+{
+	"user_id": 3,
+	"first_name": "George",
+	"last_name": "Lucas",
+	"avatar": "My avatar url"
+}
+
+returned:
+{
+    "success": "Profile created",
+    "createdProfile": {
+        "id": 6,
+        "user_id": 3,
+        "first_name": "George",
+        "last_name": "Lucas",
+        "avatar": "My avatar url",
+        "created_at": "2023-02-07T01:47:34.558Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+}
+```
+
+## GET api/profiles/user/[user_id]
+description: retrieve profile by user id
+
+```json
+returned:
+{
+    "success": "Profiles found",
+    "profiles": [
+        {
+            "id": 6,
+            "user_id": 3,
+            "first_name": "Georgy",
+            "last_name": "Luck",
+            "avatar": "My avatar url",
+            "created_at": "2023-02-07T01:47:34.558Z",
+            "updated_at": "2023-02-07T01:52:25.897Z",
+            "deleted_at": null,
+            "email": "123435@test.com"
+        }
+    ]
+}
+```
+
+## GET api/profiles/[profile_id]
+description: retrieve profile by profile id
+
+```json
+returned:
+{
+    "success": "Profile found",
+    "profile": {
+        "id": 6,
+        "user_id": 3,
+        "first_name": "Georgy",
+        "last_name": "Luck",
+        "avatar": "My avatar url",
+        "created_at": "2023-02-07T01:47:34.558Z",
+        "updated_at": "2023-02-07T01:52:25.897Z",
+        "deleted_at": null,
+        "email": "123435@test.com"
+    }
+}
+```
+
+## UPDATE api/profiles/[profile_id]
+description: create/save a new profile
+
+```json
+body:
+{
+    "id": 6,
+    "user_id": 3,
+	"first_name": "Georgy",
+	"last_name": "Luck",
+	"avatar": "My avatar url"
+}
+
+returned:
+{
+    "success": "Profile updated",
+    "updatedProfile": {
+        "id": 6,
+        "user_id": 3,
+        "first_name": "Georgy",
+        "last_name": "Luck",
+        "avatar": "My avatar url",
+        "created_at": "2023-02-07T01:47:34.558Z",
+        "updated_at": "2023-02-07T01:52:25.897Z",
+        "deleted_at": null
+    }
 }
 ```
 
@@ -78,6 +214,77 @@ returned:
     "updated_at": null,
     "deleted_at": null
   }
+]
+```
+
+## GET api/resources/withAddition
+description: retrieve all resources from all Users with details
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "profile_id": 1,
+        "url": "https://www.youtube.com/watch?v=t_ispmWmdjY",
+        "title": "Ruby Programming Language - Full Course",
+        "description": "Learn the Ruby programming language in this full course / tutorial. The course is designed for new programmers, and will introduce common programming topics using the ruby language.\nWant more from Mike? He ISs starting a coding RPG/Bootcamp",
+        "thumbnail": "https://i0.wp.com/www.alphr.com/wp-content/uploads/2021/11/How-to-Make-YouTube-Thumbnails-1.png?resize=738%2C320&ssl=1",
+        "created_at": "2023-02-09T04:55:52.720Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "total_likes": "2",
+        "categories": [
+            "Node.js",
+            "Ruby",
+            "VS Code"
+        ],
+        "avg_ranking": "7.0000000000000000",
+        "avg_rating": "4.0000000000000000"
+    },
+    {
+        "id": 2,
+        "profile_id": 1,
+        "url": "https://www.youtube.com/watch?v=_y9oxzTGERs",
+        "title": "Introduction to JavaScript",
+        "description": "This course introduces you to JavaScript, the most popular programming language for web development. You can also try the interactive version of the course here: https://scrimba.com/g/gintrotojavascript\n\n  The course contains 14 lessons and 7 challenges. In the challenges, you will be encourage to jump into the code and get your hands dirty. This is both fun and great for making the knowledge stick.",
+        "thumbnail": "",
+        "created_at": "2023-02-09T04:55:52.720Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "total_likes": "1",
+        "categories": [
+            "JavaScript"
+        ],
+        "avg_ranking": "3.0000000000000000",
+        "avg_rating": "1.5000000000000000"
+    }
+]
+```
+
+## GET api/resources/keyword/[keyword_to_search]
+description: retrieve all resources from all Users with details that title or description has the keyword being searched
+
+```json
+returned:
+[
+    {
+        "id": 2,
+        "profile_id": 1,
+        "url": "https://www.youtube.com/watch?v=_y9oxzTGERs",
+        "title": "Introduction to JavaScript",
+        "description": "This course introduces you to JavaScript, the most popular programming language for web development. You can also try the interactive version of the course here: https://scrimba.com/g/gintrotojavascript\n\n  The course contains 14 lessons and 7 challenges. In the challenges, you will be encourage to jump into the code and get your hands dirty. This is both fun and great for making the knowledge stick.",
+        "thumbnail": "",
+        "created_at": "2023-02-09T04:55:52.720Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "total_likes": "1",
+        "categories": [
+            "JavaScript"
+        ],
+        "avg_ranking": "3.0000000000000000",
+        "avg_rating": "1.5000000000000000"
+    }
 ]
 ```
 
@@ -133,7 +340,7 @@ body:
 description: create/save a resource
 
 ```json
-body: 
+body:
 {
     "profile_id": 1,
     "url": "https://www.youtube.com/watch?v=_y9oxzTGERs",
@@ -156,6 +363,92 @@ returned:
 }
 ```
 
+## POST api/resources/options
+description: retrieve resources using options/filtration
+order_by values:
+"most_liked" -> order descending from highest liked to lowest
+"top_rated" -> order descending from highest rated to lowest
+"top_ranked" -> order descending from highest ranked to lowest
+"lowest_ranked" -> order ascending from lowest ranked to highest
+"newest" -> order descending from most recent created to lastest
+"alpha_a-z" -> order ascending by title
+"alpha_z-a" -> order descending by title
+
+```json
+body:
+{
+  "resource" : {
+		"is_deleted":false,
+		"created_by":1,
+		"created_last_num_hours":36,
+		"limit": 35,
+		"order_by": "newest",
+		"categories" : ["Ruby", "JavaScript", "CSS"],
+		"minimum_average_rating": 2,
+		"minimum_likes": 2,
+		"minimum_is_recommended": 2,
+		"minimum_average_ranking" : 1,
+		"maximum_average_ranking" : 8,
+		"excluded_minimum_average_ranking" : 8,
+		"excluded_maximum_average_ranking" : 5
+   },
+  "user": {
+  	"profile_id" : 1,
+    "is_liked" : true,
+    "is_favourite": true,
+    "is_bookmarked":true,
+    "is_playlist" : true,
+    "is_reported": true,
+    "is_recommended" : true,
+    "minimum_myRating" : 2,
+    "maximum_myRating" : 5,
+    "minimum_myRanking" : 4,
+    "maximum_myRanking" : 7
+  }
+}
+
+returned:
+[
+    {
+        "resource": {
+            "id": 1,
+            "profile_id": 1,
+            "url": "https://www.youtube.com/watch?v=t_ispmWmdjY",
+            "title": "Ruby Programming Language - Full Course",
+            "description": "Learn the Ruby programming language in this full course / tutorial. The course is designed for new programmers, and will introduce common programming topics using the ruby language.\nWant more from Mike? He ISs starting a coding RPG/Bootcamp",
+            "thumbnail": "https://i0.wp.com/www.alphr.com/wp-content/uploads/2021/11/How-to-Make-YouTube-Thumbnails-1.png?resize=738%2C320&ssl=1",
+            "created_at": "2023-02-09T04:55:52.720Z",
+            "updated_at": null,
+            "deleted_at": null,
+            "avg_rating": "4.0000000000000000",
+            "total_likes": "2",
+            "total_recommends": "2",
+            "avg_ranking": "7.0000000000000000",
+            "categories": [
+                "Ruby",
+                "VS Code"
+            ]
+        },
+        "user": {
+            "profile_id": 1,
+            "is_liked": true,
+            "is_favourite": true,
+            "is_bookmarked": true,
+            "is_playlist": true,
+            "is_reported": true,
+            "is_recommended": true,
+            "my_rating": 4,
+            "my_ranking": 7,
+            "my_categories": [
+                "Node.js"
+            ],
+            "my_comments_private": "Great Video",
+            "my_comments_public": null
+        }
+    }
+]
+```
+
 ## GET api/categories/resources/[resource_id]
 description: retrieve all categories for a specific resource
 
@@ -165,20 +458,99 @@ returned:
     {
         "id": 1,
         "resource_id": 1,
+        "profile_id": null,
         "name": "Ruby",
         "index": 1,
         "description": null,
-        "created_at": "2023-01-31T13:54:46.368Z",
+        "created_at": "2023-02-08T15:41:48.752Z",
         "updated_at": null,
         "deleted_at": null
     },
     {
         "id": 2,
         "resource_id": 1,
+        "profile_id": null,
         "name": "VS Code",
         "index": 2,
         "description": null,
-        "created_at": "2023-01-31T13:54:46.368Z",
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## GET api/categories/profiles/[profile_id]
+description: retrieve all categories that user created for all the resources that they added.
+
+```json
+returned:
+[
+    {
+        "resource_profile_id": 1,
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": null,
+        "name": "Ruby",
+        "index": 1,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "resource_profile_id": 1,
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": null,
+        "name": "VS Code",
+        "index": 2,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "resource_profile_id": 1,
+        "id": 3,
+        "resource_id": 2,
+        "profile_id": null,
+        "name": "JavaScript",
+        "index": 1,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "resource_profile_id": 1,
+        "id": 4,
+        "resource_id": 1,
+        "profile_id": 2,
+        "name": "Node.js",
+        "index": 3,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## GET api/categories/profiles/[profile_id]/resources/[resource_id]
+description: retrieve all categories that profile/user created for personal purpose
+
+```json
+returned:
+[
+    {
+        "id": 4,
+        "resource_id": 1,
+        "profile_id": 2,
+        "name": "Node.js",
+        "index": 3,
+        "description": null,
+        "created_at": "2023-02-08T15:41:48.752Z",
         "updated_at": null,
         "deleted_at": null
     }
@@ -189,7 +561,7 @@ returned:
 description: create/save a category
 
 ```json
-body: 
+body:
   {
     "resource_id": 2,
     "name":"Java",
@@ -213,7 +585,7 @@ returned:
 description: update a category
 
 ```json
-body: 
+body:
     {
         "id": 6,
         "name":"Rails",
@@ -294,7 +666,7 @@ returned:
 description: create/save a rating
 
 ```json
-body: 
+body:
     {
         "resource_id": 1,
         "profile_id": 2,
@@ -317,7 +689,7 @@ returned:
 description: update a rating
 
 ```json
-body: 
+body:
     {
     	"id": 4,
         "resource_id": 1,
@@ -401,7 +773,7 @@ returned:
 description: create/save a comment
 
 ```json
-body: 
+body:
 {
     "resource_id": 2,
     "profile_id": 1,
@@ -428,7 +800,7 @@ returned:
 description: update a comment
 
 ```json
-body: 
+body:
 {
 	"id": 4,
     "resource_id": 2,
@@ -470,4 +842,536 @@ returned:
     "updated_at": "2023-02-02T14:19:55.068Z",
     "deleted_at": "2023-02-02T14:21:56.902Z"
 }
+```
+
+## GET api/favourites/resources/[resource_id]
+description: retrieve all favourites for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_favourite": true,
+        "created_at": "2023-02-06T22:34:36.572Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_favourite": false,
+        "created_at": "2023-02-06T22:34:36.572Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/favourites
+description: create/save a favourite
+
+```json
+body:
+{
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": false
+}
+
+returned:
+{
+    "id": 5,
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": false,
+    "created_at": "2023-02-07T01:57:47.278Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/favourites/[favourite_id]
+description: update a favourite
+
+```json
+body:
+{
+    "id": 5,
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": true
+}
+
+returned:
+{
+    "id": 5,
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": true,
+    "created_at": "2023-02-07T01:57:47.278Z",
+    "updated_at": "2023-02-07T02:02:02.344Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/favourites/[favourite_id]
+description: delete a favourite
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 5,
+    "resource_id": 2,
+    "profile_id": 6,
+    "is_favourite": true,
+    "created_at": "2023-02-07T01:57:47.278Z",
+    "updated_at": "2023-02-07T02:02:02.344Z",
+    "deleted_at": "2023-02-07T02:03:03.164Z"
+}
+```
+
+## GET api/playlists/resources/[resource_id]
+description: retrieve all playlists for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_playlist": true,
+        "created_at": "2023-02-07T13:54:43.881Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_playlist": false,
+        "created_at": "2023-02-07T13:54:43.881Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/playlists
+description: create/save a playlist
+
+```json
+body:
+{
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": true,
+    "created_at": "2023-02-07T14:15:52.745Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/playlists/[playlist_id]
+description: update a playlist
+
+```json
+body:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": false
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": false,
+    "created_at": "2023-02-07T14:15:52.745Z",
+    "updated_at": "2023-02-07T14:17:20.899Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/playlists/[playlist_id]
+description: delete a playlist
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_playlist": false,
+    "created_at": "2023-02-07T14:15:52.745Z",
+    "updated_at": "2023-02-07T14:17:20.899Z",
+    "deleted_at": "2023-02-07T14:18:29.452Z"
+}
+```
+
+## GET api/recommends/resources/[resource_id]
+description: retrieve all recommends for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_recommended": true,
+        "created_at": "2023-02-07T17:15:54.281Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_recommended": false,
+        "created_at": "2023-02-07T17:15:54.281Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/recommends
+description: create/save a recommend
+
+```json
+body:
+{
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": true,
+    "created_at": "2023-02-07T17:19:34.882Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/recommends/[recommend_id]
+description: update a recommend
+
+```json
+body:
+{
+    "id": 3,
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": false
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": false,
+    "created_at": "2023-02-07T17:19:34.882Z",
+    "updated_at": "2023-02-07T17:21:06.438Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/recommends/[recommend_id]
+description: delete a recommend
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 3,
+    "resource_id": 2,
+    "profile_id": 2,
+    "is_recommended": false,
+    "created_at": "2023-02-07T17:19:34.882Z",
+    "updated_at": "2023-02-07T17:21:06.438Z",
+    "deleted_at": "2023-02-07T17:22:03.014Z"
+}
+```
+
+## GET api/bookmarks/resources/[resource_id]
+description: retrieve all bookmarks for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_bookmarked": true,
+        "created_at": "2023-02-07T16:32:32.821Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_bookmarked": false,
+        "created_at": "2023-02-07T16:32:32.821Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/bookmarks
+description: create/save a bookmark
+
+```json
+body:
+{
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true,
+    "created_at": "2023-02-07T16:35:51.203Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/bookmarks/[bookmark_id]
+description: update a bookmark
+
+```json
+body:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true,
+    "created_at": "2023-02-07T16:35:51.203Z",
+    "updated_at": "2023-02-07T16:52:44.380Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/bookmarks/[bookmark_id]
+description: delete a bookmark
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_bookmarked": true,
+    "created_at": "2023-02-07T16:35:51.203Z",
+    "updated_at": "2023-02-07T16:52:44.380Z",
+    "deleted_at": "2023-02-07T16:54:34.563Z"
+}
+```
+
+## GET api/reports/resources/[resource_id]
+description: retrieve all reports for a specific resource
+
+```json
+returned:
+[
+    {
+        "id": 1,
+        "resource_id": 1,
+        "profile_id": 1,
+        "is_reported": true,
+        "created_at": "2023-02-08T14:43:15.090Z",
+        "updated_at": null,
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "resource_id": 1,
+        "profile_id": 2,
+        "is_reported": false,
+        "created_at": "2023-02-08T14:43:15.090Z",
+        "updated_at": null,
+        "deleted_at": null
+    }
+]
+```
+
+## POST api/reports
+description: create/save a report
+
+```json
+body:
+{
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": true
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": true,
+    "created_at": "2023-02-08T14:55:47.641Z",
+    "updated_at": null,
+    "deleted_at": null
+}
+```
+
+## PUT api/reportes/[report_id]
+description: update a report
+
+```json
+body:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": false
+}
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": false,
+    "created_at": "2023-02-08T14:55:47.641Z",
+    "updated_at": "2023-02-08T14:57:41.877Z",
+    "deleted_at": null
+}
+```
+
+## DELETE api/reports/[report_id]
+description: delete a report
+
+```json
+body: N/A
+
+returned:
+{
+    "id": 3,
+    "resource_id": 1,
+    "profile_id": 2,
+    "is_reported": false,
+    "created_at": "2023-02-08T14:55:47.641Z",
+    "updated_at": "2023-02-08T14:57:41.877Z",
+    "deleted_at": "2023-02-08T14:58:29.160Z"
+}
+```
+
+
+## GET api/icons/[profile_id]
+description: get icons status
+body: N/A
+
+```json
+returned:
+[
+  {
+    "profile_id": 1,
+    "resource_id": 1,
+    "is_liked" : true,
+    "is_favourite" : true,
+    "is_bookmarked" : false,
+    "is_playlist" : false,
+    "is_reported" : false,
+    "is_recommended" : false,
+  },
+  {
+    "profile_id": 1,
+    "resource_id": 2,
+    "is_liked" : true,
+    "is_favourite" : true,
+    "is_bookmarked" : false,
+    "is_playlist" : false,
+    "is_reported" : false,
+    "is_recommended" : false,
+  },
+  {
+    /* Sample of a return when there's no status for any icon */
+    "profile_id": 1,
+    "resource_id": 3,
+    "is_liked" : false,
+    "is_favourite" : false,
+    "is_bookmarked" : false,
+    "is_playlist" : false,
+    "is_reported" : false,
+    "is_recommended" : false,
+  }
+]
+```
+
+## POST api/icons
+description: post icons status
+
+```json
+body:
+{
+  "profile_id" : 1,
+  "resource_id": 2,
+  "is_liked" : true,
+  "is_favourite" : true,
+  "is_bookmarked" : false,
+  "is_playlist" : false,
+  "is_reported" : false,
+  "is_recommended" : false,
+}
+
+returned:
+  {
+    "profile_id": 1,
+    "resource_id": 2,
+    "is_liked" : true,
+    "is_favourite" : true,
+    "is_bookmarked" : false,
+    "is_playlist" : false,
+    "is_reported" : false,
+    "is_recommended" : false,
+  }
+
 ```
