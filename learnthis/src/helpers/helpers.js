@@ -233,6 +233,17 @@ export function getKeywordScores(searchText) {
     }
   }
 
+  // Calculate total score
+  const totalScore = scores.reduce((acc, cur) => acc + cur.score, 0);
+
+  // Calculate score percentage for each keyword
+  scores.forEach(score => {
+    score.scorePercentage = Math.ceil((score.score / totalScore) * 100);
+  });
+
+  // Sort by score percentage, high to low
+  scores.sort((a, b) => b.scorePercentage - a.scorePercentage);
+
   // order these high to low and return
-  return scores.sort((a, b) => b.score - a.score);
+  return scores;
 }

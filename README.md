@@ -1,6 +1,8 @@
 # LearnThis!
 
-about message here
+A bookmarking, organizational and learning tool built for the developer community.
+
+Keep your resource bookmarks all in one convenient location while having a quick organizational system and a built in learning program to actually study from your saved materials!
 
 ![Screen Shot of app](./screenshots/title.jpg)
 
@@ -48,9 +50,9 @@ You'll also need the server and SQL data that is available within this same gith
 
 
 ## Bonus features...
-- replace this as necessary
-- replace this as necessary
-![Screen Shot Dark Mode](./screenshots/darkmode.png)     
+
+- LearnThis! also includes a helpful resource clipping browser extension tool.  One click grabs the title and description of the page you're on and lets you save it quickly into the LearnThis! database!
+![Screen Shot of Resource Clipper](./screenshots/webclipper.png)     
 [( back to top 🔺)](#learnthis)
 ---
 ## Future Plans...
@@ -77,8 +79,12 @@ You'll also need the server and SQL data that is available within this same gith
 [( back to top 🔺)](#learnthis)
 ---
 ## The Team...
-- Atsu 
-- Ernie Johnson
-- Gene Tenorlas
+- Atsuyuki Yoshimatsu  
+(back end API developer)  
+- Gene Tenorlas  
+(back end API, database schema developer)  
+- Ernie Johnson  
+(front end, back end interface developer)  
+.  
 [( back to top 🔺)](#learnthis)
 ---
