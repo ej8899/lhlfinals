@@ -164,15 +164,16 @@ export const getdata = (data, stage) => {
 
 
 export function getKeywordScores(searchText) {
-  const lowercaseText = searchText.toLowerCase().replace(/[^\w\s]/gi, ''); // Remove non-alphanumeric characters
+  
   const industryKeywords = [
-    // 'developer',
-    // 'coding',
-    // 'programming',
-    // 'web development',
-    // 'software engineering',
-    // 'tech industry',
-    // 'IT industry',
+    'developer',
+    'coding',
+    'programming',
+    'web development',
+    'software engineering',
+    'tech industry',
+    'IT industry',
+
     "JavaScript",
     "HTML",
     "CSS",
@@ -203,8 +204,8 @@ export function getKeywordScores(searchText) {
     "ASP.NET",
     "Java",
     "Python",
-    //"C++",
-    //"C#",
+    "C\\+\\+",
+    "C#",
     "Ruby",
     "Go",
     "Swift",
@@ -214,15 +215,20 @@ export function getKeywordScores(searchText) {
     "SQL"
   ];
   
+  //const lowercaseText = searchText.toLowerCase().replace(/[^\w\s]/gi, ''); // Remove non-alphanumeric characters
+  const lowercaseText = searchText.replace(/[^\w+#]/gi, ''); // dont' strip + and #
+
   const scores = [];
   
   for (const keyword of industryKeywords) {
-    // Remove non-alphanumeric characters at beginning and end
-    //const strippedKeyword = keyword.replace(/(^\W+|\W+$)/g, ''); 
-    const strippedKeyword = keyword;
+    let strippedKeyword = keyword;
+    
     const keywordCount = (lowercaseText.match(new RegExp(strippedKeyword, 'gi')) || []).length;
     
     if (keywordCount > 0) {
+      if(strippedKeyword === "C\\+\\+") {
+        strippedKeyword = "C++";
+      }
       scores.push({ keyword: strippedKeyword, score: keywordCount });
     }
   }
