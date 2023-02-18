@@ -22,18 +22,19 @@ export default function UserNotifications() {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popper' : undefined;
 
-  const sampledata = randomizer();
+  const numNotifications = 6;
+  const sampledata = randomizer(numNotifications);
 
   return (
   <div>
     
       <IconButton
               size="large"
-              aria-label="show 17 new notifications"
+              aria-label="new notifications"
               color="inherit"
               onClick={handleClick}
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={numNotifications} color="error">
                 <NotificationsIcon />
               </Badge>
       </IconButton>
@@ -65,7 +66,7 @@ export default function UserNotifications() {
 }
 
 
-function randomizer() {
+function randomizer(num) {
   let names = [
     "Sarah",
     "Michael",
@@ -98,7 +99,7 @@ function randomizer() {
   
   let result = [];
   
-  for (let i = 0; i < names.length; i++) {
+  for (let i = 0; i < num; i++) {
     let x = (Math.random())
     let url = "https://api.dicebear.com/5.x/bottts-neutral/svg?radius=50&seed=" + x;
 

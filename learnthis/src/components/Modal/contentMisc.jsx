@@ -85,7 +85,7 @@ export function modalAboutMessage() {
           <Box display="flex" alignItems="center" justifyContent="center"><img src="./images/pernstack.png" alt="PERN stack"/></Box>
           </Typography>
           <Typography gutterBottom mt={2}>
-            <b>LearnThis!</b> has been developed with the PERN web development stack.  It is a resource collection tool and presenation system built for developers - beginners through to advanced students and developers.  With 'crowd-based' learning database, <b>LearnThis!</b> can present and even intelligently develop lesson plans suited to your skill level and interests.
+            <b>LearnThis!</b> has been developed with the PERN web development stack.  LearnThis! is a resource bookmarking tool for developers.  With a 'crowd-based' learning database, <b>LearnThis!</b> can present and even intelligently develop lesson plans suited to your skill level and interests.
           </Typography>
           <Typography gutterBottom mt={2}>
         With PostgreSQL as the backbone, you can trust in the security and reliability of your data. Express and Node.js effortlessly handle server-side operations and routing, allowing you to focus on the core functionality of your application. On the front-end, React shines with Material-UI, a library that imbues your application with a sleek, modern feel. Material-UI's highly responsive UI components are a perfect match for React's ability to manage and update the application state with ease.

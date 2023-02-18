@@ -88,6 +88,10 @@ let options = fetchCats();
 options.forEach(option => {
   const optionElement = document.createElement("option");
   optionElement.value = option;
+  if(option === "JavaScript") {
+    //alert(option)
+    optionElement.defaultSelected = true;
+  }
   optionElement.textContent = option;
   selectElement.appendChild(optionElement);
 });

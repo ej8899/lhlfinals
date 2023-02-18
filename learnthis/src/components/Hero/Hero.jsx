@@ -327,7 +327,7 @@ export default function Hero(props) {
   ];
 
   const { filterData, totalkeys } = useContext(FilterContext);
-  const { isAuth, user, userid, logout } = useContext(AuthContext);
+  const { isAuth, user, userid, logout, setViewTitle } = useContext(AuthContext);
   const {chipReset} = useContext(ChipContext)
 
   const handleSort = (type, label) => {
@@ -346,6 +346,7 @@ export default function Hero(props) {
       props.setSort("Sort by...")
       filterData("clear", userid, props.setsampledata, props.sampledata, props.combinedData, false, false, true, props.setResourceCount, props.setShowMoreCards)
       chipReset(props.catList, props.setChipFilled)
+      setViewTitle("Home...")
     } else {
       props.setFilled({...props.filled, [index]: !props.filled[index]});
       // console.log({...filled, [index]: !filled[index]})

@@ -21,7 +21,7 @@ import { AddNewResource } from "../NewResource/newResource";
 // --------------------------------------------------------
 // Import Helper Functions
 import zlog from "../../helpers/zlog";
-import { getYoutubeVideoId, isYoutubeUrl, extractDomain, getdata } from "../../helpers/helpers";
+import { getYoutubeVideoId, isYoutubeUrl, extractDomain, getdata, truncateText, getKeywordScores } from "../../helpers/helpers";
 // --------------------------------------------------------
 
 // --------------------------------------------------------
@@ -291,6 +291,11 @@ export const AddResourceFlow = (props) => {
             zlog('API',"YouTube API Called:", videoId)
             setTitle(response.data.items[0].snippet.title)
             setDescriptionExpanded(response.data.items[0].snippet.description)
+
+            // parse for category suggestions
+            let keyScores = getKeywordScores(response.data.items[0].snippet.description);
+            zlog('info',"keyword scores:",keyScores)
+
             setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
             /*
             REFERENCE:
@@ -364,7 +369,7 @@ export const AddResourceFlow = (props) => {
           "profile_id" : userid,
           "url": videoURL,
           "title": title,
-          "description": descriptionExpanded,
+          "description": truncateText(descriptionExpanded,2500),
           "thumbnail": thumbnail,
         },
         user: {
