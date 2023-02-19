@@ -166,13 +166,13 @@ export const getdata = (data, stage) => {
 export function getKeywordScores(searchText) {
   
   const industryKeywords = [
-    'developer',
-    'coding',
-    'programming',
-    'web development',
-    'software engineering',
-    'tech industry',
-    'IT industry',
+    // 'developer',
+    // 'coding',
+    // 'programming',
+    // 'web development',
+    // 'software engineering',
+    // 'tech industry',
+    // 'IT industry',
 
     "JavaScript",
     "HTML",
@@ -219,17 +219,21 @@ export function getKeywordScores(searchText) {
   const lowercaseText = searchText.replace(/[^\w+#]/gi, ''); // dont' strip + and #
 
   const scores = [];
+  const scoredArray = [];
   
   for (const keyword of industryKeywords) {
     let strippedKeyword = keyword;
     
     const keywordCount = (lowercaseText.match(new RegExp(strippedKeyword, 'gi')) || []).length;
     
-    if (keywordCount > 0) {
+    if (keywordCount > 1) {
       if(strippedKeyword === "C\\+\\+") {
         strippedKeyword = "C++";
       }
       scores.push({ keyword: strippedKeyword, score: keywordCount });
+      if(scoredArray.length < 2) {
+        scoredArray.push(strippedKeyword)
+      }
     }
   }
 
@@ -245,5 +249,7 @@ export function getKeywordScores(searchText) {
   scores.sort((a, b) => b.scorePercentage - a.scorePercentage);
 
   // order these high to low and return
-  return scores;
+
+  return scoredArray;
+  //return scores;
 }
