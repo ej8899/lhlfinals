@@ -205,12 +205,13 @@ export function modalAboutTeam() {
           <LinkedInIcon/></IconButton>
           </Grid>
           <Grid item xs>
+          <Divider flexItem textAlign="left"><Typography>Ernie Johnson</Typography>
+          </Divider>
           
-          <Typography>
-            <Divider flexItem textAlign="left">
-            Ernie Johnson
-            </Divider>
+            
             <Typography sx={{mb:1}}>Front End: Javascript, CSS, ReactJS, MaterialUI</Typography>
+            <Typography>
+
             What you see has been created in Javascript using React and MaterialUI. As the front end developer, I also worked on interfacing to our back end engine.<br/>I’m taking the leap to web app development from a history in construction mega-project management. 
             
             </Typography>
@@ -228,11 +229,12 @@ export function modalAboutTeam() {
           <LinkedInIcon/></IconButton>
           </Grid>
           <Grid item xs>
-          <Typography>
+          
             <Divider flexItem textAlign="left">
-            Gene Tenorlas
+            <Typography>Gene Tenorlas</Typography>
             </Divider>
             <Typography sx={{mb:1}}>Back end: SQL, NodeJS, Express</Typography>
+            <Typography>
             My name is Gene, one of the back-end developers to this app. I created the ERD diagram, database schema, and some of the back-end API. Prior to this, I was a software tester in a financial company and graduated as System Analyst at Sheridan College.
             </Typography>
           </Grid>
@@ -249,12 +251,12 @@ export function modalAboutTeam() {
           <LinkedInIcon/></IconButton>
           </Grid>
           <Grid item xs>
-            <Typography >
-            <Divider flexItem textAlign="left" alignItems="flex-end">
-            Atsuyuki Yoshimatsu
+            
+            <Divider flexItem textAlign="left" >
+            <Typography >Atsuyuki Yoshimatsu</Typography>
             </Divider>
             <Typography sx={{mb:1}}>Back end: SQL, NodeJS, Express</Typography>
-            My name is Atsu and am from Japan. I have implemented some of the backend API including user sign-up. Currently, I am working for a Japanese company as a web developer.
+            <Typography >My name is Atsu and am from Japan. I have implemented some of the backend API including user sign-up. Currently, I am working for a Japanese company as a web developer.
             </Typography>
           </Grid>
           </Grid>

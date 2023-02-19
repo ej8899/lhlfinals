@@ -56,7 +56,11 @@ You'll also need the server and SQL data that is available within this same gith
 [( back to top 🔺)](#learnthis)
 ---
 ## Future Plans...
-- continued experimentation through ReactJS components  
+- streamlining React state
+- twitter DM to app bookmarks
+- improve resource 'note-taking' systems to allow for code blocks
+- add user general comments (public)
+- making database more efficient  
 [( back to top 🔺)](#learnthis)
 ---
 ## Known Bugs...
@@ -66,17 +70,20 @@ You'll also need the server and SQL data that is available within this same gith
 ---
 ## Attributions...
 - [conColors library](https://github.com/ej8899/conColors) (modals & misc animations)
-- FontAwesome (various icons)
+- MaterialUI for React
 - Node.js
 - PostgreSQL
+- Express
 - SCSS (CSS)
 - ReactJS  
+- ChatGPT for some minor helper functions  
+![Screen Shot of About App](./screenshots/about.png)    
 [( back to top 🔺)](#lhl-scheduler)
 ---
 ## Updates...
-- Get the latest of our version of LearnThis! on [Github here](https://github.com/ej8899/lhlfinals).
-![Screen Shot of About App](./screenshots/about.png)    
-[( back to top 🔺)](#learnthis)
+- Get the latest of our version of LearnThis! on [Github here](https://github.com/ej8899/lhlfinals)
+.  
+[( back to top 🔺)](#learnthis)  
 ---
 ## The Team...
 - Atsuyuki Yoshimatsu  
