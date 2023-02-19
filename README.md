@@ -38,17 +38,22 @@ You'll also need the server and SQL data that is available within this same gith
 9. Run the server with nodemon: `npm run local`
   - Note: nodemon is used, so you should not have to restart your server
 10. Visit `http://localhost:8080/`
-11. login: `12345@test.com` password: `1234`
-
+11. login: `12345@test.com` password: `1234`  
+[( back to top 🔺)](#learnthis)
 ---
 ## Features...
-  - ## API and Data Structure
+- ### Learning Component:  
+  - We've included a built in lesson planning system in LearnThis! that intelligently develops a suggested learning process based on the lesson topic(s) you are interested in.  Using an algorithm to determine ideal placements, you can start at the first displayed resource and work your way to the final resource in order of complexity and suggested order.
+![Screen Shot of lesson planner component](./screenshots/lessons.png)
+
+
+- ### API and Data Structure
   - ![All api and data structure](./z-planning/z-data-structure.md)
 
 - replace this as necessary
 ![Screen Shot of main feature component](./screenshots/edit.png)
 
-
+[( back to top 🔺)](#learnthis)
 ## Bonus features...
 
 - LearnThis! also includes a helpful resource clipping browser extension tool.  One click grabs the title and description of the page you're on and lets you save it quickly into the LearnThis! database!
@@ -78,7 +83,7 @@ You'll also need the server and SQL data that is available within this same gith
 - ReactJS  
 - ChatGPT for some minor helper functions  
 ![Screen Shot of About App](./screenshots/about.png)    
-[( back to top 🔺)](#lhl-scheduler)
+[( back to top 🔺)](#learnthis)
 ---
 ## Updates...
 - Get the latest of our version of LearnThis! on [Github here](https://github.com/ej8899/lhlfinals)
