@@ -295,7 +295,8 @@ export const AddResourceFlow = (props) => {
             // parse for category suggestions
             let keyScores = getKeywordScores(response.data.items[0].snippet.description);
             zlog('info',"keyword scores(AddResource.jsx):",keyScores)
-
+            addMyCategory(keyScores)
+            
             setThumbnail(response.data.items[0].snippet.thumbnails.standard.url);
             /*
             REFERENCE:
